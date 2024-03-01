@@ -1,0 +1,157 @@
+#%%
+"""
+Creates Schemasheets for all classes (ie. tables) based on the ODM v2 data dictionary parts sheet.
+The outputs will be named "class_{table_name}.tsv".
+
+## Example
+
+```python
+from make_v2_ss_classes import extract_all_classes
+
+extract_all_classes("odm_v2/dictionary/parts.csv", "odm_v2/schemasheets")
+```
+"""
+
+from pathlib import Path
+import pandas as pd
+import os
+from utils import add_schemasheets_header, keep_active_rows, get_enum_name_from_part_id, save_data_frame, get_header_rows, class_names
+import argparse
+
+# For mapping the columns in our final DataFrame to columns recognized by Schemasheets
+headers = {
+    "class" : "class",
+    "partID" : "slot",
+    "partLabel" : "title",
+    "identifier" : "identifier",
+    "required" : "required",
+    "dataType" : "range",
+    "partDesc" : "description",
+    "minValue" : "minimum_value",
+    "maxValue" : "maximum_value",
+    # "partInstr" : "notes",
+}
+
+# For mapping the ODM v2 data types to LinkML datatypes
+_data_types_map = {
+    "varchar" : "string",
+    "dateTime" : "datetime",
+    "datetime" : "datetime",
+    "integer" : "integer",
+    "float" : "float",
+    "boolean" : "booleanSet",
+    "blob" : "blob",            # @TODO: How should we deal with blobs? I'm not sure if LinkML has this data type
+}
+
+def extract_class(df: pd.DataFrame, class_name: str, output_dir: str) -> List[str, pd.DataFrame]:
+    """Create a Schemasheet for the specified class name using the data in a
+    DataFrame loaded from the parts sheet of the ODM v2 data dictionary.
+
+    Args:
+        df (pd.DataFrame): The parts sheet of the ODM v2 data dictionary.
+        class_name (str): The name of the class (ie. table) to extract.
+        output_dir (str): The location to save the Schemasheet. The actual
+            Schemasheet will be named "class_{class_name}.tsv".
+
+    Returns:
+        List[str, pd.DataFrame]: The full path and file name to the saved Schemasheet as
+            well as the DataFrame of the Schemasheet.
+    """
+    
+    # Select all rows for the table
+    table_df = get_header_rows(df, class_name)
+    table_df = keep_active_rows(table_df)
+
+    # Select the columns of interest, and rename some of the columns
+    table_output_df = table_df[["partID", "partLabel", "partDesc", "partType", "partInstr", "mmaSet", f"{class_name}", f"{class_name}Required", f"{class_name}Order", "dataType", "minValue", "maxValue", "minLength", "maxLength"]].copy()
+    columns = list(table_output_df.columns)
+    columns[columns.index(class_name)] = "headerType"
+    columns[columns.index(f"{class_name}Required")] = "required"
+    columns[columns.index(f"{class_name}Order")] = "order"
+    table_output_df.columns = columns
+
+    # Fix up minValue and maxValue
+    # @TODO: This code is commented out because Schemasheets currently seems to treat these
+    # numeric values as strings when creating the LinkML schema. This causes downstream problems
+    # (eg. linkml-validate raises an exception and doesn't complete).
+    # def _cast_int(x):
+    #     try:
+    #         return int(x)
+    #     except:
+    #         return None
+    # table_output_df["maxValue"] = table_output_df["maxValue"].map(_cast_int)
+    # table_output_df["minValue"] = table_output_df["minValue"].map(_cast_int)
+
+    # Set required field
+    table_output_df["required"] = table_output_df["required"].isin(["mandatory"])
+
+    # Set the dataType (range) by mapping the values in the "dataType" column to
+    # the data types recognized by LinkML (eg. map varchar to string)
+    for k, v in _data_types_map.items():
+        table_output_df.loc[table_output_df["dataType"] == k, "dataType" ] = v
+
+    # Set the dataType for enumerations that have an mmaSet
+    mmaset_filt = ~pd.isna(table_output_df["mmaSet"])
+    table_output_df.loc[mmaset_filt, "dataType"] = table_output_df.loc[mmaset_filt, "mmaSet"]
+
+    # Set the dataType for remaining enumerations that are categorical (ie. the ones that do not have an mmaSet that was set previously)
+    categorical_filt = (~mmaset_filt) & (table_output_df["dataType"] == "categorical")
+    table_output_df.loc[categorical_filt, "dataType"] = table_output_df.loc[categorical_filt, "partID"].apply(get_enum_name_from_part_id)
+
+    # Set identifiers (primary keys)
+    table_output_df["identifier"] = table_output_df["headerType"] == "pK"
+
+    # Sort by "order" column
+    table_output_df = table_output_df.sort_values("order")
+
+    # Set the table name (class)
+    table_output_df["class"] = class_name
+
+    column_order = list(headers.keys()) + [c for c in table_output_df.columns if c not in headers.keys()]
+    table_output_df = table_output_df[column_order]
+    
+    # Add Schemasheets headers
+    table_output_df = add_schemasheets_header(table_output_df, headers = headers)
+
+    # Save to disk for now
+    output_file = Path(output_dir) / f"class_{class_name}.tsv"
+    print(f"Saving classes to {output_file}")
+    save_data_frame(table_output_df, output_file)
+    
+    return output_file, table_output_df
+
+def extract_all_classes(parts_file: str, output_dir: str):
+    """Create a Schemasheet for all classes (tables) found in the parts sheet that was
+    extracted from the ODM v2 data dictionary.
+
+    Args:
+        parts_file (str): The parts sheet (CSV) that was extracted from the ODM v2 data
+            dictionary.
+        output_dir (str): The location to save all the Schemasheets. One Schemasheet per
+            class is created, with the name "class_{class_name}.tsv" 
+    """
+    if not output_dir:
+        output_dir = os.path.dirname(parts_file)
+
+    df = pd.read_csv(parts_file)
+
+    for class_name in class_names:
+        print(f"Processing table {class_name}...")
+        extract_class(df, class_name, output_dir)
+
+if __name__ == "__main__":
+    if "get_ipython" in globals():
+        class opts:
+            parts_file = "../odm_v2/dictionary/parts.csv"
+            output_dir = "../odm_v2/schemasheets"
+    else:
+        args = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+        args.add_argument("--parts_file", type=str, help="Input ODM v2 parts file to extract the classes from", required=True)
+        args.add_argument("--output_dir", type=str, help="The directory to save the Schemasheets classes files. If not specified then the directory of the input file is used.", required=False)
+        opts = args.parse_args()
+
+    print("Making ODM v2 Classes...")
+
+    extract_all_classes(opts.parts_file, opts.output_dir)
+
+    print("Finished!")

@@ -1,0 +1,3 @@
+pandas==2.2
+linkml>=1.5
+schemasheets

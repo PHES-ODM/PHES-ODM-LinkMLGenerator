@@ -1,0 +1,172 @@
+tableName	variableName	enum Name	variableValue	variableValue Lowercase	desc_en	desc_fr
+> ignore	ignore	enum	permissible_value	ignore	description	ignore
+Sample	type	SampleType	rawWW	rawww	Raw wastewater.	Eau us�e brute
+Sample	type	SampleType	swrSed	swrsed	Sediments obtained in sewer.	S�diments provenant des �gouts.
+Sample	type	SampleType	pstGrit	pstgrit	Raw wastewater after a treatment plant's headworks.	Eau us�e apr�s d�grillage et dessablage.
+Sample	type	SampleType	pSludge	psludge	Sludge produced by primary clarifiers.	Boue provenant d'un d�canteur primaire.
+Sample	type	SampleType	pEfflu	pefflu	Effluent obtained after primary clarifiers.	Effluent obtenu apr�s un d�canteur primaire.
+Sample	type	SampleType	sSludge	ssludge	Sludge produced by secondary clarifiers.	Boue provenant d'un d�canteur secondaire.
+Sample	type	SampleType	sEfflu	sefflu	Effluent obtained after secondary clarifiers.	Effluent obtenu apr�s un d�canteur secondaire.
+Sample	type	SampleType	water	water	"Non-wastewater, coming from any kind of water body."	Eau non-us�e provenant de toute �tendue d'eau.
+Sample	type	SampleType	faeces	faeces	Fecal matter.	Mati�re f�cale.
+Sample	type	SampleType	other	other	Other type of site. Add description to typeOther.	"Autre type de site d'�chantillonnage. Ajouter une description dans la colonne ""typeOther"""
+Sample	collection	SampleCollection	cpTP24h	cptp24h	A time proportional 24-hour composite sample generally collected by an autosampler.	"Un �chantillon composite proportionnel au temps pr�lev� sur 24 heures, g�n�ralement pr�lev� par un auto-�chantilonneur."
+Sample	collection	SampleCollection	cpFP24h	cpfp24h	A flow proportional 24-hour composite sample generally collected by an autosampler.	"Un �chantillon composite proportionnel au d�bit pr�lev� sur 24 heures, g�n�ralement pr�lev� par un auto-�chantilonneur."
+Sample	collection	SampleCollection	grb	grb	A single large representative grab sample.	Un seul �chantillon ponctuel repr�sentatif.
+Sample	collection	SampleCollection	grbCp8h	grbcp8h	"A 8-hour composite with 8 grab samples each taken once per hour, generally manually performed."	"Un �chantillon composite pr�lev� sur 8 heures consitu� d'�chantillons ponctuels collect�s une fois par heure, g�n�ralement pr�lev� manuellement."
+Sample	collection	SampleCollection	grbCp3h	grbcp3h	"A 3-hour composite with 3 grab samples each taken once per hour, generally manually performed."	"Un �chantillon composite pr�lev� sur 3 heures consitu� d'�chantillons ponctuels collect�s une fois par heure, g�n�ralement pr�lev� manuellement."
+Sample	collection	SampleCollection	grbCp3	grbcp3	A grab-composite sample composed of 3 separate grab samples.	Un �chantillon composite compos� de 3 �chantillons ponctuels.
+Sample	collection	SampleCollection	mooreSw	mooresw	Moore swab passive sample.	Un �chantillon passif collect� par la m�thode de Moore.
+Sample	collection	SampleCollection	other	other	Other type of collection method. Add description to collectionOther.	"Autre m�thode de collecte. Ajouter une description dans la colonne ""descriptionOther"""
+WWMeasure	fractionAnalyzed	WWMeasureFractionAnalyzed	liquid	liquid	Liquid fraction	Fraction liquide.
+WWMeasure	fractionAnalyzed	WWMeasureFractionAnalyzed	solid	solid	Solid fraction	Fraction solide.
+WWMeasure	fractionAnalyzed	WWMeasureFractionAnalyzed	mixed	mixed	Mixed/homogenized sample	�chantillon homog�n�is�/m�lang�.
+WWMeasure	type	WWMeasureType	covN1	covn1	SARS-CoV-2 nucleocapsid gene N1	G�ne nucleocapside N1 du SRAS-CoV-2
+WWMeasure	type	WWMeasureType	covN2	covn2	SARS-CoV-2 nucleocapsid gene N2	G�ne nucleocapside N2 du SRAS-CoV-2
+WWMeasure	type	WWMeasureType	covN3	covn3	SARS-like coronaviruses nucleocapsid gene N3	G�ne nucleocapside N3 des virus similaires au SRAS
+WWMeasure	type	WWMeasureType	covE	cove	SARS-CoV-2 gene region E	R�gion g�nique E du SRAS-CoV-2
+WWMeasure	type	WWMeasureType	varB117	varb117	Variant B.1.1.7	Variant B.1.1.7
+WWMeasure	type	WWMeasureType	varB1351	varb1351	Variant B.1.351	Variant B.1.351
+WWMeasure	type	WWMeasureType	varP1	varp1	Variant P.1	Variant P.1
+WWMeasure	type	WWMeasureType	covRdRp	covrdrp	SARS-CoV-2 gene region RdRp	R�gion g�nique RdRp du SRAS-CoV-2
+WWMeasure	type	WWMeasureType	nPMMoV	npmmov	Pepper mild mottle virus	Virus de la marbrure l�g�re du piment
+WWMeasure	type	WWMeasureType	ncrA	ncra	cross-assembly phage	CrAssphage
+WWMeasure	type	WWMeasureType	nbrsv	nbrsv	bovine respiratory syncytial virus	Virus respiratoire syncytial bovin
+WWMeasure	type	WWMeasureType	wqTS	wqts	Total solids concentration.	Solides totaux
+WWMeasure	type	WWMeasureType	wqTSS	wqtss	Total suspended solids concentration.	Mati�res en suspension
+WWMeasure	type	WWMeasureType	wqVSS	wqvss	Volatile suspended solids concentration.	Mati�res volatiles en suspension
+WWMeasure	type	WWMeasureType	wqCOD	wqcod	Chemical oxygen demand.	Demande chimique en oxyg�ne
+WWMeasure	type	WWMeasureType	wqOPhos	wqophos	Ortho-phosphate concentration.	Concentration d'ortho-phosphates
+WWMeasure	type	WWMeasureType	wqNH4N	wqnh4n	"Ammonium nitrogen concentration, as N."	"Concentrsation d'azote ammoniacal, exprim� en N."
+WWMeasure	type	WWMeasureType	wqTN	wqtn	"Total nitrogen concentration, as N."	"Azote total, exprim� en N"
+WWMeasure	type	WWMeasureType	wqPh	wqph	pH	pH
+WWMeasure	type	WWMeasureType	wqCond	wqcond	Conductivity	Conductivit�
+WWMeasure	type	WWMeasureType	temp	temp	"temperature of the sample when the measurement is taken, often when it arrives at the lab."	"la temp�rature de l'�chantillon au moment o� la mesure est prise, souvent � son arriv�e au laboratoire."
+WWMeasure	type	WWMeasureType	other	other	Other measurement category. Add description to categoryOther.	"Autre cat�gorie de mesure. Ajouter une description de la cat�gorie dans la colonne ""categoryOther""."
+WWMeasure	unit	WWMeasureUnit	gcPMMoV	gcpmmov	Gene or variant copies per copy of PMMoV.	Copies de g�ne ou de variant par copie de PMMoV
+WWMeasure	unit	WWMeasureUnit	gcMl	gcml	Gene or variant copies per milliliter.	Copies de g�ne ou de variant par millilitre.
+WWMeasure	unit	WWMeasureUnit	gcGs	gcgs	Gene or variant copies per gram solids.	Copies de g�ne ou de variant par gramme de solides.
+WWMeasure	unit	WWMeasureUnit	gcL	gcl	Gene or variant copies per liter.	Copies de g�ne ou de variant par litre.
+WWMeasure	unit	WWMeasureUnit	gcCrA	gccra	Gene or variant copies per copy of crAssphage.	Copies de g�ne ou de variant par copie de CrAssphage
+WWMeasure	unit	WWMeasureUnit	Ct	ct	Cycle threshold.	Cycle seuil.
+WWMeasure	unit	WWMeasureUnit	mgL	mgl	Milligrams per liter.	Milligrammes par litre.
+WWMeasure	unit	WWMeasureUnit	ph	ph	pH units	Unit�s de pH
+WWMeasure	unit	WWMeasureUnit	uScm	uscm	Micro-siemens per centimeter.	Microsiemens par centim�tre.
+WWMeasure	unit	WWMeasureUnit	detected	detected	Gene copies or variant detected in the sampleGene or variant copiesDetected = 1Gene or variant copiesNot detected = 0.	"Copies de g�ne ou de variant d�tect� dans ""sampleGene"". 1=Detect�, 0=Non-d�tect�."
+WWMeasure	unit	WWMeasureUnit	propVar	propvar	Proportion of variant in sample	Proportion du variant dans l'�chantillon
+WWMeasure	unit	WWMeasureUnit	pp	pp	"Percent positive, for Moore swab."	Pourcentage de positifs (m�thode de Moore)
+WWMeasure	unit	WWMeasureUnit	pps	pps	"Percent primary sludge, for total solids."	Pourcentage de boues primaire (pour solides totaux)
+WWMeasure	unit	WWMeasureUnit	c	c	temperature in celsius	temp�ratures en degr�s Celsius
+WWMeasure	unit	WWMeasureUnit	bool	bool	In cases where a boolean yes or no is required use bool	"Dans les cas o� un oui ou un non bool�en est requis, utilisez bool"
+WWMeasure	unit	WWMeasureUnit	other	other	Other measurement of viral copies or wastewater treatment plant parameter. Add description to UnitOther.	"Autre mesure de copies virales ou de qualit� des eaux us�es. Ajouter une description dans ""unitOther"""
+WWMeasure	aggregation	WWMeasureAggregation	single	single	"This value is not an aggregate measurement in any way (ie. not a mean, median, max or any other) and can be a replicate value."	"La valeur n'a subi aucune agr�gation (donc, la valeur n'est pas une moyenne, un maximum, etc.). La valeur peut �tre un r�plica."
+WWMeasure	aggregation	WWMeasureAggregation	mean	mean	Arithmetic mean	Moyenne arithm�tique.
+WWMeasure	aggregation	WWMeasureAggregation	meanNr	meannr	"Arithmetic mean, normalized"	Moyenne arithm�tique normalis�e.
+WWMeasure	aggregation	WWMeasureAggregation	geoMn	geomn	Geometric mean	Moyenne g�om�trique.
+WWMeasure	aggregation	WWMeasureAggregation	geoMnNr	geomnnr	"Geometric mean, normalized"	Moyenne g�om�trique normalis�e.
+WWMeasure	aggregation	WWMeasureAggregation	median	median	Median	M�diane.
+WWMeasure	aggregation	WWMeasureAggregation	min	min	Lowest value in a range of values	La valeur la plus basse dans un ensemble.
+WWMeasure	aggregation	WWMeasureAggregation	max	max	Highest value in a range of values	La valeur la plus haute dans un ensemble.
+WWMeasure	aggregation	WWMeasureAggregation	sd	sd	Standard deviation	L'�cart type.
+WWMeasure	aggregation	WWMeasureAggregation	sdNr	sdnr	"Standard deviation, normalized"	L'�cart type normalis�.
+WWMeasure	aggregation	WWMeasureAggregation	other	other	Other aggregation method. Add description to aggregationOther	"Autre m�thode d'agr�gation. Ajouter une description dans ""aggregationOther""."
+Site	type	SiteType	airPln	airpln	Airplane.	Avion.
+Site	type	SiteType	corFcil	corfcil	Correctional facility.	Prison.
+Site	type	SiteType	school	school	School	�cole.
+Site	type	SiteType	hosptl	hosptl	Hospital	H�pital.
+Site	type	SiteType	ltcf	ltcf	Long-term care facility.	�tablissement de soins de longue dur�e.
+Site	type	SiteType	swgTrck	swgtrck	Sewage truck.	Camion de vidange.
+Site	type	SiteType	uCampus	ucampus	University campus.	Campus universitaire.
+Site	type	SiteType	mSwrPpl	mswrppl	Major sewer pipeline.	Collecteur d'�gouts.
+Site	type	SiteType	pStat	pstat	Pumping station.	Station de pompage.
+Site	type	SiteType	holdTnk	holdtnk	Hold tank.	Bassin de stockage.
+Site	type	SiteType	retPond	retpond	Retention pond.	Bassin de r�tention.
+Site	type	SiteType	wwtpMuC	wwtpmuc	Municipal wastewater treatment plant for combined sewage.	Station de traitement des eaux us�es municipales pour �gouts combin�s.
+Site	type	SiteType	wwtpMuS	wwtpmus	Municipal wastewater treatment plant for sanitary sewage only.	Station de traitement des eaux us�es municipales pour �gouts sanitaires seulement.
+Site	type	SiteType	wwtpInd	wwtpind	Industrial wastewater treatment plant.	Station de traitement des eaux us�es industrielle.
+Site	type	SiteType	lagoon	lagoon	Logoon system for extensive wastewater treatment.	Syst�me de lagunage pour traitement des eaux us�es.
+Site	type	SiteType	septTnk	septtnk	Septic tank.	Fosse septique.
+Site	type	SiteType	river	river	"River, natural water body."	"Rivi�re, �tendue d'eau naturelle."
+Site	type	SiteType	lake	lake	"Lake, natural water body."	"Lac, �tendue d'eau naturelle."
+Site	type	SiteType	estuary	estuary	"Estuary, natural water body"	"Estuaire, �tendue d'eau naturelle."
+Site	type	SiteType	sea	sea	"Sea, natural water body."	"Mer, �tendue d'eau naturelle."
+Site	type	SiteType	ocean	ocean	"Ocean, natural water body."	"Oc�an, �tendue d'eau naturelle."
+Site	type	SiteType	other	other	Other site type. Add description to typeOther.	"Autre type de site. Ajouter une description dans ""typeOther""."
+Site	SampleTypeDefault	SiteSampleTypeDefault	rawWW	rawww	Raw wastewater.	Eau us�e brute
+Site	SampleTypeDefault	SiteSampleTypeDefault	swrSed	swrsed	Sediments obtained in sewer.	S�diments provenant des �gouts.
+Site	SampleTypeDefault	SiteSampleTypeDefault	pstGrit	pstgrit	Raw wastewater after a treatment plant's headworks.	Eau us�e apr�s d�grillage et dessablage.
+Site	SampleTypeDefault	SiteSampleTypeDefault	pSludge	psludge	Sludge produced by primary clarifiers.	Boue provenant d'un d�canteur primaire.
+Site	SampleTypeDefault	SiteSampleTypeDefault	pEfflu	pefflu	Effluent obtained after primary clarifiers.	Effluent obtenu apr�s un d�canteur primaire.
+Site	SampleTypeDefault	SiteSampleTypeDefault	sSludge	ssludge	Sludge produced by secondary clarifiers.	Boue provenant d'un d�canteur secondaire.
+Site	SampleTypeDefault	SiteSampleTypeDefault	sEfflu	sefflu	Effluent obtained after secondary clarifiers.	Effluent obtenu apr�s un d�canteur secondaire.
+Site	SampleTypeDefault	SiteSampleTypeDefault	water	water	"Non-wastewater, coming from any kind of water body."	Eau non-us�e provenant de toute �tendue d'eau.
+Site	SampleTypeDefault	SiteSampleTypeDefault	faeces	faeces	Fecal matter.	Mati�re f�cale.
+Site	SampleTypeDefault	SiteSampleTypeDefault	other	other	Other type of site. Add description to typeOther.	"Autre type de site d'�chantillonnage. Ajouter une description dans la colonne ""typeOther"""
+Site	SampleCollectionDefault	SiteSampleCollectionDefault	cpTP24h	cptp24h	A time proportional 24-hour composite sample generally collected by an autosampler.	"Un �chantillon composite proportionnel au temps pr�lev� sur 24 heures, g�n�ralement pr�lev� par un auto-�chantilonneur."
+Site	SampleCollectionDefault	SiteSampleCollectionDefault	cpFP24h	cpfp24h	A flow proportional 24-hour composite sample generally collected by an autosampler.	"Un �chantillon composite proportionnel au d�bit pr�lev� sur 24 heures, g�n�ralement pr�lev� par un auto-�chantilonneur."
+Site	SampleCollectionDefault	SiteSampleCollectionDefault	grb	grb	A single large representative grab sample.	Un seul �chantillon ponctuel repr�sentatif.
+Site	SampleCollectionDefault	SiteSampleCollectionDefault	grbCp8h	grbcp8h	"An 8-hour composite with 8 grab samples each taken once per hour, generally manually performed."	"Un �chantillon composite pr�lev� sur 8 heures consitu� d'�chantillons ponctuels collect�s une fois par heure, g�n�ralement pr�lev� manuellement."
+Site	SampleCollectionDefault	SiteSampleCollectionDefault	grbCp3h	grbcp3h	"A 3-hour composite with 3 grab samples each taken once per hour, generally manually performed."	"Un �chantillon composite pr�lev� sur 3 heures consitu� d'�chantillons ponctuels collect�s une fois par heure, g�n�ralement pr�lev� manuellement."
+Site	SampleCollectionDefault	SiteSampleCollectionDefault	grbCp3	grbcp3	A grab-composite sample composed of 3 separate grab samples.	Un �chantillon composite compos� de 3 �chantillons ponctuels.
+Site	SampleCollectionDefault	SiteSampleCollectionDefault	mooreSw	mooresw	Moore swab passive sample.	Un �chantillon passif collect� par la m�thode de Moore.
+Site	SampleCollectionDefault	SiteSampleCollectionDefault	other	other	Other type of collection method. Add description to collectionOther.	"Autre m�thode de collecte. Ajouter une description dans la colonne ""descriptionOther"""
+Site	MeasureFractionAnalyzedDefault	SiteMeasureFractionAnalyzedDefault	liquid	liquid	Liquid fraction	Fraction liquide.
+Site	MeasureFractionAnalyzedDefault	SiteMeasureFractionAnalyzedDefault	solid	solid	Solid fraction	Fraction solide.
+Site	MeasureFractionAnalyzedDefault	SiteMeasureFractionAnalyzedDefault	mixed	mixed	Mixed/homogenized sample	�chantillon homog�n�is�/m�lang�.
+SiteMeasure	type	SiteMeasureType	envTemp	envtemp	Environmental temperature.	Temp�rature ambiante.
+SiteMeasure	type	SiteMeasureType	envRnF	envrnf	"Rain fall, i.e. amount of precipitation in the form of rain."	Pluie (toute pr�cipitation sous forme liquide).
+SiteMeasure	type	SiteMeasureType	envSnwF	envsnwf	"Snow fall, i.e. amount of precipitation in the form of snow."	Neige (toute pr�cipitations sous forme solide).
+SiteMeasure	type	SiteMeasureType	envSnwD	envsnwd	Total depth of snow on the ground.	�paisseur de neige au sol.
+SiteMeasure	type	SiteMeasureType	wwFlow	wwflow	Flow of wastewater.	D�bit d'eau us�e.
+SiteMeasure	type	SiteMeasureType	wwTemp	wwtemp	Temperature of the wastewater.	Temp�rature de l'eau us�e.
+SiteMeasure	type	SiteMeasureType	wwTSS	wwtss	Total suspended solids concentration of the wastewater.	Mati�res en suspension
+SiteMeasure	type	SiteMeasureType	wwCOD	wwcod	Chemical oxygen demand of the wastewater.	Demande chimique en oxyg�ne
+SiteMeasure	type	SiteMeasureType	wwTurb	wwturb	Turbidity of the wastewater.	Turbidit�
+SiteMeasure	type	SiteMeasureType	wwOPhos	wwophos	Ortho-phosphate concentration.	Concentration d'ortho-phosphates
+SiteMeasure	type	SiteMeasureType	wwNH4N	wwnh4n	"Ammonium nitrogen concentration, as N."	"Concentrsation d'azote ammoniacal, exprim� en N."
+SiteMeasure	type	SiteMeasureType	wwTN	wwtn	"Total nitrogen concentration, as N."	"Azote total, exprim� en N"
+SiteMeasure	type	SiteMeasureType	wwpH	wwph	pH of the wastewater.	pH
+SiteMeasure	type	SiteMeasureType	wwBOD5t	wwbod5t	5 day total biochemical oxygen demand	Demande biochimique totale en oxygene sur 5 jours
+SiteMeasure	type	SiteMeasureType	wwBOD5c	wwbod5c	5 day carbonaceous biochemical oxygen demand	Demande biochinique carbonnee en oxygene sur 5 jours
+SiteMeasure	type	SiteMeasureType	wwPtot	wwptot	Total phosphates	Phosphates totaux
+SiteMeasure	type	SiteMeasureType	wwPP	wwpp	Total phosphorous	Phosphore total
+SiteMeasure	type	SiteMeasureType	wwCond	wwcond	Conductivity of the wastewater.	Conductivit�
+SiteMeasure	unit	SiteMeasureUnit	c	c	Degrees Celcius	Degr�s Celcius
+SiteMeasure	unit	SiteMeasureUnit	mm	mm	Millimeters	Millim�tres
+SiteMeasure	unit	SiteMeasureUnit	m3H	m3h	Cubic meters per hour	M�tres cubes par heure
+SiteMeasure	unit	SiteMeasureUnit	m3D	m3d	Cubic meters per day	M�tres cubes par jour
+SiteMeasure	unit	SiteMeasureUnit	mgL	mgl	Milligrams per liter	Milligrammes par litre
+SiteMeasure	unit	SiteMeasureUnit	pH	ph	pH units	Unit�s de pH
+SiteMeasure	unit	SiteMeasureUnit	usCM	uscm	Micro-siemens per centimeter	Micro-siemens par centim�tre
+SiteMeasure	aggregation	SiteMeasureAggregation	single	single	"This value is not an aggregate measurement in any way (ie. not a mean, median, max or any other) and can be a replicate value."	"La valeur n'a subi aucune agr�gation (donc, la valeur n'est pas une moyenne, un maximum, etc.). La valeur peut �tre un r�plica."
+SiteMeasure	aggregation	SiteMeasureAggregation	mean	mean	Arithmetic mean	Moyenne arithm�tique.
+SiteMeasure	aggregation	SiteMeasureAggregation	geoMn	geomn	Geometric mean	Moyenne g�om�trique.
+SiteMeasure	aggregation	SiteMeasureAggregation	median	median	Median	M�diane.
+SiteMeasure	aggregation	SiteMeasureAggregation	min	min	Lowest value in a range of values	La valeur la plus basse dans un ensemble.
+SiteMeasure	aggregation	SiteMeasureAggregation	max	max	Highest value in a range of values	La valeur la plus haute dans un ensemble.
+SiteMeasure	aggregation	SiteMeasureAggregation	sd	sd	Standard deviation	L'�cart type.
+SiteMeasure	aggregation	SiteMeasureAggregation	other	other	Other aggregation method. Add description to aggregationOther	"Autre m�thode d'agr�gation. Ajouter une description dans ""aggregationOther""."
+AssayMethod	unit	AssayMethodUnit	gcPMMoV	gcpmmov	Gene copies per copy of PMMoV.	Copies de g�ne ou de variant par copie de PMMoV
+AssayMethod	unit	AssayMethodUnit	gcMl	gcml	Gene copies per milliliter.	Copies de g�ne ou de variant par millilitre.
+AssayMethod	unit	AssayMethodUnit	gcGms	gcgms	Gene copies per gram solids.	Copies de g�ne ou de variant par gramme de solides.
+AssayMethod	unit	AssayMethodUnit	gcL	gcl	Gene copies per liter.	Copies de g�ne ou de variant par litre.
+AssayMethod	unit	AssayMethodUnit	gcCrA	gccra	Gene copies per copy of crAssphage.	Copies de g�ne ou de variant par copie de CrAssphage
+AssayMethod	unit	AssayMethodUnit	other	other	Other measurement of viral copies. Add description to unitOther.	"Autre mesure de copies virales ou de qualit� des eaux us�es. Ajouter une description dans ""unitOther"""
+Instrument	type	InstrumentType	online	online	An online sensor	Capteur en ligne.
+Instrument	type	InstrumentType	lab	lab	Offline laboratory analysis	Analyse en laboratoire.
+Instrument	type	InstrumentType	hand	hand	A handheld measurement analyzer.	Mesure � l'aide d'un capteur manuel.
+Instrument	type	InstrumentType	atline	atline	An atline analyzer with sampler.	Mesure � l'aide d'un �chantillonneur.
+Instrument	type	InstrumentType	other	other	An other type of measurement instrument. Add description to instrumentTypeOther.	"Autre type d'appareil de mesure. Ajouter une description dans ""instrumentTypeOther"""
+Polygon	type	PolygonType	swrCat	swrcat	Sewer catchment area.	Zone de captage d'un r�seau d'�gout.
+Polygon	type	PolygonType	hlthReg	hlthreg	Health region served by the sewer network	R�gion de sant� desservie par le r�seau d'�gout.
+CovidPublicHealthData	type	CovidPublicHealthDataType	conf	conf	Number of confirmed cases. This measure should be accompanied by dateType.	"Nombre de cas confirm�s. La mesure devrait �tre accompagn�e d'une valeur dans la colonne ""dateType"""
+CovidPublicHealthData	type	CovidPublicHealthDataType	active	active	Number of active cases.	Nombre de cas actifs.
+CovidPublicHealthData	type	CovidPublicHealthDataType	test	test	Number of tests performed.	Nombre de tests effectu�s.
+CovidPublicHealthData	type	CovidPublicHealthDataType	posTest	postest	Number of positive tests.	Nombre de tests positifs.
+CovidPublicHealthData	type	CovidPublicHealthDataType	pPosRt	pposrt	Percent positivity rate.	Pourcentage de positivit� des tests.
+CovidPublicHealthData	type	CovidPublicHealthDataType	hospCen	hospcen	Hospital census or the number of people admitted with covid-19.	Rencensement des patients admis � un h�pital avec la COVID-19.
+CovidPublicHealthData	type	CovidPublicHealthDataType	hospAdm	hospadm	Hospital admissions or patients newly admitted to hospital.	Nombre d'admissions ou nombre de patients admis � l'h�pital.
+CovidPublicHealthData	dateType	CovidPublicHealthDataDateType	episode	episode	"Episode date is the earliest of onset, test or reported date."	"Date estim�e � laquelle l'�pisode de maladie s'est d�clar�. Habituellement calcul� en se basant sur la date des premiers sympt�mes, la date de test ou la date de reportage."
+CovidPublicHealthData	dateType	CovidPublicHealthDataDateType	onset	onset	"Earliest that symptoms were reported for this case. This data is often not known and reported. In lieu, episode is used."	Date � laquelle les premiers sympt�mes apparaissent. Cette donn�e est souvent inconnue. La date d'�pisode est alors commun�ment utilis�e.
+CovidPublicHealthData	dateType	CovidPublicHealthDataDateType	report	report	"Date that the numbers were reported publicly. Typically, reported data and this measure is most commonly reported and used."	Date � laquelle la donn�e a �t� report�e � la sant� publique. Cette mesure est commun�ment utilis�e.
+CovidPublicHealthData	dateType	CovidPublicHealthDataDateType	test	test	Date that the covid-19 test was performed.	Date � laquelle le test de COVID-19 a �t� effectu�.
