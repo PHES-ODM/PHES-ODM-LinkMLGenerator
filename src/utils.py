@@ -171,7 +171,7 @@ def strip_whitespace(df: pd.DataFrame) -> pd.DataFrame:
     return df.map(lambda x: x.strip() if isinstance(x, str) else x)
 
 def get_enum_name_from_part_id(part_id: str) -> str:
-    """Get the enumeration name for the specified
+    """Get the enumeration name for the specified part ID.
 
     Args:
         part_id (str): The partID to get the enumeration name for. This is typically equal
