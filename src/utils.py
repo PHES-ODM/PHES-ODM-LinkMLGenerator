@@ -187,12 +187,13 @@ def get_enum_name_from_part_id(part_id: str) -> str:
     return name
 
 def clean_dirs(dirs: Union[str, List[str]], extensions: Union[str, List[str]] = [".tsv", ".csv", ".yaml"]):
-    """Remove all TSV and CSV files in all the specified directories.
+    """Remove all TSV, CSV, and YAML files in all the specified directories.
 
     Args:
-        dirs (Union[str, List[str]]): One or more directory to clean.
+        dirs (Union[str, List[str]]): One or more directories to clean.
         extensions (Union[str, List[str]]): One or more extensions. All files with these
-            extensions found in the directories are deleted. These are case-insensitive.
+            extensions found in the directories are deleted. These are case-insensitive and
+            should be prefixed by a dot.
             (Defaults to [".tsv", ".csv", ".yaml"])
     """
     if isinstance(extensions, str):
@@ -245,11 +246,13 @@ def extract_sheets(file: str, sheets: List[str], output_dir: Optional[str] = Non
             If empty then the sheets are saved to the same directory as the input file. The file names
             will be the sheet name (as specified in sheets) with a csv extension. Defaults to None.
     """
+    # Create output directory
     if not output_dir:
         output_dir = os.path.dirname(file)
     if output_dir:
         os.makedirs(output_dir, exist_ok=True)
     
+    # Load all sheets from Excel file.
     if isinstance(sheets, str):
         sheets = [sheets]
     if sheets is None or len(sheets) == 0:
@@ -257,6 +260,7 @@ def extract_sheets(file: str, sheets: List[str], output_dir: Optional[str] = Non
     print(f"Extracting {'all sheets' if sheets is None else sheets} from file '{os.path.basename(file)}'...")
     dfs = pd.read_excel(file, sheet_name = sheets)
 
+    # Save all extracted sheets to disk
     for sheet_name, df in dfs.items():
         output_file = Path(output_dir) / f"{sheet_name}.csv"
         print(f"Saving sheet {sheet_name} to {output_file}")
