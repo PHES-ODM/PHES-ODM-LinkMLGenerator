@@ -38,7 +38,7 @@ def extract_parts_enums(parts_file: str, output_file: str):
     """
     df = pd.read_csv(parts_file)
 
-    # Use only active rows (in status column)
+    # Use only active rows (indicated in the "status" column)
     df = keep_active_rows(df)
 
     # Get all enum names by getting the partID of categorical variables that are headers (pK, fK, or header) 

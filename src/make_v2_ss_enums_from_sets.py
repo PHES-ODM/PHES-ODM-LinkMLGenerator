@@ -55,7 +55,7 @@ def extract_sets_enums(sets_file: str, parts_file: str, output_file: str):
         df.loc[pd.isna(df[k]), k] = ""
 
     # Drop duplicates, based on both "enum" and "permissible_value" columns
-    # For the duplicates, we concatenate the "title" and "description" values so that in
+    # For the duplicates, we concatenate the multiple "title" and "description" values so that in
     # the kept duplicate we have all possible titles and descriptions included.
     # eg. If the "MyEnum" enum has multiple blank permissible_values (usually corresponding
     # to "not applicable"), then we will merge them into one. The resulting title might look
@@ -81,12 +81,14 @@ def extract_sets_enums(sets_file: str, parts_file: str, output_file: str):
     # Drop the duplicates
     df = df.drop_duplicates(subset = [enum_col, permissible_value_col], keep = "first")
     
-    # @TODO: Once we figure out how to have blank permissible values, remove this.
+    # @TODO: Once we figure out how to have blank permissible values, remove this. At the
+    # moment Schemasheets treats blank permissible values as corresponding to details about
+    # the upper level enum, rather than a value of the enum.
     # Drop blank partIDs. 
     df[df["partID"] == ""] = None
     df = df.dropna(axis = 0, subset="partID")
     
-    # We now have all the permissible values for each enumeration. We also want a row
+    # We now have all the permissible values for each enumeration. We also want to create a row
     # for each enumeration where no permissible value is listed. These are the rows containing
     # top-level enumeration data, ie. the enumeration's title and description, rather than
     # a permissible value title and description.
