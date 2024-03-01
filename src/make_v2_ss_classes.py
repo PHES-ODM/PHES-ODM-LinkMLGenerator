@@ -15,8 +15,9 @@ extract_all_classes("odm_v2/dictionary/parts.csv", "odm_v2/schemasheets")
 from pathlib import Path
 import pandas as pd
 import os
-from utils import add_schemasheets_header, keep_active_rows, get_enum_name_from_part_id, save_data_frame, get_header_rows, class_names
+from utils import add_schemasheets_header, keep_active_rows, get_enum_name_from_part_id, save_data_frame, get_header_rows, order_columns, class_names
 import argparse
+from typing import Tuple
 
 # For mapping the columns in our final DataFrame to columns recognized by Schemasheets
 headers = {
@@ -43,7 +44,7 @@ _data_types_map = {
     "blob" : "blob",            # @TODO: How should we deal with blobs? I'm not sure if LinkML has this data type
 }
 
-def extract_class(df: pd.DataFrame, class_name: str, output_dir: str) -> List[str, pd.DataFrame]:
+def extract_class(df: pd.DataFrame, class_name: str, output_dir: str) -> Tuple[str, pd.DataFrame]:
     """Create a Schemasheet for the specified class name using the data in a
     DataFrame loaded from the parts sheet of the ODM v2 data dictionary.
 
@@ -58,8 +59,11 @@ def extract_class(df: pd.DataFrame, class_name: str, output_dir: str) -> List[st
             well as the DataFrame of the Schemasheet.
     """
     
-    # Select all rows for the table
+    # Get all rows in the table that correspond to a header in the parts sheet (ie. rows identified
+    # as a primary key, foreign key, or header)
     table_df = get_header_rows(df, class_name)
+    
+    # Only keep rows that are marked as "active" under the "status" column
     table_df = keep_active_rows(table_df)
 
     # Select the columns of interest, and rename some of the columns
@@ -73,7 +77,7 @@ def extract_class(df: pd.DataFrame, class_name: str, output_dir: str) -> List[st
     # Fix up minValue and maxValue
     # @TODO: This code is commented out because Schemasheets currently seems to treat these
     # numeric values as strings when creating the LinkML schema. This causes downstream problems
-    # (eg. linkml-validate raises an exception and doesn't complete).
+    # (eg. linkml-validate raises an exception due to comparing a string to an int, and doesn't complete).
     # def _cast_int(x):
     #     try:
     #         return int(x)
@@ -82,7 +86,7 @@ def extract_class(df: pd.DataFrame, class_name: str, output_dir: str) -> List[st
     # table_output_df["maxValue"] = table_output_df["maxValue"].map(_cast_int)
     # table_output_df["minValue"] = table_output_df["minValue"].map(_cast_int)
 
-    # Set required field
+    # Set "required" field (ie. row has the value "mandatory" in the "required" column)
     table_output_df["required"] = table_output_df["required"].isin(["mandatory"])
 
     # Set the dataType (range) by mapping the values in the "dataType" column to
@@ -90,11 +94,13 @@ def extract_class(df: pd.DataFrame, class_name: str, output_dir: str) -> List[st
     for k, v in _data_types_map.items():
         table_output_df.loc[table_output_df["dataType"] == k, "dataType" ] = v
 
-    # Set the dataType for enumerations that have an mmaSet
+    # Set the dataType for enumerations that have an mmaSet (the data type/enumeration is the value in "mmaSet")
     mmaset_filt = ~pd.isna(table_output_df["mmaSet"])
     table_output_df.loc[mmaset_filt, "dataType"] = table_output_df.loc[mmaset_filt, "mmaSet"]
 
     # Set the dataType for remaining enumerations that are categorical (ie. the ones that do not have an mmaSet that was set previously)
+    # The enumeration names are a variant of the value found in the partID column (eg. we often just need to add an "s" to
+    # the end of the partID column, see utils.get_enum_name_from_part_id)
     categorical_filt = (~mmaset_filt) & (table_output_df["dataType"] == "categorical")
     table_output_df.loc[categorical_filt, "dataType"] = table_output_df.loc[categorical_filt, "partID"].apply(get_enum_name_from_part_id)
 
@@ -104,16 +110,18 @@ def extract_class(df: pd.DataFrame, class_name: str, output_dir: str) -> List[st
     # Sort by "order" column
     table_output_df = table_output_df.sort_values("order")
 
-    # Set the table name (class)
+    # Set the table name for all the rows (class). We're only working with one table name
+    # at a time, so they're all the same.
     table_output_df["class"] = class_name
 
-    column_order = list(headers.keys()) + [c for c in table_output_df.columns if c not in headers.keys()]
-    table_output_df = table_output_df[column_order]
+    # Reorder the columns, according to the order in the headers dictionary. Any column
+    # not in the headers dictionary is placed at the end.
+    table_output_df = order_columns(table_output_df, headers.keys())
     
     # Add Schemasheets headers
     table_output_df = add_schemasheets_header(table_output_df, headers = headers)
 
-    # Save to disk for now
+    # Save to disk
     output_file = Path(output_dir) / f"class_{class_name}.tsv"
     print(f"Saving classes to {output_file}")
     save_data_frame(table_output_df, output_file)
