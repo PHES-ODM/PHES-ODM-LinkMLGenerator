@@ -1,5 +1,5 @@
 """
-Utility functions for ODM v2 Schema Generator.
+Utility functions for ODM LinkML Schema Generator.
 """
 
 from pathlib import Path
