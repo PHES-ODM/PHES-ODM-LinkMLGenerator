@@ -26,7 +26,7 @@ The script will output the location of the saved schema. By default this is loca
 
 ## Generating the ODM v2 LinkML Schema
 
-Since ODM v2 is a much more complicated data model and is expected to have some ammendments in the future, generation of the ODM v2 schema is more complicated and involves a lot of processing of the ODM v2 data dictionary spreadsheet to create a series of Schemasheets. We have included a single script that can be run to do the full processing and generation of the final LinkML schema.
+Since ODM v2 is a much more complex data model and is expected to have some ammendments in the future, generation of the ODM v2 schema is more complicated and involves a lot of processing of the ODM v2 data dictionary spreadsheet to create a series of Schemasheets. We have included a single script that can be run to do the full processing and generation of the final LinkML schema.
 
 Before generating the schema, you must first obtain the Excel data dictionary for the ODM. This file is currently not publicly available. To obtain the file please contact [Mathew Thomson](mailto:matthomson@ohri.ca). Once you obtain the data dictionary, save it as "v2 ODM dictionary.xlsx" in the "odm_v2" root directory. Since this spreadsheet uses several Excel functions not supported in some older versions of Excel (such as the FILTER and XLOOKUP functions), it is recommended that you do not load and resave the file in Excel, as doing so will make the file unusable.
 
