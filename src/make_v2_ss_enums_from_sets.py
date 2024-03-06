@@ -17,7 +17,9 @@ extract_sets_enums("odm_v2/dictionary/sets.csv",
 
 import pandas as pd
 import argparse
-from utils import add_schemasheets_header, keep_active_rows, save_data_frame, order_columns
+
+from utils import add_schemasheets_header, save_data_frame, order_columns
+from v2_utils import v2_keep_active_rows
 
 # For mapping the columns in our final DataFrame to columns recognized by Schemasheets
 # Required schemasheets headers: "enum", "permissible_value", "description", "title"
@@ -45,7 +47,7 @@ def extract_sets_enums(sets_file: str, parts_file: str, output_file: str):
     parts_df = pd.read_csv(parts_file)
 
     # Keep only active status parts
-    df = keep_active_rows(df)
+    df = v2_keep_active_rows(df)
 
     # Get the description (partDesc) and title (partLabel) from the parts list, by joining on partID
     df = df.merge(parts_df[["partID", "partDesc", "partLabel"]], on="partID", how="left")

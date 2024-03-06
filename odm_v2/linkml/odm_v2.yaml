@@ -2747,6 +2747,13 @@ enums:
       pmmovNorm:
         description: Mean measure normalized to amount of PMMoV.
         title: PMMoV-normalized mean
+      sum14:
+        description: The rolling sum of case counts/some kind of count over the previous
+          14 days.
+        title: Rolling sum of previous 14 days
+      total:
+        description: The total number or final count of cases, or other defined metric.
+        title: Total amount or count - the sum
   aggregationSets:
     description: Sets of aggregations.
     title: Aggregation sets
@@ -3590,10 +3597,22 @@ enums:
       centSpeed:
         description: Centrifugation speed
         title: Centrifugation speed
+      shaker:
+        description: The speed/aggitation level for a shaker plate/shaker platform.
+        title: Shaker aggitation speed
+      duration:
+        description: The duration of time for a given method as described in protocols.
+        title: Duration time of a method
       conc:
         description: Measurement of concentration (generalized) - designed for describing
           protocols.
         title: Concentration measure
+      finVol:
+        description: The final volume of a testing solution or sample.
+        title: Final volume
+      cyNum:
+        description: The number of cycles of a PCR machine, or any other cycling process.
+        title: Number of cycles
       col2Frdg:
         description: The amount of time between sample collection and the samples
           placement in stable storage/refrigeration.
@@ -3788,6 +3807,14 @@ enums:
         description: The set capturing containing all of the valid methods for the
           PCR standard curve calculations.
         title: Standard Curve Calculation Set
+      retElSet:
+        description: The set for enumerating the valid possible values of the retained
+          element method.
+        title: Retained Element Set
+      resusSet:
+        description: The set to describe valid categorical values for the resuspension
+          method.
+        title: Resuspension method set
   nomenclatures:
     description: A classification system to report the measure class.
     title: Nomenclatures
@@ -6568,7 +6595,7 @@ classes:
       license:
         description: The license of a dataset.
         title: License
-        range: string
+        range: licSet
         required: true
       descr:
         description: A detailed description of a measure, method, or attribute.

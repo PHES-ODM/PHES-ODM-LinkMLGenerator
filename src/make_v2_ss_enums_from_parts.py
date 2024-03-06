@@ -14,8 +14,10 @@ extract_parts_enums("odm_v2/dictionary/parts.csv", "odm_v2/schemasheets/enums_pa
 """
 
 import pandas as pd
-from utils import add_schemasheets_header, keep_active_rows, class_names, get_header_rows, save_data_frame, get_enum_name_from_part_id
 import argparse
+
+from utils import add_schemasheets_header, save_data_frame
+from v2_utils import v2_keep_active_rows, v2_class_names, v2_get_header_rows, v2_get_enum_name_from_part_id
 
 # For mapping the columns in our final DataFrame to columns recognized by Schemasheets
 # Required schemasheets headers: "enum", "permissible_value", "description"
@@ -39,17 +41,17 @@ def extract_parts_enums(parts_file: str, output_file: str):
     df = pd.read_csv(parts_file)
 
     # Use only active rows (indicated in the "status" column)
-    df = keep_active_rows(df)
+    df = v2_keep_active_rows(df)
 
     # Get all enum names by getting the partID of categorical variables that are headers (pK, fK, or header) 
     # and do not have an mmaSet. Once we have all the header rows, we get the enumeration name based on the 
     # partID. We do not extract the ones with mmaSet set, since those are fully defined in the sets
     # sheet, not the parts sheet (see make_v2_ss_enums_from_sets.py).
-    headers_df = get_header_rows(df, class_names)
+    headers_df = v2_get_header_rows(df, v2_class_names)
     filt = headers_df["dataType"].isin(["categorical"])
     filt = filt & pd.isna(headers_df["mmaSet"])
     enum_source_names = sorted(headers_df[filt]["partID"].unique())
-    enum_names = [get_enum_name_from_part_id(name) for name in enum_source_names]
+    enum_names = [v2_get_enum_name_from_part_id(name) for name in enum_source_names]
 
     # Get all rows for all enums. We only keep the columns in keep_columns.
     # Each row (or enum value) should be an "input" for at least one class.
@@ -64,7 +66,7 @@ def extract_parts_enums(parts_file: str, output_file: str):
         "partInstr",
     ]
     output_df = pd.DataFrame()
-    is_input = df[class_names].isin(["input"])
+    is_input = df[v2_class_names].isin(["input"])
     is_input = is_input.sum(axis=1)
     input_df = df[is_input > 0]
     for enum_name in enum_names:

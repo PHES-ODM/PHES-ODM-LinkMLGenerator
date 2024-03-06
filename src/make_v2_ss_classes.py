@@ -15,7 +15,8 @@ extract_all_classes("odm_v2/dictionary/parts.csv", "odm_v2/schemasheets")
 from pathlib import Path
 import pandas as pd
 import os
-from utils import add_schemasheets_header, keep_active_rows, get_enum_name_from_part_id, save_data_frame, get_header_rows, order_columns, class_names
+from utils import add_schemasheets_header, save_data_frame, order_columns
+from v2_utils import v2_keep_active_rows, v2_get_enum_name_from_part_id, v2_get_header_rows, v2_class_names
 import argparse
 from typing import Tuple
 
@@ -61,10 +62,10 @@ def extract_class(df: pd.DataFrame, class_name: str, output_dir: str) -> Tuple[s
     
     # Get all rows in the table that correspond to a header in the parts sheet (ie. rows identified
     # as a primary key, foreign key, or header)
-    table_df = get_header_rows(df, class_name)
+    table_df = v2_get_header_rows(df, class_name)
     
     # Only keep rows that are marked as "active" under the "status" column
-    table_df = keep_active_rows(table_df)
+    table_df = v2_keep_active_rows(table_df)
 
     # Select the columns of interest, and rename some of the columns
     table_output_df = table_df[["partID", "partLabel", "partDesc", "partType", "partInstr", "mmaSet", f"{class_name}", f"{class_name}Required", f"{class_name}Order", "dataType", "minValue", "maxValue", "minLength", "maxLength"]].copy()
@@ -100,9 +101,9 @@ def extract_class(df: pd.DataFrame, class_name: str, output_dir: str) -> Tuple[s
 
     # Set the dataType for remaining enumerations that are categorical (ie. the ones that do not have an mmaSet that was set previously)
     # The enumeration names are a variant of the value found in the partID column (eg. we often just need to add an "s" to
-    # the end of the partID column, see utils.get_enum_name_from_part_id)
+    # the end of the partID column, see utils.v2_get_enum_name_from_part_id)
     categorical_filt = (~mmaset_filt) & (table_output_df["dataType"] == "categorical")
-    table_output_df.loc[categorical_filt, "dataType"] = table_output_df.loc[categorical_filt, "partID"].apply(get_enum_name_from_part_id)
+    table_output_df.loc[categorical_filt, "dataType"] = table_output_df.loc[categorical_filt, "partID"].apply(v2_get_enum_name_from_part_id)
 
     # Set identifiers (primary keys)
     table_output_df["identifier"] = table_output_df["headerType"] == "pK"
@@ -143,7 +144,7 @@ def extract_all_classes(parts_file: str, output_dir: str):
 
     df = pd.read_csv(parts_file)
 
-    for class_name in class_names:
+    for class_name in v2_class_names:
         print(f"Processing table {class_name}...")
         extract_class(df, class_name, output_dir)
 
