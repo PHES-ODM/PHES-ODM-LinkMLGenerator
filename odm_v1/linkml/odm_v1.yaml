@@ -972,7 +972,7 @@ classes:
       unit:
         description: Unit of the measurement.
         title: Unit
-        range: category
+        range: WWMeasureUnit
       unitOther:
         description: Description for other measurement unit not listed in unit.
         title: Unit other
@@ -981,7 +981,7 @@ classes:
         description: Statistical measures used to report the sample units of Ct/Cq,
           unless otherwise stated. Each aggregation has a corresponding value.
         title: Aggregation
-        range: category
+        range: WWMeasureAggregation
       aggregationOther:
         description: Description for other type of aggregation not listed in aggregation.
         title: Aggregation other
