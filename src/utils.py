@@ -53,7 +53,7 @@ def order_columns(df: pd.DataFrame, column_order: List[str]) -> pd.DataFrame:
     columns = list(column_order) + [c for c in df.columns if c not in column_order]
     return df[columns].copy()
 
-def save_data_frame(df: pd.DataFrame, output_file: Union[str, Path], strip: bool = True):
+def save_data_frame(df: pd.DataFrame, output_file: Union[str, Path], strip: bool = True, **kwargs):
     """Save a Pandas DataFrame to disk as a TSV or CSV, using the correct separator for the
     file extension.
 
@@ -63,12 +63,13 @@ def save_data_frame(df: pd.DataFrame, output_file: Union[str, Path], strip: bool
             delimeters are used. Any other extension will have comma delimeters.
         strip (bool): If True then strip leading and trailing whitespace from all string values
             in the DataFrame. (Defaults to True)
+        **kwargs: Additional key-word arguments to pass to df.to_csv.
     """
     if strip:
         df = strip_whitespace(df)
     if os.path.dirname(output_file):
         os.makedirs(os.path.dirname(output_file), exist_ok=True)
-    df.to_csv(output_file, index=False, sep="\t" if os.path.splitext(output_file)[1] in [".tsv", ".txt"] else ",")
+    df.to_csv(output_file, sep="\t" if os.path.splitext(output_file)[1] in [".tsv", ".txt"] else ",", **kwargs)
     
 def read_data_frame(file: str, **kwargs) -> pd.DataFrame:
     """Read a Pandas DataFrom from disk, using the correct separator based on the file extension.
@@ -94,7 +95,7 @@ def strip_whitespace(df: pd.DataFrame) -> pd.DataFrame:
     """
     return df.map(lambda x: x.strip() if isinstance(x, str) else x)
 
-def clean_dirs(dirs: Union[Union[str, Path], List[Union[str, Path]]], extensions: Union[str, List[str]] = [".tsv", ".csv", ".yaml"]):
+def clear_dirs(dirs: Union[Union[str, Path], List[Union[str, Path]]], extensions: Union[str, List[str]] = [".tsv", ".csv", ".yaml"]):
     """Remove all TSV, CSV, and YAML files in all the specified directories.
 
     Args:

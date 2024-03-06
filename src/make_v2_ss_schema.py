@@ -35,7 +35,7 @@ def make_schema(output_file: str):
     df = add_schemasheets_header(df, {k:k for k in data.keys()})
 
     print(f"Saving schema to '{output_file}'")
-    save_data_frame(df, output_file)
+    save_data_frame(df, output_file, index=False)
 
 if __name__ == "__main__":
     if "get_ipython" in globals():

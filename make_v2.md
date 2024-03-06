@@ -4,7 +4,7 @@ The ODM v2 Data Dictionary is much more complicated than the v1 dictionary. As s
 
 A detailed description of the steps that the "make_v2.py" script performs to generate the schema are described below.
 
-## utils.clean_dirs
+## utils.clear_dirs
 
 The output directories are first cleaned by removing any old CSV, TSV, and YAML files. This is to ensure no artefacts are left over from previous runs.
 

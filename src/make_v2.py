@@ -10,7 +10,7 @@ Configurable paths (defaults are recommended):
 
 from pathlib import Path
 
-from utils import clean_dirs, extract_sheets, make_linkml_schema
+from utils import clear_dirs, extract_sheets, make_linkml_schema
 from make_v2_ss_classes import extract_all_classes
 from make_v2_ss_enums_from_parts import extract_parts_enums
 from make_v2_ss_enums_from_sets import extract_sets_enums
@@ -28,7 +28,7 @@ parts_file = dictionary_dir / "parts.csv"
 sets_file = dictionary_dir / "sets.csv"
 
 # Clean up the output directories (ie. delete old csv, tsv, and yaml files)
-clean_dirs([dictionary_dir, schemasheets_dir, linkml_dir])
+clear_dirs([dictionary_dir, schemasheets_dir, linkml_dir])
 
 # Extract the parts and sets sheets from the Excel ODM v2 data dictionary file
 extract_sheets(excel_file, ["parts", "sets"], dictionary_dir)

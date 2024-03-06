@@ -81,7 +81,7 @@ def extract_parts_enums(parts_file: str, output_file: str):
 
     # Save to disk
     print(f"Saving enums from parts to '{output_file}'")
-    save_data_frame(output_df, output_file)
+    save_data_frame(output_df, output_file, index=False)
 
 if __name__ == "__main__":
     if "get_ipython" in globals():

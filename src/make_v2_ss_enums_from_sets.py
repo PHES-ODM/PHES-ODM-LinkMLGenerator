@@ -111,7 +111,7 @@ def extract_sets_enums(sets_file: str, parts_file: str, output_file: str):
 
     # Save to disk
     print(f"Saving enums from sets to '{output_file}'")
-    save_data_frame(df, output_file)
+    save_data_frame(df, output_file, index=False)
 
 if __name__ == "__main__":
     if "get_ipython" in globals():

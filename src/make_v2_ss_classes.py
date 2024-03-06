@@ -125,7 +125,7 @@ def extract_class(df: pd.DataFrame, class_name: str, output_dir: str) -> Tuple[s
     # Save to disk
     output_file = Path(output_dir) / f"class_{class_name}.tsv"
     print(f"Saving classes to {output_file}")
-    save_data_frame(table_output_df, output_file)
+    save_data_frame(table_output_df, output_file, index=False)
     
     return output_file, table_output_df
 
