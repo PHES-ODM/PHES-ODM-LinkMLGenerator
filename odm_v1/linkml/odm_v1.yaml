@@ -425,7 +425,7 @@ slots:
     from_schema: https://onto.phes-odm.org/odmv1
   siteID:
     from_schema: https://onto.phes-odm.org/odmv1
-  instrumentID:
+  InstrumentID:
     from_schema: https://onto.phes-odm.org/odmv1
   reporterID:
     from_schema: https://onto.phes-odm.org/odmv1
@@ -472,6 +472,8 @@ slots:
   labID:
     from_schema: https://onto.phes-odm.org/odmv1
   assayID:
+    from_schema: https://onto.phes-odm.org/odmv1
+  instrumentID:
     from_schema: https://onto.phes-odm.org/odmv1
   analysisDate:
     from_schema: https://onto.phes-odm.org/odmv1
@@ -547,10 +549,6 @@ slots:
     from_schema: https://onto.phes-odm.org/odmv1
   accessToAllOrgs:
     from_schema: https://onto.phes-odm.org/odmv1
-  siteIDDefault:
-    from_schema: https://onto.phes-odm.org/odmv1
-  labIDDefault:
-    from_schema: https://onto.phes-odm.org/odmv1
   contactName:
     from_schema: https://onto.phes-odm.org/odmv1
   contactEmail:
@@ -559,11 +557,9 @@ slots:
     from_schema: https://onto.phes-odm.org/odmv1
   contactPhone:
     from_schema: https://onto.phes-odm.org/odmv1
-  assayMethodIDDefault:
+  assayMethodID:
     from_schema: https://onto.phes-odm.org/odmv1
   updateDate:
-    from_schema: https://onto.phes-odm.org/odmv1
-  assayMethodID:
     from_schema: https://onto.phes-odm.org/odmv1
   version:
     from_schema: https://onto.phes-odm.org/odmv1
@@ -622,7 +618,7 @@ classes:
     slots:
     - sampleID
     - siteID
-    - instrumentID
+    - InstrumentID
     - reporterID
     - dateTime
     - dateTimeStart
@@ -652,7 +648,7 @@ classes:
         description: Links with the Site table to describe the location of sampling.
         title: Site id
         range: Site
-      instrumentID:
+      InstrumentID:
         description: Links with the Instrument table to describe the instrument used
           for sampling.
         title: Instrument id
@@ -1207,8 +1203,8 @@ classes:
     from_schema: https://onto.phes-odm.org/odmv1
     slots:
     - reporterID
-    - siteIDDefault
-    - labIDDefault
+    - siteID
+    - labID
     - contactName
     - contactEmail
     - organization
@@ -1221,12 +1217,12 @@ classes:
         title: Reporter id
         identifier: true
         range: string
-      siteIDDefault:
+      siteID:
         description: Used as default when a new sample is created by this reporter.
           See ID in Site table.
         title: Site id default
         range: Site
-      labIDDefault:
+      labID:
         description: Used as default when a new sample is created by this reporter.
           See ID in Lab table.
         title: Lab id default
@@ -1258,7 +1254,7 @@ classes:
     from_schema: https://onto.phes-odm.org/odmv1
     slots:
     - labID
-    - assayMethodIDDefault
+    - assayMethodID
     - name
     - contactName
     - contactEmail
@@ -1270,7 +1266,7 @@ classes:
         title: Lab id
         identifier: true
         range: string
-      assayMethodIDDefault:
+      assayMethodID:
         description: Used as default when a new measurement is created for this lab.
           See ID in AssayMethod table.
         title: Assay method id default
