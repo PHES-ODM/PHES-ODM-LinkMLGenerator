@@ -85,7 +85,7 @@ def extract_sets_enums(sets_file: str, parts_file: str, output_file: str):
     # moment Schemasheets treats blank permissible values as corresponding to details about
     # the upper level enum, rather than a value of the enum.
     # Drop blank partIDs. 
-    df[df["partID"] == ""] = None
+    df.loc[df["partID"] == "", "partID"] = None
     df = df.dropna(axis = 0, subset="partID")
     
     # We now have all the permissible values for each enumeration. We also want to create a row
