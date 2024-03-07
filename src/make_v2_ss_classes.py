@@ -3,6 +3,8 @@
 Creates Schemasheets for all classes (ie. tables) based on the ODM v2 data dictionary parts sheet.
 The outputs will be named "class_{table_name}.tsv".
 
+@TODO: We currently don't have any descriptions or titles for the classes. These should be added.
+
 ## Example
 
 ```python
