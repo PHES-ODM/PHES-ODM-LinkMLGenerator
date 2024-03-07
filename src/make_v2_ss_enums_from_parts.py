@@ -16,8 +16,10 @@ extract_parts_enums("odm_v2/dictionary/parts.csv", "odm_v2/schemasheets/enums_pa
 import pandas as pd
 import argparse
 
-from utils import add_schemasheets_header, save_data_frame
+from utils import add_schemasheets_header, save_data_frame, get_logger
 from v2_utils import v2_keep_active_rows, v2_class_names, v2_get_header_rows, v2_get_enum_name_from_part_id
+
+logger = get_logger(__name__)
 
 # For mapping the columns in our final DataFrame to columns recognized by Schemasheets
 # Required schemasheets headers: "enum", "permissible_value", "description"
@@ -80,7 +82,7 @@ def extract_parts_enums(parts_file: str, output_file: str):
     output_df = add_schemasheets_header(output_df, headers)
 
     # Save to disk
-    print(f"Saving enums from parts to '{output_file}'")
+    logger.info(f"Saving enums from parts to '{output_file}'")
     save_data_frame(output_df, output_file, index=False)
 
 if __name__ == "__main__":
@@ -94,8 +96,8 @@ if __name__ == "__main__":
         args.add_argument("--output_file", type=str, help="The TSV file to save the extracted enums to", required=True)
         opts = args.parse_args()
         
-    print("Making ODM v2 Enums from Parts List...")
+    logger.info("Making ODM v2 Enums from Parts List...")
     
     extract_parts_enums(opts.parts_file, opts.output_file)
 
-    print("Finished!")
+    logger.info("Finished!")

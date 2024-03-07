@@ -10,7 +10,7 @@ Configurable paths (defaults are recommended):
 
 from pathlib import Path
 
-from utils import clear_dirs, extract_sheets, make_linkml_schema
+from utils import clear_dirs, extract_sheets, make_linkml_schema, get_logger
 from make_v2_ss_classes import extract_all_classes
 from make_v2_ss_enums_from_parts import extract_parts_enums
 from make_v2_ss_enums_from_sets import extract_sets_enums
@@ -27,6 +27,8 @@ schemasheets_dir = output_dir / "schemasheets"
 linkml_dir = output_dir / "linkml"
 parts_file = dictionary_dir / "parts.csv"
 sets_file = dictionary_dir / "sets.csv"
+
+logger = get_logger(__name__)
 
 # Clean up the output directories (ie. delete old csv, tsv, and yaml files)
 clear_dirs([dictionary_dir, schemasheets_dir, linkml_dir])
@@ -57,4 +59,4 @@ make_schema(schemasheets_dir / "schema.tsv")
 # Run Schemasheets to make the final LinkML schema
 make_linkml_schema(schemasheets_dir, linkml_dir / "odm_v2.yaml")
 
-print("Finished!")
+logger.info("Finished!")

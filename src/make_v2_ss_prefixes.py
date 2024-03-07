@@ -13,7 +13,10 @@ make_prefixes("odm_v2/schemasheets/prefixes.tsv")
 
 import pandas as pd
 import argparse
-from utils import add_schemasheets_header, save_data_frame
+
+from utils import add_schemasheets_header, save_data_frame, get_logger
+
+logger = get_logger(__name__)
 
 # The full prefixes schemasheet: Column names and values
 data = {
@@ -31,7 +34,7 @@ def make_prefixes(output_file: str):
     df = pd.DataFrame(data, columns = data.keys(), index = [0])
     df = add_schemasheets_header(df, {k:k for k in data.keys()})
 
-    print(f"Saving prefixes to '{output_file}'")
+    logger.info(f"Saving prefixes to '{output_file}'")
     save_data_frame(df, output_file, index=False)
 
 if __name__ == "__main__":
@@ -43,8 +46,8 @@ if __name__ == "__main__":
         args.add_argument("--output_file", type=str, help="The TSV file to save the Schemasheets prefixes file to", required=True)
         opts = args.parse_args()
 
-    print("Making ODM v2 Prefixes...")
+    logger.info("Making ODM v2 Prefixes...")
         
     make_prefixes(opts.output_file)
 
-    print("Finished!")
+    logger.info("Finished!")

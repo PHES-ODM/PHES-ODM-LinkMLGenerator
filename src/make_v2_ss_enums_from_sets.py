@@ -18,8 +18,10 @@ extract_sets_enums("odm_v2/dictionary/sets.csv",
 import pandas as pd
 import argparse
 
-from utils import add_schemasheets_header, save_data_frame, order_columns
+from utils import add_schemasheets_header, save_data_frame, order_columns, get_logger
 from v2_utils import v2_keep_active_rows
+
+logger = get_logger(__name__)
 
 # For mapping the columns in our final DataFrame to columns recognized by Schemasheets
 # Required schemasheets headers: "enum", "permissible_value", "description", "title"
@@ -110,7 +112,7 @@ def extract_sets_enums(sets_file: str, parts_file: str, output_file: str):
     df = add_schemasheets_header(df, headers)
 
     # Save to disk
-    print(f"Saving enums from sets to '{output_file}'")
+    logger.info(f"Saving enums from sets to '{output_file}'")
     save_data_frame(df, output_file, index=False)
 
 if __name__ == "__main__":
@@ -126,8 +128,8 @@ if __name__ == "__main__":
         args.add_argument("--output_file", type=str, help="The TSV file to save the extracted enums to", required=True)
         opts = args.parse_args()
         
-    print("Making ODM v2 from Sets List...")
+    logger.info("Making ODM v2 from Sets List...")
     
     extract_sets_enums(opts.sets_file, opts.parts_file, opts.output_file)
 
-    print("Finished!")
+    logger.info("Finished!")

@@ -8,9 +8,31 @@ import os
 import yaml
 from glob import glob
 from typing import Union, List, Optional
+import logging
+import sys
 
 from schemasheets.schemamaker import SchemaMaker
 from linkml_runtime.utils.schema_as_dict import schema_as_dict
+
+def get_logger(name: str, output_file: str=None, level: Optional[str] = "INFO") -> logging.Logger:
+    handlers = [
+        logging.StreamHandler(sys.stdout)
+    ]
+    if output_file:
+        handlers.append(logging.FileHandler(output_file, mode="w"))
+    logging.basicConfig(
+        handlers=handlers,
+        format="%(levelname)s %(asctime)s %(filename)s:%(lineno)d: %(message)s",
+        level=logging.INFO,
+        datefmt="%Y-%m-%d %H:%M:%S"
+        )
+
+    logger = logging.getLogger(name)
+    if level:
+        logger.setLevel(level)
+    return logger
+
+logger = get_logger(__name__)
 
 def add_schemasheets_header(df: pd.DataFrame, headers: dict) -> pd.DataFrame:
     """Insert Schemasheets header line. This is the line that starts with ">" and is
@@ -111,7 +133,7 @@ def clear_dirs(dirs: Union[Union[str, Path], List[Union[str, Path]]], extensions
     if isinstance(dirs, (str, Path)):
         dirs = [dirs]
     for d in dirs:
-        print(f"Cleaning directory {d}")
+        logger.info(f"Cleaning directory {d}")
         if os.path.isdir(d):
             for f in os.listdir(d):
                 file = Path(d) / f
@@ -127,7 +149,7 @@ def make_linkml_schema(schemasheets_dir: Union[str, Path], output_schema: Union[
             files. All .tsv files are used.
         output_schema (str): The YAML file to save the LinkML schema to.
     """
-    print(f"Making LinkML schema at '{output_schema}' from Schemasheets files in '{schemasheets_dir}'")
+    logger.info(f"Making LinkML schema at '{output_schema}' from Schemasheets files in '{schemasheets_dir}'")
     sm = SchemaMaker(use_attributes=False,
                         unique_slots=False,
                         gsheet_id=None,
@@ -142,7 +164,7 @@ def make_linkml_schema(schemasheets_dir: Union[str, Path], output_schema: Union[
         os.makedirs(os.path.dirname(output_schema), exist_ok=True)
     with open(output_schema, "w") as f:
         f.write(yaml.dump(schema_dict, sort_keys=False))
-    print(f"LinkML schema saved to '{output_schema}'")
+    logger.info(f"LinkML schema saved to '{output_schema}'")
 
 def extract_sheets(file: Union[str, Path], sheets: List[str], output_dir: Optional[Union[str, Path]] = None):
     """Extract the specified sheets from Excel file and save them as separate CSV files.
@@ -166,11 +188,11 @@ def extract_sheets(file: Union[str, Path], sheets: List[str], output_dir: Option
         sheets = [sheets]
     if sheets is None or len(sheets) == 0:
         sheets = None
-    print(f"Extracting {'all sheets' if sheets is None else sheets} from file '{os.path.basename(file)}'...")
+    logger.info(f"Extracting {'all sheets' if sheets is None else sheets} from file '{os.path.basename(file)}'...")
     dfs = pd.read_excel(file, sheet_name = sheets)
 
     # Save all extracted sheets to disk
     for sheet_name, df in dfs.items():
         output_file = Path(output_dir) / f"{sheet_name}.csv"
-        print(f"Saving sheet {sheet_name} to {output_file}")
+        logger.info(f"Saving sheet {sheet_name} to {output_file}")
         df.to_csv(output_file, index=False)

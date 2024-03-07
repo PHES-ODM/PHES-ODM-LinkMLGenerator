@@ -17,10 +17,13 @@ extract_all_classes("odm_v2/dictionary/parts.csv", "odm_v2/schemasheets")
 from pathlib import Path
 import pandas as pd
 import os
-from utils import add_schemasheets_header, save_data_frame, order_columns
-from v2_utils import v2_keep_active_rows, v2_get_enum_name_from_part_id, v2_get_header_rows, v2_class_names
 import argparse
 from typing import Tuple
+
+from utils import add_schemasheets_header, save_data_frame, order_columns, get_logger
+from v2_utils import v2_keep_active_rows, v2_get_enum_name_from_part_id, v2_get_header_rows, v2_class_names
+
+logger = get_logger(__name__)
 
 # For mapping the columns in our final DataFrame to columns recognized by Schemasheets
 headers = {
@@ -126,7 +129,7 @@ def extract_class(df: pd.DataFrame, class_name: str, output_dir: str) -> Tuple[s
 
     # Save to disk
     output_file = Path(output_dir) / f"class_{class_name}.tsv"
-    print(f"Saving classes to {output_file}")
+    logger.info(f"Saving classes to {output_file}")
     save_data_frame(table_output_df, output_file, index=False)
     
     return output_file, table_output_df
@@ -147,7 +150,7 @@ def extract_all_classes(parts_file: str, output_dir: str):
     df = pd.read_csv(parts_file)
 
     for class_name in v2_class_names:
-        print(f"Processing table {class_name}...")
+        logger.info(f"Processing table {class_name}...")
         extract_class(df, class_name, output_dir)
 
 if __name__ == "__main__":
@@ -161,8 +164,8 @@ if __name__ == "__main__":
         args.add_argument("--output_dir", type=str, help="The directory to save the Schemasheets classes files. If not specified then the directory of the input file is used.", required=False)
         opts = args.parse_args()
 
-    print("Making ODM v2 Classes...")
+    logger.info("Making ODM v2 Classes...")
 
     extract_all_classes(opts.parts_file, opts.output_dir)
 
-    print("Finished!")
+    logger.info("Finished!")

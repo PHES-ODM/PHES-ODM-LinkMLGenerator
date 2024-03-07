@@ -11,8 +11,10 @@ import pandas as pd
 from typing import Union
 from pathlib import Path
 
-from utils import save_data_frame, add_schemasheets_header, order_columns
+from utils import save_data_frame, add_schemasheets_header, order_columns, get_logger
 from v2_utils import v2_class_names
+
+logger = get_logger(__name__)
 
 def extract_container_class(output_file: Union[str, Path]):
     # First row is for the Container only (ie. no slot is specified)
@@ -46,8 +48,8 @@ if __name__ == "__main__":
         args.add_argument("--output_file", type=str, help="The TSV file to save the container class Schemasheet to", required=True)
         opts = args.parse_args()
 
-    print("Making ODM v2 Container class...")
+    logger.info("Making ODM v2 Container class...")
 
     extract_container_class(opts.output_file)
 
-    print("Finished!")
+    logger.info("Finished!")
