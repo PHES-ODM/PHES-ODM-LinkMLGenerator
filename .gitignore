@@ -2,6 +2,9 @@ odm_v2/*.xlsx
 odm_v2/dictionary/
 odm_v2/schemasheets/
 
+odm_v1/linkml/docs
+odm_v2/linkml/docs
+
 .DS_Store
 
 # Byte-compiled / optimized / DLL files
