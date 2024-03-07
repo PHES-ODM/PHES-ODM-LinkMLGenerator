@@ -16,6 +16,7 @@ from make_v2_ss_enums_from_parts import extract_parts_enums
 from make_v2_ss_enums_from_sets import extract_sets_enums
 from make_v2_ss_prefixes import make_prefixes
 from make_v2_ss_schema import make_schema
+from make_v2_ss_container import extract_container_class
 
 excel_file = Path("../odm_v2/v2 ODM dictionary.xlsx")
 output_dir = Path("../odm_v2")
@@ -35,6 +36,10 @@ extract_sheets(excel_file, ["parts", "sets"], dictionary_dir)
 
 # Extract all classes from the parts sheet (and save as a schemasheet)
 extract_all_classes(parts_file, schemasheets_dir)
+
+# Extract the Container class, which is the top-level LinkML class containing all
+# the tables.
+extract_container_class(schemasheets_dir / "container.tsv")
 
 # Extract all enums from the sets sheet (and save as a schemasheet)
 extract_sets_enums(sets_file, parts_file, schemasheets_dir / "enums_sets.tsv")
