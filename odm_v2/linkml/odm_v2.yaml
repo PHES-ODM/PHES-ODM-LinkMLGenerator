@@ -4517,6 +4517,50 @@ slots:
     from_schema: https://onto.phes-odm.org/odmv2
   iso6396:
     from_schema: https://onto.phes-odm.org/odmv2
+  protocolSteps:
+    from_schema: https://onto.phes-odm.org/odmv2
+  protocolRelationships:
+    from_schema: https://onto.phes-odm.org/odmv2
+  measures:
+    from_schema: https://onto.phes-odm.org/odmv2
+  measureSets:
+    from_schema: https://onto.phes-odm.org/odmv2
+  datasets:
+    from_schema: https://onto.phes-odm.org/odmv2
+  sites:
+    from_schema: https://onto.phes-odm.org/odmv2
+  samples:
+    from_schema: https://onto.phes-odm.org/odmv2
+  addresses:
+    from_schema: https://onto.phes-odm.org/odmv2
+  contacts:
+    from_schema: https://onto.phes-odm.org/odmv2
+  organizations:
+    from_schema: https://onto.phes-odm.org/odmv2
+  instruments:
+    from_schema: https://onto.phes-odm.org/odmv2
+  polygons:
+    from_schema: https://onto.phes-odm.org/odmv2
+  languages:
+    from_schema: https://onto.phes-odm.org/odmv2
+  translations:
+    from_schema: https://onto.phes-odm.org/odmv2
+  parts:
+    from_schema: https://onto.phes-odm.org/odmv2
+  sets:
+    from_schema: https://onto.phes-odm.org/odmv2
+  qualityReports:
+    from_schema: https://onto.phes-odm.org/odmv2
+  sampleRelationships:
+    from_schema: https://onto.phes-odm.org/odmv2
+  protocols:
+    from_schema: https://onto.phes-odm.org/odmv2
+  countries:
+    from_schema: https://onto.phes-odm.org/odmv2
+  zones:
+    from_schema: https://onto.phes-odm.org/odmv2
+  wideNames:
+    from_schema: https://onto.phes-odm.org/odmv2
   stepID:
     from_schema: https://onto.phes-odm.org/odmv2
   method:
@@ -4637,87 +4681,57 @@ slots:
     from_schema: https://onto.phes-odm.org/odmv2
   status:
     from_schema: https://onto.phes-odm.org/odmv2
-  protocolSteps:
-    from_schema: https://onto.phes-odm.org/odmv2
   protocolRelationshipsRequired:
     from_schema: https://onto.phes-odm.org/odmv2
   protocolStepsRequired:
     from_schema: https://onto.phes-odm.org/odmv2
   protocolStepsOrder:
     from_schema: https://onto.phes-odm.org/odmv2
-  protocolRelationships:
-    from_schema: https://onto.phes-odm.org/odmv2
   protocolRelationshipsOrder:
-    from_schema: https://onto.phes-odm.org/odmv2
-  measures:
     from_schema: https://onto.phes-odm.org/odmv2
   measuresRequired:
     from_schema: https://onto.phes-odm.org/odmv2
   measuresOrder:
     from_schema: https://onto.phes-odm.org/odmv2
-  measureSets:
-    from_schema: https://onto.phes-odm.org/odmv2
   measureSetsOrder:
     from_schema: https://onto.phes-odm.org/odmv2
   measureSetsRequired:
-    from_schema: https://onto.phes-odm.org/odmv2
-  datasets:
     from_schema: https://onto.phes-odm.org/odmv2
   datasetsRequired:
     from_schema: https://onto.phes-odm.org/odmv2
   datasetsOrder:
     from_schema: https://onto.phes-odm.org/odmv2
-  sites:
-    from_schema: https://onto.phes-odm.org/odmv2
   sitesRequired:
     from_schema: https://onto.phes-odm.org/odmv2
   sitesOrder:
-    from_schema: https://onto.phes-odm.org/odmv2
-  samples:
     from_schema: https://onto.phes-odm.org/odmv2
   samplesRequired:
     from_schema: https://onto.phes-odm.org/odmv2
   samplesOrder:
     from_schema: https://onto.phes-odm.org/odmv2
-  addresses:
-    from_schema: https://onto.phes-odm.org/odmv2
   addressesRequired:
     from_schema: https://onto.phes-odm.org/odmv2
   addressesOrder:
-    from_schema: https://onto.phes-odm.org/odmv2
-  contacts:
     from_schema: https://onto.phes-odm.org/odmv2
   contactsRequired:
     from_schema: https://onto.phes-odm.org/odmv2
   contactsOrder:
     from_schema: https://onto.phes-odm.org/odmv2
-  organizations:
-    from_schema: https://onto.phes-odm.org/odmv2
   organizationsRequired:
     from_schema: https://onto.phes-odm.org/odmv2
   organizationsOrder:
-    from_schema: https://onto.phes-odm.org/odmv2
-  instruments:
     from_schema: https://onto.phes-odm.org/odmv2
   instrumentsRequired:
     from_schema: https://onto.phes-odm.org/odmv2
   instrumentsOrder:
     from_schema: https://onto.phes-odm.org/odmv2
-  polygons:
-    from_schema: https://onto.phes-odm.org/odmv2
   polygonsRequired:
     from_schema: https://onto.phes-odm.org/odmv2
   polygonsOrder:
     from_schema: https://onto.phes-odm.org/odmv2
-  languages:
-    from_schema: https://onto.phes-odm.org/odmv2
   languagesRequired:
     from_schema: https://onto.phes-odm.org/odmv2
   languagesOrder:
-    from_schema: https://onto.phes-odm.org/odmv2
-  translations:
-    from_schema: https://onto.phes-odm.org/odmv2
-  parts:
     from_schema: https://onto.phes-odm.org/odmv2
   translationsRequired:
     from_schema: https://onto.phes-odm.org/odmv2
@@ -4727,43 +4741,29 @@ slots:
     from_schema: https://onto.phes-odm.org/odmv2
   partsRequired:
     from_schema: https://onto.phes-odm.org/odmv2
-  sets:
-    from_schema: https://onto.phes-odm.org/odmv2
   setsOrder:
     from_schema: https://onto.phes-odm.org/odmv2
   setsRequired:
-    from_schema: https://onto.phes-odm.org/odmv2
-  qualityReports:
     from_schema: https://onto.phes-odm.org/odmv2
   qualityReportsRequired:
     from_schema: https://onto.phes-odm.org/odmv2
   qualityReportsOrder:
     from_schema: https://onto.phes-odm.org/odmv2
-  sampleRelationships:
-    from_schema: https://onto.phes-odm.org/odmv2
   sampleRelationshipsRequired:
     from_schema: https://onto.phes-odm.org/odmv2
   sampleRelationshipsOrder:
-    from_schema: https://onto.phes-odm.org/odmv2
-  protocols:
     from_schema: https://onto.phes-odm.org/odmv2
   protocolsRequired:
     from_schema: https://onto.phes-odm.org/odmv2
   protocolsOrder:
     from_schema: https://onto.phes-odm.org/odmv2
-  countries:
-    from_schema: https://onto.phes-odm.org/odmv2
   countriesRequired:
     from_schema: https://onto.phes-odm.org/odmv2
   countriesOrder:
     from_schema: https://onto.phes-odm.org/odmv2
-  zones:
-    from_schema: https://onto.phes-odm.org/odmv2
   zonesRequired:
     from_schema: https://onto.phes-odm.org/odmv2
   zonesOrder:
-    from_schema: https://onto.phes-odm.org/odmv2
-  wideNames:
     from_schema: https://onto.phes-odm.org/odmv2
   wideNamesRequired:
     from_schema: https://onto.phes-odm.org/odmv2
@@ -5336,6 +5336,121 @@ classes:
           attrbitutes
         title: Notes
         range: string
+  Container:
+    from_schema: https://onto.phes-odm.org/odmv2
+    slots:
+    - protocolSteps
+    - protocolRelationships
+    - measures
+    - measureSets
+    - datasets
+    - sites
+    - samples
+    - addresses
+    - contacts
+    - organizations
+    - instruments
+    - polygons
+    - languages
+    - translations
+    - parts
+    - sets
+    - qualityReports
+    - sampleRelationships
+    - protocols
+    - countries
+    - zones
+    - wideNames
+    slot_usage:
+      protocolSteps:
+        multivalued: true
+        range: protocolSteps
+        inlined_as_list: true
+      protocolRelationships:
+        multivalued: true
+        range: protocolRelationships
+        inlined_as_list: true
+      measures:
+        multivalued: true
+        range: measures
+        inlined_as_list: true
+      measureSets:
+        multivalued: true
+        range: measureSets
+        inlined_as_list: true
+      datasets:
+        multivalued: true
+        range: datasets
+        inlined_as_list: true
+      sites:
+        multivalued: true
+        range: sites
+        inlined_as_list: true
+      samples:
+        multivalued: true
+        range: samples
+        inlined_as_list: true
+      addresses:
+        multivalued: true
+        range: addresses
+        inlined_as_list: true
+      contacts:
+        multivalued: true
+        range: contacts
+        inlined_as_list: true
+      organizations:
+        multivalued: true
+        range: organizations
+        inlined_as_list: true
+      instruments:
+        multivalued: true
+        range: instruments
+        inlined_as_list: true
+      polygons:
+        multivalued: true
+        range: polygons
+        inlined_as_list: true
+      languages:
+        multivalued: true
+        range: languages
+        inlined_as_list: true
+      translations:
+        multivalued: true
+        range: translations
+        inlined_as_list: true
+      parts:
+        multivalued: true
+        range: parts
+        inlined_as_list: true
+      sets:
+        multivalued: true
+        range: sets
+        inlined_as_list: true
+      qualityReports:
+        multivalued: true
+        range: qualityReports
+        inlined_as_list: true
+      sampleRelationships:
+        multivalued: true
+        range: sampleRelationships
+        inlined_as_list: true
+      protocols:
+        multivalued: true
+        range: protocols
+        inlined_as_list: true
+      countries:
+        multivalued: true
+        range: countries
+        inlined_as_list: true
+      zones:
+        multivalued: true
+        range: zones
+        inlined_as_list: true
+      wideNames:
+        multivalued: true
+        range: wideNames
+        inlined_as_list: true
+    tree_root: true
   protocolSteps:
     slots:
     - stepID
