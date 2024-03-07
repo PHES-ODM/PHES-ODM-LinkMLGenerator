@@ -31,8 +31,8 @@ headers = {
     "required" : "required",
     "dataType" : "range",
     "partDesc" : "description",
-    "minValue" : "minimum_value",
-    "maxValue" : "maximum_value",
+    # "minValue" : "minimum_value",
+    # "maxValue" : "maximum_value",
     # "partInstr" : "notes",
 }
 
