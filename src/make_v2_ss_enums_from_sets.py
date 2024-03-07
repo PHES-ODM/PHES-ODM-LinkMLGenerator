@@ -123,7 +123,7 @@ if __name__ == "__main__":
         args = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
         args.add_argument("--sets_file", type=str, help="Input ODM v2 sets file to extract the enums from", required=True)
         args.add_argument("--parts_file", type=str, help="Input ODM v2 parts file. This file contains additional info about the enum, such as the top-level description.", required=True)
-        args.add_argument("--output_file", type=str, help="The file (tsv or csv) to save the extracted enums to", required=True)
+        args.add_argument("--output_file", type=str, help="The TSV file to save the extracted enums to", required=True)
         opts = args.parse_args()
         
     print("Making ODM v2 from Sets List...")
