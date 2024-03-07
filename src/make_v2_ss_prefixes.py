@@ -40,7 +40,7 @@ if __name__ == "__main__":
             output_file = "../odm_v2/schemasheets/prefixes.tsv"
     else:
         args = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
-        args.add_argument("--output_file", type=str, help="The file (tsv or csv) to save the Schemasheets prefixes file to", required=True)
+        args.add_argument("--output_file", type=str, help="The TSV file to save the Schemasheets prefixes file to", required=True)
         opts = args.parse_args()
 
     print("Making ODM v2 Prefixes...")
