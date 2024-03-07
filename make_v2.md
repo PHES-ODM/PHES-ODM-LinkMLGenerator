@@ -18,6 +18,13 @@ The parts sheet contains (among others) all classes (which are equivalent to tab
 
 The `extract_all_classes` function extracts one class at a time, outputing the results to "../odm_v2/schemasheets/class_{class_name}.tsv".
 
+## make_v2_ss_container.extract_container_class
+
+The top-level LinkML class is the container class. It contains all the tables and is marked as the tree root. Each of the container's slots point to a table in ODM v2 (eg. the measures and protocols tables). These slots
+have a range equal to each of the table classes (ie. the slots are rows of each class, forming a table).
+
+The `extract_container_class` function extracts the container class and saves the result to "../odm_v2/schemasheets/container.tsv".
+
 ## make_v2_ss_enums_from_sets.extract_sets_enums
 
 The data dictionary includes a sheet named "sets" that contains a list of many (but not all) enumerations. `extract_sets_enums` will extract the enumerations in the "sets" sheet and save them to "../odm_v2/schemasheets/enums_sets.tsv".
