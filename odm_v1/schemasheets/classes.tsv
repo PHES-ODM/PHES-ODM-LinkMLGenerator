@@ -1,6 +1,6 @@
 tableName	variableName	variableLabel_en	variableLabel_fr	key	foreignKeyTable	foreignKeyVariable	Required	variableType	Inlined	ucum code	variableDesc_en	variableDesc_fr
 > class	slot	title	ignore	identifier	ignore	ignore	required	range	inlined	unit	description	ignore
->				"vmap: { ""Primary Key"" : TRUE, ""Foreign key"" : """" }"						inner_key: ucum_code		
+>				"vmap: { ""Primary Key"" : TRUE, ""Foreign key"" : """" }"				"vmap: { ""blob"" : ""string"" }"		inner_key: ucum_code		
 Sample	sampleID	Sample id	Identifiant de l'�chantillon	Primary Key				string			Unique identifier for sample. Suggestion:siteID-date-index.	Identifiant unique pour l'�chantillon. Suggestion:siteID-date-index.
 Sample	siteID	Site id	Identifiant du site	Foreign key	Site	siteID		Site	FALSE		Links with the Site table to describe the location of sampling.	"Cr�e un lien avec la table ""Site"" pour d�crire le point d'�chantillonage."
 Sample	instrumentID	Instrument id	Identifiant de l'instrument	Foreign key	Instrument	InstrumentID		Instrument	FALSE		Links with the Instrument table to describe the instrument used for sampling.	"Cr�e un lien avec la table ""Instrument"" pour d�crire l'instrument utilis� pour l'�chantillonnage."

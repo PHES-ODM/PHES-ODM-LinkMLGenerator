@@ -1165,7 +1165,7 @@ classes:
         description: A file blob that has any detailed information about the sewer
           network associated with the site (any format).
         title: Sewer network file blob
-        range: blob
+        range: string
   SiteMeasure:
     description: Measurement result (ie. single variable) obtained by at the site
       of wastewater sample.SiteMeasure includes data that is commonly collected by
@@ -1613,7 +1613,7 @@ classes:
       file:
         description: File containing the geometry of the polygon, blob format.
         title: File
-        range: blob
+        range: string
       link:
         description: Link to an external reference that describes the geometry of
           the polygon.
