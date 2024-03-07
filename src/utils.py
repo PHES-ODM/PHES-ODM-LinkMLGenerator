@@ -14,16 +14,14 @@ import sys
 from schemasheets.schemamaker import SchemaMaker
 from linkml_runtime.utils.schema_as_dict import schema_as_dict
 
-def get_logger(name: str, output_file: str=None, level: Optional[str] = "INFO") -> logging.Logger:
+def get_logger(name: str, level: Optional[str] = logging.INFO) -> logging.Logger:
     handlers = [
         logging.StreamHandler(sys.stdout)
     ]
-    if output_file:
-        handlers.append(logging.FileHandler(output_file, mode="w"))
     logging.basicConfig(
         handlers=handlers,
         format="%(levelname)s %(asctime)s %(filename)s:%(lineno)d: %(message)s",
-        level=logging.INFO,
+        level=level,
         datefmt="%Y-%m-%d %H:%M:%S"
         )
 
