@@ -2126,7 +2126,7 @@ enums:
         title: Municipal wastewater treatment plant for combined sewage
       wwtpMuS:
         description: Municipal wastewater treatment plant for sanitary sewage only
-        title: Municipal wastewater treatment plant for sanitary dewage only
+        title: Municipal wastewater treatment plant for sanitary sewage only
       wwtp:
         description: A general site type for wastewater treatment plants.
         title: Wastewater treatment plant
@@ -2682,21 +2682,22 @@ enums:
     title: Aggregations
     from_schema: https://onto.phes-odm.org/odmv2
     permissible_values:
-      andBoo:
-        description: '"AND" aggreation.'
-        title: AND Boolean aggregation
-      cuCo:
-        description: The cumulative count of cases of a given disease.
-        title: Cumulative count
-      daiCo:
-        description: The daily count of cases of a given disease.
-        title: Daily count
+      sin:
+        description: A value that is not an aggregate measurement (ie. not a mean,
+          median, max or any other) and can be a replicate value.
+        title: Single
+      menr:
+        description: Arithmetic mean, normalized.
+        title: Normalized arithmetic mean
+      ngmn:
+        description: Geometric mean, normalized.
+        title: Normalized geometric mean
+      sdn:
+        description: Standard deviation, normalized.
+        title: Normalized standard deviation
       gmn:
         description: Geometric mean.
         title: Geometric mean
-      lowerCI95:
-        description: Specifies the the lower limit of a 95% confidence interval.
-        title: Lower limit of a 95% confidence interval
       maxVal:
         description: Highest value in a range of values for a measure.
         title: Maximum value
@@ -2706,31 +2707,30 @@ enums:
       med:
         description: Median.
         title: Median
-      menr:
-        description: Arithmetic mean, normalized.
-        title: Normalized arithmetic mean
       minVal:
         description: Lowest value in a range of values for a measure.
         title: Minimum value
-      naAggr:
-        description: Not applicable for aggregations.
-        title: Aggregation not applicable
-      ngmn:
-        description: Geometric mean, normalized.
-        title: Normalized geometric mean
-      orBoo:
-        description: '"OR" aggreation.'
-        title: OR Boolean aggregation
       sd:
         description: Standard deviation.
         title: Standard deviation
-      sdn:
-        description: Standard deviation, normalized.
-        title: Normalized standard deviation
-      sin:
-        description: A value that is not an aggregate measurement (ie. not a mean,
-          median, max or any other) and can be a replicate value.
-        title: Single
+      andBoo:
+        description: '"AND" aggreation.'
+        title: AND Boolean aggregation
+      cuCo:
+        description: The cumulative count of cases of a given disease.
+        title: Cumulative count
+      daiCo:
+        description: The daily count of cases of a given disease.
+        title: Daily count
+      lowerCI95:
+        description: Specifies the the lower limit of a 95% confidence interval.
+        title: Lower limit of a 95% confidence interval
+      naAggr:
+        description: Not applicable for aggregations.
+        title: Aggregation not applicable
+      orBoo:
+        description: '"OR" aggreation.'
+        title: OR Boolean aggregation
       upperCI95:
         description: Specifies the the upper limit of a 95% confidence interval.
         title: Upper limit of a 95% confidence interval
@@ -2994,37 +2994,19 @@ enums:
         description: A measure of the total mass of water vapour present in the air
           per volume of air.
         title: Absolute humidity
-      airTemp:
-        description: Environmental temperature.
-        title: Environmental temperature
       arTemp:
         description: The temperature of a sample upon arrival at the laboratory for
           analysis.
         title: Arrival temperature
-      bod5c:
-        description: "The\_quantity\_of\_oxygen\_utilized\_for the biochemical\_degradation\_\
-          of\_organic matter\_under\_standard\_laboratory procedures\_in five (5)\
-          \ days in the\_presence of a\_nitrification inhibitor,\_expressed\_in\_\
-          milligrams per litre\_(mg/l)."
-        title: 5-Day carbonaceous biochemical oxygen demand
-      bod5t:
-        description: 5 day total biochemical oxygen demand.
-        title: 5-day total biochemical oxygen demand
       camp:
         description: Campylobacter.
         title: Campylobacter
       co2:
         description: A measure of an amount or concentraion of carbon dioxide.
         title: Carbon Dioxide
-      cod:
-        description: Chemical oxygen demand.
-        title: Chemical Oxygen Demand
       colis:
         description: Colistin-resistant bacteria.
         title: Colistin resistance
-      cond:
-        description: Measurement of conductivity of sample or site.
-        title: Water conductivity
       cov:
         description: Covid-19 infection.
         title: Covid-19
@@ -3045,16 +3027,9 @@ enums:
       envSnwD:
         description: Total depth of snow on the ground.
         title: Ground snow depth
-      envSnwF:
-        description: Snowfall, i.e. amount of precipitation in the form of snow.
-        title: Snowfall
       exvol:
         description: Extraction volume of sample.
         title: Extraction volume of sample
-      floRate:
-        description: Wastewater volumetric flow rate at the sample collection location
-          over the 24-hr period during which the sample was collected.
-        title: Flow rate
       flowVol:
         description: Volume of influent.
         title: Flow volume
@@ -3076,14 +3051,6 @@ enums:
       frnaG2:
         description: A measure for amount of G2 F-Specific RNA bacteriophages.
         title: F-Specific RNA bacteriophages, G2
-      fst:
-        description: Temperature that the sample is stored at while it is being sampled.
-          This field is mainly relevant for composite samples which are either kept
-          at ambient temperature or refrigerated while being sampled.
-        title: Field sample temperature
-      hepGRna:
-        description: Measure of the amount Hepatitis G Armored RNA.
-        title: hep g armored rna
       inhibMe:
         description: Parameter to report whether or not inhibition was detected in
           the sample.
@@ -3091,13 +3058,18 @@ enums:
       lod:
         description: Limit of detection, ie. the minimum level of a genetic target.
         title: Limit of detection (LOD)
+      hepGRna:
+        description: Measure of the amount Hepatitis G Armored RNA.
+        title: hep g armored rna
+      weath:
+        description: A measure for weather captured through qualitative categories;
+          part of a larger suite of weather measures that may be useful when collecting
+          samples from outdoor sources.
+        title: Weather
       lodSewa:
         description: Limit of detection, ie. the minimum level of a genetic target,
           for sewage samples.
         title: Limit of detection (LOD) - sewage
-      loq:
-        description: Loq
-        title: Limit of quantification (LOQ)
       mhv:
         description: A measure for amount of murine hepatitis viurs.
         title: Murine Hepatitis Virus
@@ -3128,9 +3100,6 @@ enums:
       n969k:
         description: n969k omicron-variant gene target
         title: n969k omicron-variant gene target
-      nH4N:
-        description: Ammonium nitrogen concentration, as N.
-        title: Ammonium Nitrogen
       niid19:
         description: niid_2019-ncov_n sars-cov-2 gene target
         title: niid_2019-ncov_n sars-cov-2 gene target
@@ -3140,9 +3109,6 @@ enums:
       oc43:
         description: Measure of the amount of coronavirus OC43.
         title: coronavirus OC43
-      ophos:
-        description: Ortho-phosphate concentration.
-        title: Orthophosphates
       orf1a:
         description: ORF1a sars-cov-2 gene target
         title: ORF1a sars-cov-2 gene target
@@ -3172,21 +3138,9 @@ enums:
       p681r:
         description: p681r delta-variant gene target
         title: p681r delta-variant gene target
-      ph:
-        description: pH measurement
-        title: pH
       phi6:
         description: Measure of the amount of pseudomonas virus phi6.
         title: Pseudomonas virus phi6
-      phos:
-        description: Total phosphorous
-        title: Total phosphorous
-      phostot:
-        description: Total phosphates
-        title: Total Phosphates
-      ppmv:
-        description: Pepper mild mottle virus capsid protein gene region
-        title: PMMoV-CP
       puro:
         description: Measure of the amount of puro virus.
         title: Puro virus
@@ -3205,12 +3159,6 @@ enums:
       stec:
         description: Shiga-toxin-producing Escheria coli (STEC).
         title: Shiga-toxin-producing Escheria coli (STEC)
-      sTemp:
-        description: Temperature that the sample is stored at in Celsius.
-        title: Storage temp
-      temp:
-        description: Temperature of the sample measured in degrees Celcius
-        title: Sample temperature
       tempVol:
         description: The volume of DNA or RNA template used for PCR.
         title: Nucleic acid template volume
@@ -3219,23 +3167,9 @@ enums:
           bound in organic substances, nitrogen in ammonia (NH3-N) and in ammonium
           (NH4+-N) in the chemical analysis of soil, water, or waste water.
         title: Total Kjeldahl Nitrogen
-      tn:
-        description: Total nitrogen concentration, as N.
-        title: Total Nitrogen
-      ts:
-        description: Total solids concentration
-        title: Total solids concentration
-      tss:
-        description: Total suspended solids
-        title: Total suspended solids
-      tssConc:
-        description: Total suspended solids concentration of the wastewater.
-        title: Concentration of total suspended solids
-      turb:
-        description: A measure for the turbidity of water, or a liquid sample, quanitfying
-          the relative clarity or opcaity of a liquid. Highly indicative of water
-          quality.
-        title: Turbidity
+      covE:
+        description: SARS-CoV-2 E gene.
+        title: SARS-CoV-2-E
       tWeighE:
         description: The weight of the tube used for analysis while empty.
         title: Tube weight empty
@@ -3245,9 +3179,6 @@ enums:
       vanc:
         description: Vancomycin resistant bacteria.
         title: Vancomycin resistance
-      vss:
-        description: Volatile suspended solids
-        title: Volatile suspended solids
       vssIg:
         description: "A water quality measure, captured by via the loss on ignition\
           \ of the mass of measured total suspended solids. This ignition generally\
@@ -3258,20 +3189,6 @@ enums:
       watTemp:
         description: Temperature of the wastewater.
         title: Wastewater temperature
-      weath:
-        description: A measure for weather captured through qualitative categories;
-          part of a larger suite of weather measures that may be useful when collecting
-          samples from outdoor sources.
-        title: Weather
-      wind:
-        description: A measure for wind speed; part of a larger suite of weather measures
-          that may be useful when collecting samples from outdoor sources.
-        title: Wind Speed
-      wwtpCap:
-        description: A measure for the designed capacity of a wastewater treatment
-          plant, in terms of how much water it was designed to be able to hold and
-          process.
-        title: Wastewater treatment plant designed capacity
       slod:
         description: The minimum level of a target within a sample that would be consistently
           detectable considering all sample processing steps, from sample concentration
@@ -3298,6 +3215,83 @@ enums:
       rsvMe:
         description: Human Respiratory Syncytial virus (RSV), generic measure.
         title: Respiratory syncytial virus
+      fst:
+        description: Temperature that the sample is stored at while it is being sampled.
+          This field is mainly relevant for composite samples which are either kept
+          at ambient temperature or refrigerated while being sampled.
+        title: Field sample temperature
+      sTemp:
+        description: Temperature that the sample is stored at in Celsius.
+        title: Storage temp
+      vol:
+        description: Total volume of water or sludge sampled.
+        title: Size in volume
+      airTemp:
+        description: Environmental temperature.
+        title: Environmental temperature
+      bod5c:
+        description: "The\_quantity\_of\_oxygen\_utilized\_for the biochemical\_degradation\_\
+          of\_organic matter\_under\_standard\_laboratory procedures\_in five (5)\
+          \ days in the\_presence of a\_nitrification inhibitor,\_expressed\_in\_\
+          milligrams per litre\_(mg/l)."
+        title: 5-Day carbonaceous biochemical oxygen demand
+      bod5t:
+        description: 5 day total biochemical oxygen demand.
+        title: 5-day total biochemical oxygen demand
+      envSnwF:
+        description: Snowfall, i.e. amount of precipitation in the form of snow.
+        title: Snowfall
+      floRate:
+        description: Wastewater volumetric flow rate at the sample collection location
+          over the 24-hr period during which the sample was collected.
+        title: Flow rate
+      loq:
+        description: Loq
+        title: Limit of quantification (LOQ)
+      phos:
+        description: Total phosphorous
+        title: Total phosphorous
+      phostot:
+        description: Total phosphates
+        title: Total Phosphates
+      tssConc:
+        description: Total suspended solids concentration of the wastewater.
+        title: Concentration of total suspended solids
+      turb:
+        description: A measure for the turbidity of water, or a liquid sample, quanitfying
+          the relative clarity or opcaity of a liquid. Highly indicative of water
+          quality.
+        title: Turbidity
+      wind:
+        description: A measure for wind speed; part of a larger suite of weather measures
+          that may be useful when collecting samples from outdoor sources.
+        title: Wind Speed
+      wwtpCap:
+        description: A measure for the designed capacity of a wastewater treatment
+          plant, in terms of how much water it was designed to be able to hold and
+          process.
+        title: Wastewater treatment plant designed capacity
+      covN1:
+        description: SARS-CoV-2 nucleocapsid gene, allele 1.
+        title: SARS-CoV-2-N1
+      covN2:
+        description: SARS-CoV-2 nucleocapsid gene, allele 2.
+        title: SARS-CoV-2-N2
+      covN3:
+        description: SARS-CoV-2 nucleocapsid gene, allele 3.
+        title: SARS-CoV-2-N3
+      covRdrp:
+        description: SARS-CoV-2 RdRp gene.
+        title: SARS-CoV-2-RdRp
+      brsvN:
+        description: bovine respiratory syncytial virus capsid protein gene region
+        title: BRSV-N
+      cra:
+        description: crAssphage virus capsid protein gene region
+        title: crAssphage-N
+      ppmv:
+        description: Pepper mild mottle virus capsid protein gene region
+        title: PMMoV-CP
       hMe:
         description: An indicator to show in a wide-name that measure information
           is located in a different column.
@@ -3329,30 +3323,30 @@ enums:
       brsv:
         description: Bovine respiratory syncytial virus.
         title: Bovine respiratory syncytial virus group
-      brsvN:
-        description: bovine respiratory syncytial virus capsid protein gene region
-        title: BRSV-N
       cAuris:
         description: The yeast species Candida auris, or C. auris.
         title: Candida auris
       cbp:
         description: Carbapenemase-encoding genes.
         title: Carbapenemase-encoding genes
-      covE:
-        description: SARS-CoV-2 E gene.
-        title: SARS-CoV-2-E
-      covN1:
-        description: SARS-CoV-2 nucleocapsid gene, allele 1.
-        title: SARS-CoV-2-N1
-      covN2:
-        description: SARS-CoV-2 nucleocapsid gene, allele 2.
-        title: SARS-CoV-2-N2
-      covN3:
-        description: SARS-CoV-2 nucleocapsid gene, allele 3.
-        title: SARS-CoV-2-N3
-      cra:
-        description: crAssphage virus capsid protein gene region
-        title: crAssphage-N
+      covB117:
+        description: Variant B.1.1.7 of the SARS-CoV-2 virus.
+        title: SARS-CoV-2-B.1.1.7
+      covB135:
+        description: Variant B.1.351 of the SARS-CoV-2 virus.
+        title: SARS-CoV-2-B.1.351
+      covP1:
+        description: Variant P.1 of the SARS-CoV-2 virus.
+        title: SARS-CoV-2-P.1
+      cod:
+        description: Chemical oxygen demand.
+        title: Chemical Oxygen Demand
+      cond:
+        description: Measurement of conductivity of sample or site.
+        title: Water conductivity
+      nH4N:
+        description: Ammonium nitrogen concentration, as N.
+        title: Ammonium Nitrogen
       d377y:
         description: d377y delta-variant gene target.
         title: d377y delta-variant gene target
@@ -3422,6 +3416,21 @@ enums:
       g662s:
         description: g662s delta-variant gene target
         title: g662s delta-variant gene target
+      ph:
+        description: pH measurement
+        title: pH
+      temp:
+        description: Temperature of the sample measured in degrees Celcius
+        title: Sample temperature
+      tn:
+        description: Total nitrogen concentration, as N.
+        title: Total Nitrogen
+      ts:
+        description: Total solids concentration
+        title: Total solids concentration
+      tss:
+        description: Total suspended solids
+        title: Total suspended solids
       i1566v:
         description: i1566v omicron-variant gene target
         title: i1566v omicron-variant gene target
@@ -3455,6 +3464,12 @@ enums:
       noroG2:
         description: Norovirus genogroup 2
         title: Norovirus G2
+      vss:
+        description: Volatile suspended solids
+        title: Volatile suspended solids
+      ophos:
+        description: Ortho-phosphate concentration.
+        title: Orthophosphates
       q19e:
         description: q19e omicron-variant gene target
         title: q19e omicron-variant gene target
@@ -3537,24 +3552,9 @@ enums:
       rsvN:
         description: Human Respiratory syncytial Virus, N-gene region.
         title: RSV N-gene
-      vol:
-        description: Total volume of water or sludge sampled.
-        title: Size in volume
       beta:
         description: B.1.351
         title: Beta
-      covB117:
-        description: Variant B.1.1.7 of the SARS-CoV-2 virus.
-        title: SARS-CoV-2-B.1.1.7
-      covB135:
-        description: Variant B.1.351 of the SARS-CoV-2 virus.
-        title: SARS-CoV-2-B.1.351
-      covP1:
-        description: Variant P.1 of the SARS-CoV-2 virus.
-        title: SARS-CoV-2-P.1
-      covRdrp:
-        description: SARS-CoV-2 RdRp gene.
-        title: SARS-CoV-2-RdRp
       delta:
         description: B.1.617.2
         title: Delta
@@ -3628,6 +3628,15 @@ enums:
       methodConc:
         description: Description of the method to concentrate a wastewater sample.
         title: Concentration method
+      solidSep:
+        description: Process used to separate solid and liquid phases of the sample.
+        title: Solid seperation
+      inhibMeth:
+        description: Description of the method used to evaluate molecular inhibition.
+        title: Inhibition method
+      pcrmeth:
+        description: Description of the PCR method.
+        title: PCR method
       pretreat:
         description: Was the sample chemically treated in anyway with the addition
           of stabilizers or other
@@ -3635,19 +3644,10 @@ enums:
       shipOnIce:
         description: Was the sample kept cool while being shipped to the lab
         title: Shipped on ice
-      solidSep:
-        description: Process used to separate solid and liquid phases of the sample.
-        title: Solid seperation
       pcrSeq:
         description: Specifies the PCR selection method for sequencing, ie. that a
           pre-determined primer was used.
         title: PCR sequencingsSelection method
-      inhibMeth:
-        description: Description of the method used to evaluate molecular inhibition.
-        title: Inhibition method
-      pcrmeth:
-        description: Description of the PCR method.
-        title: PCR method
       scf:
         description: A method for specifying the frequecy over which a standard curve
           (or 'Master Curve') is used.
@@ -3938,14 +3938,6 @@ enums:
     title: Quality indicators
     from_schema: https://onto.phes-odm.org/odmv2
     permissible_values:
-      noConcern:
-        description: A flag to indicate there is are no quality concern about the
-          measure or sample.
-        title: No quality concerns
-      qf1:
-        description: A flag to indicate there is a quality concern, not otherwise
-          sepcified.
-        title: Quality concerns
       flagND:
         description: No amplification occurred in the reaction; non-detect.
         title: ND - Non-detect
@@ -3963,9 +3955,17 @@ enums:
       lowVol:
         description: Sample is low-volume, but was run regardless.
         title: Low-volume sample
+      noConcern:
+        description: A flag to indicate there is are no quality concern about the
+          measure or sample.
+        title: No quality concerns
       mI:
         description: Multiple issues have arisen in the sequencing process.
         title: Multiple issues
+      qf1:
+        description: A flag to indicate there is a quality concern, not otherwise
+          sepcified.
+        title: Quality concerns
       noLabel:
         description: Sample had no label
         title: Sample not labelled
@@ -4086,15 +4086,9 @@ enums:
     title: Units
     from_schema: https://onto.phes-odm.org/odmv2
     permissible_values:
-      acti:
-        description: Number of active cases.
-        title: Number of active cases
       boc:
         description: Positions with read depth greater or equal to 5.
         title: Breadth of coverage (>=5x depth)
-      cel:
-        description: Degrees Celsius.
-        title: Degrees Celcius
       cfu:
         description: Colony forming units per 100 ml of filtered sample.
         title: CFU per 100 ml
@@ -4103,9 +4097,6 @@ enums:
           case. Typically, reported data and this measure is most commonly reported
           and used.
         title: Report date of confirmed cases
-      conf:
-        description: Number of confirmed cases.
-        title: Number of confirmed cases
       caseEpDate:
         description: Episode date is the earliest of onset, test or reported date
           for a confirmed case.
@@ -4134,12 +4125,6 @@ enums:
       grams:
         description: A unit of mass or weight.
         title: Grams
-      hosa:
-        description: Hospital admissions or patients newly admitted to hospital.
-        title: General Hospital Admissions
-      hosc:
-        description: Hospital census or the number of people admitted with an ailment.
-        title: Hospital Census
       icu:
         description: Units for describing a population measure of patients who are
           in intensive care due to a given cause.
@@ -4167,19 +4152,13 @@ enums:
       ppm:
         description: Parts per million.
         title: parts per million
-      pprt:
-        description: Percent positivity rate of tests conducted within a day in a
-          given region.
-        title: Percent positivity rate
-      pps:
-        description: Percentage of total solids, for primary sludge.
-        title: Percent primary sludge
+      percRec:
+        description: Percent of the surrogate recovery for a recovery efficiency control
+          assay.
+        title: Percent recovery
       prop:
         description: Proportion as a precent of total.
         title: Proportion of total
-      ptot:
-        description: Number of positive tests conducted within a day in a given region.
-        title: Number of positive tests
       ratio:
         description: Ratio (unitless)
         title: Ratio
@@ -4187,9 +4166,6 @@ enums:
         description: Units for describing a population measure of patients who have
           recovered from a given disease.
         title: Recovered patients
-      test:
-        description: Number of tests performed.
-        title: Number of tests performed
       unitless:
         description: A unit for unitless measures, like pH.
         title: Unitless measure
@@ -4201,35 +4177,42 @@ enums:
         description: The population with 2 or more doses of vaccine, with the vaccine
           specified in the measure field.
         title: Population with 2+ or more doses of vaccine
-      det:
-        description: Substance detected or not detected.
-        title: Detected
       cm:
         description: Unit part for the SI unit of centimetres.
         title: Centimetres
       days:
         description: A unit for indicating a length of time in days.
         title: Days
+      acti:
+        description: Number of active cases.
+        title: Number of active cases
+      conf:
+        description: Number of confirmed cases.
+        title: Number of confirmed cases
+      hosa:
+        description: Hospital admissions or patients newly admitted to hospital.
+        title: General Hospital Admissions
+      hosc:
+        description: Hospital census or the number of people admitted with an ailment.
+        title: Hospital Census
       hours:
         description: A unit for indicating a length of time in hours.
         title: Hours
-      m3D:
-        description: Cubic metres per day.
-        title: Cubic metres per day
-      m3H:
-        description: Cubic metres per hour.
-        title: Cubic metres per hour
-      m3S:
-        description: Cubic metre per second.
-        title: Cubic metres per second
+      pprt:
+        description: Percent positivity rate of tests conducted within a day in a
+          given region.
+        title: Percent positivity rate
+      ptot:
+        description: Number of positive tests conducted within a day in a given region.
+        title: Number of positive tests
+      test:
+        description: Number of tests performed.
+        title: Number of tests performed
       mgd:
         description: A unit for measuring of design capacity for wastewater treatment
           plants, represented as millions of gallons per day. Also can be used to
           measure flow.
         title: Millions of gallons per day (MG/D)
-      mgL:
-        description: Milligrams per litre.
-        title: Milligrams per litre
       minutes:
         description: A unit for indicating a length of time in minutes.
         title: Minutes
@@ -4255,10 +4238,6 @@ enums:
         description: Nephelometric Turbidity Units, a unit used in the measurement
           of turbidity (see "turbidity" under measureIDs).
         title: Nephelometric turbidity unit
-      percRec:
-        description: Percent of the surrogate recovery for a recovery efficiency control
-          assay.
-        title: Percent recovery
       rP100:
         description: Units for describing a population measure of a rate of case incidence
           per 100,000 people of a given disease.
@@ -4297,12 +4276,42 @@ enums:
         description: An indicator to show in a wide-name that unit information is
           located in a different column.
         title: See Header for Unit
-      ct:
-        description: Cycle thresholds in a PCR assay.
-        title: Cycle threshold or quantification cycle (Ct or Cq)
       efficient:
         description: The efficiency reported for a standard curve.
         title: Efficiency
+      inter:
+        description: Intercept value of the calibration curve.
+        title: Intercept
+      r2:
+        description: R-squared value of the calibration curve.
+        title: R squared
+      slope:
+        description: Slope value of the calibration curve.
+        title: slope
+      gc:
+        description: Gene or variant copies
+        title: Gene copies
+      gcPpmov:
+        description: Gene or variant copies per copy of PMMoV.
+        title: Gene copies per PMMoV copy
+      cel:
+        description: Degrees Celsius.
+        title: Degrees Celcius
+      m3D:
+        description: Cubic metres per day.
+        title: Cubic metres per day
+      m3H:
+        description: Cubic metres per hour.
+        title: Cubic metres per hour
+      m3S:
+        description: Cubic metre per second.
+        title: Cubic metres per second
+      ct:
+        description: Cycle thresholds in a PCR assay.
+        title: Cycle threshold or quantification cycle (Ct or Cq)
+      det:
+        description: Substance detected or not detected.
+        title: Detected
       gcCrA:
         description: Gene or variant copies per copy of crAssphage.
         title: Gene copies per copy of crAssphage
@@ -4315,27 +4324,18 @@ enums:
       gcMl:
         description: Gene or variant copies per millilitre of solution.
         title: Gene copies per mL
-      gcPpmov:
-        description: Gene or variant copies per copy of PMMoV.
-        title: Gene copies per PMMoV copy
-      inter:
-        description: Intercept value of the calibration curve.
-        title: Intercept
+      mgL:
+        description: Milligrams per litre.
+        title: Milligrams per litre
       pp:
         description: Percent positive of sample measures.
         title: Percent positive
+      pps:
+        description: Percentage of total solids, for primary sludge.
+        title: Percent primary sludge
       propV:
         description: Proportion of a variant as percent of total variants.
         title: Proportion of variant in sample
-      r2:
-        description: R-squared value of the calibration curve.
-        title: R squared
-      slope:
-        description: Slope value of the calibration curve.
-        title: slope
-      gc:
-        description: Gene or variant copies
-        title: Gene copies
       varFreq:
         description: A description of the frequency of a variants detected.
         title: Frequency of variants detected
@@ -4394,6 +4394,15 @@ enums:
       actiEp:
         description: Number of active cases by episode date.
         title: Number of active cases by episode date
+      actiRep:
+        description: Number of active cases by report date.
+        title: Number of active cases by Report date
+      actiOn:
+        description: Number of active cases by onset date.
+        title: Number of active cases by Onset date
+      actiTest:
+        description: Number of active cases by test date.
+        title: Number of active cases by test date
 slots:
   wideName:
     from_schema: https://onto.phes-odm.org/odmv2
