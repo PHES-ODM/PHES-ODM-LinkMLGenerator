@@ -54,7 +54,7 @@ def extract_parts_enums(parts_file: str, output_file: str):
     filt = filt & pd.isna(headers_df["mmaSet"])
     enum_source_names = sorted(headers_df[filt]["partID"].unique())
     enum_names = [v2_get_enum_name_from_part_id(name) for name in enum_source_names]
-
+    
     # Get all rows for all enums. We only keep the columns in keep_columns.
     # Each row (or enum value) should be an "input" for at least one class.
     # "partType" matches the enum name (corresponds to a permissible value of the enum)
@@ -72,10 +72,13 @@ def extract_parts_enums(parts_file: str, output_file: str):
     is_input = is_input.sum(axis=1)
     input_df = df[is_input > 0]
     for enum_name in enum_names:
+        # Get the top-level enum row (where the partID is the same as the enum_name)
         enum_toplevel_df = input_df[input_df["partID"] == enum_name][keep_columns].copy()
         enum_toplevel_df["partID"] = ""
         enum_toplevel_df["partType"] = enum_name
+        # Get all rows where the part is a member of the enumeration (by checking the partType column)
         enum_df = input_df[input_df["partType"] == enum_name][keep_columns].copy()
+        # Add the top-level enum row and the enum values rows to our final DataFrame
         output_df = pd.concat([output_df, enum_toplevel_df, enum_df])
         
     # Add Schemasheets headers
