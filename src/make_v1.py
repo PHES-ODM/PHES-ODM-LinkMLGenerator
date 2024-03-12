@@ -10,11 +10,15 @@ Configurable paths (defaults are recommended):
 
 from pathlib import Path
 
-from utils import make_linkml_schema
+from utils import make_linkml_schema, get_logger
 
 output_dir = Path("../odm_v1")
 schemasheets_dir = output_dir / "schemasheets"
 
+logger = get_logger(__name__)
+
 # Make the schema
 linkml_schema = output_dir / "linkml" / "odm_v1.yaml"
-_ = make_linkml_schema(schemasheets_dir, linkml_schema)
+make_linkml_schema(schemasheets_dir, linkml_schema)
+
+logger.info("Finished!")
