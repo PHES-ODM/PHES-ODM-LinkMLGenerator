@@ -510,24 +510,23 @@ enums:
       : description: "The field for which the expected value is not a property of\
           \ the described object. / The outcome of a measurement is not a valid number\
           \ (plus or minus infinity, error, ...) / A logical representation of a statement\
-          \ that is neither TRUE nor FALSE. /  / Puro virus vector? / The Epstein\u2013\
-          Barr virus, formally called Human gammaherpesvirus 4"
-        title: "Not applicable / Not a number / Null / Murine Hepatitis Group / Murine\
-          \ Coronavirus Group / RSV Group / PMMoV Group / Lentivirus Group / Candida\
-          \ auris Group / MPox Group / Poliovirus Group / Human Rhinovirus (HRV) /\
-          \ Human Rhinovirus (HRV) A / Human Rhinovirus (HRV) B / Human Rhinovirus\
-          \ (HRV) C / Rhinovirus Group / Human Metapneumovirus (HMPV) / Human Parainfluenza\
-          \ Virus (HPIV) / Streptococcus pneumoniae / Streptococcus Group / Adenovirus\
-          \ (F40/41) / Salmonella / Salmonella Group / Shigella / Shigella Group /\
-          \ Verotoxin-producing Escherichia coli (VTEC) / Enteropathogenic Escherichia\
-          \ coli (EPEC) / Enteroaggregative Escherichia coli (EAEC) / Enteroinvasive\
-          \ Escherichia coli (EIEC) / Enterotoxigenic Escherichia coli (ETEC) / Enterohemorrhagic\
-          \ Escherichia coli (EHEC) / Extraintestinal pathogenic Escherichia coli\
-          \ (ExPEC) / Klebsiella pneumoniae / Clostridium perfringens / Vibrio / Brucella\
-          \ / Listeria / Enterovirus / Rotavirus / Astrovirus / Vibrio Group / Brucella\
-          \ Group / Listeria Group / Enterovirus Group / Rotavirus Group / Astrovirus\
-          \ Group / Sapovirus / Sapovirus Group / Chlamydia / Chlamydia Group / Trichomonas\
-          \ vaginalis / Neisseria gonorrhoeae / Treponema pallidum / Human Immunodeficiency\
+          \ that is neither TRUE nor FALSE. /  / The Epstein\u2013Barr virus, formally\
+          \ called Human gammaherpesvirus 4"
+        title: "Not applicable / Not a number / Null / MPox Group / Poliovirus Group\
+          \ / Human Rhinovirus (HRV) / Human Rhinovirus (HRV) A / Human Rhinovirus\
+          \ (HRV) B / Human Rhinovirus (HRV) C / Rhinovirus Group / Human Metapneumovirus\
+          \ (HMPV) / Human Parainfluenza Virus (HPIV) / Streptococcus pneumoniae /\
+          \ Streptococcus Group / Adenovirus (F40/41) / Salmonella / Salmonella Group\
+          \ / Shigella / Shigella Group / Verotoxin-producing Escherichia coli (VTEC)\
+          \ / Enteropathogenic Escherichia coli (EPEC) / Enteroaggregative Escherichia\
+          \ coli (EAEC) / Enteroinvasive Escherichia coli (EIEC) / Enterotoxigenic\
+          \ Escherichia coli (ETEC) / Enterohemorrhagic Escherichia coli (EHEC) /\
+          \ Extraintestinal pathogenic Escherichia coli (ExPEC) / Klebsiella pneumoniae\
+          \ / Clostridium perfringens / Vibrio / Brucella / Listeria / Enterovirus\
+          \ / Rotavirus / Astrovirus / Vibrio Group / Brucella Group / Listeria Group\
+          \ / Enterovirus Group / Rotavirus Group / Astrovirus Group / Sapovirus /\
+          \ Sapovirus Group / Chlamydia / Chlamydia Group / Trichomonas vaginalis\
+          \ / Neisseria gonorrhoeae / Treponema pallidum / Human Immunodeficiency\
           \ Virus (HIV) / Human Papiloma Virus (HPV) / Mycoplasma genitalus / Epstein\u2013\
           Barr virus (EBV) / Herpes / Haemophilus ducreyi / Ureaplasma / Hepatitis\
           \ A / Hepatitis B / Hepatitis C / Hepatitis E / Clostridium difficile /\
@@ -645,24 +644,23 @@ enums:
       : description: "The field for which the expected value is not a property of\
           \ the described object. / The outcome of a measurement is not a valid number\
           \ (plus or minus infinity, error, ...) / A logical representation of a statement\
-          \ that is neither TRUE nor FALSE. /  / Puro virus vector? / The Epstein\u2013\
-          Barr virus, formally called Human gammaherpesvirus 4"
-        title: "Not applicable / Not a number / Null / Murine Hepatitis Group / Murine\
-          \ Coronavirus Group / RSV Group / PMMoV Group / Lentivirus Group / Candida\
-          \ auris Group / MPox Group / Poliovirus Group / Human Rhinovirus (HRV) /\
-          \ Human Rhinovirus (HRV) A / Human Rhinovirus (HRV) B / Human Rhinovirus\
-          \ (HRV) C / Rhinovirus Group / Human Metapneumovirus (HMPV) / Human Parainfluenza\
-          \ Virus (HPIV) / Streptococcus pneumoniae / Streptococcus Group / Adenovirus\
-          \ (F40/41) / Salmonella / Salmonella Group / Shigella / Shigella Group /\
-          \ Verotoxin-producing Escherichia coli (VTEC) / Enteropathogenic Escherichia\
-          \ coli (EPEC) / Enteroaggregative Escherichia coli (EAEC) / Enteroinvasive\
-          \ Escherichia coli (EIEC) / Enterotoxigenic Escherichia coli (ETEC) / Enterohemorrhagic\
-          \ Escherichia coli (EHEC) / Extraintestinal pathogenic Escherichia coli\
-          \ (ExPEC) / Klebsiella pneumoniae / Clostridium perfringens / Vibrio / Brucella\
-          \ / Listeria / Enterovirus / Rotavirus / Astrovirus / Vibrio Group / Brucella\
-          \ Group / Listeria Group / Enterovirus Group / Rotavirus Group / Astrovirus\
-          \ Group / Sapovirus / Sapovirus Group / Chlamydia / Chlamydia Group / Trichomonas\
-          \ vaginalis / Neisseria gonorrhoeae / Treponema pallidum / Human Immunodeficiency\
+          \ that is neither TRUE nor FALSE. /  / The Epstein\u2013Barr virus, formally\
+          \ called Human gammaherpesvirus 4"
+        title: "Not applicable / Not a number / Null / MPox Group / Poliovirus Group\
+          \ / Human Rhinovirus (HRV) / Human Rhinovirus (HRV) A / Human Rhinovirus\
+          \ (HRV) B / Human Rhinovirus (HRV) C / Rhinovirus Group / Human Metapneumovirus\
+          \ (HMPV) / Human Parainfluenza Virus (HPIV) / Streptococcus pneumoniae /\
+          \ Streptococcus Group / Adenovirus (F40/41) / Salmonella / Salmonella Group\
+          \ / Shigella / Shigella Group / Verotoxin-producing Escherichia coli (VTEC)\
+          \ / Enteropathogenic Escherichia coli (EPEC) / Enteroaggregative Escherichia\
+          \ coli (EAEC) / Enteroinvasive Escherichia coli (EIEC) / Enterotoxigenic\
+          \ Escherichia coli (ETEC) / Enterohemorrhagic Escherichia coli (EHEC) /\
+          \ Extraintestinal pathogenic Escherichia coli (ExPEC) / Klebsiella pneumoniae\
+          \ / Clostridium perfringens / Vibrio / Brucella / Listeria / Enterovirus\
+          \ / Rotavirus / Astrovirus / Vibrio Group / Brucella Group / Listeria Group\
+          \ / Enterovirus Group / Rotavirus Group / Astrovirus Group / Sapovirus /\
+          \ Sapovirus Group / Chlamydia / Chlamydia Group / Trichomonas vaginalis\
+          \ / Neisseria gonorrhoeae / Treponema pallidum / Human Immunodeficiency\
           \ Virus (HIV) / Human Papiloma Virus (HPV) / Mycoplasma genitalus / Epstein\u2013\
           Barr virus (EBV) / Herpes / Haemophilus ducreyi / Ureaplasma / Hepatitis\
           \ A / Hepatitis B / Hepatitis C / Hepatitis E / Clostridium difficile /\
@@ -1267,24 +1265,23 @@ enums:
       : description: "The field for which the expected value is not a property of\
           \ the described object. / The outcome of a measurement is not a valid number\
           \ (plus or minus infinity, error, ...) / A logical representation of a statement\
-          \ that is neither TRUE nor FALSE. /  / Puro virus vector? / The Epstein\u2013\
-          Barr virus, formally called Human gammaherpesvirus 4"
-        title: "Not applicable / Not a number / Null / Murine Hepatitis Group / Murine\
-          \ Coronavirus Group / RSV Group / PMMoV Group / Lentivirus Group / Candida\
-          \ auris Group / MPox Group / Poliovirus Group / Human Rhinovirus (HRV) /\
-          \ Human Rhinovirus (HRV) A / Human Rhinovirus (HRV) B / Human Rhinovirus\
-          \ (HRV) C / Rhinovirus Group / Human Metapneumovirus (HMPV) / Human Parainfluenza\
-          \ Virus (HPIV) / Streptococcus pneumoniae / Streptococcus Group / Adenovirus\
-          \ (F40/41) / Salmonella / Salmonella Group / Shigella / Shigella Group /\
-          \ Verotoxin-producing Escherichia coli (VTEC) / Enteropathogenic Escherichia\
-          \ coli (EPEC) / Enteroaggregative Escherichia coli (EAEC) / Enteroinvasive\
-          \ Escherichia coli (EIEC) / Enterotoxigenic Escherichia coli (ETEC) / Enterohemorrhagic\
-          \ Escherichia coli (EHEC) / Extraintestinal pathogenic Escherichia coli\
-          \ (ExPEC) / Klebsiella pneumoniae / Clostridium perfringens / Vibrio / Brucella\
-          \ / Listeria / Enterovirus / Rotavirus / Astrovirus / Vibrio Group / Brucella\
-          \ Group / Listeria Group / Enterovirus Group / Rotavirus Group / Astrovirus\
-          \ Group / Sapovirus / Sapovirus Group / Chlamydia / Chlamydia Group / Trichomonas\
-          \ vaginalis / Neisseria gonorrhoeae / Treponema pallidum / Human Immunodeficiency\
+          \ that is neither TRUE nor FALSE. /  / The Epstein\u2013Barr virus, formally\
+          \ called Human gammaherpesvirus 4"
+        title: "Not applicable / Not a number / Null / MPox Group / Poliovirus Group\
+          \ / Human Rhinovirus (HRV) / Human Rhinovirus (HRV) A / Human Rhinovirus\
+          \ (HRV) B / Human Rhinovirus (HRV) C / Rhinovirus Group / Human Metapneumovirus\
+          \ (HMPV) / Human Parainfluenza Virus (HPIV) / Streptococcus pneumoniae /\
+          \ Streptococcus Group / Adenovirus (F40/41) / Salmonella / Salmonella Group\
+          \ / Shigella / Shigella Group / Verotoxin-producing Escherichia coli (VTEC)\
+          \ / Enteropathogenic Escherichia coli (EPEC) / Enteroaggregative Escherichia\
+          \ coli (EAEC) / Enteroinvasive Escherichia coli (EIEC) / Enterotoxigenic\
+          \ Escherichia coli (ETEC) / Enterohemorrhagic Escherichia coli (EHEC) /\
+          \ Extraintestinal pathogenic Escherichia coli (ExPEC) / Klebsiella pneumoniae\
+          \ / Clostridium perfringens / Vibrio / Brucella / Listeria / Enterovirus\
+          \ / Rotavirus / Astrovirus / Vibrio Group / Brucella Group / Listeria Group\
+          \ / Enterovirus Group / Rotavirus Group / Astrovirus Group / Sapovirus /\
+          \ Sapovirus Group / Chlamydia / Chlamydia Group / Trichomonas vaginalis\
+          \ / Neisseria gonorrhoeae / Treponema pallidum / Human Immunodeficiency\
           \ Virus (HIV) / Human Papiloma Virus (HPV) / Mycoplasma genitalus / Epstein\u2013\
           Barr virus (EBV) / Herpes / Haemophilus ducreyi / Ureaplasma / Hepatitis\
           \ A / Hepatitis B / Hepatitis C / Hepatitis E / Clostridium difficile /\
@@ -2716,24 +2713,23 @@ enums:
       : description: "The field for which the expected value is not a property of\
           \ the described object. / The outcome of a measurement is not a valid number\
           \ (plus or minus infinity, error, ...) / A logical representation of a statement\
-          \ that is neither TRUE nor FALSE. /  / Puro virus vector? / The Epstein\u2013\
-          Barr virus, formally called Human gammaherpesvirus 4"
-        title: "Not applicable / Not a number / Null / Murine Hepatitis Group / Murine\
-          \ Coronavirus Group / RSV Group / PMMoV Group / Lentivirus Group / Candida\
-          \ auris Group / MPox Group / Poliovirus Group / Human Rhinovirus (HRV) /\
-          \ Human Rhinovirus (HRV) A / Human Rhinovirus (HRV) B / Human Rhinovirus\
-          \ (HRV) C / Rhinovirus Group / Human Metapneumovirus (HMPV) / Human Parainfluenza\
-          \ Virus (HPIV) / Streptococcus pneumoniae / Streptococcus Group / Adenovirus\
-          \ (F40/41) / Salmonella / Salmonella Group / Shigella / Shigella Group /\
-          \ Verotoxin-producing Escherichia coli (VTEC) / Enteropathogenic Escherichia\
-          \ coli (EPEC) / Enteroaggregative Escherichia coli (EAEC) / Enteroinvasive\
-          \ Escherichia coli (EIEC) / Enterotoxigenic Escherichia coli (ETEC) / Enterohemorrhagic\
-          \ Escherichia coli (EHEC) / Extraintestinal pathogenic Escherichia coli\
-          \ (ExPEC) / Klebsiella pneumoniae / Clostridium perfringens / Vibrio / Brucella\
-          \ / Listeria / Enterovirus / Rotavirus / Astrovirus / Vibrio Group / Brucella\
-          \ Group / Listeria Group / Enterovirus Group / Rotavirus Group / Astrovirus\
-          \ Group / Sapovirus / Sapovirus Group / Chlamydia / Chlamydia Group / Trichomonas\
-          \ vaginalis / Neisseria gonorrhoeae / Treponema pallidum / Human Immunodeficiency\
+          \ that is neither TRUE nor FALSE. /  / The Epstein\u2013Barr virus, formally\
+          \ called Human gammaherpesvirus 4"
+        title: "Not applicable / Not a number / Null / MPox Group / Poliovirus Group\
+          \ / Human Rhinovirus (HRV) / Human Rhinovirus (HRV) A / Human Rhinovirus\
+          \ (HRV) B / Human Rhinovirus (HRV) C / Rhinovirus Group / Human Metapneumovirus\
+          \ (HMPV) / Human Parainfluenza Virus (HPIV) / Streptococcus pneumoniae /\
+          \ Streptococcus Group / Adenovirus (F40/41) / Salmonella / Salmonella Group\
+          \ / Shigella / Shigella Group / Verotoxin-producing Escherichia coli (VTEC)\
+          \ / Enteropathogenic Escherichia coli (EPEC) / Enteroaggregative Escherichia\
+          \ coli (EAEC) / Enteroinvasive Escherichia coli (EIEC) / Enterotoxigenic\
+          \ Escherichia coli (ETEC) / Enterohemorrhagic Escherichia coli (EHEC) /\
+          \ Extraintestinal pathogenic Escherichia coli (ExPEC) / Klebsiella pneumoniae\
+          \ / Clostridium perfringens / Vibrio / Brucella / Listeria / Enterovirus\
+          \ / Rotavirus / Astrovirus / Vibrio Group / Brucella Group / Listeria Group\
+          \ / Enterovirus Group / Rotavirus Group / Astrovirus Group / Sapovirus /\
+          \ Sapovirus Group / Chlamydia / Chlamydia Group / Trichomonas vaginalis\
+          \ / Neisseria gonorrhoeae / Treponema pallidum / Human Immunodeficiency\
           \ Virus (HIV) / Human Papiloma Virus (HPV) / Mycoplasma genitalus / Epstein\u2013\
           Barr virus (EBV) / Herpes / Haemophilus ducreyi / Ureaplasma / Hepatitis\
           \ A / Hepatitis B / Hepatitis C / Hepatitis E / Clostridium difficile /\
@@ -3070,9 +3066,9 @@ enums:
     title: Groups
     from_schema: https://onto.phes-odm.org/odmv2
     permissible_values:
-      rsv:
+      rsvGrp:
         description: Human Respiratory Syncytial virus (RSV).
-        title: Respiratory syncytial virus
+        title: Respiratory syncytial virus (RSV) Group
       virusMisc:
         description: A group of measures/methods related to miscellaneous viruses.
         title: Miscellaneous viruses group
@@ -5962,7 +5958,7 @@ classes:
           should say: [protocolIDSubject or stepIDSubject]  [relationshipID] [protocolIDObject
           or stepIDObject]. Ex: stepIDSubject  precedes protocolIDObject.'
         range: integer
-        minimum_value: '1'
+        minimum_value: 1
       relationshipID:
         description: Attribute for specifying the relationship between a sample subject
           and object.
@@ -6076,14 +6072,14 @@ classes:
         - 'Examples: 1 hour, 6 hours, 24 hours'
         range: float
         required: true
-        minimum_value: '1'
+        minimum_value: 1
       collNum:
         description: The number of subsamples that were combined to create the sample.
           Use NA for continuous, proportional or passive sampling.
         title: Collection number
         range: integer
         required: true
-        minimum_value: '1'
+        minimum_value: 1
       pooled:
         description: Is this a pooled sample, and therefore composed of multiple child
           samples obtained at different sites
@@ -6228,7 +6224,6 @@ classes:
           For a COSCA ball or Moore swab collecting for 24 hours, the entry would
           be 1.24'
         range: string
-        minimum_value: '1:1'
         pattern: ^.{0,6}$
   measures:
     slots:
@@ -6811,7 +6806,7 @@ classes:
         description: Specifies the order of the columns in a Protocol Steps table.
         title: Protocol steps table column order
         range: integer
-        minimum_value: '1'
+        minimum_value: 1
       protocolRelationships:
         description: The table that contains the organizational information and details
           (such as order) about a given protocol, recorded as a series of protocol
@@ -6830,7 +6825,7 @@ classes:
           table.
         title: Protocol relationships table column order
         range: integer
-        minimum_value: '1'
+        minimum_value: 1
       measures:
         description: The table that contains information and details about a given
           measure
@@ -6848,7 +6843,7 @@ classes:
         description: Specifies the order of the columns in a Measures table.
         title: Measures table column order
         range: integer
-        minimum_value: '1'
+        minimum_value: 1
       measureSets:
         description: The table that identifies sets of measures.
         title: Measure set report table
@@ -6861,7 +6856,7 @@ classes:
         description: Specifies the order of the columns in a Measure Sets table.
         title: Measure sets table column order
         range: integer
-        minimum_value: '1'
+        minimum_value: 1
       measureSetsRequired:
         description: Specifies the columns required in a Measure Sets table.
         title: Measure Set table required headers
@@ -6882,7 +6877,7 @@ classes:
         description: Specifies the order of the columns in a Datasets table.
         title: Datasets table column order
         range: integer
-        minimum_value: '1'
+        minimum_value: 1
       sites:
         description: The table that contains information about a site; the location
           where an environmental sample was taken.
@@ -6902,7 +6897,7 @@ classes:
         description: Specifies the order of the columns in a Sites table.
         title: Sites table column order
         range: integer
-        minimum_value: '1'
+        minimum_value: 1
       samples:
         description: The table that contains information about a sample. A sample
           is defined as a representative volume of wastewater (or other forms of water
@@ -6922,7 +6917,7 @@ classes:
         description: Specifies the order of the columns in a Samples table.
         title: Samples table column order
         range: integer
-        minimum_value: '1'
+        minimum_value: 1
       addresses:
         description: The table that contains information about addresses. Addresses
           can recorded for sites, organizations or contacts (indivduals).
@@ -6941,7 +6936,7 @@ classes:
         description: Specifies the order of the columns in the Addresses table.
         title: Addresses table column order
         range: integer
-        minimum_value: '1'
+        minimum_value: 1
       contacts:
         description: The table that contains information about a contact; a person
           who is the contact of a site or laboratory.
@@ -6959,7 +6954,7 @@ classes:
         description: Specifies the order of the columns in a Contacts table.
         title: Contacts table column order
         range: integer
-        minimum_value: '1'
+        minimum_value: 1
       organizations:
         description: The table that contains information about a laboratory.
         title: Organization table
@@ -6976,7 +6971,7 @@ classes:
         description: Specifies the order of the columns in a Organizations table.
         title: Organizations table column order
         range: integer
-        minimum_value: '1'
+        minimum_value: 1
       instruments:
         description: The table that contains information about instruments.
         title: Instrument table
@@ -6993,7 +6988,7 @@ classes:
         description: Specifies the order of the columns in the Instruments table.
         title: Instruments table column order
         range: integer
-        minimum_value: '1'
+        minimum_value: 1
       polygons:
         description: The table that contains information about the geometry of a geographic
           area.
@@ -7009,7 +7004,7 @@ classes:
         description: Specifies the order of the columns in a Polygons table.
         title: Polygons table column order
         range: integer
-        minimum_value: '1'
+        minimum_value: 1
       languages:
         description: Look up table for all languages, used to give structure to the
           translation table.
@@ -7025,7 +7020,7 @@ classes:
         description: Specifies the order of the columns in the Languages table.
         title: Language table column order
         range: integer
-        minimum_value: '1'
+        minimum_value: 1
       translations:
         description: Look up table for translations of the description, label, and
           instruction for all parts.
@@ -7055,7 +7050,7 @@ classes:
         description: Specifies the order of the columns in the Translation table.
         title: Translation table column order
         range: integer
-        minimum_value: '1'
+        minimum_value: 1
       partsRequired:
         description: Required headers in the Parts table.
         title: Parts table required headers
@@ -7074,7 +7069,7 @@ classes:
         description: Specifies the order of the columns in the Sets table.
         title: Sets table column order
         range: integer
-        minimum_value: '1'
+        minimum_value: 1
       setsRequired:
         description: Required headers in the Sets table.
         title: Sets table required headers
@@ -7095,7 +7090,7 @@ classes:
         description: Specifies the order of the columns in the Quality Reports table.
         title: Quality rerpots table column order
         range: integer
-        minimum_value: '1'
+        minimum_value: 1
       sampleRelationships:
         description: Table for recording the relationships between samples.
         title: Sample relationships table
@@ -7115,7 +7110,7 @@ classes:
           table.
         title: Sample relationships table column order
         range: integer
-        minimum_value: '1'
+        minimum_value: 1
       protocols:
         description: The table for protocols.
         title: Protocols table
@@ -7130,7 +7125,7 @@ classes:
         description: Specifies the order of the columns in the Protocols table.
         title: Protocols table column order
         range: integer
-        minimum_value: '1'
+        minimum_value: 1
       countries:
         description: Look up table for the possible country inputs.
         title: Countries look-up tables
@@ -7145,7 +7140,7 @@ classes:
         description: Specifies the order of the columns in the countries table.
         title: Countries table column order
         range: integer
-        minimum_value: '1'
+        minimum_value: 1
       zones:
         description: Look up table for the possible sub-national region or zone inputs.
         title: Zones look-up table
@@ -7160,7 +7155,7 @@ classes:
         description: Specifies the order of the columns in the zones table.
         title: Zones table column order
         range: integer
-        minimum_value: '1'
+        minimum_value: 1
       wideNames:
         description: The table for wide names.
         title: Wide name table
@@ -7305,7 +7300,7 @@ classes:
         notes:
         - Version of the method set. Semantic versioning is recommended.
         range: integer
-        minimum_value: '1'
+        minimum_value: 1
       lastEdited:
         description: The date the entry was last updated.
         title: Last edited
@@ -7383,8 +7378,8 @@ classes:
         title: Enumeration for set values
         range: integer
         required: true
-        minimum_value: '0'
-        maximum_value: '100'
+        minimum_value: 0
+        maximum_value: 100
       status:
         description: Whether the part is still active and can be used in the most
           current ODM version. Values are 'active' or 'inactive'.
@@ -7489,7 +7484,7 @@ classes:
           that polygon. A rough estimate of the number of human residents.
         title: Polygon Population
         range: integer
-        minimum_value: '0'
+        minimum_value: 0
       geoType:
         description: Type of geography that is represented by the polygon.
         title: Type of geography
@@ -8182,15 +8177,15 @@ classes:
           (45.424721)'
         title: Latitude
         range: float
-        minimum_value: '-90'
-        maximum_value: '90'
+        minimum_value: -90
+        maximum_value: 90
       geoLong:
         description: 'Geographical location, longitude in decimal coordinates, ie.:
           (-75.695000)'
         title: Longitude
         range: float
-        minimum_value: '-180'
-        maximum_value: '180'
+        minimum_value: -180
+        maximum_value: 180
       geoEPSG:
         description: The unique EPSG code specifying a given geospatial area.
         title: European Petroleum Survey Group Coordinates
