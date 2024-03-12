@@ -290,7 +290,7 @@ def fix_schemasheets_generated_schema(schema: SchemaDefinition):
     # here.
     def _make_number(key: str, slot_definition: SlotDefinition):
         val = slot_definition[key]
-        if pd.isna(None):
+        if pd.isna(val):
             return
         try:
             float_val = float(val)
