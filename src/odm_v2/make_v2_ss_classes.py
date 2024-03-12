@@ -101,18 +101,6 @@ def extract_class(df: pd.DataFrame, class_name: str, output_dir: str) -> Tuple[s
     columns[columns.index(f"{class_name}Order")] = "order"
     table_output_df.columns = columns
 
-    # Fix up minValue and maxValue
-    # @TODO: This code is commented out because Schemasheets currently seems to treat these
-    # numeric values as strings when creating the LinkML schema. This causes downstream problems
-    # (eg. linkml-validate raises an exception due to comparing a string to an int, and doesn't complete).
-    # def _cast_int(x):
-    #     try:
-    #         return int(x)
-    #     except:
-    #         return None
-    # table_output_df["maxValue"] = table_output_df["maxValue"].map(_cast_int)
-    # table_output_df["minValue"] = table_output_df["minValue"].map(_cast_int)
-
     # Set "required" field (ie. row has the value "mandatory" in the "required" column)
     table_output_df["required"] = table_output_df["required"].isin(["mandatory"])
 
