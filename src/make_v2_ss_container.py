@@ -17,6 +17,13 @@ from v2_utils import v2_class_names
 logger = get_logger(__name__)
 
 def extract_container_class(output_file: Union[str, Path]):
+    """Extract and create the Schemasheets file for the top-level Container class. This class
+    contains a multivalued slot for each table found in the ODM v2 data dictionary.
+
+    Args:
+        output_file (Union[str, Path]): The TSV file to save the Container class Schemasheet
+            to.
+    """
     # First row is for the Container only (ie. no slot is specified)
     df = pd.DataFrame([{ "class" : "Container", "tree_root" : True }])
 
