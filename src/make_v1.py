@@ -17,4 +17,4 @@ schemasheets_dir = output_dir / "schemasheets"
 
 # Make the schema
 linkml_schema = output_dir / "linkml" / "odm_v1.yaml"
-make_linkml_schema(schemasheets_dir, linkml_schema)
+_ = make_linkml_schema(schemasheets_dir, linkml_schema)
