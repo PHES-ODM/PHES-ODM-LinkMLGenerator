@@ -14,12 +14,12 @@ Configurable paths (defaults are recommended):
 from pathlib import Path
 
 from utils import clear_dirs, extract_sheets, make_linkml_schema, get_logger
-from make_v2_ss_classes import extract_all_classes
-from make_v2_ss_enums_from_parts import extract_parts_enums
-from make_v2_ss_enums_from_sets import extract_sets_enums
-from make_v2_ss_prefixes import make_prefixes
-from make_v2_ss_schema import make_schema
-from make_v2_ss_container import extract_container_class
+from odm_v2.make_v2_ss_classes import extract_all_classes
+from odm_v2.make_v2_ss_enums_from_parts import extract_parts_enums
+from odm_v2.make_v2_ss_enums_from_sets import extract_sets_enums
+from odm_v2.make_v2_ss_prefixes import make_prefixes
+from odm_v2.make_v2_ss_schema import make_schema
+from odm_v2.make_v2_ss_container import extract_container_class
 
 excel_file = Path("../odm_v2/v2 ODM dictionary.xlsx")
 output_dir = Path("../odm_v2")

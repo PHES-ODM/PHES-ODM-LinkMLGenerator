@@ -17,7 +17,7 @@ import pandas as pd
 import argparse
 
 from utils import add_schemasheets_header, save_data_frame, get_logger
-from v2_utils import v2_keep_active_rows, v2_class_names, v2_get_header_rows, v2_get_enum_name_from_part_id
+from odm_v2.v2_utils import v2_keep_active_rows, v2_class_names, v2_get_header_rows, v2_get_enum_name_from_part_id
 
 logger = get_logger(__name__)
 
@@ -91,8 +91,8 @@ def extract_parts_enums(parts_file: str, output_file: str):
 if __name__ == "__main__":
     if "get_ipython" in globals():
         class opts:
-            parts_file = "../odm_v2/dictionary/parts.csv"
-            output_file = "../odm_v2/schemasheets/enums_parts.tsv"
+            parts_file = "../../odm_v2/dictionary/parts.csv"
+            output_file = "../../odm_v2/schemasheets/enums_parts.tsv"
     else:
         args = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
         args.add_argument("--parts_file", type=str, help="Input ODM v2 parts file to extract the enums from", required=True)

@@ -43,7 +43,7 @@ def make_schema(output_file: str):
 if __name__ == "__main__":
     if "get_ipython" in globals():
         class opts:
-            output_file = "../odm_v2/schemasheets/schema.tsv"
+            output_file = "../../odm_v2/schemasheets/schema.tsv"
     else:
         args = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
         args.add_argument("--output_file", type=str, help="The TSV file to save the Schemasheets schema file to", required=True)
