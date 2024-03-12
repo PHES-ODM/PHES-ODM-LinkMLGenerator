@@ -1,18 +1,22 @@
-nwss/
-nwss_public_concentration/dictionary/
-nwss_public_concentration/schemasheets/
-nwss_public_metric/dictionary/
-nwss_public_metric/schemasheets/
-nwss_reporting/dictionary/
-nwss_reporting/schemasheets/
+# NWSS input and output
+/nwss/
+/nwss_public_concentration/dictionary/
+/nwss_public_concentration/schemasheets/
+/nwss_public_metric/dictionary/
+/nwss_public_metric/schemasheets/
+/nwss_reporting/dictionary/
+/nwss_reporting/schemasheets/
 
-odm_v2/*.xlsx
-odm_v2/dictionary/
-odm_v2/schemasheets/
+# ODM v2 input and output
+/odm_v2/*.xlsx
+/odm_v2/dictionary/
+/odm_v2/schemasheets/
+/odm_v2/linkml/docs
 
-odm_v1/linkml/docs
-odm_v2/linkml/docs
+# ODM v1 input and output
+/odm_v1/linkml/docs
 
+# Mac Desktop Services Store
 .DS_Store
 
 # Byte-compiled / optimized / DLL files
