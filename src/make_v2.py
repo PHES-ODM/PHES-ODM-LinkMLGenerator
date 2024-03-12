@@ -2,6 +2,9 @@
 """
 Make the ODMv2 LinkML schema.
 
+@TODO:
+- collNumPer has minValue "1:1". Currently this is converted to NA. Should use pattern ^[1-9][0-9]*\\.[1-9][0-9]*$
+
 Configurable paths (defaults are recommended):
 
 - excel_file: The full ODM v2 data dictionary (should contain a parts and sets sheet)
