@@ -34,9 +34,10 @@ headers = {
     "required" : "required",
     "dataType" : "range",
     "partDesc" : "description",
-    # "minValue" : "minimum_value",
-    # "maxValue" : "maximum_value",
-    # "partInstr" : "notes",
+    "minValue" : "minimum_value",
+    "maxValue" : "maximum_value",
+    "pattern" : "pattern",
+    "partInstr" : "notes",
 }
 
 # For mapping the ODM v2 data types to LinkML datatypes
@@ -49,6 +50,26 @@ _data_types_map = {
     "boolean" : "booleanSet",
     "blob" : "blob",            # @TODO: How should we deal with blobs? I'm not sure if LinkML has this data type
 }
+
+def _extract_pattern(row: pd.Series) -> str:
+    """Extract the regex pattern to match for validation for the specified row.
+
+    Args:
+        row (pd.Series): The row to extract the pattern for.
+
+    Returns:
+        str: The regex pattern for validation, or None if no pattern required.
+    """
+    min_length = row["minLength"]
+    max_length = row["maxLength"]
+    if pd.isna(min_length) and pd.isna(max_length):
+        return None
+    
+    # Create a string of length min_length to max_length
+    min_length = "0" if pd.isna(min_length) else str(int(min_length))
+    max_length = "" if pd.isna(max_length) else str(int(max_length))
+    pattern = "^.{%s,%s}$" % (min_length, max_length)
+    return pattern
 
 def extract_class(df: pd.DataFrame, class_name: str, output_dir: str) -> Tuple[str, pd.DataFrame]:
     """Create a Schemasheet for the specified class name using the data in a
@@ -112,6 +133,9 @@ def extract_class(df: pd.DataFrame, class_name: str, output_dir: str) -> Tuple[s
 
     # Set identifiers (primary keys)
     table_output_df["identifier"] = table_output_df["headerType"] == "pK"
+    
+    # Set the regex "pattern" where required
+    table_output_df["pattern"] = table_output_df.apply(_extract_pattern, axis=1)
 
     # Sort by "order" column
     table_output_df = table_output_df.sort_values("order")
