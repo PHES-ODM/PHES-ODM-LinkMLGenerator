@@ -87,11 +87,13 @@ def extract_sets_enums(sets_file: str, parts_file: str, output_file: str):
     
     # @TODO: Once we figure out how to have blank permissible values, remove this. At the
     # moment Schemasheets treats blank permissible values as corresponding to details about
-    # the upper level enum, rather than a value of the enum.
+    # the upper level enum, rather than a value of the enum. After generating the schema
+    # with Schemasheets in utils.make_linkml_schema, we edit the schema in 
+    # utils.fix_schemasheets_generated_schemato replace permissible values equal to EMPTY_PERMISSIBLE_VALUE with "".
     # Drop blank partIDs. 
     # df.loc[df["partID"] == "", "partID"] = None        
+    # df = df.dropna(axis = 0, subset="partID")
     df.loc[df["partID"] == "", "partID"] = EMPTY_PERMISSIBLE_VALUE
-    df = df.dropna(axis = 0, subset="partID")
     
     # We now have all the permissible values for each enumeration. We also want to create a row
     # for each enumeration where no permissible value is listed. These are the rows containing
