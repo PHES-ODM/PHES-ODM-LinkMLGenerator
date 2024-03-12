@@ -506,6 +506,37 @@ enums:
       sol:
         description: Solid fraction of a sample.
         title: Solid fraction
+      ? ''
+      : description: "The field for which the expected value is not a property of\
+          \ the described object. / The outcome of a measurement is not a valid number\
+          \ (plus or minus infinity, error, ...) / A logical representation of a statement\
+          \ that is neither TRUE nor FALSE. /  / Puro virus vector? / The Epstein\u2013\
+          Barr virus, formally called Human gammaherpesvirus 4"
+        title: "Not applicable / Not a number / Null / Murine Hepatitis Group / Murine\
+          \ Coronavirus Group / RSV Group / PMMoV Group / Lentivirus Group / Candida\
+          \ auris Group / MPox Group / Poliovirus Group / Human Rhinovirus (HRV) /\
+          \ Human Rhinovirus (HRV) A / Human Rhinovirus (HRV) B / Human Rhinovirus\
+          \ (HRV) C / Rhinovirus Group / Human Metapneumovirus (HMPV) / Human Parainfluenza\
+          \ Virus (HPIV) / Streptococcus pneumoniae / Streptococcus Group / Adenovirus\
+          \ (F40/41) / Salmonella / Salmonella Group / Shigella / Shigella Group /\
+          \ Verotoxin-producing Escherichia coli (VTEC) / Enteropathogenic Escherichia\
+          \ coli (EPEC) / Enteroaggregative Escherichia coli (EAEC) / Enteroinvasive\
+          \ Escherichia coli (EIEC) / Enterotoxigenic Escherichia coli (ETEC) / Enterohemorrhagic\
+          \ Escherichia coli (EHEC) / Extraintestinal pathogenic Escherichia coli\
+          \ (ExPEC) / Klebsiella pneumoniae / Clostridium perfringens / Vibrio / Brucella\
+          \ / Listeria / Enterovirus / Rotavirus / Astrovirus / Vibrio Group / Brucella\
+          \ Group / Listeria Group / Enterovirus Group / Rotavirus Group / Astrovirus\
+          \ Group / Sapovirus / Sapovirus Group / Chlamydia / Chlamydia Group / Trichomonas\
+          \ vaginalis / Neisseria gonorrhoeae / Treponema pallidum / Human Immunodeficiency\
+          \ Virus (HIV) / Human Papiloma Virus (HPV) / Mycoplasma genitalus / Epstein\u2013\
+          Barr virus (EBV) / Herpes / Haemophilus ducreyi / Ureaplasma / Hepatitis\
+          \ A / Hepatitis B / Hepatitis C / Hepatitis E / Clostridium difficile /\
+          \ Varicella / Measles / Mumps / Rubella / Corynebacterium diphtheriae /\
+          \ Haemophilus influenzae / Acinetobacter / Pseudomonas / Legionella / Cryptosporidium\
+          \ / Methicillin-resistant Staphylococcus aureus (MRSA) / Yersinia enterocolitica\
+          \ / Mycobacterium tuberculosis / Borrelia burgdorferi / Anaplasma phagocytophilum\
+          \ / Babesia / Plasmodium / Dengue / West Nile / Francisella tularensis /\
+          \ Chikungunya / Rickettsia / Zika"
   fullDictionarySheetSet:
     description: Worksheets in the full Excel dictionary.
     title: Full dictionary sheets set
@@ -610,6 +641,37 @@ enums:
       nr:
         description: A value could have been recorded, however, it was not.
         title: Not reported
+      ? ''
+      : description: "The field for which the expected value is not a property of\
+          \ the described object. / The outcome of a measurement is not a valid number\
+          \ (plus or minus infinity, error, ...) / A logical representation of a statement\
+          \ that is neither TRUE nor FALSE. /  / Puro virus vector? / The Epstein\u2013\
+          Barr virus, formally called Human gammaherpesvirus 4"
+        title: "Not applicable / Not a number / Null / Murine Hepatitis Group / Murine\
+          \ Coronavirus Group / RSV Group / PMMoV Group / Lentivirus Group / Candida\
+          \ auris Group / MPox Group / Poliovirus Group / Human Rhinovirus (HRV) /\
+          \ Human Rhinovirus (HRV) A / Human Rhinovirus (HRV) B / Human Rhinovirus\
+          \ (HRV) C / Rhinovirus Group / Human Metapneumovirus (HMPV) / Human Parainfluenza\
+          \ Virus (HPIV) / Streptococcus pneumoniae / Streptococcus Group / Adenovirus\
+          \ (F40/41) / Salmonella / Salmonella Group / Shigella / Shigella Group /\
+          \ Verotoxin-producing Escherichia coli (VTEC) / Enteropathogenic Escherichia\
+          \ coli (EPEC) / Enteroaggregative Escherichia coli (EAEC) / Enteroinvasive\
+          \ Escherichia coli (EIEC) / Enterotoxigenic Escherichia coli (ETEC) / Enterohemorrhagic\
+          \ Escherichia coli (EHEC) / Extraintestinal pathogenic Escherichia coli\
+          \ (ExPEC) / Klebsiella pneumoniae / Clostridium perfringens / Vibrio / Brucella\
+          \ / Listeria / Enterovirus / Rotavirus / Astrovirus / Vibrio Group / Brucella\
+          \ Group / Listeria Group / Enterovirus Group / Rotavirus Group / Astrovirus\
+          \ Group / Sapovirus / Sapovirus Group / Chlamydia / Chlamydia Group / Trichomonas\
+          \ vaginalis / Neisseria gonorrhoeae / Treponema pallidum / Human Immunodeficiency\
+          \ Virus (HIV) / Human Papiloma Virus (HPV) / Mycoplasma genitalus / Epstein\u2013\
+          Barr virus (EBV) / Herpes / Haemophilus ducreyi / Ureaplasma / Hepatitis\
+          \ A / Hepatitis B / Hepatitis C / Hepatitis E / Clostridium difficile /\
+          \ Varicella / Measles / Mumps / Rubella / Corynebacterium diphtheriae /\
+          \ Haemophilus influenzae / Acinetobacter / Pseudomonas / Legionella / Cryptosporidium\
+          \ / Methicillin-resistant Staphylococcus aureus (MRSA) / Yersinia enterocolitica\
+          \ / Mycobacterium tuberculosis / Borrelia burgdorferi / Anaplasma phagocytophilum\
+          \ / Babesia / Plasmodium / Dengue / West Nile / Francisella tularensis /\
+          \ Chikungunya / Rickettsia / Zika"
   genQualitySet:
     description: A quality set to specify any generic quality concerns about a measure
       or sample.
@@ -1201,6 +1263,37 @@ enums:
       nr:
         description: A value could have been recorded, however, it was not.
         title: Not reported
+      ? ''
+      : description: "The field for which the expected value is not a property of\
+          \ the described object. / The outcome of a measurement is not a valid number\
+          \ (plus or minus infinity, error, ...) / A logical representation of a statement\
+          \ that is neither TRUE nor FALSE. /  / Puro virus vector? / The Epstein\u2013\
+          Barr virus, formally called Human gammaherpesvirus 4"
+        title: "Not applicable / Not a number / Null / Murine Hepatitis Group / Murine\
+          \ Coronavirus Group / RSV Group / PMMoV Group / Lentivirus Group / Candida\
+          \ auris Group / MPox Group / Poliovirus Group / Human Rhinovirus (HRV) /\
+          \ Human Rhinovirus (HRV) A / Human Rhinovirus (HRV) B / Human Rhinovirus\
+          \ (HRV) C / Rhinovirus Group / Human Metapneumovirus (HMPV) / Human Parainfluenza\
+          \ Virus (HPIV) / Streptococcus pneumoniae / Streptococcus Group / Adenovirus\
+          \ (F40/41) / Salmonella / Salmonella Group / Shigella / Shigella Group /\
+          \ Verotoxin-producing Escherichia coli (VTEC) / Enteropathogenic Escherichia\
+          \ coli (EPEC) / Enteroaggregative Escherichia coli (EAEC) / Enteroinvasive\
+          \ Escherichia coli (EIEC) / Enterotoxigenic Escherichia coli (ETEC) / Enterohemorrhagic\
+          \ Escherichia coli (EHEC) / Extraintestinal pathogenic Escherichia coli\
+          \ (ExPEC) / Klebsiella pneumoniae / Clostridium perfringens / Vibrio / Brucella\
+          \ / Listeria / Enterovirus / Rotavirus / Astrovirus / Vibrio Group / Brucella\
+          \ Group / Listeria Group / Enterovirus Group / Rotavirus Group / Astrovirus\
+          \ Group / Sapovirus / Sapovirus Group / Chlamydia / Chlamydia Group / Trichomonas\
+          \ vaginalis / Neisseria gonorrhoeae / Treponema pallidum / Human Immunodeficiency\
+          \ Virus (HIV) / Human Papiloma Virus (HPV) / Mycoplasma genitalus / Epstein\u2013\
+          Barr virus (EBV) / Herpes / Haemophilus ducreyi / Ureaplasma / Hepatitis\
+          \ A / Hepatitis B / Hepatitis C / Hepatitis E / Clostridium difficile /\
+          \ Varicella / Measles / Mumps / Rubella / Corynebacterium diphtheriae /\
+          \ Haemophilus influenzae / Acinetobacter / Pseudomonas / Legionella / Cryptosporidium\
+          \ / Methicillin-resistant Staphylococcus aureus (MRSA) / Yersinia enterocolitica\
+          \ / Mycobacterium tuberculosis / Borrelia burgdorferi / Anaplasma phagocytophilum\
+          \ / Babesia / Plasmodium / Dengue / West Nile / Francisella tularensis /\
+          \ Chikungunya / Rickettsia / Zika"
   orgLevelSet:
     description: Categories of organization levels.
     title: Organization level set
@@ -2619,6 +2712,37 @@ enums:
       sol:
         description: Solid fraction of a sample.
         title: Solid fraction
+      ? ''
+      : description: "The field for which the expected value is not a property of\
+          \ the described object. / The outcome of a measurement is not a valid number\
+          \ (plus or minus infinity, error, ...) / A logical representation of a statement\
+          \ that is neither TRUE nor FALSE. /  / Puro virus vector? / The Epstein\u2013\
+          Barr virus, formally called Human gammaherpesvirus 4"
+        title: "Not applicable / Not a number / Null / Murine Hepatitis Group / Murine\
+          \ Coronavirus Group / RSV Group / PMMoV Group / Lentivirus Group / Candida\
+          \ auris Group / MPox Group / Poliovirus Group / Human Rhinovirus (HRV) /\
+          \ Human Rhinovirus (HRV) A / Human Rhinovirus (HRV) B / Human Rhinovirus\
+          \ (HRV) C / Rhinovirus Group / Human Metapneumovirus (HMPV) / Human Parainfluenza\
+          \ Virus (HPIV) / Streptococcus pneumoniae / Streptococcus Group / Adenovirus\
+          \ (F40/41) / Salmonella / Salmonella Group / Shigella / Shigella Group /\
+          \ Verotoxin-producing Escherichia coli (VTEC) / Enteropathogenic Escherichia\
+          \ coli (EPEC) / Enteroaggregative Escherichia coli (EAEC) / Enteroinvasive\
+          \ Escherichia coli (EIEC) / Enterotoxigenic Escherichia coli (ETEC) / Enterohemorrhagic\
+          \ Escherichia coli (EHEC) / Extraintestinal pathogenic Escherichia coli\
+          \ (ExPEC) / Klebsiella pneumoniae / Clostridium perfringens / Vibrio / Brucella\
+          \ / Listeria / Enterovirus / Rotavirus / Astrovirus / Vibrio Group / Brucella\
+          \ Group / Listeria Group / Enterovirus Group / Rotavirus Group / Astrovirus\
+          \ Group / Sapovirus / Sapovirus Group / Chlamydia / Chlamydia Group / Trichomonas\
+          \ vaginalis / Neisseria gonorrhoeae / Treponema pallidum / Human Immunodeficiency\
+          \ Virus (HIV) / Human Papiloma Virus (HPV) / Mycoplasma genitalus / Epstein\u2013\
+          Barr virus (EBV) / Herpes / Haemophilus ducreyi / Ureaplasma / Hepatitis\
+          \ A / Hepatitis B / Hepatitis C / Hepatitis E / Clostridium difficile /\
+          \ Varicella / Measles / Mumps / Rubella / Corynebacterium diphtheriae /\
+          \ Haemophilus influenzae / Acinetobacter / Pseudomonas / Legionella / Cryptosporidium\
+          \ / Methicillin-resistant Staphylococcus aureus (MRSA) / Yersinia enterocolitica\
+          \ / Mycobacterium tuberculosis / Borrelia burgdorferi / Anaplasma phagocytophilum\
+          \ / Babesia / Plasmodium / Dengue / West Nile / Francisella tularensis /\
+          \ Chikungunya / Rickettsia / Zika"
       hFr:
         description: An indicator in wide-names to show that information on the fraction
           analyzed in found under a separate header.
@@ -4952,126 +5076,165 @@ classes:
         identifier: true
         range: string
         required: true
+        pattern: ^.{0,30}$
       label:
         description: A human readable label of a part.
         title: Label
+        notes:
+        - Typically, a part label has no acrynomns (every word is spelled out). Equivalent
+          to a LOINC common name.
         range: string
         required: true
+        pattern: ^.{0,30}$
       charLength:
         description: The number of characters used for the wide names.
         title: character length
         range: string
+        pattern: ^.{0,30}$
       descr:
         description: A detailed description of a measure, method, or attribute.
         title: Description
+        notes:
+        - A description of the part that serves a clear presentation of the part to
+          a wide audience including techinical and not techincal staff. A description
+          should allow any person who generates environment surveillance data to know
+          how to identify how to record their data elements in the ODM. partReference
+          can be used to further describe a part.
         range: string
         required: true
+        pattern: ^.{0,200}$
       source:
         description: The database or table sourced for the wide name.
         title: Wide name source
         range: string
         required: true
+        pattern: ^.{0,30}$
       wideMeasure:
         description: Unique identifier for a measure in a wide table only.
         title: Measure identification (wide table)
         range: string
+        pattern: ^.{0,30}$
       wideProtocol:
         description: Unique identifier for a protocol in a wide table only.
         title: Specified protocol (wide table)
         range: string
+        pattern: ^.{0,30}$
       wideAttribute:
         description: Unique identifier for an attribute in a wide table only.
         title: Specified attribute (wide table)
         range: string
+        pattern: ^.{0,30}$
       wideNameType:
         description: The type of wide name generated. Possible options are measure,
           protocol or attribute.
         title: Wide name type
         range: string
+        pattern: ^.{0,30}$
       reportTableName:
         description: The report table that the wide name calls from.
         title: Report table name (wide table)
         range: string
+        pattern: ^.{0,30}$
       reportTableInput:
         description: The short name for the listed source table.
         title: Report table input (wide table)
         range: string
+        pattern: ^.{0,30}$
       partTypeName:
         description: The part type being used in a wide name.
         title: Part type name (wide table)
         range: string
+        pattern: ^.{0,30}$
       partTypeInput:
         description: The partID for the part type being used in a wide name.
         title: Part type input (wide table)
         range: string
+        pattern: ^.{0,30}$
       compartmentName:
         description: The compartment referenced for the wide name.
         title: Compartment name (wide table)
         range: string
+        pattern: ^.{0,30}$
       compartmentInput:
         description: The partID for the compartment being used in a wide name.
         title: Compartment input (wide table)
         range: string
+        pattern: ^.{0,30}$
       specimenName:
         description: The specimen referenced for the wide name.
         title: Specimen name (wide table)
         range: string
+        pattern: ^.{0,30}$
       specimenInput:
         description: The partID for the specimen being used in a wide name.
         title: Specimen input (wide table)
         range: string
+        pattern: ^.{0,30}$
       fractionName:
         description: The fraction analyzed referenced for the wide name.
         title: Fraction name (wide table)
         range: string
+        pattern: ^.{0,30}$
       fractionInput:
         description: The partID for the fraction being used in a wide name.
         title: Fraction input (wide table)
         range: string
+        pattern: ^.{0,30}$
       measureName:
         description: The measure referenced for the wide name.
         title: Measure name (wide table)
         range: string
+        pattern: ^.{0,30}$
       measureInput:
         description: The partID for the measure being used in a wide name.
         title: Measure input (wide table)
         range: string
+        pattern: ^.{0,30}$
       methodName:
         description: The method referenced for the wide name.
         title: Method name (wide table)
         range: string
+        pattern: ^.{0,30}$
       methodInput:
         description: The partID for the method being used in a wide name.
         title: Method input (wide table)
         range: string
+        pattern: ^.{0,30}$
       unitName:
         description: The unit referenced for the wide name.
         title: Unit name (wide table)
         range: string
+        pattern: ^.{0,30}$
       unitInput:
         description: The partID for the unit being used in a wide name.
         title: Unit input (wide table)
         range: string
+        pattern: ^.{0,30}$
       aggregationName:
         description: The aggregation referenced for the wide name.
         title: Aggregation name (wide table)
         range: string
+        pattern: ^.{0,30}$
       aggregationInput:
         description: The partID for the aggregation being used in a wide name.
         title: Aggregation input (wide table)
         range: string
+        pattern: ^.{0,30}$
       index:
         description: Index number in case the measurement was taken multiple times.
         title: Index
         range: string
+        pattern: ^.{0,50}$
       attributeName:
         description: The attribute referenced for the wide name.
         title: Attribute name (wide table)
         range: string
+        pattern: ^.{0,30}$
       attributeInput:
         description: The partID for the attribute being used in a wide name.
         title: Attribute input (wide table)
         range: string
+        pattern: ^.{0,30}$
   organizations:
     slots:
     - organizationID
@@ -5092,46 +5255,88 @@ classes:
         identifier: true
         range: string
         required: true
+        pattern: ^.{0,100}$
       name:
         description: Name of a domain, specimen, group, class, attribute, unit, nomeclature
           or other entity.
         title: Name
+        notes:
+        - Name of any entity. Use a prefix to distinguish names from different report
+          tables. See fully specified name (FSN) list.  i.e. Si-name = Site name,
+          Po-name = Polygon name, Or-name = Organization name, Me-name = Method-name.
         range: string
+        pattern: ^.{0,30}$
       descr:
         description: A detailed description of a measure, method, or attribute.
         title: Description
+        notes:
+        - A description of the part that serves a clear presentation of the part to
+          a wide audience including techinical and not techincal staff. A description
+          should allow any person who generates environment surveillance data to know
+          how to identify how to record their data elements in the ODM. partReference
+          can be used to further describe a part.
         range: string
+        pattern: ^.{0,200}$
       addressID:
         description: A unique identifier for an address.
         title: Address ID
         range: string
         required: true
+        pattern: ^.{0,30}$
       datasetID:
         description: The name of the dataset that stores information for MeasureReport,
           SampleReport and other reporting tables.
         title: Dataset ID
+        notes:
+        - Where possible, datasetID name should correspond the orignial data custodian
+          responsible for generating environmental data. (suggestion for a default
+          name convention.)
         range: string
+        pattern: ^.{0,30}$
       orgType:
         description: Specifies the type or purpose of a given organization.
         title: Organization Type
         range: orgTypeSet
+        pattern: ^.{0,30}$
       orgLevel:
         description: The geographic level of an organization.
         title: Organization level
+        notes:
+        - There are six levels based on International Standard Classification of Administrative
+          Units (ISCU).
         range: orgLevelSet
+        pattern: ^.{0,30}$
       orgSector:
         description: The sector of an organization
         title: Organization sector
         range: orgSectorSet
+        pattern: ^.{0,30}$
       lastEdited:
         description: The date the entry was last updated.
         title: Last edited
+        notes:
+        - Use lastEdited if an entry is updated. Leave lastEdited blank or 'NA' for
+          the first entry. Updates can include additions or revisions of the entry
+          for any reason. For example, a wastewater measure was repeated later with
+          an improved method. You can revise the entry by updating the value and then
+          adding the date the new measure was performed to 'lastEdited'.  To ensure
+          data provenance, the best practice in this example is to generate a new
+          entry with the same measureID as the original measureID. The original and
+          new measures are kept in the database with a date in the 'lastEdited' field
+          for the new entry but not the original one. Some databases may choose a
+          delete-and-replace approach where the original entry is deleted and replaced
+          by a new entry. In this approach, the 'lastEdited' field indicates the delete
+          and replace occurred.
         range: datetime
+        pattern: ^.{0,30}$
       notes:
         description: A note used to describe details that are not captured in other
           attrbitutes
         title: Notes
+        notes:
+        - There is no recommended structure of a note. Use notes as needed.
         range: string
+        pattern: ^.{0,200}$
   qualityReports:
     slots:
     - qualityReportID
@@ -5148,37 +5353,67 @@ classes:
         title: Quality report ID
         range: string
         required: true
+        pattern: ^.{0,30}$
       measureRepID:
         description: Unique identifier for a measurement.
         title: Report ID
+        notes:
+        - Report IDs cannot be repeated.
         range: string
+        pattern: ^.{0,30}$
       sampleID:
         description: Unique identifier for a sample.
         title: Sample ID
+        notes:
+        - Suggestion:siteID-date-index.
         range: string
+        pattern: ^.{0,30}$
       measureSetRepID:
         description: Unique identifier that links together a group of related measures.
         title: Measure set report set ID
         range: string
+        pattern: ^.{0,30}$
       qualityFlag:
         description: A field for reporting any quality concerns - of lack thereof
           - for a sample or measure.
         title: Quality flag
+        notes:
+        - Types of quality flag vary on context; please see the qulaityFlagSet to
+          be confirm.
         range: qualityIndicators
         required: true
+        pattern: ^.{0,30}$
       severity:
         description: An indicator of the severity or seriousness of a quality flag.
         title: Severity indicator
         range: sevSet
+        pattern: ^.{0,30}$
       lastEdited:
         description: The date the entry was last updated.
         title: Last edited
+        notes:
+        - Use lastEdited if an entry is updated. Leave lastEdited blank or 'NA' for
+          the first entry. Updates can include additions or revisions of the entry
+          for any reason. For example, a wastewater measure was repeated later with
+          an improved method. You can revise the entry by updating the value and then
+          adding the date the new measure was performed to 'lastEdited'.  To ensure
+          data provenance, the best practice in this example is to generate a new
+          entry with the same measureID as the original measureID. The original and
+          new measures are kept in the database with a date in the 'lastEdited' field
+          for the new entry but not the original one. Some databases may choose a
+          delete-and-replace approach where the original entry is deleted and replaced
+          by a new entry. In this approach, the 'lastEdited' field indicates the delete
+          and replace occurred.
         range: datetime
+        pattern: ^.{0,30}$
       notes:
         description: A note used to describe details that are not captured in other
           attrbitutes
         title: Notes
+        notes:
+        - There is no recommended structure of a note. Use notes as needed.
         range: string
+        pattern: ^.{0,200}$
   translations:
     slots:
     - translationID
@@ -5199,52 +5434,92 @@ classes:
         identifier: true
         range: string
         required: true
+        pattern: ^.{0,50}$
       lang:
         description: Language code for translation purposes. Specifies the langage
           for each translation, other than the default English. Uses the ISO-6393
           code.
         title: Language ID
+        notes:
+        - Follow the ISO639-3 codes for now.
         range: string
         required: true
+        pattern: ^.{0,30}$
       partID:
         description: The unique identify of any entity within the dictionary.
         title: Part identifier
+        notes:
+        - Every entity in the ODM has a partID. The partID must be unique with no
+          duplcates. partIDs are short. partIDs that are constructed by different
+          part attributes can be up 28 characters (check max), but each part attibute
+          should be 1 to 5 characters. partIDs are machine readible, but a knowledgable
+          user can understand what they represent. partID are used, for example, as
+          a header in an Excel input table. Numbers are allowed but there no other
+          special characters other than `_`. `_` is a reserved character that is used
+          to generate a partID using a compoent or table attributes. A partID for
+          a subComponent is automatically generated using attributes of a component.
+          For example, the partID for the compoent `SARS-CoV-2` is `covid`. `Covid`
+          can have many subComponents including different groups (Covid-19-al, Covid-19-va,
+          ovid-pr (allele, variant or protein) or units and aggregatrions (i.e. covid-al-N1-mean-cpl
+          representing ovid allele N1, mean observation of viral copies per litre
+          of effluent). A similar approach to naming subComponent is use for naming
+          parts in a reprotTable.
         range: string
         required: true
+        pattern: ^.{0,28}$
       label:
         description: A human readable label of a part.
         title: Label
+        notes:
+        - Typically, a part label has no acrynomns (every word is spelled out). Equivalent
+          to a LOINC common name.
         range: string
         required: true
+        pattern: ^.{0,30}$
       partDesc:
         description: The description of the part.
         title: Part description
+        notes:
+        - Provides description of the part, used for tranlsation.
         range: string
         required: true
+        pattern: ^.{0,30}$
       partInstr:
         description: Additional notes and instructions on how a part is used and/or
           defined.
         title: Part instruction
         range: string
+        pattern: ^.{0,200}$
       firstReleased:
         description: The version in which a part was first released
         title: First released version
         range: string
         required: true
+        pattern: ^.{0,30}$
       lastUpdated:
         description: The version in which the part was last updated.
         title: Last updated version
+        notes:
+        - Any change to the part of list will result in a change in the lastUpdated
+          field to the dictionary version where the update occurred.
         range: string
         required: true
+        pattern: ^.{0,30}$
       changes:
         description: A column for recording the changes from a previous version.
         title: Changes column
+        notes:
+        - Use this column as a short-hand change log for dictionary development.
         range: string
+        pattern: ^.{0,30}$
       notes:
         description: A note used to describe details that are not captured in other
           attrbitutes
         title: Notes
+        notes:
+        - There is no recommended structure of a note. Use notes as needed.
         range: string
+        pattern: ^.{0,200}$
   languages:
     slots:
     - lang
@@ -5266,85 +5541,123 @@ classes:
           for each translation, other than the default English. Uses the ISO-6393
           code.
         title: Language ID
+        notes:
+        - Follow the ISO639-3 codes for now.
         identifier: true
         range: string
         required: true
+        pattern: ^.{0,30}$
       langFam:
         description: Specifies the language family of a given language for translation
           and language tracking purposes.
         title: Language family
+        notes:
+        - Part of the metedata for a languageID.
         range: string
         required: true
+        pattern: ^.{0,30}$
       langName:
         description: Specifies the name of the language in roman alphabet characters
           for translation and language tracking purposes.
         title: Language name
+        notes:
+        - Part of the metedata for a languageID.
         range: string
         required: true
+        pattern: ^.{0,30}$
       natName:
         description: The native name of the language, i.e. what the language is called
           by its speakers.
         title: Native Name
+        notes:
+        - Part of the metedata for a languageID.
         range: natNames
         required: true
+        pattern: ^.{0,30}$
       iso6391:
         description: The first part of the ISO 639 series of international standards
           for language codes. Part 1 covers the registration of two-letter codes.
           There are 183 two-letter codes registered as of June 2021. The registered
           codes cover the world's major languages.
         title: ISO639-1
+        notes:
+        - Part of the metedata for a languageID.
         range: iso6391s
         required: true
+        pattern: ^.{0,30}$
       iso6392B:
         description: A set of international standards that lists short codes for language
           names. These ISO639-2 are the three-letter codes defined in part two (ISO
           639-2) of the standard, including the corresponding two-letter (ISO 639-1)
           codes where they exist. The 'B' specifies the bibliographic code (B code).
         title: ISO639-2B
+        notes:
+        - Part of the metedata for a languageID.
         range: iso6392Bs
         required: true
+        pattern: ^.{0,30}$
       iso6392T:
         description: A set of international standards that lists short codes for language
           names. These ISO639-2 are the three-letter codes defined in part two (ISO
           639-2) of the standard, including the corresponding two-letter (ISO 639-1)
           codes where they exist. The 'T' specifies the terminological code (T code).
         title: ISO639-2T
+        notes:
+        - Part of the metedata for a languageID.
         range: iso6392Ts
         required: true
+        pattern: ^.{0,30}$
       iso6393:
         description: A set of international standards that lists short codes for language
           names. ISO 639-3 extends the ISO 639-2 alpha-3 codes with an aim to cover
           all known natural languages.
         title: ISO639-3
+        notes:
+        - Part of the metedata for a languageID.
         range: iso6393s
         required: true
+        pattern: ^.{0,30}$
       iso6396:
         description: A set of international standards that lists short codes for language
           names. ISO 639-6 builds off ISO639-3 with the use of four-letter codes,
           and allowing users to differenciate between variants of languages and language
           families, such as histroical vs. revived versions of languages.
         title: ISO639-6
+        notes:
+        - Part of the metedata for a languageID.
         range: iso6396s
         required: true
+        pattern: ^.{0,30}$
       firstReleased:
         description: The version in which a part was first released
         title: First released version
         range: string
         required: true
+        pattern: ^.{0,30}$
       lastUpdated:
         description: The version in which the part was last updated.
         title: Last updated version
+        notes:
+        - Any change to the part of list will result in a change in the lastUpdated
+          field to the dictionary version where the update occurred.
         range: string
         required: true
+        pattern: ^.{0,30}$
       changes:
         description: A column for recording the changes from a previous version.
         title: Changes column
+        notes:
+        - Use this column as a short-hand change log for dictionary development.
         range: string
+        pattern: ^.{0,30}$
       notes:
         description: A note used to describe details that are not captured in other
           attrbitutes
         title: Notes
+        notes:
+        - There is no recommended structure of a note. Use notes as needed.
         range: string
+        pattern: ^.{0,200}$
   Container:
     from_schema: https://onto.phes-odm.org/odmv2
     slots:
@@ -5481,72 +5794,124 @@ classes:
       stepID:
         description: The unique identifier for a specific protocol step.
         title: Protocol Step ID
+        notes:
+        - Protocol Steps are the component parts of a larger protocols, the latter
+          being linked to specific measure reports.
         identifier: true
         range: string
         required: true
+        pattern: ^.{0,30}$
       method:
         description: A procedure for collecting a sample or performing a measure.
         title: Method
         range: methods
+        pattern: ^.{0,10}$
       measure:
         description: A measurement or observation of any substance including a biological,
           physical or chemical substance.
         title: Measure
+        notes:
+        - An measurement is recorded from a specimen (i.e. a site, sample, person
+          or population). Measures are organized into groups and classes (sub-groups).
         range: measurements
+        pattern: ^.{0,12}$
       summ:
         description: Short description of the assay and how it is different from the
           other assay methods.
         title: Summary
         range: string
+        pattern: ^.{0,255}$
       sourceStep:
         description: Specifies the protocol step which serves as a basis for a given
           protocol step.
         title: Protocol step source ID
+        notes:
+        - Populate with a protocol step ID (stepID).
         range: string
+        pattern: ^.{0,30}$
       stepVer:
         description: Specifies the version of a given protocol step.
         title: Protocol step version
+        notes:
+        - Version of the method step. Semantic versioning is recommended.
         range: string
+        pattern: ^.{0,50}$
       refLink:
         description: Link to the reference material for a part. May link to literature
           on a method, measure, etc.
         title: Reference link
+        notes:
+        - Link to standard operating procedure for a measure or part. Part reference
+          is a reference to a technical document that describes the part in detail.
+          The reference could be a URL, DOI, or reference to a techincal report.
         range: string
+        pattern: ^.{0,255}$
       organizationID:
         description: A unique identifier for the organization to which the reporter
           is affiliated.
         title: Organization ID
         range: string
+        pattern: ^.{0,100}$
       contactID:
         description: A unique identifier for a given contact person.
         title: Contact ID
         range: string
+        pattern: ^.{0,30}$
       instrumentID:
         description: A unique identifier for an instrument.
         title: Instrument ID
         range: instrumentIDs
+        pattern: ^.{0,10}$
       value:
         description: Value of a measure, observation or attribute.
         title: Value
+        notes:
+        - Only used for the dictionary entries of parts.
         range: string
+        pattern: ^.{0,15}$
       unit:
         description: The units of a measurement.
         title: Unit
+        notes:
+        - Different units that are used to describe measurement values. Units are
+          combined into UnitSetIDs. Please requests new units by creating an issue
+          in the ODM repository.
         range: units
+        pattern: ^.{0,30}$
       aggregation:
         description: Statistical measures used to report a measure. Each aggregation
           has a corresponding value.
         title: Aggregation
+        notes:
+        - The default aggregation is `single`, which corresponds to a single measurement.
         range: aggregations
+        pattern: ^.{0,12}$
       lastEdited:
         description: The date the entry was last updated.
         title: Last edited
+        notes:
+        - Use lastEdited if an entry is updated. Leave lastEdited blank or 'NA' for
+          the first entry. Updates can include additions or revisions of the entry
+          for any reason. For example, a wastewater measure was repeated later with
+          an improved method. You can revise the entry by updating the value and then
+          adding the date the new measure was performed to 'lastEdited'.  To ensure
+          data provenance, the best practice in this example is to generate a new
+          entry with the same measureID as the original measureID. The original and
+          new measures are kept in the database with a date in the 'lastEdited' field
+          for the new entry but not the original one. Some databases may choose a
+          delete-and-replace approach where the original entry is deleted and replaced
+          by a new entry. In this approach, the 'lastEdited' field indicates the delete
+          and replace occurred.
         range: datetime
+        pattern: ^.{0,30}$
       notes:
         description: A note used to describe details that are not captured in other
           attrbitutes
         title: Notes
+        notes:
+        - There is no recommended structure of a note. Use notes as needed.
         range: string
+        pattern: ^.{0,200}$
   protocolRelationships:
     slots:
     - protocolRelationshipsID
@@ -5566,47 +5931,96 @@ classes:
         identifier: true
         range: string
         required: true
+        pattern: ^.{0,50}$
       protocolIDContainer:
         description: Unique identifier for the protocol and the steps and other protocols
           that make it up.
         title: Protocol ID container
+        notes:
+        - Protocol ID Container in popuated by a protocolID (partID = protocolID)
         range: string
         required: true
+        pattern: ^.{0,15}$
       protocolIDObj:
         description: The object of the relationship between one protocol and another
           protocol or step, within a given protocol ID container.
         title: Protocol ID object
+        notes:
+        - 'Populate this field using Protocol ID (partID = protocolID). Together with
+          `protocolIDSub` or `stepIDSub` and `relationshipID`, the protocol relationship
+          is defined as: [protocolIDSubject or stepIDSubject]  [relationshipID] [protocolIDObject
+          or stepIDObject]. Ex: stepIDSubject  precedes protocolIDObject.'
         range: string
+        pattern: ^.{0,30}$
       stepIDObj:
         description: The object of the relationship between one protocol step and
           another step or protocol, within a given protocol ID container.
         title: Step ID Object
+        notes:
+        - 'Populate this field using Protocol Step ID (partID = stepID). Together
+          with `protocolIDSub` or `stepIDSub` and `relationshipID` the row of `protocolRelationships`
+          should say: [protocolIDSubject or stepIDSubject]  [relationshipID] [protocolIDObject
+          or stepIDObject]. Ex: stepIDSubject  precedes protocolIDObject.'
         range: integer
+        minimum_value: '1'
       relationshipID:
         description: Attribute for specifying the relationship between a sample subject
           and object.
         title: Relationship between entities
+        notes:
+        - 'Together with `sampleIDSubject` and `sampleRelID`, a row of the `sampleRelationships`
+          should say: [sampleIDSubject] is a [sampleID] of [sampleIDObject]'
         range: sampleRelSet, protocolRelSet
         required: true
+        pattern: ^.{0,30}$
       protocolIDSub:
         description: The subject of the relationship between one protocol and another
           protocol or step, within a given protocol ID container.
         title: Protocol ID subject
+        notes:
+        - 'Populate this field using Protocol ID (partID = protocolID). Together with
+          `protocolIDObj` or `stepIDObj` and `relationshipID` the row of `protocolRelationships`
+          should say: [protocolIDSubject or stepIDSubject]  [relationshipID] [protocolIDObject
+          or stepIDObject]. Ex: stepIDSubject  precedes protocolIDObject.'
         range: string
+        pattern: ^.{0,30}$
       stepIDSub:
         description: The subject of the relationship between one protocol step and
           another step or protocol, within a given protocol ID container.
         title: Step ID Subject
+        notes:
+        - 'Populate this field using Protocol ID (partID = stepID). Together with
+          `protocolIDSub` or `stepIDSub` and `relationshipID` the row of `protocolRelationships`
+          should say: [protocolIDSubject or stepIDSubject]  [relationshipID] [protocolIDObject
+          or stepIDObject]. Ex: stepIDSubject  precedes protocolIDObject.'
         range: string
+        pattern: ^.{0,30}$
       lastEdited:
         description: The date the entry was last updated.
         title: Last edited
+        notes:
+        - Use lastEdited if an entry is updated. Leave lastEdited blank or 'NA' for
+          the first entry. Updates can include additions or revisions of the entry
+          for any reason. For example, a wastewater measure was repeated later with
+          an improved method. You can revise the entry by updating the value and then
+          adding the date the new measure was performed to 'lastEdited'.  To ensure
+          data provenance, the best practice in this example is to generate a new
+          entry with the same measureID as the original measureID. The original and
+          new measures are kept in the database with a date in the 'lastEdited' field
+          for the new entry but not the original one. Some databases may choose a
+          delete-and-replace approach where the original entry is deleted and replaced
+          by a new entry. In this approach, the 'lastEdited' field indicates the delete
+          and replace occurred.
         range: datetime
+        pattern: ^.{0,30}$
       notes:
         description: A note used to describe details that are not captured in other
           attrbitutes
         title: Notes
+        notes:
+        - There is no recommended structure of a note. Use notes as needed.
         range: string
+        pattern: ^.{0,200}$
   samples:
     slots:
     - sampleID
@@ -5636,113 +6050,186 @@ classes:
       sampleID:
         description: Unique identifier for a sample.
         title: Sample ID
+        notes:
+        - Suggestion:siteID-date-index.
         identifier: true
         range: string
         required: true
+        pattern: ^.{0,30}$
       repType:
         description: Attirbute of a sample, specifying whether the sample is unique,
           or a replicate. And if it is a replicate, what type of replicate is it?
         title: Replicate Type
         range: replicateSet
+        pattern: ^.{0,30}$
       collType:
         description: The type of collection.
         title: Sample collection type
         range: collectSet
         required: true
+        pattern: ^.{0,12}$
       collPer:
         description: Collection period. The time period over which the sample was
           collected, in hours. Alternatively, use collectionStart and collectionEnd.
         title: Collection period
+        notes:
+        - 'Examples: 1 hour, 6 hours, 24 hours'
         range: float
         required: true
+        minimum_value: '1'
       collNum:
         description: The number of subsamples that were combined to create the sample.
           Use NA for continuous, proportional or passive sampling.
         title: Collection number
         range: integer
         required: true
+        minimum_value: '1'
       pooled:
         description: Is this a pooled sample, and therefore composed of multiple child
           samples obtained at different sites
         title: Pooled
         range: booleanSet
+        pattern: ^.{0,30}$
       collDT:
         description: For grab samples this is the date, time and timezone the sample
           was taken.
         title: Collection date time
         range: datetime
         required: true
+        pattern: ^.{0,30}$
       collDTStart:
         description: For integrated time averaged samples this is the date, time and
           timezone the sample was started being taken.
         title: Collection date time start
         range: datetime
+        pattern: ^.{0,30}$
       collDTEnd:
         description: For integrated time average samples this is the date, time and
           timezone the sample was finished being taken.
         title: Collection date time end
         range: datetime
+        pattern: ^.{0,30}$
       sentDate:
         title: Date sample was sent
         range: datetime
+        pattern: ^.{0,30}$
       recDate:
         description: The date the sample was received at the laboratory for analysis.
         title: Date sample recieved
         range: datetime
+        pattern: ^.{0,30}$
       protocolID:
         description: A unique identifier for a given protocol.
         title: Protocol ID
         range: string
+        pattern: ^.{0,30}$
       reportable:
         description: Flag for whether a measure is reportable or not, based on confidence
           in the measure and methods applied.
         title: Reportable
         range: booleanSet
+        pattern: ^.{0,10}$
       lastEdited:
         description: The date the entry was last updated.
         title: Last edited
+        notes:
+        - Use lastEdited if an entry is updated. Leave lastEdited blank or 'NA' for
+          the first entry. Updates can include additions or revisions of the entry
+          for any reason. For example, a wastewater measure was repeated later with
+          an improved method. You can revise the entry by updating the value and then
+          adding the date the new measure was performed to 'lastEdited'.  To ensure
+          data provenance, the best practice in this example is to generate a new
+          entry with the same measureID as the original measureID. The original and
+          new measures are kept in the database with a date in the 'lastEdited' field
+          for the new entry but not the original one. Some databases may choose a
+          delete-and-replace approach where the original entry is deleted and replaced
+          by a new entry. In this approach, the 'lastEdited' field indicates the delete
+          and replace occurred.
         range: datetime
+        pattern: ^.{0,30}$
       notes:
         description: A note used to describe details that are not captured in other
           attrbitutes
         title: Notes
+        notes:
+        - There is no recommended structure of a note. Use notes as needed.
         range: string
+        pattern: ^.{0,200}$
       organizationID:
         description: A unique identifier for the organization to which the reporter
           is affiliated.
         title: Organization ID
         range: string
+        pattern: ^.{0,100}$
       contactID:
         description: A unique identifier for a given contact person.
         title: Contact ID
         range: string
+        pattern: ^.{0,30}$
       siteID:
         description: Unique identifier for the location where a sample was taken.
         title: Site ID
         range: string
         required: true
+        pattern: ^.{0,30}$
       purpose:
         description: The reason the measure or sample was taken.
         title: Purpose
+        notes:
+        - 'See allowed categories: report, quality control, validation study, test'
         range: purposeSet
+        pattern: ^.{0,30}$
       saMaterial:
         description: Type of sample.
         title: Sample material
         range: sampleMatSet
         required: true
+        pattern: ^.{0,30}$
       datasetID:
         description: The name of the dataset that stores information for MeasureReport,
           SampleReport and other reporting tables.
         title: Dataset ID
+        notes:
+        - Where possible, datasetID name should correspond the orignial data custodian
+          responsible for generating environmental data. (suggestion for a default
+          name convention.)
         range: string
+        pattern: ^.{0,30}$
       origin:
         description: An attribute of a sample specifying the origin.
         title: Sample origin
         range: origins
+        pattern: ^.{0,30}$
       collNumPer:
         description: Composite collection number.period.
         title: Collection period and number
+        notes:
+        - 'This a composite measure that combines `collection period` (collPer) and
+          `collection number` (collNum). Collection number and period can be used
+          to reduce the number of table headings during data collection. In data storage,
+          `collNum` and `collPeriod` should be transformed to `collPer` and `collNum`.
+          For Grab sample, Surface swab, or Area proportional sample just enter 1
+
+
+          In case of Composite, Flow-proportional collection, the number of subsamples
+          followed by a dot, followed by the period of the sampling, in hours.
+
+          For example, for 4 composite subsamples covering a 8 hours period, the entry
+          would be 4.2
+
+          For time-proportional 24 subsamples collected every hour, the entry would
+          be 24.1
+
+          For volume-proportional, the entry for 24 subsamples collected over 24 hours
+          should be 24.24, in this case the period part of the entry should be understood
+          as the total collection time instead of the periodicity of the collection.
+
+
+          For a COSCA ball or Moore swab collecting for 24 hours, the entry would
+          be 1.24'
         range: string
+        minimum_value: '1:1'
+        pattern: ^.{0,6}$
   measures:
     slots:
     - measureRepID
@@ -5778,140 +6265,233 @@ classes:
       measureRepID:
         description: Unique identifier for a measurement.
         title: Report ID
+        notes:
+        - Report IDs cannot be repeated.
         identifier: true
         range: string
         required: true
+        pattern: ^.{0,30}$
       protocolID:
         description: A unique identifier for a given protocol.
         title: Protocol ID
         range: string
+        pattern: ^.{0,30}$
       sampleID:
         description: Unique identifier for a sample.
         title: Sample ID
+        notes:
+        - Suggestion:siteID-date-index.
         range: string
         required: true
+        pattern: ^.{0,30}$
       purpose:
         description: The reason the measure or sample was taken.
         title: Purpose
+        notes:
+        - 'See allowed categories: report, quality control, validation study, test'
         range: purposeSet
+        pattern: ^.{0,30}$
       polygonID:
         description: Unique identifier for the polygon.
         title: Polygon ID
+        notes:
+        - A polygon is a geographic are representing the capment area of an environmental
+          sample.
         range: string
+        pattern: ^.{0,10}$
       siteID:
         description: Unique identifier for the location where a sample was taken.
         title: Site ID
         range: string
+        pattern: ^.{0,30}$
       datasetID:
         description: The name of the dataset that stores information for MeasureReport,
           SampleReport and other reporting tables.
         title: Dataset ID
+        notes:
+        - Where possible, datasetID name should correspond the orignial data custodian
+          responsible for generating environmental data. (suggestion for a default
+          name convention.)
         range: string
+        pattern: ^.{0,30}$
       measureSetRepID:
         description: Unique identifier that links together a group of related measures.
         title: Measure set report set ID
         range: string
+        pattern: ^.{0,30}$
       aDateStart:
         description: Date the measurement or analysis was started.
         title: Analysis date start
         range: datetime
+        pattern: ^.{0,30}$
       aDateEnd:
         description: Date the measurement or analysis was completed.
         title: Analysis date end
         range: datetime
         required: true
+        pattern: ^.{0,30}$
       reportDate:
         description: The date a measure was reported.
         title: Report date
+        notes:
+        - This date is the first date the laboratory or enity reported the measure
+          findings to the public health or other enity who ordered the measure or
+          is responsible for action. Use the analyses end date if the measure is part
+          of a research study or other purpose that does not have a reporting entity.
         range: datetime
+        pattern: ^.{0,30}$
       compartment:
         description: The attribute identifying the substance from which where a sample
           was taken. For more information, see partID = compartment.
         title: Compartment
         range: compartments
+        pattern: ^.{0,30}$
       specimen:
         description: The substance or thing upon which the observation was made.
         title: Specimen
+        notes:
+        - 'Specimens include: site, sample, person and population.'
         range: specimens
         required: true
+        pattern: ^.{0,12}$
       fraction:
         description: Fraction of the sample that is analyzed.
         title: Fraction analyzed
         range: fractionSet
+        pattern: ^.{0,30}$
       group:
         description: Unique identifier for a group of measures. Mostly applicable
           for measures, methods, units, and aggregations.
         title: Group
+        notes:
+        - A collection of related measures. For example, SARS-CoV-2 is a group. Within
+          the SARS-CoV-2 group, there are measure classes tht include RNA alleles
+          (N1, N2, E, etc.), mutations, (E484K0), an entire sequence, viral proteins,
+          etc. Currently groups are used for measures only.
         range: groups
+        pattern: ^.{0,30}$
       class:
         description: A unique identifier for a class, which is akin to a sub-group;
           it's a way of grouping parts within a given group. A group can have one
           or more classes to describe different parts of the class.
         title: Class
+        notes:
+        - Currently, class is only used for biologics. For example, SARS-CoV-2 is
+          a group of measures with the following classes of allele, variant, mutation,
+          sequence, and protein.
         range: classes
+        pattern: ^.{0,30}$
       measure:
         description: A measurement or observation of any substance including a biological,
           physical or chemical substance.
         title: Measure
+        notes:
+        - An measurement is recorded from a specimen (i.e. a site, sample, person
+          or population). Measures are organized into groups and classes (sub-groups).
         range: measurements
         required: true
+        pattern: ^.{0,12}$
       value:
         description: Value of a measure, observation or attribute.
         title: Value
+        notes:
+        - Only used for the dictionary entries of parts.
         range: string
         required: true
+        pattern: ^.{0,15}$
       unit:
         description: The units of a measurement.
         title: Unit
+        notes:
+        - Different units that are used to describe measurement values. Units are
+          combined into UnitSetIDs. Please requests new units by creating an issue
+          in the ODM repository.
         range: units
         required: true
+        pattern: ^.{0,30}$
       aggregation:
         description: Statistical measures used to report a measure. Each aggregation
           has a corresponding value.
         title: Aggregation
+        notes:
+        - The default aggregation is `single`, which corresponds to a single measurement.
         range: aggregations
         required: true
+        pattern: ^.{0,12}$
       nomenclature:
         description: A classification system to report the measure class. Only applicable
           to variants, mutations, and diseases.
         title: Nomenclature
+        notes:
+        - Currently only used for class = variant, mutation, or disease. Valid options
+          are currently restricted to 'NextClade', 'Pangolin', 'WHO', or 'ICD'.
         range: nomenclatures
+        pattern: ^.{0,30}$
       index:
         description: Index number in case the measurement was taken multiple times.
         title: Index
         range: string
+        pattern: ^.{0,50}$
       measureLic:
         description: Specifies the access and use licensing for a given single measurement.
         title: Measure license
+        notes:
+        - Populated by partID = licenseID
         range: licSet
+        pattern: ^.{0,30}$
       reportable:
         description: Flag for whether a measure is reportable or not, based on confidence
           in the measure and methods applied.
         title: Reportable
         range: booleanSet
+        pattern: ^.{0,10}$
       organizationID:
         description: A unique identifier for the organization to which the reporter
           is affiliated.
         title: Organization ID
         range: string
+        pattern: ^.{0,100}$
       contactID:
         description: A unique identifier for a given contact person.
         title: Contact ID
         range: string
+        pattern: ^.{0,30}$
       refLink:
         description: Link to the reference material for a part. May link to literature
           on a method, measure, etc.
         title: Reference link
+        notes:
+        - Link to standard operating procedure for a measure or part. Part reference
+          is a reference to a technical document that describes the part in detail.
+          The reference could be a URL, DOI, or reference to a techincal report.
         range: string
+        pattern: ^.{0,255}$
       lastEdited:
         description: The date the entry was last updated.
         title: Last edited
+        notes:
+        - Use lastEdited if an entry is updated. Leave lastEdited blank or 'NA' for
+          the first entry. Updates can include additions or revisions of the entry
+          for any reason. For example, a wastewater measure was repeated later with
+          an improved method. You can revise the entry by updating the value and then
+          adding the date the new measure was performed to 'lastEdited'.  To ensure
+          data provenance, the best practice in this example is to generate a new
+          entry with the same measureID as the original measureID. The original and
+          new measures are kept in the database with a date in the 'lastEdited' field
+          for the new entry but not the original one. Some databases may choose a
+          delete-and-replace approach where the original entry is deleted and replaced
+          by a new entry. In this approach, the 'lastEdited' field indicates the delete
+          and replace occurred.
         range: datetime
+        pattern: ^.{0,30}$
       notes:
         description: A note used to describe details that are not captured in other
           attrbitutes
         title: Notes
+        notes:
+        - There is no recommended structure of a note. Use notes as needed.
         range: string
+        pattern: ^.{0,200}$
   parts:
     slots:
     - partID
@@ -6013,429 +6593,635 @@ classes:
       partID:
         description: The unique identify of any entity within the dictionary.
         title: Part identifier
+        notes:
+        - Every entity in the ODM has a partID. The partID must be unique with no
+          duplcates. partIDs are short. partIDs that are constructed by different
+          part attributes can be up 28 characters (check max), but each part attibute
+          should be 1 to 5 characters. partIDs are machine readible, but a knowledgable
+          user can understand what they represent. partID are used, for example, as
+          a header in an Excel input table. Numbers are allowed but there no other
+          special characters other than `_`. `_` is a reserved character that is used
+          to generate a partID using a compoent or table attributes. A partID for
+          a subComponent is automatically generated using attributes of a component.
+          For example, the partID for the compoent `SARS-CoV-2` is `covid`. `Covid`
+          can have many subComponents including different groups (Covid-19-al, Covid-19-va,
+          ovid-pr (allele, variant or protein) or units and aggregatrions (i.e. covid-al-N1-mean-cpl
+          representing ovid allele N1, mean observation of viral copies per litre
+          of effluent). A similar approach to naming subComponent is use for naming
+          parts in a reprotTable.
         identifier: true
         range: string
         required: true
+        pattern: ^.{0,28}$
       label:
         description: A human readable label of a part.
         title: Label
+        notes:
+        - Typically, a part label has no acrynomns (every word is spelled out). Equivalent
+          to a LOINC common name.
         range: string
         required: true
+        pattern: ^.{0,30}$
       partType:
         description: Part types describe the purpose or use of the part.
         title: Part types
+        notes:
+        - 'Enivornment data has three main part types: measure (i.e. covN1 viral measures,
+          wasteawater flow rate, temperature), method (e.g. how the measure was taken),
+          and attribute (such as a site name). See description of each of the part
+          types within categorySetID = partTypeCatSets.'
         range: partType
         required: true
+        pattern: ^.{0,15}$
       shortName:
         description: Shortened names for tables and other important parts for use
           in wide names.
         title: Short names
         range: string
+        pattern: ^.{0,30}$
       partDesc:
         description: The description of the part.
         title: Part description
+        notes:
+        - Provides description of the part, used for tranlsation.
         range: string
         required: true
+        pattern: ^.{0,30}$
       partInstr:
         description: Additional notes and instructions on how a part is used and/or
           defined.
         title: Part instruction
         range: string
+        pattern: ^.{0,200}$
       domain:
         description: Domain is the highest level of describing of a measure.
         title: Domain
+        notes:
+        - The domain ID that corresponds to a given part. Mostly applicable for measures,
+          methods, units, and aggregations.
         range: domains
         required: true
+        pattern: ^.{0,30}$
       specimenSets:
         description: Sets of specimens.
         title: Specimen sets
+        notes:
+        - Specimen sets are used when a measure or attribute can be recorded for more
+          than one specimen.
         range: specimenSets
         required: true
+        pattern: ^.{0,15}$
       group:
         description: Unique identifier for a group of measures. Mostly applicable
           for measures, methods, units, and aggregations.
         title: Group
+        notes:
+        - A collection of related measures. For example, SARS-CoV-2 is a group. Within
+          the SARS-CoV-2 group, there are measure classes tht include RNA alleles
+          (N1, N2, E, etc.), mutations, (E484K0), an entire sequence, viral proteins,
+          etc. Currently groups are used for measures only.
         range: groups
         required: true
+        pattern: ^.{0,30}$
       class:
         description: A unique identifier for a class, which is akin to a sub-group;
           it's a way of grouping parts within a given group. A group can have one
           or more classes to describe different parts of the class.
         title: Class
+        notes:
+        - Currently, class is only used for biologics. For example, SARS-CoV-2 is
+          a group of measures with the following classes of allele, variant, mutation,
+          sequence, and protein.
         range: classes
         required: true
+        pattern: ^.{0,30}$
       nomenclature:
         description: A classification system to report the measure class. Only applicable
           to variants, mutations, and diseases.
         title: Nomenclature
+        notes:
+        - Currently only used for class = variant, mutation, or disease. Valid options
+          are currently restricted to 'NextClade', 'Pangolin', 'WHO', or 'ICD'.
         range: nomenclatures
+        pattern: ^.{0,30}$
       ontologyRef:
         description: Ontology reference for a part.
         title: Ontology reference
+        notes:
+        - This field contains a link to an existing ontology reference for the part.
+          ODM content spans several existing ontologies. ODM does not strive to generate
+          a new ontology, rather ODM seeks to harmonize and extend dictionaries for
+          application in environmental and public health surveillance.
         range: string
+        pattern: ^.{0,200}$
       latExp:
         description: LaTeX expression used to generate formulas, symbols, etc.  Mainly
           relevant for units.
         title: LaTeX expression
         range: string
+        pattern: ^.{0,20}$
       mmaSet:
         description: The set for a measure, method, or attribute. Only applicable
           for categorical fields, and the categories that populate them.
         title: Measure, method, or attribute
         range: mmaSets
+        pattern: ^.{0,12}$
       unitSet:
         description: An idenfication of a set of units that can be used for a measure
           or method.
         title: Unit set
         range: string
+        pattern: ^.{0,30}$
       aggragationScale:
         description: A scale used for an aggregation. Only applicable for measures
           and units.
         title: Aggregation scale
         range: aggregationScales
+        pattern: ^.{0,12}$
       aggregationSet:
         description: The aggregation set for a unit.
         title: Aggregation set
         range: aggregationSets
         required: true
+        pattern: ^.{0,12}$
       qualitySetID:
         description: The quality set that corresponds to a given part. Only applicable
           for samples and measures.
         title: Quality set
         range: string
+        pattern: ^.{0,30}$
       missingnessSets:
         description: Missingness sets for measures, methods or attributes.
         title: Missingness sets
+        notes:
+        - Inputted data into an ODM field may have missing data. The missingness set
+          lists valid missing categories for the measure, method, or attribute.
         range: missingnessSets
+        pattern: ^.{0,15}$
       status:
         description: Whether the part is still active and can be used in the most
           current ODM version. Values are 'active' or 'inactive'.
         title: Status
+        notes:
+        - The status of the part or list. 'active' means the part is used in the dictionary
+          version. 'inactive' means the part has been retired and not longer used
+          in the version.
         range: statusSet
         required: true
+        pattern: ^.{0,30}$
       firstReleased:
         description: The version in which a part was first released
         title: First released version
         range: string
         required: true
+        pattern: ^.{0,30}$
       lastUpdated:
         description: The version in which the part was last updated.
         title: Last updated version
+        notes:
+        - Any change to the part of list will result in a change in the lastUpdated
+          field to the dictionary version where the update occurred.
         range: string
         required: true
+        pattern: ^.{0,30}$
       changes:
         description: A column for recording the changes from a previous version.
         title: Changes column
+        notes:
+        - Use this column as a short-hand change log for dictionary development.
         range: string
+        pattern: ^.{0,30}$
       protocolSteps:
         description: The table for collecting metadata on individual steps in a protocol,
           methodological process, or assay.
         title: Protocol steps table
         range: string
+        pattern: ^.{0,30}$
       protocolRelationshipsRequired:
         description: Specifies the columns required in the Protocol Organization table.
         title: Protocol Relationship table required headers
         range: string
+        pattern: ^.{0,30}$
       protocolStepsRequired:
         description: Specifies the columns required in a Protocol Steps table.
         title: Protocol steps table required headers
         range: string
+        pattern: ^.{0,30}$
       protocolStepsOrder:
         description: Specifies the order of the columns in a Protocol Steps table.
         title: Protocol steps table column order
         range: integer
+        minimum_value: '1'
       protocolRelationships:
         description: The table that contains the organizational information and details
           (such as order) about a given protocol, recorded as a series of protocol
           steps (protocolSteps).
         title: Protocol relationships table
+        notes:
+        - Protocols are a group of related protocol steps. For example a protocol
+          step can describe a sample concentration, extraction, inhibition or a measurement.
+          Protocols can include both methodID (a proceedure) and measureIDs (a measure).
+          An example of a method is centrifugation; where the centriguation rotation
+          speed is described as a measure.
         range: string
+        pattern: ^.{0,30}$
       protocolRelationshipsOrder:
         description: Specifies the order of the columns in the Protocol Organization
           table.
         title: Protocol relationships table column order
         range: integer
+        minimum_value: '1'
       measures:
         description: The table that contains information and details about a given
           measure
         title: Measure report table
+        notes:
+        - adapt from verson 1 documentation
         range: string
+        pattern: ^.{0,30}$
       measuresRequired:
         description: Specifies the columns required in a Measures table.
         title: Measures table required headers
         range: string
+        pattern: ^.{0,30}$
       measuresOrder:
         description: Specifies the order of the columns in a Measures table.
         title: Measures table column order
         range: integer
+        minimum_value: '1'
       measureSets:
         description: The table that identifies sets of measures.
         title: Measure set report table
+        notes:
+        - Examples of measure sets include a set of replicates, dilutions (used to
+          generate a Ct curve) or varients that are identified in a single sample.
         range: string
+        pattern: ^.{0,30}$
       measureSetsOrder:
         description: Specifies the order of the columns in a Measure Sets table.
         title: Measure sets table column order
         range: integer
+        minimum_value: '1'
       measureSetsRequired:
         description: Specifies the columns required in a Measure Sets table.
         title: Measure Set table required headers
         range: string
+        pattern: ^.{0,30}$
       datasets:
         description: A report table for capturing details about data's parental data
           set and data custodians. Supplying attribution for data collectors.
         title: Dataset table
         range: string
+        pattern: ^.{0,30}$
       datasetsRequired:
         description: Specifies the columns required in a Datasets table.
         title: Dataset table required headers
         range: string
+        pattern: ^.{0,30}$
       datasetsOrder:
         description: Specifies the order of the columns in a Datasets table.
         title: Datasets table column order
         range: integer
+        minimum_value: '1'
       sites:
         description: The table that contains information about a site; the location
           where an environmental sample was taken.
         title: Sites table
+        notes:
+        - The site of an eviromental sample. Information in the site table does not
+          regularly change. Consider using the MeasureReport table if the infomation
+          changes often.
         range: string
+        pattern: ^.{0,30}$
       sitesRequired:
         description: Specifies the columns required in a Sites table.
         title: Sites table required headers
         range: string
+        pattern: ^.{0,30}$
       sitesOrder:
         description: Specifies the order of the columns in a Sites table.
         title: Sites table column order
         range: integer
+        minimum_value: '1'
       samples:
         description: The table that contains information about a sample. A sample
           is defined as a representative volume of wastewater (or other forms of water
           or liquid), air, or surface area taken from a site.
         title: Sample report table
+        notes:
+        - Samples can be combined, split, stored and reused. The `Sample relationships`
+          (sampleRelationships) is used to describe the relationships between samples.
         range: string
+        pattern: ^.{0,30}$
       samplesRequired:
         description: Specifies the columns required in a Samples table.
         title: Sample table required headers
         range: string
+        pattern: ^.{0,30}$
       samplesOrder:
         description: Specifies the order of the columns in a Samples table.
         title: Samples table column order
         range: integer
+        minimum_value: '1'
       addresses:
         description: The table that contains information about addresses. Addresses
           can recorded for sites, organizations or contacts (indivduals).
         title: Address table
+        notes:
+        - The Sites, Organizations, and Contacts tables include a link to the addresses
+          table through Address ID.
         range: string
+        pattern: ^.{0,30}$
       addressesRequired:
         description: Specifies the columns required in a Addresses table.
         title: Address table required headers
         range: string
+        pattern: ^.{0,30}$
       addressesOrder:
         description: Specifies the order of the columns in the Addresses table.
         title: Addresses table column order
         range: integer
+        minimum_value: '1'
       contacts:
         description: The table that contains information about a contact; a person
           who is the contact of a site or laboratory.
         title: Contact table
+        notes:
+        - adapt from verson 1 documentation
         range: string
+        pattern: ^.{0,30}$
       contactsRequired:
         description: Specifies the columns required in a Contacts table.
         title: Contact table required headers
         range: string
+        pattern: ^.{0,30}$
       contactsOrder:
         description: Specifies the order of the columns in a Contacts table.
         title: Contacts table column order
         range: integer
+        minimum_value: '1'
       organizations:
         description: The table that contains information about a laboratory.
         title: Organization table
+        notes:
+        - adapt from verson 1 documentation
         range: string
+        pattern: ^.{0,30}$
       organizationsRequired:
         description: Specifies the columns required in a Organizations table.
         title: Organziation table required headers
         range: string
+        pattern: ^.{0,30}$
       organizationsOrder:
         description: Specifies the order of the columns in a Organizations table.
         title: Organizations table column order
         range: integer
+        minimum_value: '1'
       instruments:
         description: The table that contains information about instruments.
         title: Instrument table
+        notes:
+        - adapt from verson 1 documentation
         range: string
+        pattern: ^.{0,30}$
       instrumentsRequired:
         description: Specifies the columns required in the Instruments table.
         title: Instrutment table required headers
         range: string
+        pattern: ^.{0,30}$
       instrumentsOrder:
         description: Specifies the order of the columns in the Instruments table.
         title: Instruments table column order
         range: integer
+        minimum_value: '1'
       polygons:
         description: The table that contains information about the geometry of a geographic
           area.
         title: Polygon table
         range: string
+        pattern: ^.{0,30}$
       polygonsRequired:
         description: Specifies the columns required in a Polygons table.
         title: Polygon table required headers
         range: string
+        pattern: ^.{0,30}$
       polygonsOrder:
         description: Specifies the order of the columns in a Polygons table.
         title: Polygons table column order
         range: integer
+        minimum_value: '1'
       languages:
         description: Look up table for all languages, used to give structure to the
           translation table.
         title: Language Look-up table
         range: string
+        pattern: ^.{0,30}$
       languagesRequired:
         description: Required headers in the Languages  table.
         title: Language table required headers
         range: string
+        pattern: ^.{0,30}$
       languagesOrder:
         description: Specifies the order of the columns in the Languages table.
         title: Language table column order
         range: integer
+        minimum_value: '1'
       translations:
         description: Look up table for translations of the description, label, and
           instruction for all parts.
         title: Translation look-up table
+        notes:
+        - The default language if a translation is not specified is English.
         range: string
+        pattern: ^.{0,30}$
       parts:
         description: Look up table containing all parts in of the data model.
         title: Parts Look-up table
+        notes:
+        - Contains all parts, including self-referential parts.
         range: string
+        pattern: ^.{0,30}$
       translationsRequired:
         description: Required headers in the Translations table.
         title: Translation table required headers
         range: string
+        pattern: ^.{0,30}$
       partsOrder:
         description: Order of headers in the Parts table.
         title: Parts table column order
         range: string
+        pattern: ^.{0,30}$
       translationsOrder:
         description: Specifies the order of the columns in the Translation table.
         title: Translation table column order
         range: integer
+        minimum_value: '1'
       partsRequired:
         description: Required headers in the Parts table.
         title: Parts table required headers
         range: string
+        pattern: ^.{0,30}$
       sets:
         description: Look up table for all sets, managing how categorical inputs for
           various methods and attributes are grouped together.
         title: Sets look-up table
+        notes:
+        - This table manages many-to-many relationships and category recycling within
+          the ODM.
         range: string
+        pattern: ^.{0,30}$
       setsOrder:
         description: Specifies the order of the columns in the Sets table.
         title: Sets table column order
         range: integer
+        minimum_value: '1'
       setsRequired:
         description: Required headers in the Sets table.
         title: Sets table required headers
         range: string
+        pattern: ^.{0,30}$
       qualityReports:
         description: The table for recording the various quality metrics and indicators
           for samples and measures.
         title: Quality reports table
         range: string
+        pattern: ^.{0,30}$
       qualityReportsRequired:
         description: Specifies the columns required in the Quality Reports table.
         title: Quality report table required headers
         range: string
+        pattern: ^.{0,30}$
       qualityReportsOrder:
         description: Specifies the order of the columns in the Quality Reports table.
         title: Quality rerpots table column order
         range: integer
+        minimum_value: '1'
       sampleRelationships:
         description: Table for recording the relationships between samples.
         title: Sample relationships table
+        notes:
+        - Samples can be pooled or split. The sample relationships table holds information
+          on parent-child relationships between samples, and allow for tracking sample
+          lineage for single and pooled samples.
         range: string
+        pattern: ^.{0,30}$
       sampleRelationshipsRequired:
         description: Specifies the columns required in a Sample Relationships table.
         title: Sample relationships table required headers
         range: string
+        pattern: ^.{0,30}$
       sampleRelationshipsOrder:
         description: Specifies the order of the columns in a Sample Relationships
           table.
         title: Sample relationships table column order
         range: integer
+        minimum_value: '1'
       protocols:
         description: The table for protocols.
         title: Protocols table
         range: string
+        pattern: ^.{0,30}$
       protocolsRequired:
         description: Specifies the columns required in the Protocols table.
         title: Protocols table required headers
         range: string
+        pattern: ^.{0,30}$
       protocolsOrder:
         description: Specifies the order of the columns in the Protocols table.
         title: Protocols table column order
         range: integer
+        minimum_value: '1'
       countries:
         description: Look up table for the possible country inputs.
         title: Countries look-up tables
         range: string
+        pattern: ^.{0,30}$
       countriesRequired:
         description: Required headers in the countries table.
         title: Counries table required headers
         range: string
+        pattern: ^.{0,30}$
       countriesOrder:
         description: Specifies the order of the columns in the countries table.
         title: Countries table column order
         range: integer
+        minimum_value: '1'
       zones:
         description: Look up table for the possible sub-national region or zone inputs.
         title: Zones look-up table
         range: string
+        pattern: ^.{0,30}$
       zonesRequired:
         description: Required headers in the zones table.
         title: Zones table required headers
         range: string
+        pattern: ^.{0,30}$
       zonesOrder:
         description: Specifies the order of the columns in the zones table.
         title: Zones table column order
         range: integer
+        minimum_value: '1'
       wideNames:
         description: The table for wide names.
         title: Wide name table
         range: string
+        pattern: ^.{0,30}$
       wideNamesRequired:
         description: Column for indicating which fields in the wide names table are
           mandatory.
         title: Wide name table required
         range: string
+        pattern: ^.{0,30}$
       wideNamesOrder:
         description: Column for indicating the order of the fields in the wide names
           table.
         title: Wide name table order
         range: string
+        pattern: ^.{0,30}$
       refLink:
         description: Link to the reference material for a part. May link to literature
           on a method, measure, etc.
         title: Reference link
+        notes:
+        - Link to standard operating procedure for a measure or part. Part reference
+          is a reference to a technical document that describes the part in detail.
+          The reference could be a URL, DOI, or reference to a techincal report.
         range: string
+        pattern: ^.{0,255}$
       dataTypes:
         description: The data type for a part.
         title: Data types
+        notes:
+        - 'Data types used in the ODM include: varchar, booleen, float, category,
+          date, time, datetime, url, email. dataType corresponds the the entry or
+          cell within a data table, most commonly within a report table. If the data
+          entry has a unit, then the dataType corresponds to the unit and the dataType
+          refers to ''unit''. If the data entry is a category, then the dataType refers
+          to ''category''. All categories are varchar. Otherwise the dataType is identifed
+          within the part entry. TBA: dataType for dictionary.'
         range: dataTypes
         required: true
+        pattern: ^.{0,12}$
       minValue:
         description: The minimum value of part.
         title: Minimum value part support
         range: string
+        pattern: ^.{0,30}$
       maxValue:
         description: The maximum value of a part.
         title: Maximum value part support
         range: string
+        pattern: ^.{0,30}$
       minLength:
         description: The maximum value of measure.
         title: Minimum length
         range: integer
+        pattern: ^.{0,30}$
       maxLength:
         description: The maximum length of the value of a part or measure.
         title: Maximum length
         range: integer
+        pattern: ^.{0,30}$
   protocols:
     slots:
     - sourceProtocol
@@ -6455,55 +7241,97 @@ classes:
           may be due to version changes, or a referencing a protocol that was later
           adapted.
         title: Source Protocol ID
+        notes:
+        - Populate with protocolID.
         range: string
+        pattern: ^.{0,30}$
       protocolID:
         description: A unique identifier for a given protocol.
         title: Protocol ID
         identifier: true
         range: string
         required: true
+        pattern: ^.{0,30}$
       datasetID:
         description: The name of the dataset that stores information for MeasureReport,
           SampleReport and other reporting tables.
         title: Dataset ID
+        notes:
+        - Where possible, datasetID name should correspond the orignial data custodian
+          responsible for generating environmental data. (suggestion for a default
+          name convention.)
         range: string
+        pattern: ^.{0,30}$
       name:
         description: Name of a domain, specimen, group, class, attribute, unit, nomeclature
           or other entity.
         title: Name
+        notes:
+        - Name of any entity. Use a prefix to distinguish names from different report
+          tables. See fully specified name (FSN) list.  i.e. Si-name = Site name,
+          Po-name = Polygon name, Or-name = Organization name, Me-name = Method-name.
         range: string
+        pattern: ^.{0,30}$
       summ:
         description: Short description of the assay and how it is different from the
           other assay methods.
         title: Summary
         range: string
+        pattern: ^.{0,255}$
       refLink:
         description: Link to the reference material for a part. May link to literature
           on a method, measure, etc.
         title: Reference link
+        notes:
+        - Link to standard operating procedure for a measure or part. Part reference
+          is a reference to a technical document that describes the part in detail.
+          The reference could be a URL, DOI, or reference to a techincal report.
         range: string
+        pattern: ^.{0,255}$
       organizationID:
         description: A unique identifier for the organization to which the reporter
           is affiliated.
         title: Organization ID
         range: string
+        pattern: ^.{0,100}$
       contactID:
         description: A unique identifier for a given contact person.
         title: Contact ID
         range: string
+        pattern: ^.{0,30}$
       protocolVersion:
         description: Specifies the version of a method set.
         title: Protocol version
+        notes:
+        - Version of the method set. Semantic versioning is recommended.
         range: integer
+        minimum_value: '1'
       lastEdited:
         description: The date the entry was last updated.
         title: Last edited
+        notes:
+        - Use lastEdited if an entry is updated. Leave lastEdited blank or 'NA' for
+          the first entry. Updates can include additions or revisions of the entry
+          for any reason. For example, a wastewater measure was repeated later with
+          an improved method. You can revise the entry by updating the value and then
+          adding the date the new measure was performed to 'lastEdited'.  To ensure
+          data provenance, the best practice in this example is to generate a new
+          entry with the same measureID as the original measureID. The original and
+          new measures are kept in the database with a date in the 'lastEdited' field
+          for the new entry but not the original one. Some databases may choose a
+          delete-and-replace approach where the original entry is deleted and replaced
+          by a new entry. In this approach, the 'lastEdited' field indicates the delete
+          and replace occurred.
         range: datetime
+        pattern: ^.{0,30}$
       notes:
         description: A note used to describe details that are not captured in other
           attrbitutes
         title: Notes
+        notes:
+        - There is no recommended structure of a note. Use notes as needed.
         range: string
+        pattern: ^.{0,200}$
   sets:
     slots:
     - setID
@@ -6520,53 +7348,84 @@ classes:
       setID:
         description: The unique identifier of a value set.
         title: Set ID
+        notes:
+        - A set is a group of units, attributes, categories, specimens, or compartments
+          that can be used for a measure, method or attribute.
         identifier: true
         range: string
         required: true
+        pattern: ^.{0,28}$
       setType:
         description: The type of set. i.e. quality set, aggregation set, unit set
         title: Set type
         required: true
+        pattern: ^.{0,30}$
       setValue:
         description: The partID for the set value or category.
         title: Set Value
+        notes:
+        - Populated by any part where partType = aggregationSet, compartmentSet, qualitySet,
+          specimentSet, or unitSet
         required: true
+        pattern: ^.{0,30}$
       label:
         description: A human readable label of a part.
         title: Label
+        notes:
+        - Typically, a part label has no acrynomns (every word is spelled out). Equivalent
+          to a LOINC common name.
         range: string
         required: true
+        pattern: ^.{0,30}$
       enumeration:
         description: The numeric value that corresponds to a given value in a set,
           defined in the sets table.
         title: Enumeration for set values
         range: integer
         required: true
+        minimum_value: '0'
+        maximum_value: '100'
       status:
         description: Whether the part is still active and can be used in the most
           current ODM version. Values are 'active' or 'inactive'.
         title: Status
+        notes:
+        - The status of the part or list. 'active' means the part is used in the dictionary
+          version. 'inactive' means the part has been retired and not longer used
+          in the version.
         range: statusSet
         required: true
+        pattern: ^.{0,30}$
       firstReleased:
         description: The version in which a part was first released
         title: First released version
         range: string
         required: true
+        pattern: ^.{0,30}$
       lastUpdated:
         description: The version in which the part was last updated.
         title: Last updated version
+        notes:
+        - Any change to the part of list will result in a change in the lastUpdated
+          field to the dictionary version where the update occurred.
         range: string
         required: true
+        pattern: ^.{0,30}$
       changes:
         description: A column for recording the changes from a previous version.
         title: Changes column
+        notes:
+        - Use this column as a short-hand change log for dictionary development.
         range: string
+        pattern: ^.{0,30}$
       notes:
         description: A note used to describe details that are not captured in other
           attrbitutes
         title: Notes
+        notes:
+        - There is no recommended structure of a note. Use notes as needed.
         range: string
+        pattern: ^.{0,200}$
   polygons:
     slots:
     - polygonID
@@ -6587,70 +7446,122 @@ classes:
       polygonID:
         description: Unique identifier for the polygon.
         title: Polygon ID
+        notes:
+        - A polygon is a geographic are representing the capment area of an environmental
+          sample.
         identifier: true
         range: string
         required: true
+        pattern: ^.{0,10}$
       datasetID:
         description: The name of the dataset that stores information for MeasureReport,
           SampleReport and other reporting tables.
         title: Dataset ID
+        notes:
+        - Where possible, datasetID name should correspond the orignial data custodian
+          responsible for generating environmental data. (suggestion for a default
+          name convention.)
         range: string
+        pattern: ^.{0,30}$
       name:
         description: Name of a domain, specimen, group, class, attribute, unit, nomeclature
           or other entity.
         title: Name
+        notes:
+        - Name of any entity. Use a prefix to distinguish names from different report
+          tables. See fully specified name (FSN) list.  i.e. Si-name = Site name,
+          Po-name = Polygon name, Or-name = Organization name, Me-name = Method-name.
         range: string
+        pattern: ^.{0,30}$
       descr:
         description: A detailed description of a measure, method, or attribute.
         title: Description
+        notes:
+        - A description of the part that serves a clear presentation of the part to
+          a wide audience including techinical and not techincal staff. A description
+          should allow any person who generates environment surveillance data to know
+          how to identify how to record their data elements in the ODM. partReference
+          can be used to further describe a part.
         range: string
+        pattern: ^.{0,200}$
       polyPop:
         description: An attribute of a polygon, which specifies the population of
           that polygon. A rough estimate of the number of human residents.
         title: Polygon Population
         range: integer
+        minimum_value: '0'
       geoType:
         description: Type of geography that is represented by the polygon.
         title: Type of geography
         range: geoTypeSet
         required: true
+        pattern: ^.{0,30}$
       geoEPSG:
         description: The unique EPSG code specifying a given geospatial area.
         title: European Petroleum Survey Group Coordinates
         range: float
         required: true
+        pattern: ^.{0,30}$
       geoWKT:
         description: Well-known text of the polygon
         title: Well-known text
         range: string
         required: true
+        pattern: ^.{0,63}$
       fileLocation:
         description: The location of the file containing the geometry of the polygon.
         title: File location of polygon
+        notes:
+        - File path specified, or a URL
         range: blob
+        pattern: ^.{0,65535}$
       refLink:
         description: Link to the reference material for a part. May link to literature
           on a method, measure, etc.
         title: Reference link
+        notes:
+        - Link to standard operating procedure for a measure or part. Part reference
+          is a reference to a technical document that describes the part in detail.
+          The reference could be a URL, DOI, or reference to a techincal report.
         range: string
+        pattern: ^.{0,255}$
       organizationID:
         description: A unique identifier for the organization to which the reporter
           is affiliated.
         title: Organization ID
         range: string
+        pattern: ^.{0,100}$
       contactID:
         description: A unique identifier for a given contact person.
         title: Contact ID
         range: string
+        pattern: ^.{0,30}$
       lastEdited:
         description: The date the entry was last updated.
         title: Last edited
+        notes:
+        - Use lastEdited if an entry is updated. Leave lastEdited blank or 'NA' for
+          the first entry. Updates can include additions or revisions of the entry
+          for any reason. For example, a wastewater measure was repeated later with
+          an improved method. You can revise the entry by updating the value and then
+          adding the date the new measure was performed to 'lastEdited'.  To ensure
+          data provenance, the best practice in this example is to generate a new
+          entry with the same measureID as the original measureID. The original and
+          new measures are kept in the database with a date in the 'lastEdited' field
+          for the new entry but not the original one. Some databases may choose a
+          delete-and-replace approach where the original entry is deleted and replaced
+          by a new entry. In this approach, the 'lastEdited' field indicates the delete
+          and replace occurred.
         range: datetime
+        pattern: ^.{0,30}$
       notes:
         description: A note used to describe details that are not captured in other
           attrbitutes
         title: Notes
+        notes:
+        - There is no recommended structure of a note. Use notes as needed.
         range: string
+        pattern: ^.{0,200}$
   datasets:
     slots:
     - parDatasetID
@@ -6672,68 +7583,127 @@ classes:
         description: The datasetID that is a parent to another datasetID.
         title: Parent dataset ID
         range: string
+        pattern: ^.{0,30}$
       datasetID:
         description: The name of the dataset that stores information for MeasureReport,
           SampleReport and other reporting tables.
         title: Dataset ID
+        notes:
+        - Where possible, datasetID name should correspond the orignial data custodian
+          responsible for generating environmental data. (suggestion for a default
+          name convention.)
         identifier: true
         range: string
         required: true
+        pattern: ^.{0,30}$
       datasetDate:
         description: Specifies the date a given dataset was created.
         title: Dataset creation date
         range: datetime
+        pattern: ^.{0,30}$
       name:
         description: Name of a domain, specimen, group, class, attribute, unit, nomeclature
           or other entity.
         title: Name
+        notes:
+        - Name of any entity. Use a prefix to distinguish names from different report
+          tables. See fully specified name (FSN) list.  i.e. Si-name = Site name,
+          Po-name = Polygon name, Or-name = Organization name, Me-name = Method-name.
         range: string
+        pattern: ^.{0,30}$
       license:
         description: The license of a dataset.
         title: License
+        notes:
+        - Specify the dataset's license name or provide a description of the license.
+          Individual measures may possess their own licenses, which take precedence
+          over the overall database license.
         range: licSet
         required: true
+        pattern: ^.{0,30}$
       descr:
         description: A detailed description of a measure, method, or attribute.
         title: Description
+        notes:
+        - A description of the part that serves a clear presentation of the part to
+          a wide audience including techinical and not techincal staff. A description
+          should allow any person who generates environment surveillance data to know
+          how to identify how to record their data elements in the ODM. partReference
+          can be used to further describe a part.
         range: string
+        pattern: ^.{0,200}$
       refLink:
         description: Link to the reference material for a part. May link to literature
           on a method, measure, etc.
         title: Reference link
+        notes:
+        - Link to standard operating procedure for a measure or part. Part reference
+          is a reference to a technical document that describes the part in detail.
+          The reference could be a URL, DOI, or reference to a techincal report.
         range: string
+        pattern: ^.{0,255}$
       lang:
         description: Language code for translation purposes. Specifies the langage
           for each translation, other than the default English. Uses the ISO-6393
           code.
         title: Language ID
+        notes:
+        - Follow the ISO639-3 codes for now.
         range: string
+        pattern: ^.{0,30}$
       funderCont:
         description: A unique identifier for a funder.
         title: Funder contact ID
         range: string
+        pattern: ^.{0,30}$
       custodyCont:
         description: A unique identifier for data custodians.
         title: Custody Contact ID
         range: string
+        pattern: ^.{0,30}$
       funderID:
         description: The funding agency of the dataset.
         title: Funding agency ID
+        notes:
+        - Use Organization ID to populate this field, and the organizations table
+          to describe contact information and other details for the funding agency.
         range: string
+        pattern: ^.{0,30}$
       custodyID:
         description: The data custodian of a database.
         title: Data custodian ID
+        notes:
+        - Use Organization ID to populate this field, and the organizations table
+          to describe contact information and other details for the data custodian.
         range: string
         required: true
+        pattern: ^.{0,30}$
       lastEdited:
         description: The date the entry was last updated.
         title: Last edited
+        notes:
+        - Use lastEdited if an entry is updated. Leave lastEdited blank or 'NA' for
+          the first entry. Updates can include additions or revisions of the entry
+          for any reason. For example, a wastewater measure was repeated later with
+          an improved method. You can revise the entry by updating the value and then
+          adding the date the new measure was performed to 'lastEdited'.  To ensure
+          data provenance, the best practice in this example is to generate a new
+          entry with the same measureID as the original measureID. The original and
+          new measures are kept in the database with a date in the 'lastEdited' field
+          for the new entry but not the original one. Some databases may choose a
+          delete-and-replace approach where the original entry is deleted and replaced
+          by a new entry. In this approach, the 'lastEdited' field indicates the delete
+          and replace occurred.
         range: datetime
+        pattern: ^.{0,30}$
       notes:
         description: A note used to describe details that are not captured in other
           attrbitutes
         title: Notes
+        notes:
+        - There is no recommended structure of a note. Use notes as needed.
         range: string
+        pattern: ^.{0,200}$
   addresses:
     slots:
     - addressID
@@ -6755,65 +7725,100 @@ classes:
         identifier: true
         range: string
         required: true
+        pattern: ^.{0,30}$
       datasetID:
         description: The name of the dataset that stores information for MeasureReport,
           SampleReport and other reporting tables.
         title: Dataset ID
+        notes:
+        - Where possible, datasetID name should correspond the orignial data custodian
+          responsible for generating environmental data. (suggestion for a default
+          name convention.)
         range: string
         required: true
+        pattern: ^.{0,30}$
       addL1:
         description: Line 1 (the street name, number and direction) for a given address.
         title: Address Line 1
         range: string
         required: true
+        pattern: ^.{0,30}$
       addL2:
         description: Line 2 (the unit number) for a given address.
         title: Address Line 2
         range: string
+        pattern: ^.{0,30}$
       city:
         description: The city where a site or organization is located; part of the
           address.
         title: City
         range: string
         required: true
+        pattern: ^.{0,30}$
       stateProvReg:
         description: The state, province, or region where a site or organization is
           located; part of the address.
         title: State, Province, or Region
         range: string
         required: true
+        pattern: ^.{0,30}$
       pCode:
         description: The zip code or postal code for a given address, specifying a
           specifc geographic area.
         title: Postal or Zip Code
         range: string
+        pattern: ^.{0,30}$
       country:
         description: The country where a site or organization is located; part of
           the address.
         title: Country
         range: string
         required: true
+        pattern: ^.{0,30}$
       lastEdited:
         description: The date the entry was last updated.
         title: Last edited
+        notes:
+        - Use lastEdited if an entry is updated. Leave lastEdited blank or 'NA' for
+          the first entry. Updates can include additions or revisions of the entry
+          for any reason. For example, a wastewater measure was repeated later with
+          an improved method. You can revise the entry by updating the value and then
+          adding the date the new measure was performed to 'lastEdited'.  To ensure
+          data provenance, the best practice in this example is to generate a new
+          entry with the same measureID as the original measureID. The original and
+          new measures are kept in the database with a date in the 'lastEdited' field
+          for the new entry but not the original one. Some databases may choose a
+          delete-and-replace approach where the original entry is deleted and replaced
+          by a new entry. In this approach, the 'lastEdited' field indicates the delete
+          and replace occurred.
         range: datetime
+        pattern: ^.{0,30}$
       notes:
         description: A note used to describe details that are not captured in other
           attrbitutes
         title: Notes
+        notes:
+        - There is no recommended structure of a note. Use notes as needed.
         range: string
+        pattern: ^.{0,200}$
       isoCode:
         description: The ISO 3166-1 alpha-2 code, a two-letter country code which
           is also used to create the ISO 3166-2 country subdivision code and the Internet
           country code top-level domain.
         title: ISO 3166-1 alpha-2 country code
+        notes:
+        - Preprogrammed into dictionary tables, not editable by users.
         range: string
+        pattern: ^.{2,2}$
       isoZone:
         description: The ISO 3166-2 codes for the names of the principal subdivisions
           (e.g., provinces, states, departments, regions) of all countries coded in
           ISO 3166-1.
         title: ISO 3166-2 code for country sub-domain
+        notes:
+        - Preprogrammed into dictionary tables, not editable by users.
         range: string
+        pattern: ^.{4,6}$
   sampleRelationships:
     slots:
     - sampleRelationshipsID
@@ -6830,33 +7835,65 @@ classes:
         identifier: true
         range: string
         required: true
+        pattern: ^.{0,50}$
       sampleIDSubject:
         description: Populated by `sampleID` - this specifies the subject of a sample
           relationship.
         title: Sample ID subject
+        notes:
+        - 'Use `sampleID` for this field. Together with `sampleIDSub` and `relationshipID`
+          the row of the `sampleRelationships` should say: [sampleIDSubject] is a[relationshipID]
+          of [sampleIDObject]'
         range: string
         required: true
+        pattern: ^.{0,30}$
       relationshipID:
         description: Attribute for specifying the relationship between a sample subject
           and object.
         title: Relationship between entities
+        notes:
+        - 'Together with `sampleIDSubject` and `sampleRelID`, a row of the `sampleRelationships`
+          should say: [sampleIDSubject] is a [sampleID] of [sampleIDObject]'
         range: sampleRelSet, protocolRelSet
         required: true
+        pattern: ^.{0,30}$
       sampleIDObject:
         description: Populated by `sampleID` - this specifies the object of a sample
           relationship.
         title: Sample ID object
+        notes:
+        - 'Use `sampleID` for this field. Together with `sampleIDSub` and `relationshipID`
+          the row of the `sampleRelationships` should say: [sampleIDSubject] is a[relationshipID]
+          of [sampleIDObject]'
         range: string
         required: true
+        pattern: ^.{0,30}$
       lastEdited:
         description: The date the entry was last updated.
         title: Last edited
+        notes:
+        - Use lastEdited if an entry is updated. Leave lastEdited blank or 'NA' for
+          the first entry. Updates can include additions or revisions of the entry
+          for any reason. For example, a wastewater measure was repeated later with
+          an improved method. You can revise the entry by updating the value and then
+          adding the date the new measure was performed to 'lastEdited'.  To ensure
+          data provenance, the best practice in this example is to generate a new
+          entry with the same measureID as the original measureID. The original and
+          new measures are kept in the database with a date in the 'lastEdited' field
+          for the new entry but not the original one. Some databases may choose a
+          delete-and-replace approach where the original entry is deleted and replaced
+          by a new entry. In this approach, the 'lastEdited' field indicates the delete
+          and replace occurred.
         range: datetime
+        pattern: ^.{0,30}$
       notes:
         description: A note used to describe details that are not captured in other
           attrbitutes
         title: Notes
+        notes:
+        - There is no recommended structure of a note. Use notes as needed.
         range: string
+        pattern: ^.{0,200}$
   instruments:
     slots:
     - instrumentID
@@ -6880,66 +7917,113 @@ classes:
         identifier: true
         range: instrumentIDs
         required: true
+        pattern: ^.{0,10}$
       datasetID:
         description: The name of the dataset that stores information for MeasureReport,
           SampleReport and other reporting tables.
         title: Dataset ID
+        notes:
+        - Where possible, datasetID name should correspond the orignial data custodian
+          responsible for generating environmental data. (suggestion for a default
+          name convention.)
         range: string
         required: true
+        pattern: ^.{0,30}$
       name:
         description: Name of a domain, specimen, group, class, attribute, unit, nomeclature
           or other entity.
         title: Name
+        notes:
+        - Name of any entity. Use a prefix to distinguish names from different report
+          tables. See fully specified name (FSN) list.  i.e. Si-name = Site name,
+          Po-name = Polygon name, Or-name = Organization name, Me-name = Method-name.
         range: string
+        pattern: ^.{0,30}$
       model:
         description: Model number or version of the instrument.
         title: Model
         range: string
         required: true
+        pattern: ^.{0,100}$
       manufacturer:
         description: Manufacturer of an instrument.
         title: Manufacturer
         range: string
+        pattern: ^.{0,100}$
       contactID:
         description: A unique identifier for a given contact person.
         title: Contact ID
         range: string
+        pattern: ^.{0,30}$
       organizationID:
         description: A unique identifier for the organization to which the reporter
           is affiliated.
         title: Organization ID
         range: string
+        pattern: ^.{0,100}$
       descr:
         description: A detailed description of a measure, method, or attribute.
         title: Description
+        notes:
+        - A description of the part that serves a clear presentation of the part to
+          a wide audience including techinical and not techincal staff. A description
+          should allow any person who generates environment surveillance data to know
+          how to identify how to record their data elements in the ODM. partReference
+          can be used to further describe a part.
         range: string
+        pattern: ^.{0,200}$
       refLink:
         description: Link to the reference material for a part. May link to literature
           on a method, measure, etc.
         title: Reference link
+        notes:
+        - Link to standard operating procedure for a measure or part. Part reference
+          is a reference to a technical document that describes the part in detail.
+          The reference could be a URL, DOI, or reference to a techincal report.
         range: string
+        pattern: ^.{0,255}$
       insType:
         description: Type of instrument used to perform the measurement.
         title: Instrument Type
         range: insTypeSet
         required: true
+        pattern: ^.{0,30}$
       insTypeOth:
         description: Description of the instrument in case it is not listed in instrumentType.
         title: Describe other instrument type, if applicable
         range: string
+        pattern: ^.{0,100}$
       index:
         description: Index number in case the measurement was taken multiple times.
         title: Index
         range: string
+        pattern: ^.{0,50}$
       lastEdited:
         description: The date the entry was last updated.
         title: Last edited
+        notes:
+        - Use lastEdited if an entry is updated. Leave lastEdited blank or 'NA' for
+          the first entry. Updates can include additions or revisions of the entry
+          for any reason. For example, a wastewater measure was repeated later with
+          an improved method. You can revise the entry by updating the value and then
+          adding the date the new measure was performed to 'lastEdited'.  To ensure
+          data provenance, the best practice in this example is to generate a new
+          entry with the same measureID as the original measureID. The original and
+          new measures are kept in the database with a date in the 'lastEdited' field
+          for the new entry but not the original one. Some databases may choose a
+          delete-and-replace approach where the original entry is deleted and replaced
+          by a new entry. In this approach, the 'lastEdited' field indicates the delete
+          and replace occurred.
         range: datetime
+        pattern: ^.{0,30}$
       notes:
         description: A note used to describe details that are not captured in other
           attrbitutes
         title: Notes
+        notes:
+        - There is no recommended structure of a note. Use notes as needed.
         range: string
+        pattern: ^.{0,200}$
   sites:
     slots:
     - parSiteID
@@ -6967,99 +8051,177 @@ classes:
         description: The siteID that is a parent to another siteID; usually the sub-site
           will be contained in the parentSite.
         title: Parent Site ID
+        notes:
+        - An example would be surface testing in a LTC facility. The LTC facility
+          would be the parentSiteID, and the various rooms/surfaces would be the sub-sites,
+          or child-sites.
         range: string
+        pattern: ^.{0,30}$
       siteID:
         description: Unique identifier for the location where a sample was taken.
         title: Site ID
         identifier: true
         range: string
         required: true
+        pattern: ^.{0,30}$
       datasetID:
         description: The name of the dataset that stores information for MeasureReport,
           SampleReport and other reporting tables.
         title: Dataset ID
+        notes:
+        - Where possible, datasetID name should correspond the orignial data custodian
+          responsible for generating environmental data. (suggestion for a default
+          name convention.)
         range: string
+        pattern: ^.{0,30}$
       polygonID:
         description: Unique identifier for the polygon.
         title: Polygon ID
+        notes:
+        - A polygon is a geographic are representing the capment area of an environmental
+          sample.
         range: string
+        pattern: ^.{0,10}$
       siteType:
         description: Type of site or institution where sample was taken.
         title: Site Type
         range: siteTypeSet
         required: true
+        pattern: ^.{0,30}$
       sampleShed:
         description: A geographic area, physical space, or structure. A sample is
           taken from a sampleshed for a representative measurement of a substance(s).
         title: Sample shed
+        notes:
+        - 'Examples: Airplane, Long-term care home, Neighbourhood, University campus,
+          Municipality'
         range: shedSet
         required: true
+        pattern: ^.{0,30}$
       addressID:
         description: A unique identifier for an address.
         title: Address ID
         range: string
+        pattern: ^.{0,30}$
       organizationID:
         description: A unique identifier for the organization to which the reporter
           is affiliated.
         title: Organization ID
         range: string
+        pattern: ^.{0,100}$
       contactID:
         description: A unique identifier for a given contact person.
         title: Contact ID
         range: string
         required: true
+        pattern: ^.{0,30}$
       name:
         description: Name of a domain, specimen, group, class, attribute, unit, nomeclature
           or other entity.
         title: Name
+        notes:
+        - Name of any entity. Use a prefix to distinguish names from different report
+          tables. See fully specified name (FSN) list.  i.e. Si-name = Site name,
+          Po-name = Polygon name, Or-name = Organization name, Me-name = Method-name.
         range: string
+        pattern: ^.{0,30}$
       descr:
         description: A detailed description of a measure, method, or attribute.
         title: Description
+        notes:
+        - A description of the part that serves a clear presentation of the part to
+          a wide audience including techinical and not techincal staff. A description
+          should allow any person who generates environment surveillance data to know
+          how to identify how to record their data elements in the ODM. partReference
+          can be used to further describe a part.
         range: string
+        pattern: ^.{0,200}$
       repOrg1:
         description: The primary or most responsible authority for rountine surveillance
           reports or findings, or where the site is located.
         title: Primary reporting authority ID
+        notes:
+        - Use the `organizations` table to describe attributes such as the name and
+          address of the organziation. Use `orgType`, `orgLevel` and `orgSector` to
+          describe additional attributes. For example,whether the organization is
+          a government agency (`orgType`), local (`orgLevel`), or public health (`orgSector).
+          If the attributes are not specified, the default is version 1.1.0 `publicHealthDepartment`
+          defined as 'The public health department or region where the site is located.
+          See also `healthReg` if there is a separate regional health care delivery
+          authority.`
         range: string
+        pattern: ^.{0,30}$
       repOrg2:
         description: The secondary, additional or alternative authority for rountine
           surveillance reports or findings, or where the site is located.
         title: Secondary reporting authority ID
+        notes:
+        - Use the `organizations` table to describe attributes such as the name and
+          address of the organziation. Use `orgType`, `orgLevel` and `orgSector` to
+          describe additional attributes. For example,whether the organization is
+          a government agency (`orgType`), local (`orgLevel`), or public health (`orgSector).
+          If the attributes are not specified, the default is version 1.1.0 `healthRegion`,
+          The health planning authority where is site is located. defined as 'The
+          public health department or region where the site is located.'
         range: string
+        pattern: ^.{0,30}$
       healthRegion:
         description: A free-text variable for listing the health region for a given
           site.
         title: Health Region for a Site
         range: string
+        pattern: ^.{0,30}$
       popServ:
         description: An attribute of a site, which specifies the population of/population
           served by a given site.
         title: Population Served
         range: popServs
+        pattern: ^.{0,30}$
       geoLat:
         description: 'Geographical location, latitude in decimal coordinates, ie.:
           (45.424721)'
         title: Latitude
         range: float
+        minimum_value: '-90'
+        maximum_value: '90'
       geoLong:
         description: 'Geographical location, longitude in decimal coordinates, ie.:
           (-75.695000)'
         title: Longitude
         range: float
+        minimum_value: '-180'
+        maximum_value: '180'
       geoEPSG:
         description: The unique EPSG code specifying a given geospatial area.
         title: European Petroleum Survey Group Coordinates
         range: float
+        pattern: ^.{0,30}$
       lastEdited:
         description: The date the entry was last updated.
         title: Last edited
+        notes:
+        - Use lastEdited if an entry is updated. Leave lastEdited blank or 'NA' for
+          the first entry. Updates can include additions or revisions of the entry
+          for any reason. For example, a wastewater measure was repeated later with
+          an improved method. You can revise the entry by updating the value and then
+          adding the date the new measure was performed to 'lastEdited'.  To ensure
+          data provenance, the best practice in this example is to generate a new
+          entry with the same measureID as the original measureID. The original and
+          new measures are kept in the database with a date in the 'lastEdited' field
+          for the new entry but not the original one. Some databases may choose a
+          delete-and-replace approach where the original entry is deleted and replaced
+          by a new entry. In this approach, the 'lastEdited' field indicates the delete
+          and replace occurred.
         range: datetime
+        pattern: ^.{0,30}$
       notes:
         description: A note used to describe details that are not captured in other
           attrbitutes
         title: Notes
+        notes:
+        - There is no recommended structure of a note. Use notes as needed.
         range: string
+        pattern: ^.{0,200}$
   contacts:
     slots:
     - contactID
@@ -7079,47 +8241,76 @@ classes:
         identifier: true
         range: string
         required: true
+        pattern: ^.{0,30}$
       datasetID:
         description: The name of the dataset that stores information for MeasureReport,
           SampleReport and other reporting tables.
         title: Dataset ID
+        notes:
+        - Where possible, datasetID name should correspond the orignial data custodian
+          responsible for generating environmental data. (suggestion for a default
+          name convention.)
         range: string
+        pattern: ^.{0,30}$
       organizationID:
         description: A unique identifier for the organization to which the reporter
           is affiliated.
         title: Organization ID
         range: string
         required: true
+        pattern: ^.{0,100}$
       firstName:
         description: Specifies the first name of a given contact.
         title: First name of contact
         range: string
+        pattern: ^.{0,30}$
       lastName:
         description: Specifies the last name of a given contact.
         title: Last name of contact
         range: string
+        pattern: ^.{0,30}$
       email:
         description: Contact e-mail address, for the lab.
         title: Contact email
         range: string
         required: true
+        pattern: ^.{0,100}$
       phone:
         description: Contact phone number, for the lab.
         title: Contact phone
         range: string
+        pattern: ^.{10,12}$
       role:
         description: Specifies the organizational role of a given contact.
         title: Role of contact
         range: string
+        pattern: ^.{0,30}$
       lastEdited:
         description: The date the entry was last updated.
         title: Last edited
+        notes:
+        - Use lastEdited if an entry is updated. Leave lastEdited blank or 'NA' for
+          the first entry. Updates can include additions or revisions of the entry
+          for any reason. For example, a wastewater measure was repeated later with
+          an improved method. You can revise the entry by updating the value and then
+          adding the date the new measure was performed to 'lastEdited'.  To ensure
+          data provenance, the best practice in this example is to generate a new
+          entry with the same measureID as the original measureID. The original and
+          new measures are kept in the database with a date in the 'lastEdited' field
+          for the new entry but not the original one. Some databases may choose a
+          delete-and-replace approach where the original entry is deleted and replaced
+          by a new entry. In this approach, the 'lastEdited' field indicates the delete
+          and replace occurred.
         range: datetime
+        pattern: ^.{0,30}$
       notes:
         description: A note used to describe details that are not captured in other
           attrbitutes
         title: Notes
+        notes:
+        - There is no recommended structure of a note. Use notes as needed.
         range: string
+        pattern: ^.{0,200}$
   measureSets:
     slots:
     - measureSetRepID
@@ -7136,33 +8327,59 @@ classes:
         identifier: true
         range: string
         required: true
+        pattern: ^.{0,30}$
       protocolID:
         description: A unique identifier for a given protocol.
         title: Protocol ID
         range: string
+        pattern: ^.{0,30}$
       name:
         description: Name of a domain, specimen, group, class, attribute, unit, nomeclature
           or other entity.
         title: Name
+        notes:
+        - Name of any entity. Use a prefix to distinguish names from different report
+          tables. See fully specified name (FSN) list.  i.e. Si-name = Site name,
+          Po-name = Polygon name, Or-name = Organization name, Me-name = Method-name.
         range: string
+        pattern: ^.{0,30}$
       organizationID:
         description: A unique identifier for the organization to which the reporter
           is affiliated.
         title: Organization ID
         range: string
+        pattern: ^.{0,100}$
       contactID:
         description: A unique identifier for a given contact person.
         title: Contact ID
         range: string
+        pattern: ^.{0,30}$
       lastEdited:
         description: The date the entry was last updated.
         title: Last edited
+        notes:
+        - Use lastEdited if an entry is updated. Leave lastEdited blank or 'NA' for
+          the first entry. Updates can include additions or revisions of the entry
+          for any reason. For example, a wastewater measure was repeated later with
+          an improved method. You can revise the entry by updating the value and then
+          adding the date the new measure was performed to 'lastEdited'.  To ensure
+          data provenance, the best practice in this example is to generate a new
+          entry with the same measureID as the original measureID. The original and
+          new measures are kept in the database with a date in the 'lastEdited' field
+          for the new entry but not the original one. Some databases may choose a
+          delete-and-replace approach where the original entry is deleted and replaced
+          by a new entry. In this approach, the 'lastEdited' field indicates the delete
+          and replace occurred.
         range: datetime
+        pattern: ^.{0,30}$
       notes:
         description: A note used to describe details that are not captured in other
           attrbitutes
         title: Notes
+        notes:
+        - There is no recommended structure of a note. Use notes as needed.
         range: string
+        pattern: ^.{0,200}$
   countries:
     slots:
     - isoCode
@@ -7186,87 +8403,133 @@ classes:
           is also used to create the ISO 3166-2 country subdivision code and the Internet
           country code top-level domain.
         title: ISO 3166-1 alpha-2 country code
+        notes:
+        - Preprogrammed into dictionary tables, not editable by users.
         range: string
         required: true
+        pattern: ^.{2,2}$
       isoCodeX:
         description: The ISO 3166-1 alpha-3 code, a three-letter country code which
           may allow a better visual association between the code and the country names
           than the 3166-1 alpha-2 code.
         title: ISO 3166-1 alpha-3 country code
+        notes:
+        - Preprogrammed into dictionary tables, not editable by users.
         range: string
         required: true
+        pattern: ^.{3,3}$
       numCode:
         description: The ISO 3166-1 numeric code, a three-digit country code which
           is identical to that developed and maintained by the United Nations Statistics
           Division, with the advantage of script (writing system) independence, and
           hence useful for people or systems using non-Latin scripts.
         title: ISO 3166-1 numeric country code
+        notes:
+        - Preprogrammed into dictionary tables, not editable by users.
         range: string
         required: true
+        pattern: ^.{3,3}$
       tld:
         description: The internet top-level domain generally used or reserved for
           a country, sovereign state, or dependent territory identified with a country
           code.
         title: Country code top-level domain
+        notes:
+        - Preprogrammed into dictionary tables, not editable by users.
         range: string
         required: true
+        pattern: ^.{3,3}$
       nameEngl:
         description: English-language name of a given country.
         title: English name for countries
+        notes:
+        - Preprogrammed into dictionary tables, not editable by users.
         range: string
         required: true
+        pattern: ^.{0,75}$
       nameOfficial:
         description: Official english-language name of a given state.
         title: Official state name
+        notes:
+        - Preprogrammed into dictionary tables, not editable by users.
         range: string
         required: true
+        pattern: ^.{0,75}$
       sovereignty:
         description: Sovereign status of a country, indicating which state has the
           highest jurisdiction over a given territory.
         title: Sovereign status of a country
+        notes:
+        - Preprogrammed into dictionary tables, not editable by users.
         range: string
         required: true
+        pattern: ^.{0,50}$
       countryExonym:
         description: The English name foreigners use for the country.
         title: Country exonym
+        notes:
+        - Preprogrammed into dictionary tables, not editable by users.
         range: string
         required: true
+        pattern: ^.{0,75}$
       capitalExonym:
         description: "The English name foreigners use for the country\u2019s capital."
         title: Capital city exonym
+        notes:
+        - Preprogrammed into dictionary tables, not editable by users.
         range: string
         required: true
+        pattern: ^.{0,75}$
       countryEndonym:
         description: The name locals use for their country.
         title: Country endonym
+        notes:
+        - Preprogrammed into dictionary tables, not editable by users.
         range: string
         required: true
+        pattern: ^.{0,75}$
       capitalEndonym:
         description: "The name locals use for their country\u2019s capital."
         title: Capital city endonym
+        notes:
+        - Preprogrammed into dictionary tables, not editable by users.
         range: string
         required: true
+        pattern: ^.{0,75}$
       langScript:
         description: "The language(s) and script(s) used for the country\u2019s capital\
           \ endonyms."
         title: National language script
+        notes:
+        - The scripts are listed in parenthesis, in the order of their appearance.
+          Preprogrammed into dictionary tables, not editable by users.
         range: string
         required: true
+        pattern: ^.{0,75}$
       phone:
         description: International dialing code for the country.
         title: Country national phone prefix
+        notes:
+        - Preprogrammed into dictionary tables, not editable by users.
         range: string
         required: true
+        pattern: ^.{0,75}$
       utc:
         description: "UTC \u2013 Time zone."
         title: Coordinated universal time (UTC) zone
+        notes:
+        - Preprogrammed into dictionary tables, not editable by users.
         range: string
         required: true
+        pattern: ^.{0,75}$
       utcDST:
         description: Time zone during Daylight Saving Time.
         title: Coordinated universal time (UTC) zone in daylight savings
+        notes:
+        - Preprogrammed into dictionary tables, not editable by users.
         range: string
         required: true
+        pattern: ^.{0,75}$
   zones:
     slots:
     - isoCode
@@ -7278,17 +8541,26 @@ classes:
           is also used to create the ISO 3166-2 country subdivision code and the Internet
           country code top-level domain.
         title: ISO 3166-1 alpha-2 country code
+        notes:
+        - Preprogrammed into dictionary tables, not editable by users.
         range: string
         required: true
+        pattern: ^.{2,2}$
       isoZone:
         description: The ISO 3166-2 codes for the names of the principal subdivisions
           (e.g., provinces, states, departments, regions) of all countries coded in
           ISO 3166-1.
         title: ISO 3166-2 code for country sub-domain
+        notes:
+        - Preprogrammed into dictionary tables, not editable by users.
         range: string
         required: true
+        pattern: ^.{4,6}$
       zoneName:
         description: The english-language name for a given country sub-domain.
         title: English name of country sub-domains
+        notes:
+        - Preprogrammed into dictionary tables, not editable by users.
         range: string
         required: true
+        pattern: ^.{0,75}$
