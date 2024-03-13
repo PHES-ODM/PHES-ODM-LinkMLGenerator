@@ -2,13 +2,10 @@
 """
 Make the ODMv2 LinkML schema.
 
+Be sure that excel_file points to the ODM v2 data dictionary.
+
 @TODO:
 - collNumPer has minValue "1:1". Currently this is converted to NA. Should use pattern ^[1-9][0-9]*\\.[1-9][0-9]*$
-
-Configurable paths (defaults are recommended):
-
-- excel_file: The full ODM v2 data dictionary (should contain a parts and sets sheet)
-- output_dir: The directory to save all intermediary files and the final odm_v2.yaml LinkML schema file.
 """
 
 from pathlib import Path
@@ -21,7 +18,9 @@ from odm_v2.make_v2_ss_prefixes import make_prefixes
 from odm_v2.make_v2_ss_schema import make_schema
 from odm_v2.make_v2_ss_container import extract_container_class
 
+# Location of the ODM v2 data dictionary
 excel_file = Path("../odm_v2/v2 ODM dictionary.xlsx")
+# Directory to save all outputs to
 output_dir = Path("../odm_v2")
 
 # Some paths
