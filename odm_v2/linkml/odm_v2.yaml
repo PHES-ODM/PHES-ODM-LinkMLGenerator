@@ -160,12 +160,8 @@ enums:
     title: Boolean value set
     from_schema: https://onto.phes-odm.org/odmv2
     permissible_values:
-      'true':
-        description: Boolean data type = TRUE
-        title: 'True'
-      'false':
-        description: Boolean data type = FALSE
-        title: 'False'
+      'true': {}
+      'false': {}
   capacityUnitSet:
     description: Unit set for capacity measurements.
     title: Capacity unit set
@@ -507,35 +503,11 @@ enums:
         description: Solid fraction of a sample.
         title: Solid fraction
       ? ''
-      : description: "The field for which the expected value is not a property of\
-          \ the described object. / The outcome of a measurement is not a valid number\
-          \ (plus or minus infinity, error, ...) / A logical representation of a statement\
-          \ that is neither TRUE nor FALSE. /  / The Epstein\u2013Barr virus, formally\
-          \ called Human gammaherpesvirus 4"
-        title: "Not applicable / Not a number / Null / MPox Group / Poliovirus Group\
-          \ / Human Rhinovirus (HRV) / Human Rhinovirus (HRV) A / Human Rhinovirus\
-          \ (HRV) B / Human Rhinovirus (HRV) C / Rhinovirus Group / Human Metapneumovirus\
-          \ (HMPV) / Human Parainfluenza Virus (HPIV) / Streptococcus pneumoniae /\
-          \ Streptococcus Group / Adenovirus (F40/41) / Salmonella / Salmonella Group\
-          \ / Shigella / Shigella Group / Verotoxin-producing Escherichia coli (VTEC)\
-          \ / Enteropathogenic Escherichia coli (EPEC) / Enteroaggregative Escherichia\
-          \ coli (EAEC) / Enteroinvasive Escherichia coli (EIEC) / Enterotoxigenic\
-          \ Escherichia coli (ETEC) / Enterohemorrhagic Escherichia coli (EHEC) /\
-          \ Extraintestinal pathogenic Escherichia coli (ExPEC) / Klebsiella pneumoniae\
-          \ / Clostridium perfringens / Vibrio / Brucella / Listeria / Enterovirus\
-          \ / Rotavirus / Astrovirus / Vibrio Group / Brucella Group / Listeria Group\
-          \ / Enterovirus Group / Rotavirus Group / Astrovirus Group / Sapovirus /\
-          \ Sapovirus Group / Chlamydia / Chlamydia Group / Trichomonas vaginalis\
-          \ / Neisseria gonorrhoeae / Treponema pallidum / Human Immunodeficiency\
-          \ Virus (HIV) / Human Papiloma Virus (HPV) / Mycoplasma genitalus / Epstein\u2013\
-          Barr virus (EBV) / Herpes / Haemophilus ducreyi / Ureaplasma / Hepatitis\
-          \ A / Hepatitis B / Hepatitis C / Hepatitis E / Clostridium difficile /\
-          \ Varicella / Measles / Mumps / Rubella / Corynebacterium diphtheriae /\
-          \ Haemophilus influenzae / Acinetobacter / Pseudomonas / Legionella / Cryptosporidium\
-          \ / Methicillin-resistant Staphylococcus aureus (MRSA) / Yersinia enterocolitica\
-          \ / Mycobacterium tuberculosis / Borrelia burgdorferi / Anaplasma phagocytophilum\
-          \ / Babesia / Plasmodium / Dengue / West Nile / Francisella tularensis /\
-          \ Chikungunya / Rickettsia / Zika"
+      : description: The field for which the expected value is not a property of the
+          described object. / The outcome of a measurement is not a valid number (plus
+          or minus infinity, error, ...) / A logical representation of a statement
+          that is neither TRUE nor FALSE.
+        title: Not applicable / Not a number / Null
   fullDictionarySheetSet:
     description: Worksheets in the full Excel dictionary.
     title: Full dictionary sheets set
@@ -641,35 +613,11 @@ enums:
         description: A value could have been recorded, however, it was not.
         title: Not reported
       ? ''
-      : description: "The field for which the expected value is not a property of\
-          \ the described object. / The outcome of a measurement is not a valid number\
-          \ (plus or minus infinity, error, ...) / A logical representation of a statement\
-          \ that is neither TRUE nor FALSE. /  / The Epstein\u2013Barr virus, formally\
-          \ called Human gammaherpesvirus 4"
-        title: "Not applicable / Not a number / Null / MPox Group / Poliovirus Group\
-          \ / Human Rhinovirus (HRV) / Human Rhinovirus (HRV) A / Human Rhinovirus\
-          \ (HRV) B / Human Rhinovirus (HRV) C / Rhinovirus Group / Human Metapneumovirus\
-          \ (HMPV) / Human Parainfluenza Virus (HPIV) / Streptococcus pneumoniae /\
-          \ Streptococcus Group / Adenovirus (F40/41) / Salmonella / Salmonella Group\
-          \ / Shigella / Shigella Group / Verotoxin-producing Escherichia coli (VTEC)\
-          \ / Enteropathogenic Escherichia coli (EPEC) / Enteroaggregative Escherichia\
-          \ coli (EAEC) / Enteroinvasive Escherichia coli (EIEC) / Enterotoxigenic\
-          \ Escherichia coli (ETEC) / Enterohemorrhagic Escherichia coli (EHEC) /\
-          \ Extraintestinal pathogenic Escherichia coli (ExPEC) / Klebsiella pneumoniae\
-          \ / Clostridium perfringens / Vibrio / Brucella / Listeria / Enterovirus\
-          \ / Rotavirus / Astrovirus / Vibrio Group / Brucella Group / Listeria Group\
-          \ / Enterovirus Group / Rotavirus Group / Astrovirus Group / Sapovirus /\
-          \ Sapovirus Group / Chlamydia / Chlamydia Group / Trichomonas vaginalis\
-          \ / Neisseria gonorrhoeae / Treponema pallidum / Human Immunodeficiency\
-          \ Virus (HIV) / Human Papiloma Virus (HPV) / Mycoplasma genitalus / Epstein\u2013\
-          Barr virus (EBV) / Herpes / Haemophilus ducreyi / Ureaplasma / Hepatitis\
-          \ A / Hepatitis B / Hepatitis C / Hepatitis E / Clostridium difficile /\
-          \ Varicella / Measles / Mumps / Rubella / Corynebacterium diphtheriae /\
-          \ Haemophilus influenzae / Acinetobacter / Pseudomonas / Legionella / Cryptosporidium\
-          \ / Methicillin-resistant Staphylococcus aureus (MRSA) / Yersinia enterocolitica\
-          \ / Mycobacterium tuberculosis / Borrelia burgdorferi / Anaplasma phagocytophilum\
-          \ / Babesia / Plasmodium / Dengue / West Nile / Francisella tularensis /\
-          \ Chikungunya / Rickettsia / Zika"
+      : description: The field for which the expected value is not a property of the
+          described object. / The outcome of a measurement is not a valid number (plus
+          or minus infinity, error, ...) / A logical representation of a statement
+          that is neither TRUE nor FALSE.
+        title: Not applicable / Not a number / Null
   genQualitySet:
     description: A quality set to specify any generic quality concerns about a measure
       or sample.
@@ -1262,35 +1210,11 @@ enums:
         description: A value could have been recorded, however, it was not.
         title: Not reported
       ? ''
-      : description: "The field for which the expected value is not a property of\
-          \ the described object. / The outcome of a measurement is not a valid number\
-          \ (plus or minus infinity, error, ...) / A logical representation of a statement\
-          \ that is neither TRUE nor FALSE. /  / The Epstein\u2013Barr virus, formally\
-          \ called Human gammaherpesvirus 4"
-        title: "Not applicable / Not a number / Null / MPox Group / Poliovirus Group\
-          \ / Human Rhinovirus (HRV) / Human Rhinovirus (HRV) A / Human Rhinovirus\
-          \ (HRV) B / Human Rhinovirus (HRV) C / Rhinovirus Group / Human Metapneumovirus\
-          \ (HMPV) / Human Parainfluenza Virus (HPIV) / Streptococcus pneumoniae /\
-          \ Streptococcus Group / Adenovirus (F40/41) / Salmonella / Salmonella Group\
-          \ / Shigella / Shigella Group / Verotoxin-producing Escherichia coli (VTEC)\
-          \ / Enteropathogenic Escherichia coli (EPEC) / Enteroaggregative Escherichia\
-          \ coli (EAEC) / Enteroinvasive Escherichia coli (EIEC) / Enterotoxigenic\
-          \ Escherichia coli (ETEC) / Enterohemorrhagic Escherichia coli (EHEC) /\
-          \ Extraintestinal pathogenic Escherichia coli (ExPEC) / Klebsiella pneumoniae\
-          \ / Clostridium perfringens / Vibrio / Brucella / Listeria / Enterovirus\
-          \ / Rotavirus / Astrovirus / Vibrio Group / Brucella Group / Listeria Group\
-          \ / Enterovirus Group / Rotavirus Group / Astrovirus Group / Sapovirus /\
-          \ Sapovirus Group / Chlamydia / Chlamydia Group / Trichomonas vaginalis\
-          \ / Neisseria gonorrhoeae / Treponema pallidum / Human Immunodeficiency\
-          \ Virus (HIV) / Human Papiloma Virus (HPV) / Mycoplasma genitalus / Epstein\u2013\
-          Barr virus (EBV) / Herpes / Haemophilus ducreyi / Ureaplasma / Hepatitis\
-          \ A / Hepatitis B / Hepatitis C / Hepatitis E / Clostridium difficile /\
-          \ Varicella / Measles / Mumps / Rubella / Corynebacterium diphtheriae /\
-          \ Haemophilus influenzae / Acinetobacter / Pseudomonas / Legionella / Cryptosporidium\
-          \ / Methicillin-resistant Staphylococcus aureus (MRSA) / Yersinia enterocolitica\
-          \ / Mycobacterium tuberculosis / Borrelia burgdorferi / Anaplasma phagocytophilum\
-          \ / Babesia / Plasmodium / Dengue / West Nile / Francisella tularensis /\
-          \ Chikungunya / Rickettsia / Zika"
+      : description: The field for which the expected value is not a property of the
+          described object. / The outcome of a measurement is not a valid number (plus
+          or minus infinity, error, ...) / A logical representation of a statement
+          that is neither TRUE nor FALSE.
+        title: Not applicable / Not a number / Null
   orgLevelSet:
     description: Categories of organization levels.
     title: Organization level set
@@ -2710,35 +2634,11 @@ enums:
         description: Solid fraction of a sample.
         title: Solid fraction
       ? ''
-      : description: "The field for which the expected value is not a property of\
-          \ the described object. / The outcome of a measurement is not a valid number\
-          \ (plus or minus infinity, error, ...) / A logical representation of a statement\
-          \ that is neither TRUE nor FALSE. /  / The Epstein\u2013Barr virus, formally\
-          \ called Human gammaherpesvirus 4"
-        title: "Not applicable / Not a number / Null / MPox Group / Poliovirus Group\
-          \ / Human Rhinovirus (HRV) / Human Rhinovirus (HRV) A / Human Rhinovirus\
-          \ (HRV) B / Human Rhinovirus (HRV) C / Rhinovirus Group / Human Metapneumovirus\
-          \ (HMPV) / Human Parainfluenza Virus (HPIV) / Streptococcus pneumoniae /\
-          \ Streptococcus Group / Adenovirus (F40/41) / Salmonella / Salmonella Group\
-          \ / Shigella / Shigella Group / Verotoxin-producing Escherichia coli (VTEC)\
-          \ / Enteropathogenic Escherichia coli (EPEC) / Enteroaggregative Escherichia\
-          \ coli (EAEC) / Enteroinvasive Escherichia coli (EIEC) / Enterotoxigenic\
-          \ Escherichia coli (ETEC) / Enterohemorrhagic Escherichia coli (EHEC) /\
-          \ Extraintestinal pathogenic Escherichia coli (ExPEC) / Klebsiella pneumoniae\
-          \ / Clostridium perfringens / Vibrio / Brucella / Listeria / Enterovirus\
-          \ / Rotavirus / Astrovirus / Vibrio Group / Brucella Group / Listeria Group\
-          \ / Enterovirus Group / Rotavirus Group / Astrovirus Group / Sapovirus /\
-          \ Sapovirus Group / Chlamydia / Chlamydia Group / Trichomonas vaginalis\
-          \ / Neisseria gonorrhoeae / Treponema pallidum / Human Immunodeficiency\
-          \ Virus (HIV) / Human Papiloma Virus (HPV) / Mycoplasma genitalus / Epstein\u2013\
-          Barr virus (EBV) / Herpes / Haemophilus ducreyi / Ureaplasma / Hepatitis\
-          \ A / Hepatitis B / Hepatitis C / Hepatitis E / Clostridium difficile /\
-          \ Varicella / Measles / Mumps / Rubella / Corynebacterium diphtheriae /\
-          \ Haemophilus influenzae / Acinetobacter / Pseudomonas / Legionella / Cryptosporidium\
-          \ / Methicillin-resistant Staphylococcus aureus (MRSA) / Yersinia enterocolitica\
-          \ / Mycobacterium tuberculosis / Borrelia burgdorferi / Anaplasma phagocytophilum\
-          \ / Babesia / Plasmodium / Dengue / West Nile / Francisella tularensis /\
-          \ Chikungunya / Rickettsia / Zika"
+      : description: The field for which the expected value is not a property of the
+          described object. / The outcome of a measurement is not a valid number (plus
+          or minus infinity, error, ...) / A logical representation of a statement
+          that is neither TRUE nor FALSE.
+        title: Not applicable / Not a number / Null
       hFr:
         description: An indicator in wide-names to show that information on the fraction
           analyzed in found under a separate header.
