@@ -96,7 +96,7 @@ def extract_sets_enums(sets_file: str, parts_file: str, output_file: str):
     # Drop blank partIDs. 
     # df.loc[df["partID"] == "", "partID"] = None        
     # df = df.dropna(axis = 0, subset="partID")
-    df.loc[df["partID"] == "", "partID"] = EMPTY_PERMISSIBLE_VALUE
+    df.loc[(df["partID"] == "") | (pd.isna(df["partID"])), "partID"] = EMPTY_PERMISSIBLE_VALUE
     
     # We now have all the permissible values for each enumeration. We also want to create a row
     # for each enumeration where no permissible value is listed. These are the rows containing
