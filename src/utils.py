@@ -7,15 +7,15 @@ import pandas as pd
 import os
 import yaml
 from glob import glob
-from typing import Union, List, Optional, Any
+from typing import Union, List, Optional, Any, Dict, Tuple
 import logging
 import sys
 
 from schemasheets.schemamaker import SchemaMaker
-from linkml_runtime import SchemaView
 from linkml_runtime.linkml_model.meta import SchemaDefinition
 from linkml_runtime.linkml_model import SlotDefinition
 from linkml_runtime.utils.schema_as_dict import schema_as_dict
+from linkml_runtime import SchemaView
 
 class Columns:
     SOURCE_TABLE: str = "_sourceTable"
@@ -187,16 +187,19 @@ def make_linkml_schema(schemasheets_dir: Union[str, Path], output_schema: Union[
     
     return schema
 
-def extract_sheets(file: Union[str, Path], sheets: List[str], output_dir: Optional[Union[str, Path]] = None):
+def extract_sheets(file: Union[str, Path], sheets: Union[str, List[str]], output_dir: Optional[Union[str, Path]] = None, output_names: Union[str, List[str]] = None):
     """Extract the specified sheets from Excel file and save them as separate CSV files.
 
     Args:
         file (Union[str, Path]): The Excel file to extract sheets from.
-        sheets (List[str]): The sheets to extract. If None or empty then all sheets are
+        sheets (Union[str, List[str]]): The sheets to extract. If None or empty then all sheets are
             extracted.
         output_dir (Optional[Union[str, Path]], optional): The output directory to save the extracted sheets to.
             If empty then the sheets are saved to the same directory as the input file. The file names
             will be the sheet name (as specified in sheets) with a csv extension. Defaults to None.
+        output_names (Union[str, List[str]], optional): The names of the files to save, each index matching
+            the same index in sheets. Extensions are ignored, all files will be CSV files. If None then
+            the names will be the same as the sheet names in the sheets parameter.
     """
     # Create output directory
     if not output_dir:
@@ -207,6 +210,8 @@ def extract_sheets(file: Union[str, Path], sheets: List[str], output_dir: Option
     # Load all sheets from Excel file.
     if isinstance(sheets, str):
         sheets = [sheets]
+    if isinstance(output_names, str):
+        output_names = [output_names]
     if sheets is None or len(sheets) == 0:
         sheets = None
     try:
@@ -221,7 +226,11 @@ def extract_sheets(file: Union[str, Path], sheets: List[str], output_dir: Option
 
     # Save all extracted sheets to disk
     for sheet_name, df in dfs.items():
-        output_file = Path(output_dir) / f"{sheet_name}.csv"
+        output_name = sheet_name
+        if output_names is not None:
+            output_name = output_names[sheets.index(sheet_name)]
+            output_name = os.path.splitext(output_name)[0]
+        output_file = Path(output_dir) / f"{output_name}.csv"
         logger.info(f"Saving sheet {sheet_name} to {output_file}")
         df.to_csv(output_file, index=False)
 
@@ -303,3 +312,21 @@ def fix_schemasheets_generated_schema(schema: SchemaDefinition):
         for slot_definition in class_definition.slot_usage.values():
             _make_number("minimum_value", slot_definition)
             _make_number("maximum_value", slot_definition)
+
+def get_class_name_from_file_name(file_name: Union[str, Path], schema: Optional[SchemaView] = None) -> str:
+    """Get the LinkML class name based on a data file name. Data files are named as "class_name[...].ext".
+
+    Args:
+        file_name (Union[str, Path]): The file name to extract the class name from.
+        schema (Optional[SchemaView], optional): If set, then we correct the capitalization of the class name
+            based on the classes found in this schema. Defaults to None.
+
+    Returns:
+        str: The class name for the data file.
+    """
+    base_name = os.path.splitext(os.path.basename(file_name))[0]
+    class_name = base_name.split("[")[0]
+    if schema is not None:
+        class_name = choose_ignore_case_value(class_name, list(schema.all_classes().keys()))
+    return class_name
+    
