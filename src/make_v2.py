@@ -6,6 +6,8 @@ Be sure that excel_file points to the ODM v2 data dictionary.
 
 @TODO:
 - collNumPer has minValue "1:1". Currently this is converted to NA. Should use pattern ^[1-9][0-9]*\\.[1-9][0-9]*$
+- relationshipID: Has partType equal to "sampleRelSet, protocolRelSet": Is found in both sampleRelationships and protocolRelationships tables
+- origin: Is categorical, but no origins set (maybe should have mmaSet equal to originSet?)
 """
 
 from pathlib import Path
