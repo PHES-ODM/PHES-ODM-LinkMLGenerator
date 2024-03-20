@@ -16,7 +16,7 @@ extract_parts_enums("odm_v2/dictionary/parts.csv", "odm_v2/schemasheets/enums_pa
 import pandas as pd
 import argparse
 
-from utils import add_schemasheets_header, save_data_frame, get_logger
+from utils import add_schemasheets_header, save_data_frame, get_logger, EMPTY_PERMISSIBLE_VALUE
 from odm_v2.v2_utils import v2_keep_active_rows, v2_class_names, v2_get_header_rows, v2_get_enum_name_from_part_id
 
 logger = get_logger(__name__)
@@ -55,6 +55,10 @@ def extract_parts_enums(parts_file: str, output_file: str):
     enum_source_names = sorted(headers_df[filt]["partID"].unique())
     enum_names = [v2_get_enum_name_from_part_id(name) for name in enum_source_names]
     
+    # @TODO: Check if it's ok to no longer use the above for calculating the enum_names and instead use the
+    # simpler single line of code below for enum_names
+    # enum_names = list(df[(df["mmaSet"] == "") | pd.isna(df["mmaSet"])]["partType"].unique())
+    
     # Get all rows for all enums. We only keep the columns in keep_columns.
     # Each row (or enum value) should be an "input" for at least one class.
     # "partType" matches the enum name (corresponds to a permissible value of the enum)
@@ -68,9 +72,11 @@ def extract_parts_enums(parts_file: str, output_file: str):
         "partInstr",
     ]
     output_df = pd.DataFrame()
-    is_input = df[v2_class_names].isin(["input"])
-    is_input = is_input.sum(axis=1)
-    input_df = df[is_input > 0]
+    # @TODO: Check if it's ok to no longer look for "input" partIDs, but instead use the full DataFrame
+    # is_input = df[v2_class_names].isin(["input"])
+    # is_input = is_input.sum(axis=1)
+    # input_df = df[is_input > 0]
+    input_df = df
     for enum_name in enum_names:
         # Get the top-level enum row (where the partID is the same as the enum_name)
         enum_toplevel_df = input_df[input_df["partID"] == enum_name][keep_columns].copy()
@@ -78,6 +84,8 @@ def extract_parts_enums(parts_file: str, output_file: str):
         enum_toplevel_df["partType"] = enum_name
         # Get all rows where the part is a member of the enumeration (by checking the partType column)
         enum_df = input_df[input_df["partType"] == enum_name][keep_columns].copy()
+        enum_df.loc[(enum_df["partID"] == "") | (pd.isna(enum_df["partID"])), "partID"] = EMPTY_PERMISSIBLE_VALUE
+
         # Add the top-level enum row and the enum values rows to our final DataFrame
         output_df = pd.concat([output_df, enum_toplevel_df, enum_df])
         
