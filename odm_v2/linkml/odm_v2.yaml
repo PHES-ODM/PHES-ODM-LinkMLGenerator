@@ -1,7 +1,7 @@
 name: ODMv2
 description: Data model for the Public Health Environmental Surveillance Open Data
   Model, version 2
-id: https://onto.phes-odm.org/odmv2
+id: https://onto.phes-odm.org/odm/v2
 imports:
 - linkml:types
 prefixes:
@@ -13,7 +13,7 @@ enums:
   absHumidUnitSet:
     description: Unit set for absolute humidity measurements.
     title: Absolute humidity unit set
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
     permissible_values:
       gm3:
         description: Density unit.
@@ -21,7 +21,7 @@ enums:
   airCompartmentSet:
     description: A compartment set for measures and methods in the air compartment.
     title: Air compartment set
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
     permissible_values:
       air:
         description: A measure or observation made from a substance in the air.
@@ -30,7 +30,7 @@ enums:
     description: A compartment set for measures and methods in the air or surface
       compartments.
     title: Air and surface compartment set
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
     permissible_values:
       air:
         description: A measure or observation made from a substance in the air.
@@ -41,7 +41,7 @@ enums:
   airWaterCompartmentSet:
     description: A compartment set for measures and methods in the air or water compartments.
     title: Air and water compartment set
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
     permissible_values:
       air:
         description: A measure or observation made from a substance in the air.
@@ -49,7 +49,7 @@ enums:
   airportSheetSet:
     description: Worksheets in the full airport surveillance template (list + template).
     title: Airport Sheets Set
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
     permissible_values:
       airportLists:
         description: Parts lists used to generate airport and airplane data entry
@@ -62,7 +62,7 @@ enums:
   alleleUnitSet:
     description: Unit set for alleles.
     title: Allele unit set
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
     permissible_values:
       ct:
         description: Cycle thresholds in a PCR assay.
@@ -104,7 +104,7 @@ enums:
   anyCompartmentSet:
     description: A compartment set for measures and methods in any compartment.
     title: Any compartment set
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
     permissible_values:
       air:
         description: A measure or observation made from a substance in the air.
@@ -119,7 +119,7 @@ enums:
   anySpecimenSet:
     description: A specimen set that inculdes any specimen.
     title: Any specimen set
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
     permissible_values:
       po:
         description: An measure or observation for a geographic area or population.
@@ -134,7 +134,7 @@ enums:
   bacteriaUnitSet:
     description: Unit set for bacteria-related measurements.
     title: Bacteria unit set
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
     permissible_values:
       cfu:
         description: Colony forming units per 100 ml of filtered sample.
@@ -142,7 +142,7 @@ enums:
   booleanAggrSet:
     description: Aggreagation set for boolean.
     title: Boolean aggregation set
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
     permissible_values:
       sin:
         description: A value that is not an aggregate measurement (ie. not a mean,
@@ -158,14 +158,18 @@ enums:
     description: Set that contains the valid possible values for a boolean measure
       (TRUE or FALSE).
     title: Boolean value set
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
     permissible_values:
-      'true': {}
-      'false': {}
+      'true':
+        description: Boolean data type = TRUE
+        title: 'True'
+      'false':
+        description: Boolean data type = FALSE
+        title: 'False'
   capacityUnitSet:
     description: Unit set for capacity measurements.
     title: Capacity unit set
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
     permissible_values:
       mgd:
         description: A unit for measuring of design capacity for wastewater treatment
@@ -183,7 +187,7 @@ enums:
   collectSet:
     description: Methods for collection samples.
     title: Sample collection set
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
     permissible_values:
       areaPr:
         description: An area proportional sample.
@@ -217,7 +221,7 @@ enums:
   conductivityUnitSet:
     description: Unit set related to conductivity measurements.
     title: Conductivity unit set
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
     permissible_values:
       uSCm:
         description: Micro-siemens per centimetre.
@@ -226,7 +230,7 @@ enums:
     description: Tables are where measures, methods and attributes are recorded. Tables
       represent the main entities of the environmental surveillance.
     title: Contact table set
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
     permissible_values:
       sites:
         description: The table that contains information about a site; the location
@@ -246,7 +250,7 @@ enums:
   dictionaryRefTableSet:
     description: Reference or look-up tables.
     title: Dictionary reference table set
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
     permissible_values:
       parts:
         description: Look up table containing all parts in of the data model.
@@ -273,7 +277,7 @@ enums:
     description: Unit set for carbon dioxide concentrations measurements in water
       or air.
     title: Dissolved gas concentration unit set
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
     permissible_values:
       mgL:
         description: Milligrams per litre.
@@ -284,7 +288,7 @@ enums:
   erdTableSet:
     description: All tables listed in the Entity Relationship Diagram.
     title: ERD table set
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
     permissible_values:
       addresses:
         description: The table that contains information about addresses. Addresses
@@ -368,7 +372,7 @@ enums:
     description: set used for storing all the valid category values for the nucleic
       acid extraction method.
     title: Nucleic Acid Extraction set
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
     permissible_values:
       extract4s:
         description: Nucleic acid extraction performed using the 4s method.
@@ -466,7 +470,7 @@ enums:
   flowUnitSet:
     description: Unit set for volume flow  measurements.
     title: Volume flow rate unit set
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
     permissible_values:
       kgS:
         description: Kilograms per second.
@@ -491,7 +495,7 @@ enums:
   fractionSet:
     description: set for the fraction of the sample (solid, liquid, etc.).
     title: Sample fraction set
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
     permissible_values:
       liq:
         description: Liquid fraction of a sample.
@@ -503,15 +507,35 @@ enums:
         description: Solid fraction of a sample.
         title: Solid fraction
       ? ''
-      : description: The field for which the expected value is not a property of the
-          described object. / The outcome of a measurement is not a valid number (plus
-          or minus infinity, error, ...) / A logical representation of a statement
-          that is neither TRUE nor FALSE.
-        title: Not applicable / Not a number / Null
+      : description: "The field for which the expected value is not a property of\
+          \ the described object. / The outcome of a measurement is not a valid number\
+          \ (plus or minus infinity, error, ...) / A logical representation of a statement\
+          \ that is neither TRUE nor FALSE. /  / The Epstein\u2013Barr virus, formally\
+          \ called Human gammaherpesvirus 4"
+        title: "Not applicable / Not a number / Null / Human Rhinovirus (HRV) / Human\
+          \ Rhinovirus (HRV) A / Human Rhinovirus (HRV) B / Human Rhinovirus (HRV)\
+          \ C / Human Metapneumovirus (HMPV) / Human Parainfluenza Virus (HPIV) /\
+          \ Streptococcus pneumoniae / Adenovirus (F40/41) / Salmonella / Shigella\
+          \ / Verotoxin-producing Escherichia coli (VTEC) / Enteropathogenic Escherichia\
+          \ coli (EPEC) / Enteroaggregative Escherichia coli (EAEC) / Enteroinvasive\
+          \ Escherichia coli (EIEC) / Enterotoxigenic Escherichia coli (ETEC) / Enterohemorrhagic\
+          \ Escherichia coli (EHEC) / Extraintestinal pathogenic Escherichia coli\
+          \ (ExPEC) / Klebsiella pneumoniae / Clostridium perfringens / Vibrio / Brucella\
+          \ / Listeria / Enterovirus / Rotavirus / Astrovirus / Sapovirus / Chlamydia\
+          \ / Trichomonas vaginalis / Neisseria gonorrhoeae / Treponema pallidum /\
+          \ Human Immunodeficiency Virus (HIV) / Human Papiloma Virus (HPV) / Mycoplasma\
+          \ genitalus / Epstein\u2013Barr virus (EBV) / Herpes / Haemophilus ducreyi\
+          \ / Ureaplasma / Hepatitis A / Hepatitis B / Hepatitis C / Hepatitis E /\
+          \ Clostridium difficile / Varicella / Measles / Mumps / Rubella / Corynebacterium\
+          \ diphtheriae / Haemophilus influenzae / Acinetobacter / Pseudomonas / Legionella\
+          \ / Cryptosporidium / Methicillin-resistant Staphylococcus aureus (MRSA)\
+          \ / Yersinia enterocolitica / Mycobacterium tuberculosis / Borrelia burgdorferi\
+          \ / Anaplasma phagocytophilum / Babesia / Plasmodium / Dengue / West Nile\
+          \ / Francisella tularensis / Chikungunya virus (CHIKV) / Rickettsia / Zika"
   fullDictionarySheetSet:
     description: Worksheets in the full Excel dictionary.
     title: Full dictionary sheets set
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
     permissible_values:
       addresses:
         description: The table that contains information about addresses. Addresses
@@ -603,7 +627,7 @@ enums:
   genMissingnessSet:
     description: The general set for missingness values.
     title: General missingness set
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
     permissible_values:
       undisc:
         description: A value has been recorded, however it was not included in the
@@ -613,16 +637,36 @@ enums:
         description: A value could have been recorded, however, it was not.
         title: Not reported
       ? ''
-      : description: The field for which the expected value is not a property of the
-          described object. / The outcome of a measurement is not a valid number (plus
-          or minus infinity, error, ...) / A logical representation of a statement
-          that is neither TRUE nor FALSE.
-        title: Not applicable / Not a number / Null
+      : description: "The field for which the expected value is not a property of\
+          \ the described object. / The outcome of a measurement is not a valid number\
+          \ (plus or minus infinity, error, ...) / A logical representation of a statement\
+          \ that is neither TRUE nor FALSE. /  / The Epstein\u2013Barr virus, formally\
+          \ called Human gammaherpesvirus 4"
+        title: "Not applicable / Not a number / Null / Human Rhinovirus (HRV) / Human\
+          \ Rhinovirus (HRV) A / Human Rhinovirus (HRV) B / Human Rhinovirus (HRV)\
+          \ C / Human Metapneumovirus (HMPV) / Human Parainfluenza Virus (HPIV) /\
+          \ Streptococcus pneumoniae / Adenovirus (F40/41) / Salmonella / Shigella\
+          \ / Verotoxin-producing Escherichia coli (VTEC) / Enteropathogenic Escherichia\
+          \ coli (EPEC) / Enteroaggregative Escherichia coli (EAEC) / Enteroinvasive\
+          \ Escherichia coli (EIEC) / Enterotoxigenic Escherichia coli (ETEC) / Enterohemorrhagic\
+          \ Escherichia coli (EHEC) / Extraintestinal pathogenic Escherichia coli\
+          \ (ExPEC) / Klebsiella pneumoniae / Clostridium perfringens / Vibrio / Brucella\
+          \ / Listeria / Enterovirus / Rotavirus / Astrovirus / Sapovirus / Chlamydia\
+          \ / Trichomonas vaginalis / Neisseria gonorrhoeae / Treponema pallidum /\
+          \ Human Immunodeficiency Virus (HIV) / Human Papiloma Virus (HPV) / Mycoplasma\
+          \ genitalus / Epstein\u2013Barr virus (EBV) / Herpes / Haemophilus ducreyi\
+          \ / Ureaplasma / Hepatitis A / Hepatitis B / Hepatitis C / Hepatitis E /\
+          \ Clostridium difficile / Varicella / Measles / Mumps / Rubella / Corynebacterium\
+          \ diphtheriae / Haemophilus influenzae / Acinetobacter / Pseudomonas / Legionella\
+          \ / Cryptosporidium / Methicillin-resistant Staphylococcus aureus (MRSA)\
+          \ / Yersinia enterocolitica / Mycobacterium tuberculosis / Borrelia burgdorferi\
+          \ / Anaplasma phagocytophilum / Babesia / Plasmodium / Dengue / West Nile\
+          \ / Francisella tularensis / Chikungunya virus (CHIKV) / Rickettsia / Zika"
   genQualitySet:
     description: A quality set to specify any generic quality concerns about a measure
       or sample.
     title: Generic quality flag set
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
     permissible_values:
       noConcern:
         description: A flag to indicate there is are no quality concern about the
@@ -638,7 +682,7 @@ enums:
   geneticUnitSet:
     description: Unit set for genetic-related measurements.
     title: Genetics unit set
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
     permissible_values:
       boc:
         description: Positions with read depth greater or equal to 5.
@@ -699,7 +743,7 @@ enums:
   geoTypeSet:
     description: set for different type of geographic components.
     title: Geographic set
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
     permissible_values:
       hlthReg:
         description: Health region served by the sewer network
@@ -710,7 +754,7 @@ enums:
   humanCompartmentSet:
     description: A compartment set for measures and methods in the human compartment.
     title: Human compartment set
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
     permissible_values:
       hum:
         description: A measure or observation made about a human.
@@ -718,7 +762,7 @@ enums:
   inhibitionSet:
     description: Category set for inhibition methods.
     title: Inhibition set
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
     permissible_values:
       serialDilution:
         description: The serial dilution method for assessing inhibition.
@@ -729,7 +773,7 @@ enums:
   insTypeSet:
     description: List of instruments that are used for measures and methods
     title: Instrument set
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
     permissible_values:
       aas:
         description: Atline analyzer with sampler.
@@ -750,7 +794,7 @@ enums:
     description: The set to describe valid categorical values for the licensing fields
       for measures or datasets.
     title: Data license set
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
     permissible_values:
       afl30:
         description: The licensing for the measure or data set is managed under the
@@ -915,7 +959,7 @@ enums:
     description: The aggregation set that contains all aggregations that exist on
       the linear scale.
     title: Linear scale aggregation set
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
     permissible_values:
       pmFloMean:
         description: Mean measure normalized to amount of PMMoV and wastewater flow.
@@ -960,7 +1004,7 @@ enums:
   listSet:
     description: PartTypes that contain categories, sets, or lists.
     title: List set
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
     permissible_values:
       dataTypes:
         description: The data type for a part.
@@ -1023,7 +1067,7 @@ enums:
     description: The aggregation set that contains all aggregations that exist on
       the logarithmic scale (rather than linear or qualitative).
     title: Logarithmic scale aggregation set
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
     permissible_values:
       pmFloMean:
         description: Mean measure normalized to amount of PMMoV and wastewater flow.
@@ -1060,7 +1104,7 @@ enums:
     description: A quality set for any measure, includes all the quality flag options
       for any measure.
     title: Measures quality set
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
     permissible_values:
       noConcern:
         description: A flag to indicate there is are no quality concern about the
@@ -1137,7 +1181,7 @@ enums:
   methodConcSet:
     description: A set a concentration methods.
     title: Concentration method set
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
     permissible_values:
       aloh3:
         description: Aloh3 precipitation
@@ -1172,7 +1216,7 @@ enums:
   naAggrSet:
     description: Not application for aggregation sets.
     title: Aggregation set not applicable
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
     permissible_values:
       naAggr:
         description: Not applicable for aggregations.
@@ -1180,7 +1224,7 @@ enums:
   naCompartmentSet:
     description: Compartment not applicable.
     title: Compartment set not applicable
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
     permissible_values:
       naCompartment:
         description: Compartment not applicable.
@@ -1188,7 +1232,7 @@ enums:
   naSpecimenSet:
     description: A specimen set for when specimen/specimen set is not applicable.
     title: Specimen set not applicable
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
     permissible_values:
       naSpecimen:
         description: Non applicable specimen.
@@ -1196,7 +1240,7 @@ enums:
   naUnitSet:
     description: Not applicable for unit sets.
     title: Unit set not applicable
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
     permissible_values:
       naUnit:
         description: Not appliable for units.
@@ -1204,21 +1248,41 @@ enums:
   nrNAMissingnessSet:
     description: Not reported, Not applicable missing set.
     title: Not reported, Not applicable missing set
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
     permissible_values:
       nr:
         description: A value could have been recorded, however, it was not.
         title: Not reported
       ? ''
-      : description: The field for which the expected value is not a property of the
-          described object. / The outcome of a measurement is not a valid number (plus
-          or minus infinity, error, ...) / A logical representation of a statement
-          that is neither TRUE nor FALSE.
-        title: Not applicable / Not a number / Null
+      : description: "The field for which the expected value is not a property of\
+          \ the described object. / The outcome of a measurement is not a valid number\
+          \ (plus or minus infinity, error, ...) / A logical representation of a statement\
+          \ that is neither TRUE nor FALSE. /  / The Epstein\u2013Barr virus, formally\
+          \ called Human gammaherpesvirus 4"
+        title: "Not applicable / Not a number / Null / Human Rhinovirus (HRV) / Human\
+          \ Rhinovirus (HRV) A / Human Rhinovirus (HRV) B / Human Rhinovirus (HRV)\
+          \ C / Human Metapneumovirus (HMPV) / Human Parainfluenza Virus (HPIV) /\
+          \ Streptococcus pneumoniae / Adenovirus (F40/41) / Salmonella / Shigella\
+          \ / Verotoxin-producing Escherichia coli (VTEC) / Enteropathogenic Escherichia\
+          \ coli (EPEC) / Enteroaggregative Escherichia coli (EAEC) / Enteroinvasive\
+          \ Escherichia coli (EIEC) / Enterotoxigenic Escherichia coli (ETEC) / Enterohemorrhagic\
+          \ Escherichia coli (EHEC) / Extraintestinal pathogenic Escherichia coli\
+          \ (ExPEC) / Klebsiella pneumoniae / Clostridium perfringens / Vibrio / Brucella\
+          \ / Listeria / Enterovirus / Rotavirus / Astrovirus / Sapovirus / Chlamydia\
+          \ / Trichomonas vaginalis / Neisseria gonorrhoeae / Treponema pallidum /\
+          \ Human Immunodeficiency Virus (HIV) / Human Papiloma Virus (HPV) / Mycoplasma\
+          \ genitalus / Epstein\u2013Barr virus (EBV) / Herpes / Haemophilus ducreyi\
+          \ / Ureaplasma / Hepatitis A / Hepatitis B / Hepatitis C / Hepatitis E /\
+          \ Clostridium difficile / Varicella / Measles / Mumps / Rubella / Corynebacterium\
+          \ diphtheriae / Haemophilus influenzae / Acinetobacter / Pseudomonas / Legionella\
+          \ / Cryptosporidium / Methicillin-resistant Staphylococcus aureus (MRSA)\
+          \ / Yersinia enterocolitica / Mycobacterium tuberculosis / Borrelia burgdorferi\
+          \ / Anaplasma phagocytophilum / Babesia / Plasmodium / Dengue / West Nile\
+          \ / Francisella tularensis / Chikungunya virus (CHIKV) / Rickettsia / Zika"
   orgLevelSet:
     description: Categories of organization levels.
     title: Organization level set
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
     permissible_values:
       neighborLevel:
         description: Local administrative units or neighborhoods
@@ -1241,7 +1305,7 @@ enums:
   orgSectorSet:
     description: Cateogries of organization sectors.
     title: Organization sector set
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
     permissible_values:
       utilities:
         description: Describes organization that manage or provide utilities services,
@@ -1271,7 +1335,7 @@ enums:
   orgTypeSet:
     description: The set for storing organization types.
     title: Organization type set
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
     permissible_values:
       academ:
         description: The category of organization type used for academic institutions
@@ -1288,7 +1352,7 @@ enums:
   originSet:
     description: The set for storing the valid categorical values of sample origin.
     title: Sample Origin set
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
     permissible_values:
       derived:
         description: A sample that is derived or made from another sample or material.
@@ -1303,7 +1367,7 @@ enums:
   otherAggrSet:
     description: Aggregation set used for unitless measures.
     title: Other aggregation set
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
     permissible_values:
       upperCI95:
         description: Specifies the the upper limit of a 95% confidence interval.
@@ -1351,7 +1415,7 @@ enums:
   otherReportTableSet:
     description: Additional tables that form the full data model.
     title: Other report table set
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
     permissible_values:
       polygons:
         description: The table that contains information about the geometry of a geographic
@@ -1364,7 +1428,7 @@ enums:
   outbreakSet:
     description: set for the valid values of the outbreak measure.
     title: Outbreak set
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
     permissible_values:
       outbEnd:
         description: Indicates an outbreak has ended.
@@ -1379,7 +1443,7 @@ enums:
     description: The set capturing containing all of the valid methods for the PCR
       activity cycles.
     title: PCR action/activity set
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
     permissible_values:
       rt:
         description: Describes the reverse transcription cycle in a PCR process.
@@ -1396,7 +1460,7 @@ enums:
   pcrQualitySet:
     description: Quality set for PCR measures.
     title: PCR quality set
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
     permissible_values:
       flagAI:
         description: The original sample was inhibited; however, the inhibition has
@@ -1450,7 +1514,7 @@ enums:
     description: The set capturing containing all of the valid methods for the PCR
       methodID.
     title: PCR Method set
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
     permissible_values:
       bioRadDdpcr:
         description: Describes a PCR analysis done using BioRad's digital droplet
@@ -1479,7 +1543,7 @@ enums:
   poSaSpecimenSet:
     description: A specimen set that inculdes population or sample specimen.
     title: Population or sample set
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
     permissible_values:
       po:
         description: An measure or observation for a geographic area or population.
@@ -1491,7 +1555,7 @@ enums:
   poSiSpecimenSet:
     description: A specimen set that inculdes population or site specimen.
     title: Population or site set
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
     permissible_values:
       po:
         description: An measure or observation for a geographic area or population.
@@ -1502,7 +1566,7 @@ enums:
   poSpecimenSet:
     description: A specimen set that inculdes only a population specimen.
     title: Population specimen set
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
     permissible_values:
       po:
         description: An measure or observation for a geographic area or population.
@@ -1510,7 +1574,7 @@ enums:
   populationUnitSet:
     description: Unit set for hospital-related measurements.
     title: Population unit set
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
     permissible_values:
       acti:
         description: Number of active cases.
@@ -1584,7 +1648,7 @@ enums:
   precipitationUnitSet:
     description: Unit set for percipitation measurements.
     title: Precipitation unit set
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
     permissible_values:
       cm:
         description: Unit part for the SI unit of centimetres.
@@ -1595,7 +1659,7 @@ enums:
   primerSet:
     description: The set for genetic primers used in sequencing or PCR assays.
     title: Genetic primer set
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
     permissible_values:
       articV3:
         description: Initial implementation of an ARTIC bioinformatics platform for
@@ -1608,7 +1672,7 @@ enums:
     description: set for valid values of relationshipID in the protocolRelationships
       table.
     title: Protocol Relationships set
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
     permissible_values:
       before:
         description: Specifies that the object step or protocol occurs before the
@@ -1626,7 +1690,7 @@ enums:
     description: Tables holding information on the methods used for sample collection
       or measurement.
     title: Protocol table set
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
     permissible_values:
       protocols:
         description: The table for protocols.
@@ -1646,7 +1710,7 @@ enums:
   purposeSet:
     description: Purpose set for a sample or measure.
     title: Purpose set
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
     permissible_values:
       education:
         description: A measure or sample taken for education or training.
@@ -1675,7 +1739,7 @@ enums:
     description: Tables used for daily reporting of new measurements and information
       on sample collection.
     title: Regular reports table set
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
     permissible_values:
       measures:
         description: The table that contains information and details about a given
@@ -1689,7 +1753,7 @@ enums:
   relHumidUnitSet:
     description: Unit set for relative humidity measurements.
     title: Relative humidity unit set
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
     permissible_values:
       perc:
         description: Percentage.
@@ -1697,7 +1761,7 @@ enums:
   replicateSet:
     description: The set for storing valid categorical values of replicate type.
     title: Replicate Type set
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
     permissible_values:
       colocated:
         description: Second or multiples samples collected at same location but different
@@ -1728,7 +1792,7 @@ enums:
     description: The set to describe valid categorical values for the resuspension
       method.
     title: Resuspension method set
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
     permissible_values:
       elutionBuff:
         description: Elution buffer is used to resuspend material.
@@ -1737,7 +1801,7 @@ enums:
     description: The set for enumerating the valid possible values of the retained
       element method.
     title: Retained Element Set
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
     permissible_values:
       solid:
         description: The solids or pellet is retained after solid separation/centrifugation.
@@ -1752,7 +1816,7 @@ enums:
   saSpecimenSet:
     description: A specimen set that inculdes only a sample specimen.
     title: Sample specimen set
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
     permissible_values:
       sa:
         description: A measure made on a compartment or property from a sample of
@@ -1761,7 +1825,7 @@ enums:
   sampleMatSet:
     description: set for the types of material that can be found in a sample.
     title: Sample material set
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
     permissible_values:
       afu:
         description: Air filter as part of filtration or circulating unit.
@@ -1824,7 +1888,7 @@ enums:
   sampleQualitySet:
     description: Quality set for a sample.
     title: Sample quality set
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
     permissible_values:
       frozen:
         description: Sample was frozen before analysis or processing
@@ -1859,7 +1923,7 @@ enums:
     description: set for valid values of relationshipID in the sampleRelationships
       table.
     title: Sample relationships set
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
     permissible_values:
       child:
         description: Indicated that this is a sample generated from (an)other sample(s)
@@ -1890,7 +1954,7 @@ enums:
   scriptSet:
     description: The set for script versions
     title: Sequencing script version set
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
     permissible_values:
       gromstole:
         description: Gromstole 1.0 Script for sequencing.
@@ -1901,7 +1965,7 @@ enums:
   seqLaySet:
     description: The set for the layout of genetic material used in sequencing
     title: Sequencing Layout set
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
     permissible_values:
       sinLay:
         description: Specifies the single layout for a sequencing method
@@ -1915,7 +1979,7 @@ enums:
   seqQualitySet:
     description: Quality set for sequencing measures
     title: Sequencing quality set
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
     permissible_values:
       expFail:
         description: PCR experiment failed. No value reported.
@@ -1950,7 +2014,7 @@ enums:
   seqSelSet:
     description: The set for the selection method used in sequencing
     title: Sequencing selection method set
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
     permissible_values:
       ranSeq:
         description: Specifies the random selection method for sequencing
@@ -1962,7 +2026,7 @@ enums:
   seqStratSet:
     description: The set for the sequencing strategy used for an analysis
     title: Sequencing Strategy set
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
     permissible_values:
       amp:
         description: Specifies the amplicon strategy for genetic sequencing
@@ -1974,7 +2038,7 @@ enums:
   sevSet:
     description: A set for severity indicators.
     title: Severity set
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
     permissible_values:
       low:
         description: A marker for low severity
@@ -1989,7 +2053,7 @@ enums:
   shedSet:
     description: The set for all valid values of sampleshed.
     title: Sampleshed set
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
     permissible_values:
       airpln:
         description: Airplane sample shed category type
@@ -2061,7 +2125,7 @@ enums:
   siSaSpecimenSet:
     description: A specimen set that inculdes site or sample specimen.
     title: Site or sample specimen set
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
     permissible_values:
       sa:
         description: A measure made on a compartment or property from a sample of
@@ -2073,7 +2137,7 @@ enums:
   siSpecimenSet:
     description: A specimen set that inculdes only a site specimen.
     title: Site specimen set
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
     permissible_values:
       si:
         description: A measure made on a compartment or property at a site.
@@ -2081,7 +2145,7 @@ enums:
   siteTypeSet:
     description: set for the type of sampling site.
     title: Site set
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
     permissible_values:
       bSwrPpl:
         description: Specifies a site type that is collection pipe that run lateral
@@ -2154,7 +2218,7 @@ enums:
   solidSeparationSet:
     description: set for the separation of solids.
     title: Solid separation set
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
     permissible_values:
       cent:
         description: Describes solid separation from a wastewater sample via centrifugation.
@@ -2206,7 +2270,7 @@ enums:
   specHumidUnitSet:
     description: Unit set for specific humidity.
     title: Specific humidity unit set
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
     permissible_values:
       ratio:
         description: Ratio (unitless)
@@ -2214,7 +2278,7 @@ enums:
   speedUnitSet:
     description: Unit set for reporting speeds (centrifugation speed, etc.)
     title: Speed Unit Set
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
     permissible_values:
       xg:
         description: RCF (Relative Centrifugal Force) denotes the degree of force
@@ -2234,7 +2298,7 @@ enums:
     description: set for spikeMat (aterial into which the recovery efficiency control
       target is spiked).
     title: Spike material set
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
     permissible_values:
       clari:
         description: Clarified sample.
@@ -2259,7 +2323,7 @@ enums:
     description: The set capturing containing all of the valid categories for the
       recovery efficiency control (or spike) target.
     title: Recovery efficiency spike target set
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
     permissible_values:
       bcovCul:
         description: Cultured bovine coronavirus is used as the recovery efficiency
@@ -2311,7 +2375,7 @@ enums:
     description: A set for partID = Status to indicate whether a part is in current
       use or not.
     title: Status set
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
     permissible_values:
       active:
         description: Indicator that a part is in current use.
@@ -2327,7 +2391,7 @@ enums:
   stdConcentrationUnitSet:
     description: Unit set for concentration measurements.
     title: Standard concentration unit set
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
     permissible_values:
       mgL:
         description: Milligrams per litre.
@@ -2348,7 +2412,7 @@ enums:
     description: The set capturing containing all of the valid methods for the PCR
       standard curve calculations.
     title: Standard Curve Calculation Set
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
     permissible_values:
       serDil:
         description: Describes a serial dilution process for standard curve generation
@@ -2357,7 +2421,7 @@ enums:
   surfaceCompartmentSet:
     description: A compartment set for measures and methods in the surface compartment.
     title: Surface compartment set
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
     permissible_values:
       surf:
         description: A measure or observation made from a substance on a surface.
@@ -2366,7 +2430,7 @@ enums:
     description: A compartment set for measures and methods in the surface or water
       compartments.
     title: Surface and water compartment set
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
     permissible_values:
       surf:
         description: A measure or observation made from a substance on a surface.
@@ -2378,7 +2442,7 @@ enums:
   tableSet:
     description: The set for valid inputs in table columns.
     title: Table column set
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
     permissible_values:
       fK:
         description: Foreign key for a table.
@@ -2396,7 +2460,7 @@ enums:
   tempSet:
     description: The organizing set for templates.
     title: Template Set
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
     permissible_values:
       dna:
         description: Deoxyribonucleic Acid (DNA) template is used for PCR or sequencing
@@ -2409,13 +2473,13 @@ enums:
   temperatureUnitSet:
     description: Unit set for temperature measurements.
     title: Temperature unit set
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
     permissible_values:
       cel:
         description: Degrees Celsius.
         title: Degrees Celcius
   templateSheetSet:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
     permissible_values:
       addresses:
         description: The table that contains information about addresses. Addresses
@@ -2491,7 +2555,7 @@ enums:
   timeUnitSet:
     description: The unit set for measures of time.
     title: Time unit set
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
     permissible_values:
       days:
         description: A unit for indicating a length of time in days.
@@ -2514,7 +2578,7 @@ enums:
   turbidityUnitSet:
     description: Unit set for turbidity measurements.
     title: Turbidity unit set
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
     permissible_values:
       ntu:
         description: Nephelometric Turbidity Units, a unit used in the measurement
@@ -2523,7 +2587,7 @@ enums:
   unitlessUnitSet:
     description: Unit set for measurements that does not have units.
     title: Unitless unit set
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
     permissible_values:
       unitless:
         description: A unit for unitless measures, like pH.
@@ -2531,7 +2595,7 @@ enums:
   volumeUnitSet:
     description: Unit set of volume measurements.
     title: Volume unit set
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
     permissible_values:
       kl:
         description: Kilolitres of volume
@@ -2561,7 +2625,7 @@ enums:
   waterCompartmentSet:
     description: A compartment set for measures and methods in the water compartment.
     title: Water compartment set
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
     permissible_values:
       wat:
         description: A measure or observation made from a substance in the water,
@@ -2571,7 +2635,7 @@ enums:
     description: A set of the valid qualitative categories for the qualitative weather
       measure.
     title: Weather set
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
     permissible_values:
       cloudy:
         description: Qualitative category for the weather measure, specifying an overcast
@@ -2600,7 +2664,7 @@ enums:
   wideCompartmentSet:
     description: Compartment set for wide names.
     title: Compartment set for wide names
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
     permissible_values:
       air:
         description: A measure or observation made from a substance in the air.
@@ -2622,7 +2686,7 @@ enums:
   wideFractionSet:
     description: Fraction set for wide names.
     title: Fraction set for wide names
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
     permissible_values:
       liq:
         description: Liquid fraction of a sample.
@@ -2634,11 +2698,31 @@ enums:
         description: Solid fraction of a sample.
         title: Solid fraction
       ? ''
-      : description: The field for which the expected value is not a property of the
-          described object. / The outcome of a measurement is not a valid number (plus
-          or minus infinity, error, ...) / A logical representation of a statement
-          that is neither TRUE nor FALSE.
-        title: Not applicable / Not a number / Null
+      : description: "The field for which the expected value is not a property of\
+          \ the described object. / The outcome of a measurement is not a valid number\
+          \ (plus or minus infinity, error, ...) / A logical representation of a statement\
+          \ that is neither TRUE nor FALSE. /  / The Epstein\u2013Barr virus, formally\
+          \ called Human gammaherpesvirus 4"
+        title: "Not applicable / Not a number / Null / Human Rhinovirus (HRV) / Human\
+          \ Rhinovirus (HRV) A / Human Rhinovirus (HRV) B / Human Rhinovirus (HRV)\
+          \ C / Human Metapneumovirus (HMPV) / Human Parainfluenza Virus (HPIV) /\
+          \ Streptococcus pneumoniae / Adenovirus (F40/41) / Salmonella / Shigella\
+          \ / Verotoxin-producing Escherichia coli (VTEC) / Enteropathogenic Escherichia\
+          \ coli (EPEC) / Enteroaggregative Escherichia coli (EAEC) / Enteroinvasive\
+          \ Escherichia coli (EIEC) / Enterotoxigenic Escherichia coli (ETEC) / Enterohemorrhagic\
+          \ Escherichia coli (EHEC) / Extraintestinal pathogenic Escherichia coli\
+          \ (ExPEC) / Klebsiella pneumoniae / Clostridium perfringens / Vibrio / Brucella\
+          \ / Listeria / Enterovirus / Rotavirus / Astrovirus / Sapovirus / Chlamydia\
+          \ / Trichomonas vaginalis / Neisseria gonorrhoeae / Treponema pallidum /\
+          \ Human Immunodeficiency Virus (HIV) / Human Papiloma Virus (HPV) / Mycoplasma\
+          \ genitalus / Epstein\u2013Barr virus (EBV) / Herpes / Haemophilus ducreyi\
+          \ / Ureaplasma / Hepatitis A / Hepatitis B / Hepatitis C / Hepatitis E /\
+          \ Clostridium difficile / Varicella / Measles / Mumps / Rubella / Corynebacterium\
+          \ diphtheriae / Haemophilus influenzae / Acinetobacter / Pseudomonas / Legionella\
+          \ / Cryptosporidium / Methicillin-resistant Staphylococcus aureus (MRSA)\
+          \ / Yersinia enterocolitica / Mycobacterium tuberculosis / Borrelia burgdorferi\
+          \ / Anaplasma phagocytophilum / Babesia / Plasmodium / Dengue / West Nile\
+          \ / Francisella tularensis / Chikungunya virus (CHIKV) / Rickettsia / Zika"
       hFr:
         description: An indicator in wide-names to show that information on the fraction
           analyzed in found under a separate header.
@@ -2646,7 +2730,7 @@ enums:
   wideSpecimenSet:
     description: Speciment set for wide names.
     title: Speciment set for wide names
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
     permissible_values:
       po:
         description: An measure or observation for a geographic area or population.
@@ -2668,7 +2752,7 @@ enums:
   windSpeedUnitSet:
     description: Unit set for wind speed measurements.
     title: Wind speed unit set
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
     permissible_values:
       ms:
         description: metres per second.
@@ -2677,7 +2761,7 @@ enums:
     description: The scale of an aggregation set. Aggregation scales include quantitative
       and qualitative.
     title: Aggregation scales
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
     permissible_values:
       naAggrScale:
         description: Not application for aggregation sets.
@@ -2700,7 +2784,7 @@ enums:
     description: Statistical measures used to report a measure. Each measure reported
       as a number should be reported with an aggregation.
     title: Aggregations
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
     permissible_values:
       sin:
         description: A value that is not an aggregate measurement (ie. not a mean,
@@ -2777,7 +2861,7 @@ enums:
   aggregationSets:
     description: Sets of aggregations.
     title: Aggregation sets
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
     permissible_values:
       booleanAggrSet:
         description: Aggreagation set for boolean.
@@ -2801,7 +2885,7 @@ enums:
       within a group. A group can have one more more classes to describe different
       parts or the class.
     title: Classes
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
     permissible_values:
       bacteria:
         description: Measures and methods relating to bacteria.
@@ -2891,7 +2975,7 @@ enums:
   compartments:
     description: The substance from which a sample was taken.
     title: Compartments
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
     permissible_values:
       hum:
         description: A measure or observation made about a human.
@@ -2943,7 +3027,7 @@ enums:
     description: 'There are three domain types: biologic (i.e. Covid-19, chemical
       (i.e. nitrogen), physical measure (temperature).'
     title: Domains
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
     permissible_values:
       allDo:
         description: Domain that specifies that it could apply to al domains; biological,
@@ -2964,7 +3048,7 @@ enums:
   groups:
     description: A collection of related measures.
     title: Groups
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
     permissible_values:
       rsvGrp:
         description: Human Respiratory Syncytial virus (RSV).
@@ -3008,7 +3092,7 @@ enums:
     description: The attribute to describe a part type of measures. All measures have
       `partType` = "measure".
     title: Measures
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
     permissible_values:
       absHum:
         description: A measure of the total mass of water vapour present in the air
@@ -3640,7 +3724,7 @@ enums:
   methods:
     description: Procedures or steps for collecting samples or performing measures.
     title: Methods
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
     permissible_values:
       extraction:
         description: Description of the nucleic acid extraction method.
@@ -3715,11 +3799,18 @@ enums:
   missingnessSets:
     description: Missingness sets for measures, methods or attributes.
     title: Missingness sets
+    permissible_values:
+      genMissingnessSet:
+        description: The general set for missingness values.
+        title: General missingness set
+      nrNAMissingnessSet:
+        description: Not reported, Not applicable missing set.
+        title: Not reported, Not applicable missing set
   mmaSets:
     description: A set of categories. For example, site type has a list of different
       sites, such as a wastewater treatment plant, a septic tank, or a pumping station.
     title: Measure, method, or attribute sets
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
     permissible_values:
       booleanSet:
         description: Set that contains the valid possible values for a boolean measure
@@ -3766,6 +3857,9 @@ enums:
         description: The set capturing containing all of the valid methods for the
           PCR methodID.
         title: PCR Method set
+      primerSet:
+        description: The set for genetic primers used in sequencing or PCR assays.
+        title: Genetic primer set
       protocolRelSet:
         description: set for valid values of relationshipID in the protocolRelationships
           table.
@@ -3815,6 +3909,13 @@ enums:
         description: The set capturing containing all of the valid categories for
           the recovery efficiency control (or spike) target.
         title: Recovery efficiency spike target set
+      statusSet:
+        description: A set for partID = Status to indicate whether a part is in current
+          use or not.
+        title: Status set
+      tableSet:
+        description: The set for valid inputs in table columns.
+        title: Table column set
       weathSet:
         description: A set of the valid qualitative categories for the qualitative
           weather measure.
@@ -3835,10 +3936,14 @@ enums:
         description: The set to describe valid categorical values for the resuspension
           method.
         title: Resuspension method set
+      licSet:
+        description: The set to describe valid categorical values for the licensing
+          fields for measures or datasets.
+        title: Data license set
   nomenclatures:
     description: A classification system to report the measure class.
     title: Nomenclatures
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
     permissible_values:
       icd:
         description: Classification system for diseases in humans.
@@ -3956,7 +4061,7 @@ enums:
   qualityIndicators:
     description: A measure of the quality of a reported value or sample.
     title: Quality indicators
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
     permissible_values:
       flagND:
         description: No amplification occurred in the reaction; non-detect.
@@ -4057,7 +4162,7 @@ enums:
     description: 'Measures or observations are taken from three types of substances:
       populations (humans or geographic areas), samples, sites.'
     title: Specimens
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
     permissible_values:
       po:
         description: An measure or observation for a geographic area or population.
@@ -4104,7 +4209,7 @@ enums:
   units:
     description: The unit of the measurement.
     title: Units
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
     permissible_values:
       boc:
         description: Positions with read depth greater or equal to 5.
@@ -4425,511 +4530,511 @@ enums:
         title: Number of active cases by test date
 slots:
   wideName:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   label:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   charLength:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   descr:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   source:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   wideMeasure:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   wideProtocol:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   wideAttribute:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   wideNameType:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   reportTableName:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   reportTableInput:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   partTypeName:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   partTypeInput:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   compartmentName:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   compartmentInput:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   specimenName:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   specimenInput:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   fractionName:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   fractionInput:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   measureName:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   measureInput:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   methodName:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   methodInput:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   unitName:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   unitInput:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   aggregationName:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   aggregationInput:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   index:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   attributeName:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   attributeInput:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   organizationID:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   name:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   addressID:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   datasetID:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   orgType:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   orgLevel:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   orgSector:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   lastEdited:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   notes:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   qualityReportID:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   measureRepID:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   sampleID:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   measureSetRepID:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   qualityFlag:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   severity:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   translationID:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   lang:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   partID:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   partDesc:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   partInstr:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   firstReleased:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   lastUpdated:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   changes:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   langFam:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   langName:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   natName:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   iso6391:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   iso6392B:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   iso6392T:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   iso6393:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   iso6396:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   protocolSteps:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   protocolRelationships:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   measures:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   measureSets:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   datasets:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   sites:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   samples:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   addresses:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   contacts:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   organizations:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   instruments:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   polygons:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   languages:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   translations:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   parts:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   sets:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   qualityReports:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   sampleRelationships:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   protocols:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   countries:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   zones:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   wideNames:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   stepID:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   method:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   measure:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   summ:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   sourceStep:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   stepVer:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   refLink:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   contactID:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   instrumentID:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   value:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   unit:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   aggregation:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   protocolRelationshipsID:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   protocolIDContainer:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   protocolIDObj:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   stepIDObj:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   relationshipID:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   protocolIDSub:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   stepIDSub:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   repType:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   collType:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   collPer:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   collNum:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   pooled:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   collDT:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   collDTStart:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   collDTEnd:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   sentDate:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   recDate:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   protocolID:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   reportable:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   siteID:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   purpose:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   saMaterial:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   origin:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   collNumPer:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   polygonID:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   aDateStart:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   aDateEnd:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   reportDate:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   compartment:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   specimen:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   fraction:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   group:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   class:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   nomenclature:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   measureLic:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   partType:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   shortName:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   domain:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   specimenSets:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   ontologyRef:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   latExp:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   mmaSet:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   unitSet:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   aggragationScale:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   aggregationSet:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   qualitySetID:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   missingnessSets:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   status:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   protocolRelationshipsRequired:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   protocolStepsRequired:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   protocolStepsOrder:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   protocolRelationshipsOrder:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   measuresRequired:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   measuresOrder:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   measureSetsOrder:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   measureSetsRequired:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   datasetsRequired:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   datasetsOrder:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   sitesRequired:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   sitesOrder:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   samplesRequired:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   samplesOrder:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   addressesRequired:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   addressesOrder:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   contactsRequired:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   contactsOrder:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   organizationsRequired:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   organizationsOrder:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   instrumentsRequired:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   instrumentsOrder:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   polygonsRequired:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   polygonsOrder:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   languagesRequired:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   languagesOrder:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   translationsRequired:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   partsOrder:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   translationsOrder:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   partsRequired:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   setsOrder:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   setsRequired:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   qualityReportsRequired:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   qualityReportsOrder:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   sampleRelationshipsRequired:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   sampleRelationshipsOrder:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   protocolsRequired:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   protocolsOrder:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   countriesRequired:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   countriesOrder:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   zonesRequired:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   zonesOrder:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   wideNamesRequired:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   wideNamesOrder:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   dataTypes:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   minValue:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   maxValue:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   minLength:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   maxLength:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   sourceProtocol:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   protocolVersion:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   setID:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   setType:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   setValue:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   enumeration:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   polyPop:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   geoType:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   geoEPSG:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   geoWKT:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   fileLocation:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   parDatasetID:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   datasetDate:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   license:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   funderCont:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   custodyCont:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   funderID:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   custodyID:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   addL1:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   addL2:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   city:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   stateProvReg:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   pCode:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   country:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   isoCode:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   isoZone:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   sampleRelationshipsID:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   sampleIDSubject:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   sampleIDObject:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   model:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   manufacturer:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   insType:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   insTypeOth:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   parSiteID:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   siteType:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   sampleShed:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   repOrg1:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   repOrg2:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   healthRegion:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   popServ:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   geoLat:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   geoLong:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   firstName:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   lastName:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   email:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   phone:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   role:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   isoCodeX:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   numCode:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   tld:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   nameEngl:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   nameOfficial:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   sovereignty:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   countryExonym:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   capitalExonym:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   countryEndonym:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   capitalEndonym:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   langScript:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   utc:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   utcDST:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
   zoneName:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
 classes:
   wideNames:
     slots:
@@ -5555,7 +5660,7 @@ classes:
         range: string
         pattern: ^.{0,200}$
   Container:
-    from_schema: https://onto.phes-odm.org/odmv2
+    from_schema: https://onto.phes-odm.org/odm/v2
     slots:
     - protocolSteps
     - protocolRelationships

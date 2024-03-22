@@ -22,7 +22,7 @@ logger = get_logger(__name__)
 # The full schema metadata schemasheet: Column names and values
 data = {
     "schema" : "ODMv2",
-    "id" : "https://onto.phes-odm.org/odmv2",
+    "id" : "https://onto.phes-odm.org/odm/v2",
     "description" : "Data model for the Public Health Environmental Surveillance Open Data Model, version 2",
     "default_prefix" : "odmv2",
 }
