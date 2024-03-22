@@ -1,4 +1,3 @@
-#%%
 """
 Utility functions for ODM and LinkML.
 """
@@ -17,18 +16,6 @@ from linkml_runtime.linkml_model.meta import SchemaDefinition
 from linkml_runtime.linkml_model import SlotDefinition
 from linkml_runtime.utils.schema_as_dict import schema_as_dict
 from linkml_runtime import SchemaView
-
-class Columns:
-    SOURCE_TABLE: str = "_sourceTable"
-    SOURCE_LOCATION: str = "_sourceLocation"
-    SOURCE_VARIABLE: str = "_sourceVariable"
-    SOURCE_CATEGORY: str = "_sourceCategory"
-    SOURCE_ENUM_NAME: str = "_sourceEnumName"
-    
-class VariableLocations:
-    VARIABLE_CATEGORIES: str = "variableCategories"
-    TABLE: str = "Tables"
-    VARIABLES: str = "variables"
 
 EMPTY_PERMISSIBLE_VALUE = "<empty>"
 
