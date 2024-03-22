@@ -5,7 +5,7 @@ id: https://onto.phes-odm.org/odm/v2
 imports:
 - linkml:types
 prefixes:
-  odmv2: https://onto.phes-odm.org/odmv2/
+  odmv2: https://onto.phes-odm.org/odm/v2/
   linkml: https://w3id.org/linkml/
 default_prefix: odmv2
 default_range: string
