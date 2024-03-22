@@ -1,3 +1,4 @@
+#%%
 """
 Utility functions for ODM and LinkML.
 """
@@ -330,3 +331,31 @@ def get_class_name_from_file_name(file_name: Union[str, Path], schema: Optional[
         class_name = choose_ignore_case_value(class_name, list(schema.all_classes().keys()))
     return class_name
     
+def save_schemasheet(file_name: Union[str, Path], data: Union[Dict, List, pd.DataFrame], headers_map: Dict[str, str] = None):
+    """Create a Schemasheet file from the data. Schemasheets headers (with a row preceded by a '>') are also added
+    according to headers_map.
+
+    Args:
+        file_name (Union[str, Path]): The file to save the Schemasheet to.
+        data (Union[Dict, List[Dict], pd.DataFrame]): The data to save to the Schemasheet. If a Dict or List
+            of Dicts then the keys become the headers and the values are the rows.
+        headers_map (Dict[str, str], optional): If set then defines which Schemasheets headers that each
+            header in the data maps to. Any header in the data missing in headers_map is mapped to the
+            Schemasheets header "ignore". Defaults to None.
+    """
+    if isinstance(data, pd.DataFrame):
+        df = data
+    elif isinstance(data, Dict):
+        if isinstance(data[list(data.keys())[0]], (list, tuple)):
+            index = None
+        else:
+            index = [0]
+        df = pd.DataFrame(data, columns = data.keys(), index = index)
+    else:
+        df = pd.DataFrame(data, index = range(0, len(data)))
+    if headers_map is None:
+        headers_map = {k:k for k in df.columns}
+    df = add_schemasheets_header(df, headers_map)
+
+    logger.info(f"Saving Schemasheet to '{file_name}'")
+    save_data_frame(df, file_name, index=False)
