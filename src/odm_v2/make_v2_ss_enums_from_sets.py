@@ -21,7 +21,7 @@ sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
 import pandas as pd
 import argparse
 
-from utils import add_schemasheets_header, save_data_frame, order_columns, get_logger, EMPTY_PERMISSIBLE_VALUE
+from utils import get_logger, EMPTY_PERMISSIBLE_VALUE, save_schemasheet
 from odm_v2.v2_utils import v2_keep_active_rows
 
 logger = get_logger(__name__)
@@ -111,15 +111,9 @@ def extract_sets_enums(sets_file: str, parts_file: str, output_file: str):
     df = df.sort_values(["setID", "enumeration"])
     df.loc[df["enumeration"] == enum_order, "enumeration"] = None
     
-    # Order the columns
-    df = order_columns(df, headers.keys())
-    
-    # Add schemasheets headers
-    df = add_schemasheets_header(df, headers)
-
     # Save to disk
     logger.info(f"Saving enums from sets to '{output_file}'")
-    save_data_frame(df, output_file, index=False)
+    save_schemasheet(df, output_file, headers)
 
 if __name__ == "__main__":
     if "get_ipython" in globals():

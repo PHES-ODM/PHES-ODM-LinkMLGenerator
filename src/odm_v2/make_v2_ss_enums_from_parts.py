@@ -16,7 +16,7 @@ extract_parts_enums("odm_v2/dictionary/parts.csv", "odm_v2/schemasheets/enums_pa
 import pandas as pd
 import argparse
 
-from utils import add_schemasheets_header, save_data_frame, get_logger, EMPTY_PERMISSIBLE_VALUE
+from utils import get_logger, save_schemasheet, EMPTY_PERMISSIBLE_VALUE
 from odm_v2.v2_utils import v2_keep_active_rows, v2_class_names, v2_get_header_rows, v2_get_enum_name_from_part_id
 
 logger = get_logger(__name__)
@@ -89,12 +89,9 @@ def extract_parts_enums(parts_file: str, output_file: str):
         # Add the top-level enum row and the enum values rows to our final DataFrame
         output_df = pd.concat([output_df, enum_toplevel_df, enum_df])
         
-    # Add Schemasheets headers
-    output_df = add_schemasheets_header(output_df, headers)
-
     # Save to disk
     logger.info(f"Saving enums from parts to '{output_file}'")
-    save_data_frame(output_df, output_file, index=False)
+    save_schemasheet(output_df, output_file, headers)
 
 if __name__ == "__main__":
     if "get_ipython" in globals():

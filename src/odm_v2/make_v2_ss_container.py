@@ -11,7 +11,7 @@ import pandas as pd
 from typing import Union
 from pathlib import Path
 
-from utils import save_data_frame, add_schemasheets_header, order_columns, get_logger
+from utils import get_logger, save_schemasheet
 from odm_v2.v2_utils import v2_class_names
 
 logger = get_logger(__name__)
@@ -41,10 +41,8 @@ def extract_container_class(output_file: Union[str, Path]):
         df = pd.concat([df, row]).reset_index(drop=True)
         
     # Put the headers in a nice order and add the Schemasheets header
-    df = order_columns(df, ["class", "slot", "range", "tree_root", "multivalued", "inlined_as_list", "title", "description"])
-    df = add_schemasheets_header(df, { c : c for c in df.columns })
-    
-    save_data_frame(df, output_file, index=False)
+    logger.info(f"Saving Schemasheets container to 'output_file'")
+    save_schemasheet(df, output_file, ["class", "slot", "range", "tree_root", "multivalued", "inlined_as_list", "title", "description"])
 
 if __name__ == "__main__":
     if "get_ipython" in globals():

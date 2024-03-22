@@ -15,7 +15,7 @@ make_schema("odm_v2/schemasheets/schema.tsv")
 import pandas as pd
 import argparse
 
-from utils import add_schemasheets_header, save_data_frame, get_logger
+from utils import save_schemasheet, get_logger
 
 logger = get_logger(__name__)
 
@@ -34,11 +34,7 @@ def make_schema(output_file: str):
     Args:
         output_file (str): The .tsv file to save the schema Schemasheet to.
     """
-    df = pd.DataFrame(data, columns = data.keys(), index = [0])
-    df = add_schemasheets_header(df, {k:k for k in data.keys()})
-
-    logger.info(f"Saving schema to '{output_file}'")
-    save_data_frame(df, output_file, index=False)
+    save_schemasheet(data, output_file)
 
 if __name__ == "__main__":
     if "get_ipython" in globals():

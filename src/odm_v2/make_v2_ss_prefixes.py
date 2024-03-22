@@ -31,7 +31,7 @@ def make_prefixes(output_file: str):
     Args:
         output_file (str): The .tsv file to save the prefixes Schemasheet to.
     """
-    save_schemasheet(output_file, data)
+    save_schemasheet(data, output_file)
 
 if __name__ == "__main__":
     if "get_ipython" in globals():

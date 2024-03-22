@@ -20,7 +20,7 @@ import os
 import argparse
 from typing import Tuple
 
-from utils import add_schemasheets_header, save_data_frame, order_columns, get_logger
+from utils import save_schemasheet, get_logger
 from odm_v2.v2_utils import v2_keep_active_rows, v2_get_enum_name_from_part_id, v2_get_header_rows, v2_class_names
 
 logger = get_logger(__name__)
@@ -132,17 +132,10 @@ def extract_class(df: pd.DataFrame, class_name: str, output_dir: str) -> Tuple[s
     # at a time, so they're all the same.
     table_output_df["class"] = class_name
 
-    # Reorder the columns, according to the order in the headers dictionary. Any column
-    # not in the headers dictionary is placed at the end.
-    table_output_df = order_columns(table_output_df, headers.keys())
-    
-    # Add Schemasheets headers
-    table_output_df = add_schemasheets_header(table_output_df, headers = headers)
-
     # Save to disk
     output_file = Path(output_dir) / f"class_{class_name}.tsv"
     logger.info(f"Saving classes to {output_file}")
-    save_data_frame(table_output_df, output_file, index=False)
+    save_schemasheet(table_output_df, output_file, headers)
     
     return output_file, table_output_df
 
