@@ -1,11 +1,7 @@
 # NWSS input and output
 /nwss/
-/nwss_public_concentration/dictionary/
-/nwss_public_concentration/schemasheets/
-/nwss_public_metric/dictionary/
-/nwss_public_metric/schemasheets/
-/nwss_reporting/dictionary/
-/nwss_reporting/schemasheets/
+/nwss_*/dictionary/
+/nwss_*/schemasheets/
 
 # ODM v2 input and output
 /odm_v2/*.xlsx
