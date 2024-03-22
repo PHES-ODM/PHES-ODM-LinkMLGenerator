@@ -331,18 +331,25 @@ def get_class_name_from_file_name(file_name: Union[str, Path], schema: Optional[
         class_name = choose_ignore_case_value(class_name, list(schema.all_classes().keys()))
     return class_name
     
-def save_schemasheet(file_name: Union[str, Path], data: Union[Dict, List, pd.DataFrame], headers_map: Dict[str, str] = None):
+def save_schemasheet(data: Union[Dict, List, pd.DataFrame], file_name: Union[str, Path], headers: Union[List[str], Dict[str, str]] = None) -> pd.DataFrame:
     """Create a Schemasheet file from the data. Schemasheets headers (with a row preceded by a '>') are also added
-    according to headers_map.
+    according to headers. Headers are ordered according to the order in headers, with any header not found
+    in headers placed at the end.
 
     Args:
-        file_name (Union[str, Path]): The file to save the Schemasheet to.
         data (Union[Dict, List[Dict], pd.DataFrame]): The data to save to the Schemasheet. If a Dict or List
             of Dicts then the keys become the headers and the values are the rows.
-        headers_map (Dict[str, str], optional): If set then defines which Schemasheets headers that each
-            header in the data maps to. Any header in the data missing in headers_map is mapped to the
-            Schemasheets header "ignore". Defaults to None.
+        file_name (Union[str, Path]): The file to save the Schemasheet to.
+        headers (Union[List[str], Dict[str, str]], optional): If set and a Dict then defines what Schemasheets header each header in the data
+            maps to. If a List then specifies the order of the headers as well as the headers in the data that map to the a
+            Schemasheet header of the same name. Any header in the data missing in headers is mapped to the Schemasheets header
+            "ignore". Defaults to None.
+            
+    Returns:
+        pd.DataFrame: The final Schemasheets DataFrame saved to disk. It includes the Schemasheets headers row, with the
+            columns sorted according to the headers parameter.
     """
+    # Create a Pandas DataFrame from the data
     if isinstance(data, pd.DataFrame):
         df = data
     elif isinstance(data, Dict):
@@ -353,9 +360,16 @@ def save_schemasheet(file_name: Union[str, Path], data: Union[Dict, List, pd.Dat
         df = pd.DataFrame(data, columns = data.keys(), index = index)
     else:
         df = pd.DataFrame(data, index = range(0, len(data)))
-    if headers_map is None:
-        headers_map = {k:k for k in df.columns}
-    df = add_schemasheets_header(df, headers_map)
+    
+    if headers is None:
+        headers = {k:k for k in df.columns}
+    elif not isinstance(headers, dict):
+        headers = {k:k for k in headers}
+        
+    # Order columns and add the Schemasheets headers
+    df = order_columns(df, headers.keys())
+    df = add_schemasheets_header(df, headers)
 
-    logger.info(f"Saving Schemasheet to '{file_name}'")
     save_data_frame(df, file_name, index=False)
+    
+    return df
