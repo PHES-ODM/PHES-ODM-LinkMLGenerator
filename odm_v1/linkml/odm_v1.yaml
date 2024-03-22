@@ -1,7 +1,7 @@
 name: ODMv1
 description: Data model for the Public Health Environmental Surveillance Open Data
   Model, version 1
-id: https://onto.phes-odm.org/odmv1
+id: https://onto.phes-odm.org/odm/v1
 imports:
 - linkml:types
 prefixes:
@@ -11,7 +11,7 @@ default_prefix: odmv1
 default_range: string
 enums:
   SampleType:
-    from_schema: https://onto.phes-odm.org/odmv1
+    from_schema: https://onto.phes-odm.org/odm/v1
     permissible_values:
       rawWW:
         description: Raw wastewater.
@@ -34,7 +34,7 @@ enums:
       other:
         description: Other type of site. Add description to typeOther.
   SampleCollection:
-    from_schema: https://onto.phes-odm.org/odmv1
+    from_schema: https://onto.phes-odm.org/odm/v1
     permissible_values:
       cpTP24h:
         description: A time proportional 24-hour composite sample generally collected
@@ -57,7 +57,7 @@ enums:
       other:
         description: Other type of collection method. Add description to collectionOther.
   WWMeasureFractionAnalyzed:
-    from_schema: https://onto.phes-odm.org/odmv1
+    from_schema: https://onto.phes-odm.org/odm/v1
     permissible_values:
       liquid:
         description: Liquid fraction
@@ -66,7 +66,7 @@ enums:
       mixed:
         description: Mixed/homogenized sample
   WWMeasureType:
-    from_schema: https://onto.phes-odm.org/odmv1
+    from_schema: https://onto.phes-odm.org/odm/v1
     permissible_values:
       covN1:
         description: SARS-CoV-2 nucleocapsid gene N1
@@ -114,7 +114,7 @@ enums:
       other:
         description: Other measurement category. Add description to categoryOther.
   WWMeasureUnit:
-    from_schema: https://onto.phes-odm.org/odmv1
+    from_schema: https://onto.phes-odm.org/odm/v1
     permissible_values:
       gcPMMoV:
         description: Gene or variant copies per copy of PMMoV.
@@ -151,7 +151,7 @@ enums:
         description: Other measurement of viral copies or wastewater treatment plant
           parameter. Add description to UnitOther.
   WWMeasureAggregation:
-    from_schema: https://onto.phes-odm.org/odmv1
+    from_schema: https://onto.phes-odm.org/odm/v1
     permissible_values:
       single:
         description: This value is not an aggregate measurement in any way (ie. not
@@ -177,7 +177,7 @@ enums:
       other:
         description: Other aggregation method. Add description to aggregationOther
   SiteType:
-    from_schema: https://onto.phes-odm.org/odmv1
+    from_schema: https://onto.phes-odm.org/odm/v1
     permissible_values:
       airPln:
         description: Airplane.
@@ -224,7 +224,7 @@ enums:
       other:
         description: Other site type. Add description to typeOther.
   SiteSampleTypeDefault:
-    from_schema: https://onto.phes-odm.org/odmv1
+    from_schema: https://onto.phes-odm.org/odm/v1
     permissible_values:
       rawWW:
         description: Raw wastewater.
@@ -247,7 +247,7 @@ enums:
       other:
         description: Other type of site. Add description to typeOther.
   SiteSampleCollectionDefault:
-    from_schema: https://onto.phes-odm.org/odmv1
+    from_schema: https://onto.phes-odm.org/odm/v1
     permissible_values:
       cpTP24h:
         description: A time proportional 24-hour composite sample generally collected
@@ -270,7 +270,7 @@ enums:
       other:
         description: Other type of collection method. Add description to collectionOther.
   SiteMeasureFractionAnalyzedDefault:
-    from_schema: https://onto.phes-odm.org/odmv1
+    from_schema: https://onto.phes-odm.org/odm/v1
     permissible_values:
       liquid:
         description: Liquid fraction
@@ -279,7 +279,7 @@ enums:
       mixed:
         description: Mixed/homogenized sample
   SiteMeasureType:
-    from_schema: https://onto.phes-odm.org/odmv1
+    from_schema: https://onto.phes-odm.org/odm/v1
     permissible_values:
       envTemp:
         description: Environmental temperature.
@@ -318,7 +318,7 @@ enums:
       wwCond:
         description: Conductivity of the wastewater.
   SiteMeasureUnit:
-    from_schema: https://onto.phes-odm.org/odmv1
+    from_schema: https://onto.phes-odm.org/odm/v1
     permissible_values:
       c:
         description: Degrees Celcius
@@ -335,7 +335,7 @@ enums:
       usCM:
         description: Micro-siemens per centimeter
   SiteMeasureAggregation:
-    from_schema: https://onto.phes-odm.org/odmv1
+    from_schema: https://onto.phes-odm.org/odm/v1
     permissible_values:
       single:
         description: This value is not an aggregate measurement in any way (ie. not
@@ -355,7 +355,7 @@ enums:
       other:
         description: Other aggregation method. Add description to aggregationOther
   AssayMethodUnit:
-    from_schema: https://onto.phes-odm.org/odmv1
+    from_schema: https://onto.phes-odm.org/odm/v1
     permissible_values:
       gcPMMoV:
         description: Gene copies per copy of PMMoV.
@@ -370,7 +370,7 @@ enums:
       other:
         description: Other measurement of viral copies. Add description to unitOther.
   InstrumentType:
-    from_schema: https://onto.phes-odm.org/odmv1
+    from_schema: https://onto.phes-odm.org/odm/v1
     permissible_values:
       online:
         description: An online sensor
@@ -383,14 +383,14 @@ enums:
       other:
         description: An other type of measurement instrument. Add description to instrumentTypeOther.
   PolygonType:
-    from_schema: https://onto.phes-odm.org/odmv1
+    from_schema: https://onto.phes-odm.org/odm/v1
     permissible_values:
       swrCat:
         description: Sewer catchment area.
       hlthReg:
         description: Health region served by the sewer network
   CovidPublicHealthDataType:
-    from_schema: https://onto.phes-odm.org/odmv1
+    from_schema: https://onto.phes-odm.org/odm/v1
     permissible_values:
       conf:
         description: Number of confirmed cases. This measure should be accompanied
@@ -408,7 +408,7 @@ enums:
       hospAdm:
         description: Hospital admissions or patients newly admitted to hospital.
   CovidPublicHealthDataDateType:
-    from_schema: https://onto.phes-odm.org/odmv1
+    from_schema: https://onto.phes-odm.org/odm/v1
     permissible_values:
       episode:
         description: Episode date is the earliest of onset, test or reported date.
@@ -422,222 +422,222 @@ enums:
         description: Date that the covid-19 test was performed.
 slots:
   Sample:
-    from_schema: https://onto.phes-odm.org/odmv1
+    from_schema: https://onto.phes-odm.org/odm/v1
   WWMeasure:
-    from_schema: https://onto.phes-odm.org/odmv1
+    from_schema: https://onto.phes-odm.org/odm/v1
   Site:
-    from_schema: https://onto.phes-odm.org/odmv1
+    from_schema: https://onto.phes-odm.org/odm/v1
   SiteMeasure:
-    from_schema: https://onto.phes-odm.org/odmv1
+    from_schema: https://onto.phes-odm.org/odm/v1
   Reporter:
-    from_schema: https://onto.phes-odm.org/odmv1
+    from_schema: https://onto.phes-odm.org/odm/v1
   Lab:
-    from_schema: https://onto.phes-odm.org/odmv1
+    from_schema: https://onto.phes-odm.org/odm/v1
   AssayMethod:
-    from_schema: https://onto.phes-odm.org/odmv1
+    from_schema: https://onto.phes-odm.org/odm/v1
   Instrument:
-    from_schema: https://onto.phes-odm.org/odmv1
+    from_schema: https://onto.phes-odm.org/odm/v1
   Polygon:
-    from_schema: https://onto.phes-odm.org/odmv1
+    from_schema: https://onto.phes-odm.org/odm/v1
   CovidPublicHealthData:
-    from_schema: https://onto.phes-odm.org/odmv1
+    from_schema: https://onto.phes-odm.org/odm/v1
   Lookup:
-    from_schema: https://onto.phes-odm.org/odmv1
+    from_schema: https://onto.phes-odm.org/odm/v1
   sampleID:
-    from_schema: https://onto.phes-odm.org/odmv1
+    from_schema: https://onto.phes-odm.org/odm/v1
   siteID:
-    from_schema: https://onto.phes-odm.org/odmv1
+    from_schema: https://onto.phes-odm.org/odm/v1
   instrumentID:
-    from_schema: https://onto.phes-odm.org/odmv1
+    from_schema: https://onto.phes-odm.org/odm/v1
   reporterID:
-    from_schema: https://onto.phes-odm.org/odmv1
+    from_schema: https://onto.phes-odm.org/odm/v1
   dateTime:
-    from_schema: https://onto.phes-odm.org/odmv1
+    from_schema: https://onto.phes-odm.org/odm/v1
   dateTimeStart:
-    from_schema: https://onto.phes-odm.org/odmv1
+    from_schema: https://onto.phes-odm.org/odm/v1
   dateTimeEnd:
-    from_schema: https://onto.phes-odm.org/odmv1
+    from_schema: https://onto.phes-odm.org/odm/v1
   type:
-    from_schema: https://onto.phes-odm.org/odmv1
+    from_schema: https://onto.phes-odm.org/odm/v1
   typeOther:
-    from_schema: https://onto.phes-odm.org/odmv1
+    from_schema: https://onto.phes-odm.org/odm/v1
   collection:
-    from_schema: https://onto.phes-odm.org/odmv1
+    from_schema: https://onto.phes-odm.org/odm/v1
   collectionOther:
-    from_schema: https://onto.phes-odm.org/odmv1
+    from_schema: https://onto.phes-odm.org/odm/v1
   preTreatment:
-    from_schema: https://onto.phes-odm.org/odmv1
+    from_schema: https://onto.phes-odm.org/odm/v1
   preTreatmentDescription:
-    from_schema: https://onto.phes-odm.org/odmv1
+    from_schema: https://onto.phes-odm.org/odm/v1
   pooled:
-    from_schema: https://onto.phes-odm.org/odmv1
+    from_schema: https://onto.phes-odm.org/odm/v1
   children:
-    from_schema: https://onto.phes-odm.org/odmv1
+    from_schema: https://onto.phes-odm.org/odm/v1
   parent:
-    from_schema: https://onto.phes-odm.org/odmv1
+    from_schema: https://onto.phes-odm.org/odm/v1
   sizeL:
-    from_schema: https://onto.phes-odm.org/odmv1
+    from_schema: https://onto.phes-odm.org/odm/v1
   fieldSampleTempC:
-    from_schema: https://onto.phes-odm.org/odmv1
+    from_schema: https://onto.phes-odm.org/odm/v1
   shippedOnIce:
-    from_schema: https://onto.phes-odm.org/odmv1
+    from_schema: https://onto.phes-odm.org/odm/v1
   storageTempC:
-    from_schema: https://onto.phes-odm.org/odmv1
+    from_schema: https://onto.phes-odm.org/odm/v1
   qualityFlag:
-    from_schema: https://onto.phes-odm.org/odmv1
+    from_schema: https://onto.phes-odm.org/odm/v1
   notes:
-    from_schema: https://onto.phes-odm.org/odmv1
+    from_schema: https://onto.phes-odm.org/odm/v1
   uWwMeasureID:
-    from_schema: https://onto.phes-odm.org/odmv1
+    from_schema: https://onto.phes-odm.org/odm/v1
   wwMeasureID:
-    from_schema: https://onto.phes-odm.org/odmv1
+    from_schema: https://onto.phes-odm.org/odm/v1
   labID:
-    from_schema: https://onto.phes-odm.org/odmv1
+    from_schema: https://onto.phes-odm.org/odm/v1
   assayID:
-    from_schema: https://onto.phes-odm.org/odmv1
+    from_schema: https://onto.phes-odm.org/odm/v1
   analysisDate:
-    from_schema: https://onto.phes-odm.org/odmv1
+    from_schema: https://onto.phes-odm.org/odm/v1
   reportDate:
-    from_schema: https://onto.phes-odm.org/odmv1
+    from_schema: https://onto.phes-odm.org/odm/v1
   fractionAnalyzed:
-    from_schema: https://onto.phes-odm.org/odmv1
+    from_schema: https://onto.phes-odm.org/odm/v1
   unit:
-    from_schema: https://onto.phes-odm.org/odmv1
+    from_schema: https://onto.phes-odm.org/odm/v1
   unitOther:
-    from_schema: https://onto.phes-odm.org/odmv1
+    from_schema: https://onto.phes-odm.org/odm/v1
   aggregation:
-    from_schema: https://onto.phes-odm.org/odmv1
+    from_schema: https://onto.phes-odm.org/odm/v1
   aggregationOther:
-    from_schema: https://onto.phes-odm.org/odmv1
+    from_schema: https://onto.phes-odm.org/odm/v1
   index:
-    from_schema: https://onto.phes-odm.org/odmv1
+    from_schema: https://onto.phes-odm.org/odm/v1
   value:
-    from_schema: https://onto.phes-odm.org/odmv1
+    from_schema: https://onto.phes-odm.org/odm/v1
   accessToPublic:
-    from_schema: https://onto.phes-odm.org/odmv1
+    from_schema: https://onto.phes-odm.org/odm/v1
   accessToAllOrg:
-    from_schema: https://onto.phes-odm.org/odmv1
+    from_schema: https://onto.phes-odm.org/odm/v1
   accessToSelf:
-    from_schema: https://onto.phes-odm.org/odmv1
+    from_schema: https://onto.phes-odm.org/odm/v1
   accessToPHAC:
-    from_schema: https://onto.phes-odm.org/odmv1
+    from_schema: https://onto.phes-odm.org/odm/v1
   accessToLocalHA:
-    from_schema: https://onto.phes-odm.org/odmv1
+    from_schema: https://onto.phes-odm.org/odm/v1
   accessToProvHA:
-    from_schema: https://onto.phes-odm.org/odmv1
+    from_schema: https://onto.phes-odm.org/odm/v1
   accessToOtherProv:
-    from_schema: https://onto.phes-odm.org/odmv1
+    from_schema: https://onto.phes-odm.org/odm/v1
   accessToDetails:
-    from_schema: https://onto.phes-odm.org/odmv1
+    from_schema: https://onto.phes-odm.org/odm/v1
   name:
-    from_schema: https://onto.phes-odm.org/odmv1
+    from_schema: https://onto.phes-odm.org/odm/v1
   description:
-    from_schema: https://onto.phes-odm.org/odmv1
+    from_schema: https://onto.phes-odm.org/odm/v1
   publicHealthDepartment:
-    from_schema: https://onto.phes-odm.org/odmv1
+    from_schema: https://onto.phes-odm.org/odm/v1
   healthRegion:
-    from_schema: https://onto.phes-odm.org/odmv1
+    from_schema: https://onto.phes-odm.org/odm/v1
   sampleTypeDefault:
-    from_schema: https://onto.phes-odm.org/odmv1
+    from_schema: https://onto.phes-odm.org/odm/v1
   sampleTypeOtherDefault:
-    from_schema: https://onto.phes-odm.org/odmv1
+    from_schema: https://onto.phes-odm.org/odm/v1
   sampleCollectionDefault:
-    from_schema: https://onto.phes-odm.org/odmv1
+    from_schema: https://onto.phes-odm.org/odm/v1
   sampleCollectOtherDefault:
-    from_schema: https://onto.phes-odm.org/odmv1
+    from_schema: https://onto.phes-odm.org/odm/v1
   sampleStorageTempCDefault:
-    from_schema: https://onto.phes-odm.org/odmv1
+    from_schema: https://onto.phes-odm.org/odm/v1
   measureFractionAnalyzedDefault:
-    from_schema: https://onto.phes-odm.org/odmv1
+    from_schema: https://onto.phes-odm.org/odm/v1
   geoLat:
-    from_schema: https://onto.phes-odm.org/odmv1
+    from_schema: https://onto.phes-odm.org/odm/v1
   geoLong:
-    from_schema: https://onto.phes-odm.org/odmv1
+    from_schema: https://onto.phes-odm.org/odm/v1
   polygonID:
-    from_schema: https://onto.phes-odm.org/odmv1
+    from_schema: https://onto.phes-odm.org/odm/v1
   sewerNetworkFileLink:
-    from_schema: https://onto.phes-odm.org/odmv1
+    from_schema: https://onto.phes-odm.org/odm/v1
   sewerNetworkFileBLOB:
-    from_schema: https://onto.phes-odm.org/odmv1
+    from_schema: https://onto.phes-odm.org/odm/v1
   uSiteMeasureID:
-    from_schema: https://onto.phes-odm.org/odmv1
+    from_schema: https://onto.phes-odm.org/odm/v1
   siteMeasureID:
-    from_schema: https://onto.phes-odm.org/odmv1
+    from_schema: https://onto.phes-odm.org/odm/v1
   typeDescription:
-    from_schema: https://onto.phes-odm.org/odmv1
+    from_schema: https://onto.phes-odm.org/odm/v1
   aggregationDesc:
-    from_schema: https://onto.phes-odm.org/odmv1
+    from_schema: https://onto.phes-odm.org/odm/v1
   accessToAllOrgs:
-    from_schema: https://onto.phes-odm.org/odmv1
+    from_schema: https://onto.phes-odm.org/odm/v1
   siteIDDefault:
-    from_schema: https://onto.phes-odm.org/odmv1
+    from_schema: https://onto.phes-odm.org/odm/v1
   labIDDefault:
-    from_schema: https://onto.phes-odm.org/odmv1
+    from_schema: https://onto.phes-odm.org/odm/v1
   contactName:
-    from_schema: https://onto.phes-odm.org/odmv1
+    from_schema: https://onto.phes-odm.org/odm/v1
   contactEmail:
-    from_schema: https://onto.phes-odm.org/odmv1
+    from_schema: https://onto.phes-odm.org/odm/v1
   organization:
-    from_schema: https://onto.phes-odm.org/odmv1
+    from_schema: https://onto.phes-odm.org/odm/v1
   contactPhone:
-    from_schema: https://onto.phes-odm.org/odmv1
+    from_schema: https://onto.phes-odm.org/odm/v1
   assayMethodIDDefault:
-    from_schema: https://onto.phes-odm.org/odmv1
+    from_schema: https://onto.phes-odm.org/odm/v1
   updateDate:
-    from_schema: https://onto.phes-odm.org/odmv1
+    from_schema: https://onto.phes-odm.org/odm/v1
   assayMethodID:
-    from_schema: https://onto.phes-odm.org/odmv1
+    from_schema: https://onto.phes-odm.org/odm/v1
   version:
-    from_schema: https://onto.phes-odm.org/odmv1
+    from_schema: https://onto.phes-odm.org/odm/v1
   summary:
-    from_schema: https://onto.phes-odm.org/odmv1
+    from_schema: https://onto.phes-odm.org/odm/v1
   referenceLink:
-    from_schema: https://onto.phes-odm.org/odmv1
+    from_schema: https://onto.phes-odm.org/odm/v1
   date:
-    from_schema: https://onto.phes-odm.org/odmv1
+    from_schema: https://onto.phes-odm.org/odm/v1
   aliasID:
-    from_schema: https://onto.phes-odm.org/odmv1
+    from_schema: https://onto.phes-odm.org/odm/v1
   extractionVolMl:
-    from_schema: https://onto.phes-odm.org/odmv1
+    from_schema: https://onto.phes-odm.org/odm/v1
   loq:
-    from_schema: https://onto.phes-odm.org/odmv1
+    from_schema: https://onto.phes-odm.org/odm/v1
   lod:
-    from_schema: https://onto.phes-odm.org/odmv1
+    from_schema: https://onto.phes-odm.org/odm/v1
   methodConc:
-    from_schema: https://onto.phes-odm.org/odmv1
+    from_schema: https://onto.phes-odm.org/odm/v1
   methodExtract:
-    from_schema: https://onto.phes-odm.org/odmv1
+    from_schema: https://onto.phes-odm.org/odm/v1
   methodPcr:
-    from_schema: https://onto.phes-odm.org/odmv1
+    from_schema: https://onto.phes-odm.org/odm/v1
   qualityAssQC:
-    from_schema: https://onto.phes-odm.org/odmv1
+    from_schema: https://onto.phes-odm.org/odm/v1
   inhibition:
-    from_schema: https://onto.phes-odm.org/odmv1
+    from_schema: https://onto.phes-odm.org/odm/v1
   surrogateRecovery:
-    from_schema: https://onto.phes-odm.org/odmv1
+    from_schema: https://onto.phes-odm.org/odm/v1
   model:
-    from_schema: https://onto.phes-odm.org/odmv1
+    from_schema: https://onto.phes-odm.org/odm/v1
   alias:
-    from_schema: https://onto.phes-odm.org/odmv1
+    from_schema: https://onto.phes-odm.org/odm/v1
   pop:
-    from_schema: https://onto.phes-odm.org/odmv1
+    from_schema: https://onto.phes-odm.org/odm/v1
   wkt:
-    from_schema: https://onto.phes-odm.org/odmv1
+    from_schema: https://onto.phes-odm.org/odm/v1
   file:
-    from_schema: https://onto.phes-odm.org/odmv1
+    from_schema: https://onto.phes-odm.org/odm/v1
   link:
-    from_schema: https://onto.phes-odm.org/odmv1
+    from_schema: https://onto.phes-odm.org/odm/v1
   cphdID:
-    from_schema: https://onto.phes-odm.org/odmv1
+    from_schema: https://onto.phes-odm.org/odm/v1
   dateType:
-    from_schema: https://onto.phes-odm.org/odmv1
+    from_schema: https://onto.phes-odm.org/odm/v1
   tableName:
-    from_schema: https://onto.phes-odm.org/odmv1
+    from_schema: https://onto.phes-odm.org/odm/v1
   columnName:
-    from_schema: https://onto.phes-odm.org/odmv1
+    from_schema: https://onto.phes-odm.org/odm/v1
 classes:
   Container:
-    from_schema: https://onto.phes-odm.org/odmv1
+    from_schema: https://onto.phes-odm.org/odm/v1
     slots:
     - Sample
     - WWMeasure
