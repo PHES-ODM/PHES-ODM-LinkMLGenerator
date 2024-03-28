@@ -12,6 +12,7 @@ Be sure that excel_file points to the ODM v2 data dictionary.
 
 from pathlib import Path
 import argparse
+from typing import Union
 
 from utils import clear_dirs, extract_sheets, make_linkml_schema, get_logger
 from odm_v2.make_v2_ss_classes import extract_all_classes
@@ -23,19 +24,9 @@ from odm_v2.make_v2_ss_container import extract_container_class
 
 logger = get_logger(__name__)
 
-if __name__ == "__main__":
-    if "get_ipython" in globals():
-        class opts:
-            dictionary_file = "../odm_v2/v2 ODM dictionary.xlsx"
-            output_dir = "../odm_v2"
-    else:
-        args = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
-        args.add_argument("--dictionary_file", type=str, help="The Excel ODM v2 data dictionary file", required=True)
-        args.add_argument("--output_dir", type=str, help="Directory to save all results to", required=True)
-        opts = args.parse_args()
-
+def make_v2(dictionary_file: Union[str, Path], output_dir: Union[str, Path]):
     # Some paths
-    output_dir = Path(opts.output_dir)
+    output_dir = Path(output_dir)
     dictionary_dir = output_dir / "dictionary"
     schemasheets_dir = output_dir / "schemasheets"
     linkml_dir = output_dir / "linkml"
@@ -46,7 +37,7 @@ if __name__ == "__main__":
     clear_dirs([dictionary_dir, schemasheets_dir, linkml_dir])
 
     # Extract the parts and sets sheets from the Excel ODM v2 data dictionary file
-    extract_sheets(opts.dictionary_file, ["parts", "sets"], dictionary_dir)
+    extract_sheets(dictionary_file, ["parts", "sets"], dictionary_dir)
 
     # Extract all classes from the parts sheet (and save as a schemasheet)
     extract_all_classes(parts_file, schemasheets_dir)
@@ -72,3 +63,16 @@ if __name__ == "__main__":
     make_linkml_schema(schemasheets_dir, linkml_dir / "odm_v2.yaml")
 
     logger.info("Finished!")
+
+if __name__ == "__main__":
+    if "get_ipython" in globals():
+        class opts:
+            dictionary_file = "../odm_v2/v2 ODM dictionary.xlsx"
+            output_dir = "../odm_v2"
+    else:
+        args = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+        args.add_argument("--dictionary_file", type=str, help="The Excel ODM v2 data dictionary file", required=True)
+        args.add_argument("--output_dir", type=str, help="Directory to save all results to", required=True)
+        opts = args.parse_args()
+
+    make_v2(dictionary_file=opts.dictionary_file, output_dir=opts.output_dir)
