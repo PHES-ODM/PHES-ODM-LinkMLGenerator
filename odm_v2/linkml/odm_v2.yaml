@@ -507,31 +507,11 @@ enums:
         description: Solid fraction of a sample.
         title: Solid fraction
       ? ''
-      : description: "The field for which the expected value is not a property of\
-          \ the described object. / The outcome of a measurement is not a valid number\
-          \ (plus or minus infinity, error, ...) / A logical representation of a statement\
-          \ that is neither TRUE nor FALSE. /  / The Epstein\u2013Barr virus, formally\
-          \ called Human gammaherpesvirus 4"
-        title: "Not applicable / Not a number / Null / Human Rhinovirus (HRV) / Human\
-          \ Rhinovirus (HRV) A / Human Rhinovirus (HRV) B / Human Rhinovirus (HRV)\
-          \ C / Human Metapneumovirus (HMPV) / Human Parainfluenza Virus (HPIV) /\
-          \ Streptococcus pneumoniae / Adenovirus (F40/41) / Salmonella / Shigella\
-          \ / Verotoxin-producing Escherichia coli (VTEC) / Enteropathogenic Escherichia\
-          \ coli (EPEC) / Enteroaggregative Escherichia coli (EAEC) / Enteroinvasive\
-          \ Escherichia coli (EIEC) / Enterotoxigenic Escherichia coli (ETEC) / Enterohemorrhagic\
-          \ Escherichia coli (EHEC) / Extraintestinal pathogenic Escherichia coli\
-          \ (ExPEC) / Klebsiella pneumoniae / Clostridium perfringens / Vibrio / Brucella\
-          \ / Listeria / Enterovirus / Rotavirus / Astrovirus / Sapovirus / Chlamydia\
-          \ / Trichomonas vaginalis / Neisseria gonorrhoeae / Treponema pallidum /\
-          \ Human Immunodeficiency Virus (HIV) / Human Papiloma Virus (HPV) / Mycoplasma\
-          \ genitalus / Epstein\u2013Barr virus (EBV) / Herpes / Haemophilus ducreyi\
-          \ / Ureaplasma / Hepatitis A / Hepatitis B / Hepatitis C / Hepatitis E /\
-          \ Clostridium difficile / Varicella / Measles / Mumps / Rubella / Corynebacterium\
-          \ diphtheriae / Haemophilus influenzae / Acinetobacter / Pseudomonas / Legionella\
-          \ / Cryptosporidium / Methicillin-resistant Staphylococcus aureus (MRSA)\
-          \ / Yersinia enterocolitica / Mycobacterium tuberculosis / Borrelia burgdorferi\
-          \ / Anaplasma phagocytophilum / Babesia / Plasmodium / Dengue / West Nile\
-          \ / Francisella tularensis / Chikungunya virus (CHIKV) / Rickettsia / Zika"
+      : description: The field for which the expected value is not a property of the
+          described object. / The outcome of a measurement is not a valid number (plus
+          or minus infinity, error, ...) / A logical representation of a statement
+          that is neither TRUE nor FALSE.
+        title: Not applicable / Not a number / Null
   fullDictionarySheetSet:
     description: Worksheets in the full Excel dictionary.
     title: Full dictionary sheets set
@@ -637,31 +617,11 @@ enums:
         description: A value could have been recorded, however, it was not.
         title: Not reported
       ? ''
-      : description: "The field for which the expected value is not a property of\
-          \ the described object. / The outcome of a measurement is not a valid number\
-          \ (plus or minus infinity, error, ...) / A logical representation of a statement\
-          \ that is neither TRUE nor FALSE. /  / The Epstein\u2013Barr virus, formally\
-          \ called Human gammaherpesvirus 4"
-        title: "Not applicable / Not a number / Null / Human Rhinovirus (HRV) / Human\
-          \ Rhinovirus (HRV) A / Human Rhinovirus (HRV) B / Human Rhinovirus (HRV)\
-          \ C / Human Metapneumovirus (HMPV) / Human Parainfluenza Virus (HPIV) /\
-          \ Streptococcus pneumoniae / Adenovirus (F40/41) / Salmonella / Shigella\
-          \ / Verotoxin-producing Escherichia coli (VTEC) / Enteropathogenic Escherichia\
-          \ coli (EPEC) / Enteroaggregative Escherichia coli (EAEC) / Enteroinvasive\
-          \ Escherichia coli (EIEC) / Enterotoxigenic Escherichia coli (ETEC) / Enterohemorrhagic\
-          \ Escherichia coli (EHEC) / Extraintestinal pathogenic Escherichia coli\
-          \ (ExPEC) / Klebsiella pneumoniae / Clostridium perfringens / Vibrio / Brucella\
-          \ / Listeria / Enterovirus / Rotavirus / Astrovirus / Sapovirus / Chlamydia\
-          \ / Trichomonas vaginalis / Neisseria gonorrhoeae / Treponema pallidum /\
-          \ Human Immunodeficiency Virus (HIV) / Human Papiloma Virus (HPV) / Mycoplasma\
-          \ genitalus / Epstein\u2013Barr virus (EBV) / Herpes / Haemophilus ducreyi\
-          \ / Ureaplasma / Hepatitis A / Hepatitis B / Hepatitis C / Hepatitis E /\
-          \ Clostridium difficile / Varicella / Measles / Mumps / Rubella / Corynebacterium\
-          \ diphtheriae / Haemophilus influenzae / Acinetobacter / Pseudomonas / Legionella\
-          \ / Cryptosporidium / Methicillin-resistant Staphylococcus aureus (MRSA)\
-          \ / Yersinia enterocolitica / Mycobacterium tuberculosis / Borrelia burgdorferi\
-          \ / Anaplasma phagocytophilum / Babesia / Plasmodium / Dengue / West Nile\
-          \ / Francisella tularensis / Chikungunya virus (CHIKV) / Rickettsia / Zika"
+      : description: The field for which the expected value is not a property of the
+          described object. / The outcome of a measurement is not a valid number (plus
+          or minus infinity, error, ...) / A logical representation of a statement
+          that is neither TRUE nor FALSE.
+        title: Not applicable / Not a number / Null
   genQualitySet:
     description: A quality set to specify any generic quality concerns about a measure
       or sample.
@@ -1213,6 +1173,44 @@ enums:
       untracent:
         description: Ultracentrifugation
         title: Ultracentrifugation
+      mfAcidmgcl2:
+        description: Membrane filtration with acidification and mgcl2
+        title: Membrane filtration with acidification and mgcl2
+      mfAcidmgcl2SS:
+        description: Membrane filtration with acidification and mgcl2, membrane recombined
+          with separated solids
+        title: Membrane filtration with acidification and mgcl2, membrane recombined
+          with separated solids
+      mfMgcl2:
+        description: Membrane filtration with addition of mgcl2
+        title: Membrane filtration with addition of mgcl2
+      mfMgcl2SS:
+        description: Membrane filtration with addition of mgcl2, membrane recombined
+          with separated solids
+        title: Membrane filtration with  mgcl2 and separated solids
+      mfNoAmend:
+        description: Membrane filtration with no amendment
+        title: Membrane filtration with no amendment
+      mfNoAmendSS:
+        description: Membrane filtration with no amendment, membrane recombined with
+          separated solids
+        title: Membrane filtration with no amendment, membrane recombined with separated
+          solids
+      mfSampleAcid:
+        description: Membrane filtration with sample acidification
+        title: Membrane filtration with sample acidification
+      mfSampleAcidSS:
+        description: Membrane filtration with sample acidification, membrane recombined
+          with separated solids
+        title: Membrane filtration with sample acidification, membrane recombined
+          with separated solids
+      noliquid:
+        description: No liquid concentration, liquid recombined with separated solids
+        title: No liquid concentration, liquid recombined with separated solids
+      noSep:
+        description: Denoted that a sample did not undergo a solids separation protocol,
+          or did not undergo a sample concentration protocol.
+        title: No Seperation or Concentration
   naAggrSet:
     description: Not application for aggregation sets.
     title: Aggregation set not applicable
@@ -1254,31 +1252,11 @@ enums:
         description: A value could have been recorded, however, it was not.
         title: Not reported
       ? ''
-      : description: "The field for which the expected value is not a property of\
-          \ the described object. / The outcome of a measurement is not a valid number\
-          \ (plus or minus infinity, error, ...) / A logical representation of a statement\
-          \ that is neither TRUE nor FALSE. /  / The Epstein\u2013Barr virus, formally\
-          \ called Human gammaherpesvirus 4"
-        title: "Not applicable / Not a number / Null / Human Rhinovirus (HRV) / Human\
-          \ Rhinovirus (HRV) A / Human Rhinovirus (HRV) B / Human Rhinovirus (HRV)\
-          \ C / Human Metapneumovirus (HMPV) / Human Parainfluenza Virus (HPIV) /\
-          \ Streptococcus pneumoniae / Adenovirus (F40/41) / Salmonella / Shigella\
-          \ / Verotoxin-producing Escherichia coli (VTEC) / Enteropathogenic Escherichia\
-          \ coli (EPEC) / Enteroaggregative Escherichia coli (EAEC) / Enteroinvasive\
-          \ Escherichia coli (EIEC) / Enterotoxigenic Escherichia coli (ETEC) / Enterohemorrhagic\
-          \ Escherichia coli (EHEC) / Extraintestinal pathogenic Escherichia coli\
-          \ (ExPEC) / Klebsiella pneumoniae / Clostridium perfringens / Vibrio / Brucella\
-          \ / Listeria / Enterovirus / Rotavirus / Astrovirus / Sapovirus / Chlamydia\
-          \ / Trichomonas vaginalis / Neisseria gonorrhoeae / Treponema pallidum /\
-          \ Human Immunodeficiency Virus (HIV) / Human Papiloma Virus (HPV) / Mycoplasma\
-          \ genitalus / Epstein\u2013Barr virus (EBV) / Herpes / Haemophilus ducreyi\
-          \ / Ureaplasma / Hepatitis A / Hepatitis B / Hepatitis C / Hepatitis E /\
-          \ Clostridium difficile / Varicella / Measles / Mumps / Rubella / Corynebacterium\
-          \ diphtheriae / Haemophilus influenzae / Acinetobacter / Pseudomonas / Legionella\
-          \ / Cryptosporidium / Methicillin-resistant Staphylococcus aureus (MRSA)\
-          \ / Yersinia enterocolitica / Mycobacterium tuberculosis / Borrelia burgdorferi\
-          \ / Anaplasma phagocytophilum / Babesia / Plasmodium / Dengue / West Nile\
-          \ / Francisella tularensis / Chikungunya virus (CHIKV) / Rickettsia / Zika"
+      : description: The field for which the expected value is not a property of the
+          described object. / The outcome of a measurement is not a valid number (plus
+          or minus infinity, error, ...) / A logical representation of a statement
+          that is neither TRUE nor FALSE.
+        title: Not applicable / Not a number / Null
   orgLevelSet:
     description: Categories of organization levels.
     title: Organization level set
@@ -2067,7 +2045,7 @@ enums:
         title: Child day care
       corFcil:
         description: Correctional facility
-        title: Cphd ID
+        title: Correctional facility
       dorm:
         description: Higher education domitory or residential building
         title: Higher education domitory or residential building
@@ -2232,41 +2210,10 @@ enums:
         description: Describes solid separation from a wastewater sample where the
           sample material is allowed to settle by gravity, and then separated.
         title: Gravity settling
-      mfAcidmgcl2:
-        description: Membrane filtration with acidification and mgcl2
-        title: Membrane filtration with acidification and mgcl2
-      mfAcidmgcl2SS:
-        description: Membrane filtration with acidification and mgcl2, membrane recombined
-          with separated solids
-        title: Membrane filtration with acidification and mgcl2, membrane recombined
-          with separated solids
-      mfMgcl2:
-        description: Membrane filtration with addition of mgcl2
-        title: Membrane filtration with addition of mgcl2
-      mfMgcl2SS:
-        description: Membrane filtration with addition of mgcl2, membrane recombined
-          with separated solids
-        title: Membrane filtration with  mgcl2 and separated solids
-      mfNoAmend:
-        description: Membrane filtration with no amendment
-        title: Membrane filtration with no amendment
-      mfNoAmendSS:
-        description: Membrane filtration with no amendment, membrane recombined with
-          separated solids
-        title: Membrane filtration with no amendment, membrane recombined with separated
-          solids
-      mfSampleAcid:
-        description: Membrane filtration with sample acidification
-        title: Membrane filtration with sample acidification
-      mfSampleAcidSS:
-        description: Membrane filtration with sample acidification, membrane recombined
-          with separated solids
-        title: Membrane filtration with sample acidification, membrane recombined
-          with separated solids
-      noliquid:
-        description: No liquid concentration, liquid recombined with separated solids
-        title: No liquid concentration, liquid recombined with separated solids
-      noSep: {}
+      noSep:
+        description: Denoted that a sample did not undergo a solids separation protocol,
+          or did not undergo a sample concentration protocol.
+        title: No Seperation or Concentration
   specHumidUnitSet:
     description: Unit set for specific humidity.
     title: Specific humidity unit set
@@ -2408,6 +2355,9 @@ enums:
       nM:
         description: the unit of nanomolar.
         title: Nano-molar
+      ugmg:
+        description: Concentration unit of micrograms per milligram.
+        title: Micrograms per milligram
   stdCurveSet:
     description: The set capturing containing all of the valid methods for the PCR
       standard curve calculations.
@@ -2698,31 +2648,11 @@ enums:
         description: Solid fraction of a sample.
         title: Solid fraction
       ? ''
-      : description: "The field for which the expected value is not a property of\
-          \ the described object. / The outcome of a measurement is not a valid number\
-          \ (plus or minus infinity, error, ...) / A logical representation of a statement\
-          \ that is neither TRUE nor FALSE. /  / The Epstein\u2013Barr virus, formally\
-          \ called Human gammaherpesvirus 4"
-        title: "Not applicable / Not a number / Null / Human Rhinovirus (HRV) / Human\
-          \ Rhinovirus (HRV) A / Human Rhinovirus (HRV) B / Human Rhinovirus (HRV)\
-          \ C / Human Metapneumovirus (HMPV) / Human Parainfluenza Virus (HPIV) /\
-          \ Streptococcus pneumoniae / Adenovirus (F40/41) / Salmonella / Shigella\
-          \ / Verotoxin-producing Escherichia coli (VTEC) / Enteropathogenic Escherichia\
-          \ coli (EPEC) / Enteroaggregative Escherichia coli (EAEC) / Enteroinvasive\
-          \ Escherichia coli (EIEC) / Enterotoxigenic Escherichia coli (ETEC) / Enterohemorrhagic\
-          \ Escherichia coli (EHEC) / Extraintestinal pathogenic Escherichia coli\
-          \ (ExPEC) / Klebsiella pneumoniae / Clostridium perfringens / Vibrio / Brucella\
-          \ / Listeria / Enterovirus / Rotavirus / Astrovirus / Sapovirus / Chlamydia\
-          \ / Trichomonas vaginalis / Neisseria gonorrhoeae / Treponema pallidum /\
-          \ Human Immunodeficiency Virus (HIV) / Human Papiloma Virus (HPV) / Mycoplasma\
-          \ genitalus / Epstein\u2013Barr virus (EBV) / Herpes / Haemophilus ducreyi\
-          \ / Ureaplasma / Hepatitis A / Hepatitis B / Hepatitis C / Hepatitis E /\
-          \ Clostridium difficile / Varicella / Measles / Mumps / Rubella / Corynebacterium\
-          \ diphtheriae / Haemophilus influenzae / Acinetobacter / Pseudomonas / Legionella\
-          \ / Cryptosporidium / Methicillin-resistant Staphylococcus aureus (MRSA)\
-          \ / Yersinia enterocolitica / Mycobacterium tuberculosis / Borrelia burgdorferi\
-          \ / Anaplasma phagocytophilum / Babesia / Plasmodium / Dengue / West Nile\
-          \ / Francisella tularensis / Chikungunya virus (CHIKV) / Rickettsia / Zika"
+      : description: The field for which the expected value is not a property of the
+          described object. / The outcome of a measurement is not a valid number (plus
+          or minus infinity, error, ...) / A logical representation of a statement
+          that is neither TRUE nor FALSE.
+        title: Not applicable / Not a number / Null
       hFr:
         description: An indicator in wide-names to show that information on the fraction
           analyzed in found under a separate header.
@@ -2953,6 +2883,9 @@ enums:
       pcr:
         description: Measures and methods relating to qPCR.
         title: qPCR Class
+      protein:
+        description: Measures and methods related to proteins.
+        title: Proteins class
       sequence:
         description: Measures and methods related to genetic sequencing.
         title: Genetic sequences class
@@ -2972,6 +2905,9 @@ enums:
         description: Measures and methods relating to generating or recording a standard
           curve.
         title: Standard curve class
+      organism:
+        description: Organism class
+        title: Organism
   compartments:
     description: The substance from which a sample was taken.
     title: Compartments
@@ -3053,12 +2989,10 @@ enums:
       rsvGrp:
         description: Human Respiratory Syncytial virus (RSV).
         title: Respiratory syncytial virus (RSV) Group
-      virusMisc:
-        description: A group of measures/methods related to miscellaneous viruses.
-        title: Miscellaneous viruses group
-      bactMisc:
-        description: A group of measures/methods related to miscellaneous bacteria.
-        title: Miscellaneous bacteria group
+      amrGrp:
+        description: The group for measures and methods pertaining to anti-microbial
+          resistant microbes.
+        title: Anti-microbial resistance
       colGrp:
         description: A group of measurement-like attributes related to sample collection.
         title: Collection group
@@ -3088,6 +3022,199 @@ enums:
         description: A group of environmental measures/methods and those pertaining
           to the features of a site.
         title: Site features group
+      campGrp:
+        description: A group of measures/methods related to campylobacter bacteria.
+        title: Campylobacter Group
+      ecoliGrp:
+        description: A group of measures/methods related to Escherichia coli bacteria.
+        title: Escherichia coli group
+      fluGrp:
+        description: A group of measures/methods related to Influenza viruses.
+        title: Influenza Group
+      phageGrp:
+        description: A group of measures/methods related to bacteriophages.
+        title: Bacteriophage Group
+      betaCoronaGrp:
+        description: A group of measures/methods related to beta coronaviruses.
+        title: Beta Coronavirus Group
+      pmmovGrp:
+        description: A group of measures/methods related to the Pepper Mild Mottle
+          Virus (PMMoV).
+        title: PMMoV Group
+      adenovirusGrp:
+        description: A group of measures/methods related to Adenoviruses.
+        title: Adenovirus Group
+      lentiGrp:
+        description: A group of measures/methods related to lentiviruses, including
+          viral vectors such as the Puro virus vector.
+        title: Lentivirus Group
+      cAurisGrp:
+        description: A group of measures/methods related to Candida auris.
+        title: Candida auris Group
+      mpoxGrp:
+        description: A group of measures/methods related to Mpox (formerly "Monkey
+          Pox").
+        title: MPox Group
+      noroGrp:
+        description: A group of measures/methods related to noroviruses.
+        title: Norovirus Group
+      polioGrp:
+        description: A group of measures/methods related to polioviruses.
+        title: Poliovirus Group
+      hrvGrp:
+        description: A group of measures/methods related to rhinoviruses.
+        title: Rhinovirus Group
+      strepGrp:
+        description: A group of measures/methods related to streptococcus bacteria.
+        title: Streptococcus Group
+      salmonellaGrp:
+        description: A group of measures/methods related to salmonella bacteria.
+        title: Salmonella Group
+      shigellaGroup:
+        description: A group of measures/methods related to shigella bacteria.
+        title: Shigella Group
+      vibrioGrp:
+        description: A group of measures/methods related to vibrio bacteria.
+        title: Vibrio Group
+      brucellaGrp:
+        description: A group of measures/methods related to brucella bacteria.
+        title: Brucella Group
+      listeriaGrp:
+        description: A group of measures/methods related to listeria bacteria.
+        title: Listeria Group
+      enterovirusGrp:
+        description: A group of measures/methods related to enteroviruses.
+        title: Enterovirus Group
+      rotavirusGrp:
+        description: A group of measures/methods related to rotaviruses.
+        title: Rotavirus Group
+      astrovirusGrp:
+        description: A group of measures/methods related to astroviruses.
+        title: Astrovirus Group
+      sapovirusGrp:
+        description: A group of measures/methods related to sapoviruses.
+        title: Sapovirus Group
+      chalydiaGrp:
+        description: A group of measures/methods related to chlamydia bacteria.
+        title: Chlamydia Group
+      hepGrp:
+        description: A group of measures/methods related to hepatitis viruses.
+        title: Hepatitis Group
+      waterQualityGrp:
+        description: A group of measures/methods related to water quality.
+        title: Water Quality Group
+      mpvGrp:
+        description: A group of measures/methods related to metapneumoviruses.
+        title: Metapneumovirus Group
+      parafluGrp:
+        description: A group of measures/methods related to parainfluenza viruses.
+        title: Parainfluenza Group
+      clostridiumGrp:
+        description: A group of measures/methods related to clostridium bacteria.
+        title: Clostridium Group
+      gonococcusGrp:
+        description: A group of measures/methods related to gonococcus bacteria.
+        title: Gonococcus Group
+      treponemaGrp:
+        description: A group of measures/methods related to treponema bacteria.
+        title: Treponema Group
+      hivGrp:
+        description: A group of measures/methods related to Human Immunodeficiency
+          Virus (HIV).
+        title: HIV Group
+      papilomavirusGrp:
+        description: A group of measures/methods related to papilomaviruses.
+        title: Papilomavirus Group
+      mycoplasmaGrp:
+        description: A group of measures/methods related to mycoplasma bacteria.
+        title: Mycoplasma Group
+      herpesGrp:
+        description: A group of measures/methods related to herpes viruses.
+        title: Herpes Virus Group
+      ureaplasmaGrp:
+        description: A group of measures/methods related to ureaplasma bacteria.
+        title: Ureaplasma
+      klebsiellaGrp:
+        description: A group of measures/methods related to klbsiella bacteria.
+        title: Klebsiella Group
+      varicellaGrp:
+        description: A group of measures/methods related to varicella viruses.
+        title: Varicella Group
+      measlesGrp:
+        description: A group of measures/methods related to the measles virus.
+        title: Measles Group
+      mumpsGrp:
+        description: A group of measures/methods related to the mumps virus.
+        title: Mumps Group
+      rubellaGrp:
+        description: A group of measures/methods related to the rubella virus.
+        title: Rubella Group
+      diptheriaGrp:
+        description: A group of measures/methods related to the diptheria bacteria.
+        title: Diphtheria Group
+      haemophilusGrp:
+        description: A group of measures/methods related to haemophilus bacteria.
+        title: Haemophilus Group
+      acinetobacterGrp:
+        description: A group of measures/methods related to acinebacter bacteria.
+        title: Acinetobacter Group
+      pseudomonasGrp:
+        description: A group of measures/methods related to pseudomonas bacteria.
+        title: Pseudomonas Group
+      legionellaGrp:
+        description: A group of measures/methods related to legionella bacteria.
+        title: Legionella Group
+      cryptosporidiumGrp:
+        description: A group of measures/methods related to cryptosporidium parasites.
+        title: Cryptosporidium Group
+      staphGrp:
+        description: A group of measures/methods related to staphylococcus bacteria.
+        title: Staphylococcus Group
+      yersiniaGrp:
+        description: A group of measures/methods related to yersinia bacteria.
+        title: Yersinia Group
+      tuberculosisGrp:
+        description: A group of measures/methods related to tuberculosis.
+        title: Tuberculosis Group
+      borreliaGrp:
+        description: A group of measures/methods related to Borrelia burgdorferi or
+          Lyme Disease.
+        title: Borrelia burgdorferi or Lyme Disease Group
+      anaplasmaGrp:
+        description: A group of measures/methods related to anaplasma bacteria.
+        title: Anaplasma Group
+      babesiaGrp:
+        description: A group of measures/methods related to babesia parasites.
+        title: Babesia or Nuttallia Group
+      malariaGrp:
+        description: A group of measures/methods related to plasmodium parasites or
+          malaria.
+        title: Plasmodium or Malaria Group
+      tularemiaGrp:
+        description: A group of measures/methods related to Francisella tularensis.
+        title: Francisella tularensis (tularemia) Group
+      chikungunyaGrp:
+        description: A group of measures/methods related to chikungunya virus.
+        title: Chikungunya Group
+      rickettsiaGrp:
+        description: A group of measures/methods related to ricketsia parasites.
+        title: Rickettsia Group
+      flavivirusGrp:
+        description: A group of measures/methods related to flaviviruses.
+        title: Flavivirus (West Nile, Dengue, Zika) Group
+      trichomonasGrp:
+        description: A group of measures/methods related to trichomonas bacteria.
+        title: Trichomonas Group
+      metaboliteGrp:
+        description: A group of measures/methods related to metabolites.
+        title: Metabolite Group
+      bacteroidesGrp:
+        description: A group of measures/methods related to bacteroides bacteria.
+        title: Bacteroides Group
+      vsvGrp:
+        description: A group of measures/methods related to Vesicular Stomatitis Virus
+          (VSV).
+        title: Vesicular Stomatitis Virus (VSV) Group
   measurements:
     description: The attribute to describe a part type of measures. All measures have
       `partType` = "measure".
@@ -3324,6 +3451,10 @@ enums:
           This field is mainly relevant for composite samples which are either kept
           at ambient temperature or refrigerated while being sampled.
         title: Field sample temperature
+      pretreat:
+        description: Was the sample chemically treated in anyway with the addition
+          of stabilizers or other
+        title: Pretreatment
       sTemp:
         description: Temperature that the sample is stored at in Celsius.
         title: Storage temp
@@ -3698,6 +3829,12 @@ enums:
         description: A unit used to report a specific genetic lineage, or to specify
           that a reported variant is a sub-variant of another.
         title: Sub-variant or lineage
+      cVDPV2:
+        description: Circulating vaccine-derived poliovirus type 2
+        title: Circulating vaccine-derived poliovirus type 2
+      pv2:
+        description: Poliovirus type 2
+        title: Poliovirus type 2
       centSpeed:
         description: Centrifugation speed
         title: Centrifugation speed
@@ -3721,6 +3858,236 @@ enums:
         description: The amount of time between sample collection and the samples
           placement in stable storage/refrigeration.
         title: Time from collection to storage
+      hrv:
+        description: Human Rhinovirus (HRV)
+        title: Human Rhinovirus (HRV)
+      hrvA:
+        description: Human Rhinovirus (HRV) A
+        title: Human Rhinovirus (HRV) A
+      hrvB:
+        description: Human Rhinovirus (HRV) B
+        title: Human Rhinovirus (HRV) B
+      hrvC:
+        description: Human Rhinovirus (HRV) C
+        title: Human Rhinovirus (HRV) C
+      hmpv:
+        description: Human Metapneumovirus (HMPV)
+        title: Human Metapneumovirus (HMPV)
+      hpiv:
+        description: Human Parainfluenza Virus (HPIV)
+        title: Human Parainfluenza Virus (HPIV)
+      strepPneu:
+        description: Streptococcus pneumoniae
+        title: Streptococcus pneumoniae
+      adenovirusF40:
+        description: Adenovirus (F40/41)
+        title: Adenovirus (F40/41)
+      salmonella:
+        description: Salmonella
+        title: Salmonella
+      shigella:
+        description: Shigella
+        title: Shigella
+      vtec:
+        description: Verotoxin-producing Escherichia coli (VTEC)
+        title: Verotoxin-producing Escherichia coli (VTEC)
+      epec:
+        description: Enteropathogenic Escherichia coli (EPEC)
+        title: Enteropathogenic Escherichia coli (EPEC)
+      eaec:
+        description: Enteroaggregative Escherichia coli (EAEC)
+        title: Enteroaggregative Escherichia coli (EAEC)
+      eiec:
+        description: Enteroinvasive Escherichia coli (EIEC)
+        title: Enteroinvasive Escherichia coli (EIEC)
+      etec:
+        description: Enterotoxigenic Escherichia coli (ETEC)
+        title: Enterotoxigenic Escherichia coli (ETEC)
+      ehec:
+        description: Enterohemorrhagic Escherichia coli (EHEC)
+        title: Enterohemorrhagic Escherichia coli (EHEC)
+      expec:
+        description: Extraintestinal pathogenic Escherichia coli (ExPEC)
+        title: Extraintestinal pathogenic Escherichia coli (ExPEC)
+      klebsiellaPneu:
+        description: Klebsiella pneumoniae
+        title: Klebsiella pneumoniae
+      cPerfrigens:
+        description: Clostridium perfringens
+        title: Clostridium perfringens
+      vibrio:
+        description: Vibrio
+        title: Vibrio
+      brucella:
+        description: Brucella
+        title: Brucella
+      listeria:
+        description: Listeria
+        title: Listeria
+      enterovirus:
+        description: Enterovirus
+        title: Enterovirus
+      rotavirus:
+        description: Rotavirus
+        title: Rotavirus
+      astrovirus:
+        description: Astrovirus
+        title: Astrovirus
+      sapovirus:
+        description: Sapovirus
+        title: Sapovirus
+      chlamydia:
+        description: Chlamydia
+        title: Chlamydia
+      tVaginalis:
+        description: Trichomonas vaginalis
+        title: Trichomonas vaginalis
+      nGonorrhoeae:
+        description: Neisseria gonorrhoeae
+        title: Neisseria gonorrhoeae
+      tPallidum:
+        description: Treponema pallidum
+        title: Treponema pallidum
+      hiv:
+        description: Human Immunodeficiency Virus (HIV)
+        title: Human Immunodeficiency Virus (HIV)
+      hpv:
+        description: Human Papiloma Virus (HPV)
+        title: Human Papiloma Virus (HPV)
+      mGenitalus:
+        description: Mycoplasma genitalus
+        title: Mycoplasma genitalus
+      ebv:
+        description: "Epstein\u2013Barr virus (EBV), formerly known as Human gammaherpesvirus\
+          \ 4"
+        title: "Epstein\u2013Barr virus (EBV)"
+      hsv:
+        description: Herpes Simplex Virus
+        title: Herpes Simplex Virus
+      hDucreyi:
+        description: Haemophilus ducreyi
+        title: Haemophilus ducreyi
+      ureaplasma:
+        description: Ureaplasma
+        title: Ureaplasma
+      hepA:
+        description: Hepatitis A
+        title: Hepatitis A
+      hepB:
+        description: Hepatitis B
+        title: Hepatitis B
+      hepC:
+        description: Hepatitis C
+        title: Hepatitis C
+      hepE:
+        description: Hepatitis E
+        title: Hepatitis E
+      cDiff:
+        description: Clostridium difficile
+        title: Clostridium difficile
+      varicella:
+        description: Varicella
+        title: Varicella
+      measles:
+        description: Measles
+        title: Measles
+      mumps:
+        description: Mumps
+        title: Mumps
+      rubella:
+        description: Rubella
+        title: Rubella
+      cDip:
+        description: Corynebacterium diphtheriae
+        title: Corynebacterium diphtheriae
+      hInfluenzae:
+        description: Haemophilus influenzae
+        title: Haemophilus influenzae
+      acinetobacter:
+        description: Acinetobacter
+        title: Acinetobacter
+      pseudomonas:
+        description: Pseudomonas
+        title: Pseudomonas
+      legionella:
+        description: Legionella
+        title: Legionella
+      cryptosporidium:
+        description: Cryptosporidium
+        title: Cryptosporidium
+      mrsa:
+        description: Methicillin-resistant Staphylococcus aureus (MRSA)
+        title: Methicillin-resistant Staphylococcus aureus (MRSA)
+      yEnterocolitica:
+        description: Yersinia enterocolitica
+        title: Yersinia enterocolitica
+      mTuberculosis:
+        description: Mycobacterium tuberculosis
+        title: Mycobacterium tuberculosis
+      bBurgdorferi:
+        description: Borrelia burgdorferi
+        title: Borrelia burgdorferi
+      aPhagocytophilum:
+        description: Anaplasma phagocytophilum
+        title: Anaplasma phagocytophilum
+      babesia:
+        description: Babesia
+        title: Babesia
+      plasmodium:
+        description: Plasmodium
+        title: Plasmodium
+      dengue:
+        description: Dengue
+        title: Dengue
+      westNile:
+        description: West Nile
+        title: West Nile
+      fTularensis:
+        description: Francisella tularensis
+        title: Francisella tularensis
+      chikv:
+        description: Chikungunya virus (CHIKV)
+        title: Chikungunya virus (CHIKV)
+      rickettsia:
+        description: Rickettsia
+        title: Rickettsia
+      zika:
+        description: Zika
+        title: Zika
+      sewTrTi:
+        description: A measure of sewage travel time, often approximate, from sewage
+          source to the sampling site.
+        title: Sewage travel time
+      indusIn:
+        description: Percentage of total wastewater input coming from industrial sources.
+        title: Industrial input
+      influEqui:
+        description: Binary indicator for whether a site stores influent wastewater
+          prior to treatment to equilibrate flow rates.
+        title: Influent equilibration
+      sewEq:
+        description: Equivalent unconcentrated volume of wastewater or mass of sludge
+          in PCR reaction
+        title: Sewage equivalent
+      preConcTime:
+        description: Length of time for which a sample is stored between collection
+          and concentration.
+        title: Storage time prior to concentration
+      preConcTemp:
+        description: The temperature at which a sample was stored between collection
+          and concentration.
+        title: Storage temperature prior to concentration
+      preExtractTime:
+        description: Length of time for which a sample is stored between concentration
+          and extraction.
+        title: Storage time prior to extraction
+      preExtractTemp:
+        description: The temperature at which a sample was stored between concentration
+          and extraction.
+        title: Storage temperature prior to extraction
+      concVol:
+        description: The total volume of a sample after the concentration step.
+        title: Sample volume after concentration
   methods:
     description: Procedures or steps for collecting samples or performing measures.
     title: Methods
@@ -3741,10 +4108,6 @@ enums:
       pcrmeth:
         description: Description of the PCR method.
         title: PCR method
-      pretreat:
-        description: Was the sample chemically treated in anyway with the addition
-          of stabilizers or other
-        title: Pretreatment
       shipOnIce:
         description: Was the sample kept cool while being shipped to the lab
         title: Shipped on ice
@@ -3796,6 +4159,18 @@ enums:
       resuspension:
         description: Describes the method used for resuspending material.
         title: Resuspension method
+      extBlank:
+        description: Binary Y/N indicator for if extraction blank was used as a control
+          for the nucleic acid extraction process.
+        title: Extraction Blank - Control
+      pasteur:
+        description: Binary indicator for whether a sample was pasteurized as part
+          of its processing.
+        title: Pasteurized sample
+      tempType:
+        description: Specifies whether a PCR or sequencing used RNA or DNA as the
+          template for the reaction.
+        title: Nucelic Acid Template Type
   missingnessSets:
     description: Missingness sets for measures, methods or attributes.
     title: Missingness sets
@@ -4528,6 +4903,9 @@ enums:
       actiTest:
         description: Number of active cases by test date.
         title: Number of active cases by test date
+      ugmg:
+        description: Concentration unit of micrograms per milligram.
+        title: Micrograms per milligram
 slots:
   wideName:
     from_schema: https://onto.phes-odm.org/odm/v2
@@ -5352,6 +5730,7 @@ classes:
       qualityReportID:
         description: A unique identifier for a given quality report.
         title: Quality report ID
+        identifier: true
         range: string
         required: true
         pattern: ^.{0,30}$
@@ -5861,7 +6240,7 @@ classes:
       instrumentID:
         description: A unique identifier for an instrument.
         title: Instrument ID
-        range: instrumentIDs
+        range: string
         pattern: ^.{0,10}$
       value:
         description: Value of a measure, observation or attribute.
@@ -6111,6 +6490,8 @@ classes:
         range: datetime
         pattern: ^.{0,30}$
       sentDate:
+        description: Date that the sample was sent from the collection site to the
+          lab.
         title: Date sample was sent
         range: datetime
         pattern: ^.{0,30}$
@@ -7915,7 +8296,7 @@ classes:
         description: A unique identifier for an instrument.
         title: Instrument ID
         identifier: true
-        range: instrumentIDs
+        range: string
         required: true
         pattern: ^.{0,10}$
       datasetID:
@@ -8405,6 +8786,7 @@ classes:
         title: ISO 3166-1 alpha-2 country code
         notes:
         - Preprogrammed into dictionary tables, not editable by users.
+        identifier: true
         range: string
         required: true
         pattern: ^.{2,2}$
@@ -8553,6 +8935,7 @@ classes:
         title: ISO 3166-2 code for country sub-domain
         notes:
         - Preprogrammed into dictionary tables, not editable by users.
+        identifier: true
         range: string
         required: true
         pattern: ^.{4,6}$
