@@ -62,8 +62,6 @@ def make_v2(dictionary_file: Union[str, Path], output_dir: Union[str, Path]):
     # Run Schemasheets to make the final LinkML schema
     make_linkml_schema(schemasheets_dir, linkml_dir / "odm_v2.yaml")
 
-    logger.info("Finished!")
-
 if __name__ == "__main__":
     if "get_ipython" in globals():
         class opts:
@@ -76,3 +74,5 @@ if __name__ == "__main__":
         opts = args.parse_args()
 
     make_v2(dictionary_file=opts.dictionary_file, output_dir=opts.output_dir)
+
+    logger.info("Finished!")
