@@ -14,6 +14,8 @@ from pathlib import Path
 import argparse
 from typing import Union
 
+from linkml_runtime.linkml_model.meta import SchemaDefinition
+
 from utils import clear_dirs, extract_sheets, make_linkml_schema, get_logger
 from odm_v2.make_v2_ss_classes import extract_all_classes
 from odm_v2.make_v2_ss_enums_from_parts import extract_parts_enums
@@ -24,7 +26,17 @@ from odm_v2.make_v2_ss_container import extract_container_class
 
 logger = get_logger(__name__)
 
-def make_v2(dictionary_file: Union[str, Path], output_dir: Union[str, Path]):
+def make_v2(dictionary_file: Union[str, Path], output_dir: Union[str, Path]) -> SchemaDefinition:
+    """Generate the LinkML schema for ODM v2.
+
+    Args:
+        dictionary_file (Union[str, Path]): Location of the Excel data dictionary (parts file) for ODM v2.
+        output_dir (Union[str, Path]): Location to save all output. The LinkML schema output is
+            saved to "{output_dir}/linkml/odm_v2.yaml"
+
+    Returns:
+        SchemaDefinition: The generated ODM v2 LinkML schema definition.
+    """
     # Some paths
     output_dir = Path(output_dir)
     dictionary_dir = output_dir / "dictionary"
@@ -60,7 +72,9 @@ def make_v2(dictionary_file: Union[str, Path], output_dir: Union[str, Path]):
     make_schema(schemasheets_dir / "schema.tsv")
 
     # Run Schemasheets to make the final LinkML schema
-    make_linkml_schema(schemasheets_dir, linkml_dir / "odm_v2.yaml")
+    defn = make_linkml_schema(schemasheets_dir, linkml_dir / "odm_v2.yaml")
+    
+    return defn
 
 if __name__ == "__main__":
     if "get_ipython" in globals():
