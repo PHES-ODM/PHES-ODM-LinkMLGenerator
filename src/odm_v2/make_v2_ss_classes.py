@@ -120,7 +120,7 @@ def extract_class(df: pd.DataFrame, class_name: str, output_dir: str) -> Tuple[s
     table_output_df.loc[categorical_filt, "dataType"] = table_output_df.loc[categorical_filt, "partID"].apply(v2_get_enum_name_from_part_id)
 
     # Set identifiers (primary keys)
-    table_output_df["identifier"] = table_output_df["headerType"] == "pK"
+    table_output_df["identifier"] = table_output_df["headerType"].astype(str).str.lower() == "pk"
     
     # Set the regex "pattern" where required
     table_output_df["pattern"] = table_output_df.apply(_extract_pattern, axis=1)
