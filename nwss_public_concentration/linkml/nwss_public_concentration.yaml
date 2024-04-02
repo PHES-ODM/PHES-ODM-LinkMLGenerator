@@ -1,0 +1,68 @@
+name: NWSS_public_concentration
+description: National Wastewater Surveillance System (NWSS-public_concentration)
+id: https://onto.phes-odm.org/nwss/public_concentration
+imports:
+- linkml:types
+prefixes:
+  nwss_public_concentration: https://onto.phes-odm.org/nwss/public_concentration/
+  linkml: https://w3id.org/linkml/
+default_prefix: nwss_public_concentration
+default_range: string
+slots:
+  key_plot_id:
+    from_schema: https://onto.phes-odm.org/nwss/public_concentration
+  date:
+    from_schema: https://onto.phes-odm.org/nwss/public_concentration
+  pcr_conc_smoothed:
+    from_schema: https://onto.phes-odm.org/nwss/public_concentration
+  normalization:
+    from_schema: https://onto.phes-odm.org/nwss/public_concentration
+  nwss:
+    from_schema: https://onto.phes-odm.org/nwss/public_concentration
+classes:
+  nwss:
+    slots:
+    - key_plot_id
+    - date
+    - pcr_conc_smoothed
+    - normalization
+    slot_usage:
+      key_plot_id:
+        description: A unique identifier for the geographic area served by this sampling
+          site, called a sewershed. This is an underscore-separated concatenation
+          of the fields 'wwtp_jurisdiction', 'wwtp_id', and, if 'sample_location'
+          is "upstream", then also 'sample_location_specify', and sample_matrix.
+        range: string
+      date:
+        description: The date the wastewater sample was collected when pcr_conc_smoothed
+          is not missing. When pcr_conc_smoothed is missing, this date is provided
+          to enable a full time series to be plotted for a given sampling site.
+        range: date
+      pcr_conc_smoothed:
+        description: The smoothed, spline-fit SARS-CoV-2 virus concentration after
+          flow-population or human fecal normalization. The normalization method used
+          for each site is described in the normalization field.
+        range: float
+      normalization:
+        description: "The normalization method of the SARS-CoV-2 virus concentration\
+          \ in wastewater. There are two normalization approaches: flow-population\
+          \ or human fecal. \nThe flow-population normalization method is calculated\
+          \ by multiplying the SARS-CoV-2 concentration and flow rate then dividing\
+          \ by population served. The flow-population normalization approach indicates\
+          \ whether the total number of individuals at the site who are shedding has\
+          \ changed.\nThe human fecal normalization is calculated by dividing the\
+          \ SARS-CoV-2 virus concentration by the human fecal marker concentration.\
+          \ The human fecal normalization approach indicates whether the proportion\
+          \ of individuals at the site who are shedding has changed."
+        range: string
+  Container:
+    from_schema: https://onto.phes-odm.org/nwss/public_concentration
+    slots:
+    - nwss
+    slot_usage:
+      nwss:
+        title: nwss
+        multivalued: true
+        range: nwss
+        inlined_as_list: true
+    tree_root: true

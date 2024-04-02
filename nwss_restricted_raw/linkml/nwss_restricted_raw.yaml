@@ -1,0 +1,1656 @@
+name: NWSS_restricted_raw
+description: National Wastewater Surveillance System (NWSS-restricted_raw)
+id: https://onto.phes-odm.org/nwss/restricted_raw
+imports:
+- linkml:types
+prefixes:
+  nwss_restricted_raw: https://onto.phes-odm.org/nwss/restricted_raw/
+  linkml: https://w3id.org/linkml/
+default_prefix: nwss_restricted_raw
+default_range: string
+enums:
+  vs_yne[pasteurized]:
+    from_schema: https://onto.phes-odm.org/nwss/restricted_raw
+    permissible_values:
+      'yes': {}
+      'no': {}
+      '[empty]': {}
+  vs_pcr_target:
+    from_schema: https://onto.phes-odm.org/nwss/restricted_raw
+    permissible_values:
+      sars-cov-2: {}
+      delta: {}
+      omicron: {}
+      hMPXV: {}
+      hMPXV Clade I: {}
+      hMPXV Clade II: {}
+      caur:
+        description: 'Candida auris. Source: KEGG'
+      NoV GI:
+        description: 'Norovirus GI. Source: https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3446575/
+          https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3446575/'
+      NoV GII:
+        description: 'Norovirus GII. Source: https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3446575/'
+      FLUAV:
+        description: 'Influenza A. Source: Bacterial and Viral Bioinformatics Resource
+          Center (BV-BRC)'
+      FLUBV:
+        description: 'Influenza B. Source: Bacterial and Viral Bioinformatics Resource
+          Center (BV-BRC)'
+      NVO:
+        description: 'Non-Variolla Orthopoxvirus. Source: CDC https://www.cdc.gov/mmwr/volumes/71/wr/mm7128e1.htm'
+      Cjejuni:
+        description: 'Campylobacter jejuni. Source: KEGG'
+      HAdV-F:
+        description: 'Adenovirus Group F41. Source: PubChem Taxonomy'
+      Col:
+        description: Colistin AMR
+      Gly:
+        description: Vancomycin AMR
+      Bla:
+        description: Beta-Lactamase AMR
+      Integrase:
+        description: Integrase AMR
+      Tet:
+        description: Tetracycline AMR
+  vs_ynn:
+    from_schema: https://onto.phes-odm.org/nwss/restricted_raw
+    permissible_values:
+      'yes': {}
+      'no': {}
+      not tested: {}
+  vs_sample_type:
+    from_schema: https://onto.phes-odm.org/nwss/restricted_raw
+    permissible_values:
+      grab:
+        description: An individual sample collected without compositing or adding
+          other samples
+      48-hr flow-weighted composite: {}
+      47-hr flow-weighted composite: {}
+      46-hr flow-weighted composite: {}
+      45-hr flow-weighted composite: {}
+      44-hr flow-weighted composite: {}
+      43-hr flow-weighted composite: {}
+      42-hr flow-weighted composite: {}
+      41-hr flow-weighted composite: {}
+      40-hr flow-weighted composite: {}
+      39-hr flow-weighted composite: {}
+      38-hr flow-weighted composite: {}
+      37-hr flow-weighted composite: {}
+      36-hr flow-weighted composite: {}
+      35-hr flow-weighted composite: {}
+      34-hr flow-weighted composite: {}
+      33-hr flow-weighted composite: {}
+      32-hr flow-weighted composite: {}
+      31-hr flow-weighted composite: {}
+      30-hr flow-weighted composite: {}
+      29-hr flow-weighted composite: {}
+      28-hr flow-weighted composite: {}
+      27-hr flow-weighted composite: {}
+      26-hr flow-weighted composite: {}
+      25-hr flow-weighted composite: {}
+      24-hr flow-weighted composite: {}
+      23-hr flow-weighted composite: {}
+      22-hr flow-weighted composite: {}
+      21-hr flow-weighted composite: {}
+      20-hr flow-weighted composite: {}
+      19-hr flow-weighted composite: {}
+      18-hr flow-weighted composite: {}
+      17-hr flow-weighted composite: {}
+      16-hr flow-weighted composite: {}
+      15-hr flow-weighted composite: {}
+      14-hr flow-weighted composite: {}
+      13-hr flow-weighted composite: {}
+      12-hr flow-weighted composite: {}
+      11-hr flow-weighted composite: {}
+      10-hr flow-weighted composite: {}
+      9-hr flow-weighted composite: {}
+      8-hr flow-weighted composite: {}
+      7-hr flow-weighted composite: {}
+      6-hr flow-weighted composite: {}
+      5-hr flow-weighted composite: {}
+      4-hr flow-weighted composite: {}
+      3-hr flow-weighted composite: {}
+      2-hr flow-weighted composite: {}
+      1-hr flow-weighted composite: {}
+      48-hr time-weighted composite: {}
+      47-hr time-weighted composite: {}
+      46-hr time-weighted composite: {}
+      45-hr time-weighted composite: {}
+      44-hr time-weighted composite: {}
+      43-hr time-weighted composite: {}
+      42-hr time-weighted composite: {}
+      41-hr time-weighted composite: {}
+      40-hr time-weighted composite: {}
+      39-hr time-weighted composite: {}
+      38-hr time-weighted composite: {}
+      37-hr time-weighted composite: {}
+      36-hr time-weighted composite: {}
+      35-hr time-weighted composite: {}
+      34-hr time-weighted composite: {}
+      33-hr time-weighted composite: {}
+      32-hr time-weighted composite: {}
+      31-hr time-weighted composite: {}
+      30-hr time-weighted composite: {}
+      29-hr time-weighted composite: {}
+      28-hr time-weighted composite: {}
+      27-hr time-weighted composite: {}
+      26-hr time-weighted composite: {}
+      25-hr time-weighted composite: {}
+      24-hr time-weighted composite: {}
+      23-hr time-weighted composite: {}
+      22-hr time-weighted composite: {}
+      21-hr time-weighted composite: {}
+      20-hr time-weighted composite: {}
+      19-hr time-weighted composite: {}
+      18-hr time-weighted composite: {}
+      17-hr time-weighted composite: {}
+      16-hr time-weighted composite: {}
+      15-hr time-weighted composite: {}
+      14-hr time-weighted composite: {}
+      13-hr time-weighted composite: {}
+      12-hr time-weighted composite: {}
+      11-hr time-weighted composite: {}
+      10-hr time-weighted composite: {}
+      9-hr time-weighted composite: {}
+      8-hr time-weighted composite: {}
+      7-hr time-weighted composite: {}
+      6-hr time-weighted composite: {}
+      5-hr time-weighted composite: {}
+      4-hr time-weighted composite: {}
+      3-hr time-weighted composite: {}
+      2-hr time-weighted composite: {}
+      1-hr time-weighted composite: {}
+      48-hr manual composite: {}
+      47-hr manual composite: {}
+      46-hr manual composite: {}
+      45-hr manual composite: {}
+      44-hr manual composite: {}
+      43-hr manual composite: {}
+      42-hr manual composite: {}
+      41-hr manual composite: {}
+      40-hr manual composite: {}
+      39-hr manual composite: {}
+      38-hr manual composite: {}
+      37-hr manual composite: {}
+      36-hr manual composite: {}
+      35-hr manual composite: {}
+      34-hr manual composite: {}
+      33-hr manual composite: {}
+      32-hr manual composite: {}
+      31-hr manual composite: {}
+      30-hr manual composite: {}
+      29-hr manual composite: {}
+      28-hr manual composite: {}
+      27-hr manual composite: {}
+      26-hr manual composite: {}
+      25-hr manual composite: {}
+      24-hr manual composite: {}
+      23-hr manual composite: {}
+      22-hr manual composite: {}
+      21-hr manual composite: {}
+      20-hr manual composite: {}
+      19-hr manual composite: {}
+      18-hr manual composite: {}
+      17-hr manual composite: {}
+      16-hr manual composite: {}
+      15-hr manual composite: {}
+      14-hr manual composite: {}
+      13-hr manual composite: {}
+      12-hr manual composite: {}
+      11-hr manual composite: {}
+      10-hr manual composite: {}
+      9-hr manual composite: {}
+      8-hr manual composite: {}
+      7-hr manual composite: {}
+      6-hr manual composite: {}
+      5-hr manual composite: {}
+      4-hr manual composite: {}
+      3-hr manual composite: {}
+      2-hr manual composite: {}
+      1-hr manual composite: {}
+      48-hr passive sample:
+        description: E.g., Moore swabs
+      47-hr passive sample:
+        description: E.g., Moore swabs
+      46-hr passive sample:
+        description: E.g., Moore swabs
+      45-hr passive sample:
+        description: E.g., Moore swabs
+      44-hr passive sample:
+        description: E.g., Moore swabs
+      43-hr passive sample:
+        description: E.g., Moore swabs
+      42-hr passive sample:
+        description: E.g., Moore swabs
+      41-hr passive sample:
+        description: E.g., Moore swabs
+      40-hr passive sample:
+        description: E.g., Moore swabs
+      39-hr passive sample:
+        description: E.g., Moore swabs
+      38-hr passive sample:
+        description: E.g., Moore swabs
+      37-hr passive sample:
+        description: E.g., Moore swabs
+      36-hr passive sample:
+        description: E.g., Moore swabs
+      35-hr passive sample:
+        description: E.g., Moore swabs
+      34-hr passive sample:
+        description: E.g., Moore swabs
+      33-hr passive sample:
+        description: E.g., Moore swabs
+      32-hr passive sample:
+        description: E.g., Moore swabs
+      31-hr passive sample:
+        description: E.g., Moore swabs
+      30-hr passive sample:
+        description: E.g., Moore swabs
+      29-hr passive sample:
+        description: E.g., Moore swabs
+      28-hr passive sample:
+        description: E.g., Moore swabs
+      27-hr passive sample:
+        description: E.g., Moore swabs
+      26-hr passive sample:
+        description: E.g., Moore swabs
+      25-hr passive sample:
+        description: E.g., Moore swabs
+      24-hr passive sample:
+        description: E.g., Moore swabs
+      23-hr passive sample:
+        description: E.g., Moore swabs
+      22-hr passive sample:
+        description: E.g., Moore swabs
+      21-hr passive sample:
+        description: E.g., Moore swabs
+      20-hr passive sample:
+        description: E.g., Moore swabs
+      19-hr passive sample:
+        description: E.g., Moore swabs
+      18-hr passive sample:
+        description: E.g., Moore swabs
+      17-hr passive sample:
+        description: E.g., Moore swabs
+      16-hr passive sample:
+        description: E.g., Moore swabs
+      15-hr passive sample:
+        description: E.g., Moore swabs
+      14-hr passive sample:
+        description: E.g., Moore swabs
+      13-hr passive sample:
+        description: E.g., Moore swabs
+      12-hr passive sample:
+        description: E.g., Moore swabs
+      11-hr passive sample:
+        description: E.g., Moore swabs
+      10-hr passive sample:
+        description: E.g., Moore swabs
+      9-hr passive sample:
+        description: E.g., Moore swabs
+      8-hr passive sample:
+        description: E.g., Moore swabs
+      7-hr passive sample:
+        description: E.g., Moore swabs
+      6-hr passive sample:
+        description: E.g., Moore swabs
+      5-hr passive sample:
+        description: E.g., Moore swabs
+      4-hr passive sample:
+        description: E.g., Moore swabs
+      3-hr passive sample:
+        description: E.g., Moore swabs
+      2-hr passive sample:
+        description: E.g., Moore swabs
+      1-hr passive sample:
+        description: E.g., Moore swabs
+      120-hr passive sample:
+        description: E.g., Moore swabs
+  vs_extraction_method:
+    from_schema: https://onto.phes-odm.org/nwss/restricted_raw
+    permissible_values:
+      qiagen allprep powerviral dna/rna kit: {}
+      qiagen allprep powerfecal dna/rna kit: {}
+      qiagen allprep dna/rna kit: {}
+      qiagen rneasy powermicrobiome kit: {}
+      qiagen powerwater kit: {}
+      qiagen rneasy kit: {}
+      qiagen ez1 virus mini kit v2.0: {}
+      promega ht tna kit: {}
+      promega automated tna kit: {}
+      promega manual tna kit: {}
+      promega wastewater large volume tna capture kit: {}
+      nuclisens automated magnetic bead extraction kit: {}
+      nuclisens manual magnetic bead extraction kit: {}
+      phenol chloroform: {}
+      chemagic viral dna/rna 300 kit: {}
+      trizol, zymo mag beads w/ zymo clean and concentrator: {}
+      4s method (https://www.protocols.io/view/v-4-direct-wastewater-rna-capture-and-purification-bpdfmi3n): {}
+      qiagen qiaamp buffers with epoch columns: {}
+      'zymo quick-rna fungal/bacterial miniprep #r2014': {}
+      thermo magmax microbiome ultra nucleic acid isolation kit: {}
+      zymo environ water rna kit/ zymo environ water rna kit (cat. r2042): {}
+      luminultra wastewater extraction kit: {}
+      qiaamp viral rna kit: {}
+      trizol and RNA purification kit: {}
+      trizol, garnet bead beating, alcohol precipitation: {}
+      'zymo quick-rna viral 96 kit #r1041': {}
+      'zymo quick-rna viral kit #r1035': {}
+      qiagen qiaamp dsp viral rna mini kit: {}
+      monarch total RNA miniprep kit (new england biolabs) + onestep PCR inhibitor removal kit (zymo): {}
+      exclusions based sample preparation (ESP): {}
+  vs_num_no_target_control:
+    from_schema: https://onto.phes-odm.org/nwss/restricted_raw
+    permissible_values:
+      '0': {}
+      '1': {}
+      '2': {}
+      '3': {}
+      more than 3: {}
+  vs_pcr_gene_target:
+    from_schema: https://onto.phes-odm.org/nwss/restricted_raw
+    permissible_values:
+      n1:
+        description: sars-cov-2 gene target
+      n2:
+        description: sars-cov-2 gene target
+      n3:
+        description: sars-cov-2 gene target
+      e_sarbeco:
+        description: sars-cov-2 gene target
+      n_sarbeco:
+        description: sars-cov-2 gene target
+      rdrp_sarsr:
+        description: sars-cov-2 gene target
+      niid_2019-ncov_n:
+        description: sars-cov-2 gene target
+      rdrp gene / ncov_ip2:
+        description: sars-cov-2 gene target
+      rdrp gene / ncov_ip4:
+        description: sars-cov-2 gene target
+      taqpath n:
+        description: sars-cov-2 gene target
+      taqpath s:
+        description: sars-cov-2 gene target
+      orf1b:
+        description: sars-cov-2 gene target
+      orf1ab:
+        description: sars-cov-2 gene target
+      n1 and n2 combined:
+        description: sars-cov-2 gene target; Detection of N1 and N2 targets was performed
+          on a single fluorescence channel, such that distinct measurements for N1
+          and N2 do not exist
+      n:
+        description: sars-cov-2 gene target
+      s:
+        description: sars-cov-2 gene target
+      orf1a:
+        description: sars-cov-2 gene target
+      ddcov_n:
+        description: sars-cov-2 gene target
+      ddcov_e:
+        description: sars-cov-2 gene target
+      ip2 and ip4 combined:
+        description: sars-cov-2 gene target
+      a1306s:
+        description: delta gene target
+      p2046l:
+        description: delta gene target
+      p2287s:
+        description: delta gene target
+      t3646a:
+        description: delta gene target
+      v2930l:
+        description: delta gene target
+      g662s:
+        description: delta gene target
+      p100l:
+        description: delta gene target
+      a1918v:
+        description: delta gene target
+      t19r:
+        description: delta gene target
+      e156g:
+        description: delta gene target
+      del 157/158:
+        description: delta gene target
+      l452r:
+        description: delta gene target
+      p681r:
+        description: delta gene target
+      d950n:
+        description: delta gene target
+      i82t:
+        description: delta gene target
+      d63g:
+        description: delta gene target
+      r203m:
+        description: delta gene target
+      g215c:
+        description: delta gene target
+      d377y:
+        description: delta gene target
+      k856r:
+        description: omicron gene target
+      s2083i:
+        description: omicron gene target
+      del2084/2084:
+        description: omicron gene target
+      a2710t:
+        description: omicron gene target
+      p3395h:
+        description: omicron gene target
+      del3674/3676:
+        description: omicron gene target
+      i3758v:
+        description: omicron gene target
+      i1566v:
+        description: omicron gene target
+      a67v:
+        description: omicron gene target
+      del69/70:
+        description: omicron gene target
+      a67v/del69/del70:
+        description: omicron gene target
+      del143/145:
+        description: omicron gene target
+      n211i:
+        description: omicron gene target
+      del212/212:
+        description: omicron gene target
+      g339d:
+        description: omicron gene target
+      s371l:
+        description: omicron gene target
+      s373p:
+        description: omicron gene target
+      s375f:
+        description: omicron gene target
+      s477n:
+        description: omicron gene target
+      e484a:
+        description: omicron gene target
+      q493r:
+        description: omicron gene target
+      g496s:
+        description: omicron gene target
+      q498r:
+        description: omicron gene target
+      y505h:
+        description: omicron gene target
+      t547k:
+        description: omicron gene target
+      n679k:
+        description: omicron gene target
+      d796y:
+        description: omicron gene target
+      n856k:
+        description: omicron gene target
+      q954h:
+        description: omicron gene target
+      n969k:
+        description: omicron gene target
+      l981f:
+        description: omicron gene target
+      t9i:
+        description: omicron gene target
+      d3g:
+        description: omicron gene target
+      q19e:
+        description: omicron gene target
+      a63t:
+        description: omicron gene target
+      wt214:
+        description: delta gene target
+      ins214epe:
+        description: omicron gene target
+      del142-144:
+        description: omicron gene target
+      del156-157:
+        description: delta gene target
+      del31-33:
+        description: omicron gene target
+      l24s:
+        description: omicron gene target
+      lppa24s:
+        description: omicron gene target
+      CDC N1 (GT-Digital):
+        description: sars-cov-2 gene target
+      CDC N2 (GT-Digital):
+        description: sars-cov-2 gene target
+      N2 (PREvalence):
+        description: sars-cov-2 gene target
+      E (PREvalence):
+        description: sars-cov-2 gene target
+      "E9L\u200B-NVAR":
+        description: "hMPXV gene target. orthopoxvirus DNA polymerase. CDC Assay all\
+          \ hMPXV\u200B and non-variola Orthopoxvirus.\_https://doi.org/10.1016/j.jcv.2006.03.012"
+      "G2R_G\u200B":
+        description: "hMPXV gene target. G2R_G primers and\u202Fprobe:\u202Fdetects\
+          \ all MPXV strains\u202F\u200B.\_https://doi.org/10.1016/j.jviromet.2010.07.012\u200B"
+      "G2R_WA\u200B":
+        description: "hMPXV Clade II gene target. hMPXV G2R_WA primers and probe:\
+          \ detects Clade II viruses.CDC https://doi:10.1016/j.jviromet.2010.07.012\u200B"
+      "C3L\u200B":
+        description: "hMPXV Clade I gene target. hMPXV C3L primers and\u202Fprobe:\u202F\
+          detects Clade I viruses\u202F\u200B. CDC https://doi:10.1016/j.jviromet.2010.07.012\u200B"
+      "E9L-OPX\u200B3":
+        description: "hMPXV gene target. CDC \u200Bhttps://doi.org/10.4269/ajtmh.2010.09-0716"
+      B6R:
+        description: hMPXV gene target. Envelope protien gene CDC Assay; selective
+          for MPXV. CDC https://doi.org/10.1016/j.jcv.2006.03.012
+      gtmol_hMPXV:
+        description: hMPXV gene target. hMPXV gene target proprietary GT Molecular
+      MCR-1.1:
+        description: 'Colistin AMR gene target. Source: ARG-ANNOT'
+      VanA-A:
+        description: 'Vancomycin AMR gene target. Source: ARG-ANNOT'
+      blaNDM:
+        description: 'New-Delhi Metallo- (NDM) Beta-Lactamase AMR gene target. Source:
+          ARG-ANNOT'
+      blaKPC:
+        description: 'Klebsiella pneumoniae Carbapenam (KPC) Beta-Lactamase AMR gene
+          target. Source: ARG-ANNOT'
+      blaOXA-48:
+        description: 'OXA-type Beta-Lactamase AMR gene target. Source: ARG-ANNOT'
+      blaVIM:
+        description: 'Verone Integron-Encoded Metallo- (VIM) Beta-Lactamase AMR gene
+          target. Source: ARG-ANNOT'
+      blaCTX-M-1:
+        description: 'CTX-M Beta-Lactamase AMR gene target. Source: ARG-ANNOT'
+      blaCMY:
+        description: 'Cephamycin Beta-Lactamase AMR gene target. Source: ARG-ANNOT'
+      blaTEM:
+        description: 'Beta-Lactamase AMR gene target. Source: ARG-ANNOT'
+      Class I Integrase:
+        description: Integrase AMR gene target.
+      blaSHV:
+        description: 'Beta-Lactamase AMR gene target. Source: ARG-ANNOT'
+      TetW:
+        description: 'Tetracycline AMR gene target. Source: ARG-ANNOT'
+      blaIMP:
+        description: 'Impenemase (IMP) Beta-Lactamase AMR gene target. Source: ARG-ANNOT'
+      caur:
+        description: 'Candida auris gene target. Source: https://www.cdc.gov/fungal/candida-auris/pdf/Real-time-PCR-based-Id-C-auris-508.pdf'
+      NoV GI:
+        description: 'Norovirus GI ORF1-ORF2 junction gene target. Source: https://wwwnc.cdc.gov/eid/article/17/8/10-1837-t2#r27'
+      NoV GII:
+        description: 'Norovirus GII ORF1-ORF2 junction gene target. Source: https://wwwnc.cdc.gov/eid/article/17/8/10-1837-t2#r27'
+      InfA1:
+        description: 'Influenza A 1 gene target. Source: https://www.cdc.gov/coronavirus/2019-ncov/lab/multiplex.html?CDC_AA_refVal=https%3A%2F%2Fwww.cdc.gov%2Fcoronavirus%2F2019-ncov%2Flab%2Fmultiplex-primer-probes.html'
+      InfA2:
+        description: 'Influenza A 2 gene target. Source: https://www.cdc.gov/coronavirus/2019-ncov/lab/multiplex.html?CDC_AA_refVal=https%3A%2F%2Fwww.cdc.gov%2Fcoronavirus%2F2019-ncov%2Flab%2Fmultiplex-primer-probes.html'
+      InfB:
+        description: 'Influenza B gene target. Source:  https://www.cdc.gov/coronavirus/2019-ncov/lab/multiplex.html?CDC_AA_refVal=https%3A%2F%2Fwww.cdc.gov%2Fcoronavirus%2F2019-ncov%2Flab%2Fmultiplex-primer-probes.html'
+      Cjejuni:
+        description: 'Campylobacter jejuni gene target. Source: https://www.sciencedirect.com/science/article/pii/S0882401017303728?via%3Dihub'
+      HAdV-F:
+        description: 'Adenovirus Group F41 Fiber gene target. Source: https://www.sciencedirect.com/science/article/pii/S0022347608006744?via%3Dihub'
+  vs_mic_chem_units_e:
+    from_schema: https://onto.phes-odm.org/nwss/restricted_raw
+    permissible_values:
+      copies/L wastewater: {}
+      log10 copies/L wastewater: {}
+      copies/g wet sludge:
+        description: Wet sludge mass is based on the mass of sludge without drying
+          the solids in a drying oven
+      log10 copies/g wet sludge:
+        description: Wet sludge mass is based on the mass of sludge without drying
+          the solids in a drying oven
+      copies/g dry sludge:
+        description: Dry sludge mass is based on the mass of solids after drying in
+          a drying oven
+      log10 copies/g dry sludge:
+        description: Dry sludge mass is based on the mass of solids after drying in
+          a drying oven
+      micrograms/L wastewater: {}
+      log10 micrograms/L wastewater: {}
+      micrograms/g wet sludge:
+        description: Wet sludge mass is based on the mass of sludge without drying
+          the solids in a drying oven
+      log10 micrograms/g wet sludge:
+        description: Wet sludge mass is based on the mass of sludge without drying
+          the solids in a drying oven
+      micrograms/g dry sludge:
+        description: Dry sludge mass is based on the mass of solids after drying in
+          a drying oven
+      log10 micrograms/g dry sludge:
+        description: Dry sludge mass is based on the mass of solids after drying in
+          a drying oven
+      '[empty]': {}
+  vs_mic_chem_units:
+    from_schema: https://onto.phes-odm.org/nwss/restricted_raw
+    permissible_values:
+      copies/L wastewater: {}
+      log10 copies/L wastewater: {}
+      copies/g wet sludge:
+        description: Wet sludge mass is based on the mass of sludge without drying
+          the solids in a drying oven
+      log10 copies/g wet sludge:
+        description: Wet sludge mass is based on the mass of sludge without drying
+          the solids in a drying oven
+      copies/g dry sludge:
+        description: Dry sludge mass is based on the mass of solids after drying in
+          a drying oven
+      log10 copies/g dry sludge:
+        description: Dry sludge mass is based on the mass of solids after drying in
+          a drying oven
+      micrograms/L wastewater: {}
+      log10 micrograms/L wastewater: {}
+      micrograms/g wet sludge:
+        description: Wet sludge mass is based on the mass of sludge without drying
+          the solids in a drying oven
+      log10 micrograms/g wet sludge:
+        description: Wet sludge mass is based on the mass of sludge without drying
+          the solids in a drying oven
+      micrograms/g dry sludge:
+        description: Dry sludge mass is based on the mass of solids after drying in
+          a drying oven
+      log10 micrograms/g dry sludge:
+        description: Dry sludge mass is based on the mass of solids after drying in
+          a drying oven
+  vs_concentration_method:
+    from_schema: https://onto.phes-odm.org/nwss/restricted_raw
+    permissible_values:
+      membrane filtration with addition of mgcl2: {}
+      membrane filtration with sample acidification: {}
+      membrane filtration with acidification and mgcl2: {}
+      membrane filtration with no amendment: {}
+      membrane filtration with addition of mgcl2, membrane recombined with separated solids: {}
+      membrane filtration with sample acidification, membrane recombined with separated solids: {}
+      membrane filtration with acidification and mgcl2, membrane recombined with separated solids: {}
+      membrane filtration with no amendment, membrane recombined with separated solids: {}
+      peg precipitation: {}
+      aloh3 precipitation: {}
+      ultracentrifugation: {}
+      skimmed milk flocculation: {}
+      beef extract flocculation: {}
+      promega wastewater large volume tna capture kit: {}
+      centricon ultrafiltration: {}
+      amicon ultrafiltration: {}
+      hollow fiber dead end ultrafiltration: {}
+      innovaprep ultrafiltration: {}
+      no liquid concentration, liquid recombined with separated solids: {}
+      ceres nanotrap: {}
+      zymo environ water rna kit/ zymo environ water rna kit (cat. r2042): {}
+      membrane filtration with addition of mgcl3: {}
+      none: {}
+  vs_yne[influent_equilibrated]:
+    from_schema: https://onto.phes-odm.org/nwss/restricted_raw
+    permissible_values:
+      'yes': {}
+      'no': {}
+      '[empty]': {}
+  vs_yn:
+    from_schema: https://onto.phes-odm.org/nwss/restricted_raw
+    permissible_values:
+      'yes': {}
+      'no': {}
+  vs_hum_frac_target_mic:
+    from_schema: https://onto.phes-odm.org/nwss/restricted_raw
+    permissible_values:
+      pepper mild mottle virus: {}
+      crassphage: {}
+      hf183: {}
+      f+ rna coliphage: {}
+      f+ dna coliphage: {}
+      PMMoV (GT-Digital): {}
+      '[empty]': {}
+  vs_hum_frac_target_chem:
+    from_schema: https://onto.phes-odm.org/nwss/restricted_raw
+    permissible_values:
+      caffeine: {}
+      creatinine: {}
+      sucralose: {}
+      ibuprofen: {}
+      '[empty]': {}
+  vs_solids_separation:
+    from_schema: https://onto.phes-odm.org/nwss/restricted_raw
+    permissible_values:
+      filtration:
+        description: Filtration to remove solids from a wastewater sample prior to
+          further concentration or analysis of the liquid filtrate
+      centrifugation:
+        description: Centrifugation prior to or in the absence of a concentration
+          step; centrifugation as part of a flocculation or precipitation process,
+          or part of a filtration-based concentration process, is considered part
+          of a concentration method; centrifugation to dewater sludge samples is considered
+          a solids separation process, not a concentration process
+      gravity settling:
+        description: Solids separated from liquid by allowing solids to settle by
+          gravity
+      none: {}
+      '[empty]': {}
+  vs_pcr_type:
+    from_schema: https://onto.phes-odm.org/nwss/restricted_raw
+    permissible_values:
+      qpcr:
+        description: Real-time PCR, also called 'quantitative' PCR
+      ddpcr:
+        description: Used to refer specifically to BioRad digital droplet emulsification
+          technology
+      qiagen dpcr: {}
+      fluidigm dpcr: {}
+      life technologies dpcr: {}
+      raindance dpcr: {}
+      dpcr:
+        description: Generic digital PCR
+  vs_quant_stan_type:
+    from_schema: https://onto.phes-odm.org/nwss/restricted_raw
+    permissible_values:
+      dna: {}
+      rna: {}
+  vs_other_norm_name:
+    from_schema: https://onto.phes-odm.org/nwss/restricted_raw
+    permissible_values:
+      pepper mild mottle virus: {}
+      crassphage: {}
+      hf183: {}
+      f+ rna coliphage: {}
+      f+ dna coliphage: {}
+      caffeine: {}
+      creatinine: {}
+      sucralose: {}
+      ibuprofen: {}
+      rnase p: {}
+      '[empty]': {}
+  vs_rec_eff_spike_matrix:
+    from_schema: https://onto.phes-odm.org/nwss/restricted_raw
+    permissible_values:
+      raw sample: {}
+      raw sample post pasteurization: {}
+      clarified sample: {}
+      sample concentrate: {}
+      lysis buffer: {}
+      dewatered solids: {}
+      '[empty]': {}
+  vs_sample_location:
+    from_schema: https://onto.phes-odm.org/nwss/restricted_raw
+    permissible_values:
+      wwtp:
+        description: A sampling location at a wastewater treatment plant or other
+          community-scale treatment infrastructure specified in 'wwtp_name'
+      upstream:
+        description: A sampling location other than "wwtp"
+  vs_yne[stormwater_input]:
+    from_schema: https://onto.phes-odm.org/nwss/restricted_raw
+    permissible_values:
+      'yes': {}
+      'no': {}
+      '[empty]': {}
+  vs_yne[ext_blank]:
+    from_schema: https://onto.phes-odm.org/nwss/restricted_raw
+    permissible_values:
+      'yes': {}
+      'no': {}
+      '[empty]': {}
+  vs_reporting_jurisdiction:
+    from_schema: https://onto.phes-odm.org/nwss/restricted_raw
+    permissible_values:
+      AL:
+        description: Alabama
+      AK:
+        description: Alaska
+      AS:
+        description: American Samoa
+      AZ:
+        description: Arizona
+      AR:
+        description: Arkansas
+      CA:
+        description: California
+      CI:
+        description: Chicago, IL
+      CO:
+        description: Colorado
+      MP:
+        description: Commonwealth of Northern Mariana Islands
+      CT:
+        description: Connecticut
+      DE:
+        description: Delaware
+      DC:
+        description: District of Columbia
+      FM:
+        description: Federated States of Micronesia
+      FL:
+        description: Florida
+      GA:
+        description: Georgia
+      GU:
+        description: Guam
+      HI:
+        description: Hawaii
+      HO:
+        description: Houston, TX
+      ID:
+        description: Idaho
+      IL:
+        description: Illinois
+      IN:
+        description: Indiana
+      IA:
+        description: Iowa
+      KS:
+        description: Kansas
+      KY:
+        description: Kentucky
+      LC:
+        description: Los Angeles County, CA
+      LA:
+        description: Louisiana
+      ME:
+        description: Maine
+      MD:
+        description: Maryland
+      MA:
+        description: Massachusetts
+      MI:
+        description: Michigan
+      MN:
+        description: Minnesota
+      MS:
+        description: Mississippi
+      MO:
+        description: Missouri
+      MT:
+        description: Montana
+      NE:
+        description: Nebraska
+      NV:
+        description: Nevada
+      NH:
+        description: New Hampshire
+      NJ:
+        description: New Jersey
+      NM:
+        description: New Mexico
+      NY:
+        description: New York
+      NZ:
+        description: New York City, NY
+      NC:
+        description: North Carolina
+      ND:
+        description: North Dakota
+      OH:
+        description: Ohio
+      OK:
+        description: Oklahoma
+      OR:
+        description: Oregon
+      PA:
+        description: Pennsylvania
+      PH:
+        description: Philadelphia, PA
+      PR:
+        description: Puerto Rico
+      MH:
+        description: Republic of the Marshall Islands
+      PW:
+        description: Republic of Palau
+      RI:
+        description: Rhode Island
+      SC:
+        description: South Carolina
+      SD:
+        description: South Dakota
+      TN:
+        description: Tennessee
+      TX:
+        description: Texas
+      VI:
+        description: U.S. Virgin Islands
+      UT:
+        description: Utah
+      VT:
+        description: Vermont
+      VA:
+        description: Virginia
+      WA:
+        description: Washington
+      WV:
+        description: West Virginia
+      WI:
+        description: Wisconsin
+      WY:
+        description: Wyoming
+      AP:
+        description: Acoma Pueblo
+      CN:
+        description: Catawba Nation
+      CVBPI:
+        description: Coyote Valley Band of Pomo Indians
+      EBCI:
+        description: Eastern Band of Cherokee Indians
+      GTBI:
+        description: Grand Traverse Band of Ottawa and Chippewa Indians
+      MAT:
+        description: Mescalero Apache Tribe
+      NPT:
+        description: Nez Perce Tribe
+      OMT:
+        description: Otoe-Missouria Tribe
+      SBT:
+        description: The Shoshone Bannock Tribes
+      TRIT:
+        description: Tule River Indian Tribe
+      ZP:
+        description: Zuni Pueblo
+      PBCI:
+        description: Poarch Band of Creek Indians
+  vs_wwtp_jurisdiction:
+    from_schema: https://onto.phes-odm.org/nwss/restricted_raw
+    permissible_values:
+      AL:
+        description: Alabama
+      AK:
+        description: Arkansas
+      AS:
+        description: American Samoa
+      AZ:
+        description: Arizona
+      CA:
+        description: California
+      CO:
+        description: Colorado
+      MP:
+        description: Commonwealth of Northern Mariana Islands
+      CT:
+        description: Connecticut
+      DE:
+        description: Delaware
+      DC:
+        description: District of Columbia
+      FM:
+        description: Federated States of Micronesia
+      FL:
+        description: Florida
+      GA:
+        description: Georgia
+      GU:
+        description: Guam
+      HI:
+        description: Hawaii
+      ID:
+        description: Idaho
+      IL:
+        description: Illinois
+      IN:
+        description: Indiana
+      IA:
+        description: Iowa
+      KS:
+        description: Kansas
+      KY:
+        description: Kentucky
+      LA:
+        description: Louisiana
+      ME:
+        description: Maine
+      MD:
+        description: Maryland
+      MA:
+        description: Massachusetts
+      MI:
+        description: Michigan
+      MN:
+        description: Minnesota
+      MS:
+        description: Mississippi
+      MO:
+        description: Missouri
+      MT:
+        description: Montana
+      NE:
+        description: Nebraska
+      NV:
+        description: Nevada
+      NH:
+        description: New Hampshire
+      NJ:
+        description: New Jersey
+      NM:
+        description: New Mexico
+      NY:
+        description: New York
+      NC:
+        description: North Carolina
+      ND:
+        description: North Dakota
+      OH:
+        description: Ohio
+      OK:
+        description: Oklahoma
+      OR:
+        description: Oregon
+      PA:
+        description: Pennsylvania
+      PR:
+        description: Puerto Rico
+      MH:
+        description: Republic of the Marshall Islands
+      PW:
+        description: Republic of Palau
+      RI:
+        description: Rhode Island
+      SC:
+        description: South Carolina
+      SD:
+        description: South Dakota
+      TN:
+        description: Tennessee
+      TX:
+        description: Texas
+      VI:
+        description: U.S. Virgin Islands
+      UT:
+        description: Utah
+      VT:
+        description: Vermont
+      VA:
+        description: Virginia
+      WA:
+        description: Washington
+      WV:
+        description: West Virginia
+      WI:
+        description: Wisconsin
+      WY:
+        description: Wyoming
+  vs_sample_matrix:
+    from_schema: https://onto.phes-odm.org/nwss/restricted_raw
+    permissible_values:
+      raw wastewater:
+        description: Wastewater without any form of treatment applied to it
+      post grit removal:
+        description: Wastewater after removal of large solids at a treatment plant
+          but prior to a primary clarifier
+      primary sludge:
+        description: Sludge from the primary clarifier
+      primary effluent:
+        description: Effluent from the primary clarifier
+      secondary sludge:
+        description: Sludge from the secondary clarifier
+      secondary effluent:
+        description: Efluent from the secondary clarifier
+      septage:
+        description: Wastewater sampled from within a septic tank
+      holding tank:
+        description: Wastewater sampled from a holding tank, such as from an airplane
+          or ship
+  vs_yne[inhibition_adjust]:
+    from_schema: https://onto.phes-odm.org/nwss/restricted_raw
+    permissible_values:
+      'yes': {}
+      'no': {}
+      '[empty]': {}
+  vs_rec_eff_target_name:
+    from_schema: https://onto.phes-odm.org/nwss/restricted_raw
+    permissible_values:
+      bcov vaccine: {}
+      bcov culture: {}
+      brsv vaccine: {}
+      brsv culture: {}
+      murine coronavirus: {}
+      oc43: {}
+      phi6: {}
+      puro: {}
+      ms2 coliphage: {}
+      hep g armored rna: {}
+      heat inactivated sars-cov-2 virus: {}
+      murine hepatitis virus: {}
+      MHV (PREvalence): {}
+      BCoV (GT-Digital): {}
+      '[empty]': {}
+      parapoxvirus: {}
+slots:
+  reporting_jurisdiction:
+    from_schema: https://onto.phes-odm.org/nwss/restricted_raw
+  county_names:
+    from_schema: https://onto.phes-odm.org/nwss/restricted_raw
+  population_served:
+    from_schema: https://onto.phes-odm.org/nwss/restricted_raw
+  sewage_travel_time:
+    from_schema: https://onto.phes-odm.org/nwss/restricted_raw
+  sample_location:
+    from_schema: https://onto.phes-odm.org/nwss/restricted_raw
+  sample_location_specify_id:
+    from_schema: https://onto.phes-odm.org/nwss/restricted_raw
+  wwtp_id:
+    from_schema: https://onto.phes-odm.org/nwss/restricted_raw
+  wwtp_jurisdiction:
+    from_schema: https://onto.phes-odm.org/nwss/restricted_raw
+  capacity_mgd:
+    from_schema: https://onto.phes-odm.org/nwss/restricted_raw
+  industrial_input:
+    from_schema: https://onto.phes-odm.org/nwss/restricted_raw
+  stormwater_input:
+    from_schema: https://onto.phes-odm.org/nwss/restricted_raw
+  influent_equilibrated:
+    from_schema: https://onto.phes-odm.org/nwss/restricted_raw
+  sample_type:
+    from_schema: https://onto.phes-odm.org/nwss/restricted_raw
+  composite_freq:
+    from_schema: https://onto.phes-odm.org/nwss/restricted_raw
+  sample_matrix:
+    from_schema: https://onto.phes-odm.org/nwss/restricted_raw
+  collection_storage_time:
+    from_schema: https://onto.phes-odm.org/nwss/restricted_raw
+  collection_storage_temp:
+    from_schema: https://onto.phes-odm.org/nwss/restricted_raw
+  solids_separation:
+    from_schema: https://onto.phes-odm.org/nwss/restricted_raw
+  concentration_method:
+    from_schema: https://onto.phes-odm.org/nwss/restricted_raw
+  extraction_method:
+    from_schema: https://onto.phes-odm.org/nwss/restricted_raw
+  pre_conc_storage_time:
+    from_schema: https://onto.phes-odm.org/nwss/restricted_raw
+  pre_conc_storage_temp:
+    from_schema: https://onto.phes-odm.org/nwss/restricted_raw
+  pre_ext_storage_time:
+    from_schema: https://onto.phes-odm.org/nwss/restricted_raw
+  pre_ext_storage_temp:
+    from_schema: https://onto.phes-odm.org/nwss/restricted_raw
+  tot_conc_vol:
+    from_schema: https://onto.phes-odm.org/nwss/restricted_raw
+  ext_blank:
+    from_schema: https://onto.phes-odm.org/nwss/restricted_raw
+  rec_eff_target_name:
+    from_schema: https://onto.phes-odm.org/nwss/restricted_raw
+  rec_eff_spike_matrix:
+    from_schema: https://onto.phes-odm.org/nwss/restricted_raw
+  rec_eff_spike_conc:
+    from_schema: https://onto.phes-odm.org/nwss/restricted_raw
+  pasteurized:
+    from_schema: https://onto.phes-odm.org/nwss/restricted_raw
+  pcr_target:
+    from_schema: https://onto.phes-odm.org/nwss/restricted_raw
+  pcr_gene_target:
+    from_schema: https://onto.phes-odm.org/nwss/restricted_raw
+  pcr_type:
+    from_schema: https://onto.phes-odm.org/nwss/restricted_raw
+  hum_frac_target_mic:
+    from_schema: https://onto.phes-odm.org/nwss/restricted_raw
+  hum_frac_target_chem:
+    from_schema: https://onto.phes-odm.org/nwss/restricted_raw
+  other_norm_name:
+    from_schema: https://onto.phes-odm.org/nwss/restricted_raw
+  quant_stan_type:
+    from_schema: https://onto.phes-odm.org/nwss/restricted_raw
+  num_no_target_control:
+    from_schema: https://onto.phes-odm.org/nwss/restricted_raw
+  sample_collect_date:
+    from_schema: https://onto.phes-odm.org/nwss/restricted_raw
+  sample_collect_time:
+    from_schema: https://onto.phes-odm.org/nwss/restricted_raw
+  time_zone:
+    from_schema: https://onto.phes-odm.org/nwss/restricted_raw
+  flow_rate:
+    from_schema: https://onto.phes-odm.org/nwss/restricted_raw
+  ph:
+    from_schema: https://onto.phes-odm.org/nwss/restricted_raw
+  conductivity:
+    from_schema: https://onto.phes-odm.org/nwss/restricted_raw
+  tss:
+    from_schema: https://onto.phes-odm.org/nwss/restricted_raw
+  collection_water_temp:
+    from_schema: https://onto.phes-odm.org/nwss/restricted_raw
+  equiv_sewage_amt:
+    from_schema: https://onto.phes-odm.org/nwss/restricted_raw
+  sample_id:
+    from_schema: https://onto.phes-odm.org/nwss/restricted_raw
+  lab_id:
+    from_schema: https://onto.phes-odm.org/nwss/restricted_raw
+  test_result_date:
+    from_schema: https://onto.phes-odm.org/nwss/restricted_raw
+  pcr_target_units:
+    from_schema: https://onto.phes-odm.org/nwss/restricted_raw
+  pcr_target_avg_conc:
+    from_schema: https://onto.phes-odm.org/nwss/restricted_raw
+  pcr_target_std_error:
+    from_schema: https://onto.phes-odm.org/nwss/restricted_raw
+  pcr_target_cl_95_lo:
+    from_schema: https://onto.phes-odm.org/nwss/restricted_raw
+  pcr_target_cl_95_up:
+    from_schema: https://onto.phes-odm.org/nwss/restricted_raw
+  pcr_target_below_lod:
+    from_schema: https://onto.phes-odm.org/nwss/restricted_raw
+  lod_sewage:
+    from_schema: https://onto.phes-odm.org/nwss/restricted_raw
+  ntc_amplify:
+    from_schema: https://onto.phes-odm.org/nwss/restricted_raw
+  rec_eff_percent:
+    from_schema: https://onto.phes-odm.org/nwss/restricted_raw
+  inhibition_detect:
+    from_schema: https://onto.phes-odm.org/nwss/restricted_raw
+  inhibition_adjust:
+    from_schema: https://onto.phes-odm.org/nwss/restricted_raw
+  hum_frac_mic_conc:
+    from_schema: https://onto.phes-odm.org/nwss/restricted_raw
+  hum_frac_mic_unit:
+    from_schema: https://onto.phes-odm.org/nwss/restricted_raw
+  hum_frac_chem_conc:
+    from_schema: https://onto.phes-odm.org/nwss/restricted_raw
+  hum_frac_chem_unit:
+    from_schema: https://onto.phes-odm.org/nwss/restricted_raw
+  other_norm_conc:
+    from_schema: https://onto.phes-odm.org/nwss/restricted_raw
+  other_norm_unit:
+    from_schema: https://onto.phes-odm.org/nwss/restricted_raw
+  major_lab_method:
+    from_schema: https://onto.phes-odm.org/nwss/restricted_raw
+  major_lab_method_desc:
+    from_schema: https://onto.phes-odm.org/nwss/restricted_raw
+  sample_first_reported:
+    from_schema: https://onto.phes-odm.org/nwss/restricted_raw
+  nwss:
+    from_schema: https://onto.phes-odm.org/nwss/restricted_raw
+classes:
+  nwss:
+    slots:
+    - reporting_jurisdiction
+    - county_names
+    - population_served
+    - sewage_travel_time
+    - sample_location
+    - sample_location_specify_id
+    - wwtp_id
+    - wwtp_jurisdiction
+    - capacity_mgd
+    - industrial_input
+    - stormwater_input
+    - influent_equilibrated
+    - sample_type
+    - composite_freq
+    - sample_matrix
+    - collection_storage_time
+    - collection_storage_temp
+    - solids_separation
+    - concentration_method
+    - extraction_method
+    - pre_conc_storage_time
+    - pre_conc_storage_temp
+    - pre_ext_storage_time
+    - pre_ext_storage_temp
+    - tot_conc_vol
+    - ext_blank
+    - rec_eff_target_name
+    - rec_eff_spike_matrix
+    - rec_eff_spike_conc
+    - pasteurized
+    - pcr_target
+    - pcr_gene_target
+    - pcr_type
+    - hum_frac_target_mic
+    - hum_frac_target_chem
+    - other_norm_name
+    - quant_stan_type
+    - num_no_target_control
+    - sample_collect_date
+    - sample_collect_time
+    - time_zone
+    - flow_rate
+    - ph
+    - conductivity
+    - tss
+    - collection_water_temp
+    - equiv_sewage_amt
+    - sample_id
+    - lab_id
+    - test_result_date
+    - pcr_target_units
+    - pcr_target_avg_conc
+    - pcr_target_std_error
+    - pcr_target_cl_95_lo
+    - pcr_target_cl_95_up
+    - pcr_target_below_lod
+    - lod_sewage
+    - ntc_amplify
+    - rec_eff_percent
+    - inhibition_detect
+    - inhibition_adjust
+    - hum_frac_mic_conc
+    - hum_frac_mic_unit
+    - hum_frac_chem_conc
+    - hum_frac_chem_unit
+    - other_norm_conc
+    - other_norm_unit
+    - major_lab_method
+    - major_lab_method_desc
+    - sample_first_reported
+    slot_usage:
+      reporting_jurisdiction:
+        description: The CDC Epidemiology and Laboratory Capacity (ELC) jurisdiction,
+          most frequently a state, reporting these data (2-letter abbreviation)
+        range: vs_reporting_jurisdiction
+      county_names:
+        description: 5-digit numeric FIPS codes of all counties and county equivalents
+          served by this sampling site (i.e., served by this wastewater treatment
+          plant or, if 'sample_location' is "upstream", then by this upstream location).
+          Note that most jurisdictions are covered by counties, but some are covered
+          by county equivalents, such as independent cities, parishes, or census areas.
+        range: string
+      population_served:
+        description: Estimated number of persons served by this sampling site (i.e.,
+          served by this wastewater treatment plant or, if 'sample_location' is "upstream",
+          then by this upstream location)
+        range: integer
+      sewage_travel_time:
+        description: What is the approximate sewage travel time, on average, from
+          sewage source to this sampling site (i.e., this wastewater treatment plant
+          or, if 'sample_location' is "upstream", then this upstream location)? This
+          should be specified as a duration in hours, not a time of day.
+        range: float
+      sample_location:
+        description: Sample collection location in the wastewater system, whether
+          at a wastewater treatment plant (or other community level treatment infrastructure
+          such as community-scale septic) or upstream in the wastewater system
+        range: vs_sample_location
+      sample_location_specify_id:
+        description: If 'sample_location' is "upstream", specify the collection location
+          in the wastewater system
+        range: string
+      wwtp_id:
+        description: The ID of the Wastewater Treatment Plant (WWTP) to which this
+          wastewater flows.
+        range: string
+      wwtp_jurisdiction:
+        description: State, DC, US territory, or Freely Associated State jurisdiction
+          name (2-letter abbreviation) in which the wastewater treatment plant provided
+          in 'wwtp_name' is located
+        range: vs_wwtp_jurisdiction
+      capacity_mgd:
+        description: Wastewater treatment plant design capacity
+        range: float
+      industrial_input:
+        description: Approximate average percentage of wastewater from industrial
+          sources that is received by the wastewater treatment plant specified in
+          'wwtp_name'
+        range: float
+      stormwater_input:
+        description: Does the wastewater treatment plant specified in 'wwtp_name'
+          treat water from a combined sewer system (i.e., a sewer system that collects
+          both sewage and stormwater)?
+        range: vs_yne[stormwater_input]
+      influent_equilibrated:
+        description: Is influent to the wastewater treatment plant specified in 'wwtp_name'
+          ever stored prior to treatment to equilibrate or modulate the influent flow
+          rate?
+        range: vs_yne[influent_equilibrated]
+      sample_type:
+        description: Type of sample collected, whether grab or composite. If composite,
+          also provide the duration of sampling and type of composite, as listed in
+          the Value Set (e.g., "24-hr flow-weighted composite"). A grab sample is
+          defined as an individual sample collected without compositing or adding
+          other samples, regardless of whether the sample matrix is liquid wastewater
+          or sludge.
+        range: vs_sample_type
+      composite_freq:
+        description: 'Frequency of sub-sample collection (for composite samples only):
+          for flow-weighted, the number of sub-samples collected per million gallons
+          of flow; for time-weighted, the number of sub-samples per hour. Flow-weighted
+          example: a value of 5 would indicate 5 sub-samples per million gallons,
+          or 1 sub-sample per 200,000 gallons'
+        range: float
+      sample_matrix:
+        description: Wastewater matrix from which the sample was collected
+        range: vs_sample_matrix
+      collection_storage_time:
+        description: Duration of time the sample was stored after collection and prior
+          to reaching the lab
+        range: float
+      collection_storage_temp:
+        description: Temperature at which the sample was stored after collection and
+          prior to reaching the lab
+        range: float
+      solids_separation:
+        description: Process used to separate solid and liquid phases of the sample,
+          either prior to or in the absence of the concentration method specified
+          in 'concentration_method'
+        range: vs_solids_separation
+      concentration_method:
+        description: Method used to concentrate the sample prior to analysis of the
+          concentrate
+        range: vs_concentration_method
+      extraction_method:
+        description: Method used for nucleic acid extraction from the sample
+        range: vs_extraction_method
+      pre_conc_storage_time:
+        description: The approximate average duration of time between when samples
+          reach the lab and when they are concentrated (if concentrated)
+        range: float
+      pre_conc_storage_temp:
+        description: The storage temperature of samples after reaching the lab and
+          prior to concentration (if concentrated)
+        range: float
+      pre_ext_storage_time:
+        description: The approximate average duration of time between when samples
+          are concentrated (if concentrated) and when they are extracted
+        range: float
+      pre_ext_storage_temp:
+        description: The storage temperature of samples after concentration (if concentrated)
+          and prior to extraction
+        range: float
+      tot_conc_vol:
+        description: Total volume of sample concentrated (if concentrated); this total
+          volume is not necessarily assayed and is not necessarily equal to the value
+          specified in 'equiv_sewage_amt'
+        range: float
+      ext_blank:
+        description: Are extraction blanks included in the extraction process?
+        range: vs_yne[ext_blank]
+      rec_eff_target_name:
+        description: Name of the recovery efficiency control target that is spiked
+          in
+        range: vs_rec_eff_target_name
+      rec_eff_spike_matrix:
+        description: Matrix into which the recovery efficiency control target is spiked
+        range: vs_rec_eff_spike_matrix
+      rec_eff_spike_conc:
+        description: "Spike concentration, on average,\_of the recovery control on\
+          \ a per sample volume basis"
+        range: float
+      pasteurized:
+        description: Was the sample pasteurized?
+        range: vs_yne[pasteurized]
+      pcr_target:
+        description: The target of the PCR quantification
+        range: vs_pcr_target
+      pcr_gene_target:
+        description: The PCR gene used to quantify PCR target
+        range: vs_pcr_gene_target
+      pcr_type:
+        description: The type of PCR used to quantify the PCR target
+        range: vs_pcr_type
+      hum_frac_target_mic:
+        description: Name of microbial target used to estimate human fecal content
+        range: vs_hum_frac_target_mic
+      hum_frac_target_chem:
+        description: Name of chemical compound used to estimate human fecal content
+        range: vs_hum_frac_target_chem
+      other_norm_name:
+        description: Name of a target or compound not specified in 'hum_frac_target_mic'
+          or 'hum_frac_target_chem' used to estimate human fecal content
+        range: vs_other_norm_name
+      quant_stan_type:
+        description: The type of nucleic acid used as a standard for the PCR target
+          quantification
+        range: vs_quant_stan_type
+      num_no_target_control:
+        description: Number of no-template controls (NTC) per instrument run
+        range: vs_num_no_target_control
+      sample_collect_date:
+        description: The date of sample collection; for composite samples, specify
+          the date on which sample collection began
+        range: string
+        pattern: ^[0-9]{4}-[0-9]{2}-[0-9]{2}$
+      sample_collect_time:
+        description: The local time of sample collection; for composite samples, specify
+          the time at which sample collection began
+        range: string
+        pattern: ^[0-2]?[0-9]:[0-5][0-9](:[0-5][0-9])?$
+      time_zone:
+        description: Current local time zone corresponding to the time specified in
+          'sample_collect_time', represented as a UTC time offset (e.g., UTC-06:00)
+        range: string
+        pattern: ^(UTC|utc)[+|-][0-1][0-9]:[0-5][0-9]$
+      flow_rate:
+        description: Wastewater volumetric flow rate at the sample collection location
+          over the 24-hr period during which the sample was collected. If only an
+          instantaneous flow measurement is available, it may be reported in units
+          of million gallons per day.
+        range: float
+      ph:
+        description: pH of wastewater sample (if sludge, pH of influent at time of
+          collection)
+        range: float
+      conductivity:
+        description: "Specific conductivity of wastewater sample (if sludge,\_conductivity\
+          \ of influent at time of collection)"
+        range: float
+      tss:
+        description: Total suspended solids of raw (or, if unavailable, post-grit
+          removal) wastewater
+        range: float
+      collection_water_temp:
+        description: Sample temperature at time of collection
+        range: float
+      equiv_sewage_amt:
+        description: Equivalent unconcentrated volume of wastewater or mass of sludge
+          in PCR reaction
+        range: float
+      sample_id:
+        description: An ID assigned to a wastewater sample. It must be unique for
+          this NWSS reporting jurisdiction. Wastewater samples that are split and
+          measured by different labs should have the same sample ID but different
+          lab IDs. Wastewater samples for which multiple SARS-CoV-2 PCR targets are
+          measured should also have the same sample ID.
+        range: string
+        pattern: ^[0-9A-Za-z_\-\.]{1,20}$
+      lab_id:
+        description: An ID assigned to a testing lab. It must be unique across labs
+          used for this NWSS reporting jurisdiction's testing. If the same lab is
+          used across multiple NWSS reporting jurisdictions, each NWSS reporting jurisdiction
+          may assign that lab a different lab ID.
+        range: string
+        pattern: ^[0-9A-Za-z_\-\.]{1,20}$
+      test_result_date:
+        description: The date on which this PCR target measurement was made
+        range: string
+        pattern: ^[0-9]{4}-[0-9]{2}-[0-9]{2}$
+      pcr_target_units:
+        description: Units of PCR target sample concentration
+        range: vs_mic_chem_units
+      pcr_target_avg_conc:
+        description: "Concentration of the PCR target back-calculated to unconcentrated\_\
+          sample basis; enter \"0\" if no amplification occurred, using the definition\
+          \ of amplification described in 'ntc_amplify'; otherwise, enter the estimated\
+          \ concentration; do not adjust for matrix recovery efficiency. \nOnly the\
+          \ technical or biological replicate concentrations for the same pcr_gene_target\
+          \ should be averaged. For example, if there are three replicates of a given\
+          \ PCR target, average those concentrations and report the average value\
+          \ only. Do not include the three individual concentrations. Different pcr_gene_target\
+          \ concentrations should not be averaged for this field (e.g., do not average\
+          \ concentrations for N1 and N2)."
+        range: float
+      pcr_target_std_error:
+        description: Standard error (SE) of the PCR target in wastewater sample, or
+          best estimate that is consistently available. If sample replicates are always
+          performed, use SE of sample replicates; else, if processing replicates are
+          always performed, use SE of processing replicates; else, if qPCR is performed,
+          use SE of PCR replicates; else, if digital PCR is performed, use error from
+          multiple replicates if available, and Poisson error if not
+        range: float
+      pcr_target_cl_95_lo:
+        description: "Lower bound of 95%\_confidence interval of the PCR target in\
+          \ wastewater sample, or best estimate that is consistently available. Follow\
+          \ the same hierarchy as described for standard error. (Note: 'cl' stands\
+          \ for confidence limit)"
+        range: float
+      pcr_target_cl_95_up:
+        description: "Upper bound of 95%\_confidence interval of the PCR target in\
+          \ wastewater sample, or best estimate that is consistently available. Follow\
+          \ the same hierarchy as described for standard error. (Note: 'cl' stands\
+          \ for confidence limit)"
+        range: float
+      pcr_target_below_lod:
+        description: Was the concentration of the PCR target below the limit of detection?
+        range: vs_yn
+      lod_sewage:
+        description: PCR target limit of detection back-calculated to unconcentrated
+          sample basis
+        range: float
+      ntc_amplify:
+        description: For qPCR, did any no-template controls on this instrument run
+          have a Ct value less than 40? For ddPCR, did any no-template controls on
+          this instrument run have 3 or more positive droplets?
+        range: vs_yn
+      rec_eff_percent:
+        description: Percent of spiked recovery control, specified in 'rec_eff_target_name',
+          that was recovered
+        range: float
+      inhibition_detect:
+        description: Was molecular inhibition detected?
+        range: vs_ynn
+      inhibition_adjust:
+        description: Was inhibition incorporated into the PCR target concentration
+          calculation?
+        range: vs_yne[inhibition_adjust]
+      hum_frac_mic_conc:
+        description: Concentration of microbial target specified in 'hum_frac_target_mic';
+          follow the same guidelines outlined for 'pcr_target_avg_conc'
+        range: float
+      hum_frac_mic_unit:
+        description: Concentration units of microbial target specified in 'hum_frac_target_mic'
+        range: vs_mic_chem_units_e
+      hum_frac_chem_conc:
+        description: Concentration of chemical target specified in 'hum_frac_target_chem'
+        range: float
+      hum_frac_chem_unit:
+        description: Concentration units of chemical target  specified in 'hum_frac_target_chem'
+        range: vs_mic_chem_units_e
+      other_norm_conc:
+        description: Concentration of target spcified in 'other_norm_name'
+        range: float
+      other_norm_unit:
+        description: Concentration units of target spcified in 'other_norm_name'
+        range: vs_mic_chem_units_e
+      major_lab_method:
+        description: A number used to distinguish major lab methods at the reporting
+          jurisdiction level. Differences in lab methods may limit the comparability
+          of PCR target concentrations. Reporting jurisdictions should use this field
+          to indicate that lab methods are sufficiently different that caution should
+          be used when comparing PCR target concentrations across them. These differences
+          may result from any lab processing or quantification steps, including different
+          PCR gene targets. Note that 'major_lab_method' may be the same for different
+          laboratories if the reporting jurisdiction believes concentrations measured
+          by those laboratories are comparable; conversely, 'major_lab_method' may
+          be different for the same laboratory if changes made to the laboratory protocol
+          rendered concentrations not comparable.
+        range: integer
+      major_lab_method_desc:
+        description: "Brief description of the basis for assigning a \u2018major_lab_method\u2019\
+          , e.g., \"this lab uses a lab method distinct from other labs in this reporting\
+          \ jurisdiction\", \"this lab changed lab methods - new concentration method\"\
+          \ or \"lab method is same as other labs in this reporting jurisdiction but\
+          \ performance differs\""
+        range: string
+      sample_first_reported:
+        description: Date that a wastewater sample, identified by 'sample_id', was
+          first submitted to CDC NWSS
+        range: string
+        pattern: ^[0-9]{4}-[0-9]{2}-[0-9]{2}$
+  Container:
+    from_schema: https://onto.phes-odm.org/nwss/restricted_raw
+    slots:
+    - nwss
+    slot_usage:
+      nwss:
+        title: nwss
+        multivalued: true
+        range: nwss
+        inlined_as_list: true
+    tree_root: true

@@ -41,6 +41,28 @@ The final LinkML schema will be saved at [odm_v2/linkml/odm_v2.yaml](odm_v2/link
 
 If you would like more details of what this script does (as well as all the other scripts referenced by make_v2.py), a description of the processing steps performed by `make_v2.py` can be found in [Generating the ODM v2 LinkML Schema](make_v2.md).
 
-## Generating the NWSS LinkML Schema
+## Generating the CDC NWSS LinkML Schemas
 
-@TODO: Add instructions for NWSS schema generation
+The Centers for Disease Control and Prevention National Wastewater Surveillance System ([CDC NWSS](https://www.cdc.gov/nwss/index.html)) has a primary reporting data dictionary and separate subsets for analyzed wastewater data (public metric and public concentration dictionaries). We call these "dictionary types", with each available type listed below:
+
+1. Reporting data dictionary
+2. Public metric data dictionary
+3. Public concentration data dictionary
+4. Restricted raw data dictionary
+5. Restricted analytics data dictionary
+
+The data formats for each of these are single tables (eg. For the reporting data, all data are in a single table, rather than separate tables such as with ODM v2).
+
+The script [src/make_nwss.py](src/make_nwss.py) will generate the various LinkML schemas. Be sure to download the Excel versions of the data dictionaries at [Wastewater Surveillance Data Reporting and Analytics](https://www.cdc.gov/nwss/reporting.html), in the "Data Dictionaries" box. If a path for a data dictionary is ommitted then the corresponding schema will not be generated. The final outputs, including the generated LinkML schemas, will be saved in the directory specified by the `output_dir` command-line argument. A separate subdirectory will be created for each dictionary type:
+
+```console
+cd src
+python3 make_nwss.py --output_dir "path/to/output/dir" \
+    --reporting "path/to/reporting.xlsx" \
+    --public_concentration "path/to/public_concentration.xlsx" \
+    --public_metric "path/to/public_metric.xlsx" \
+    --restricted_raw "path/to/restricted_raw.xlsx" \
+    --restricted_analytics "path/to/restricted_analytics.xlsx"
+```
+
+At the moment, the `restricted_analytics` data dictionary has some problems (it does not contain a "Value Sets" tab that defines the enumerations, and some variable names might be incorrect). Until this is fixed the `--restricted_analytics` argument can be removed. Both the `restricted_raw` and `restricted_analytics` data dictionaries are not currently publicly available. Remove these if you do not have access to them.
