@@ -24,7 +24,7 @@ import os
 import argparse
 from typing import Optional, Union
 
-from utils import extract_sheets, get_logger, clear_dirs, make_linkml_schema
+from utils.general_utils import extract_sheets, get_logger, clear_dirs, make_linkml_schema
 from nwss.make_nwss_ss_enums import extract_enums
 from nwss.make_nwss_ss_schema import make_schema
 from nwss.make_nwss_ss_classes import extract_all_classes
@@ -136,12 +136,12 @@ def make_nwss(output_dir: Union[str, Path], *, reporting: Optional[Union[str, Pa
 if __name__ == "__main__":
     if "get_ipython" in globals():
         class opts:
-            output_dir = ".."
-            reporting = "../nwss/NWSS-Data-Dictionary_v5.0.0_2023-07-10.xlsx"
-            public_concentration = "../nwss/NWSS-Public-Concentration-Data-Dictionary-v1.0.xlsx"
-            public_metric = "../nwss/NWSS-Public-Metric-Data-Dictionary-v2.0.xlsx"
-            restricted_raw = "../nwss/NWSS Restricted Raw Data Set - Data Dictionary v4.0.0_2023-06-02[66].xlsx"
-            restricted_analytics = None #"../nwss/NWSS Restricted Analytics Data Set - Data Dictionary v4.0.0_2023-06-02[78].xlsx"
+            output_dir = "../gen/"
+            reporting = "../gen/nwss/NWSS-Data-Dictionary_v5.0.0_2023-07-10.xlsx"
+            public_concentration = "../gen/nwss/NWSS-Public-Concentration-Data-Dictionary-v1.0.xlsx"
+            public_metric = "../gen/nwss/NWSS-Public-Metric-Data-Dictionary-v2.0.xlsx"
+            restricted_raw = "../gen/nwss/NWSS Restricted Raw Data Set - Data Dictionary v4.0.0_2023-06-02[66].xlsx"
+            restricted_analytics = None #"../gen/nwss/NWSS Restricted Analytics Data Set - Data Dictionary v4.0.0_2023-06-02[78].xlsx"
     else:
         args = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
         args.add_argument("--output_dir", type=str, help="Directory to save all the output, including the generating LinkML schemas, to. A separate subdirectory is created for each dictionary type.", required=True)
