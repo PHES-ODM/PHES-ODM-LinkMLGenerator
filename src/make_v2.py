@@ -16,7 +16,7 @@ from typing import Union
 
 from linkml_runtime.linkml_model.meta import SchemaDefinition
 
-from utils import clear_dirs, extract_sheets, make_linkml_schema, get_logger
+from utils.general_utils import clear_dirs, extract_sheets, make_linkml_schema, get_logger
 from odm_v2.make_v2_ss_classes import extract_all_classes
 from odm_v2.make_v2_ss_enums_from_parts import extract_parts_enums
 from odm_v2.make_v2_ss_enums_from_sets import extract_sets_enums
@@ -79,8 +79,8 @@ def make_v2(dictionary_file: Union[str, Path], output_dir: Union[str, Path]) -> 
 if __name__ == "__main__":
     if "get_ipython" in globals():
         class opts:
-            dictionary_file = "../odm_v2/v2 ODM dictionary.xlsx"
-            output_dir = "../odm_v2"
+            dictionary_file = "../gen/odm_v2/v2 ODM dictionary.xlsx"
+            output_dir = "../gen/odm_v2"
     else:
         args = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
         args.add_argument("--dictionary_file", type=str, help="The Excel ODM v2 data dictionary file", required=True)
