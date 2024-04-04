@@ -1,16 +1,16 @@
 # NWSS input and output
-/nwss/
-/nwss_*/dictionary/
-/nwss_*/schemasheets/
+/gen/nwss/*.xlsx
+/gen/nwss_*/dictionary/
+/gen/nwss_*/schemasheets/
 
 # ODM v2 input and output
-/odm_v2/*.xlsx
-/odm_v2/dictionary/
-/odm_v2/schemasheets/
-/odm_v2/linkml/docs
+/gen/odm_v2/*.xlsx
+/gen/odm_v2/dictionary/
+/gen/odm_v2/schemasheets/
+/gen/odm_v2/linkml/docs
 
 # ODM v1 input and output
-/odm_v1/linkml/docs
+/gen/odm_v1/linkml/docs
 
 # Mac Desktop Services Store
 .DS_Store
