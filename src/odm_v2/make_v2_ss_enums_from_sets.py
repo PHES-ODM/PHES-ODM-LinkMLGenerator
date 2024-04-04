@@ -21,7 +21,7 @@ sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
 import pandas as pd
 import argparse
 
-from utils import get_logger, EMPTY_PERMISSIBLE_VALUE, save_schemasheet
+from utils.general_utils import get_logger, EMPTY_PERMISSIBLE_VALUE, save_schemasheet
 from odm_v2.v2_utils import v2_keep_active_rows
 
 logger = get_logger(__name__)
@@ -118,9 +118,9 @@ def extract_sets_enums(sets_file: str, parts_file: str, output_file: str):
 if __name__ == "__main__":
     if "get_ipython" in globals():
         class opts:
-            sets_file = "../../odm_v2/dictionary/sets.csv"
-            parts_file = "../../odm_v2/dictionary/parts.csv"
-            output_file = "../../odm_v2/schemasheets/enums_sets.tsv"
+            sets_file = "../../gen/odm_v2/dictionary/sets.csv"
+            parts_file = "../../gen/odm_v2/dictionary/parts.csv"
+            output_file = "../../gen/odm_v2/schemasheets/enums_sets.tsv"
     else:
         args = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
         args.add_argument("--sets_file", type=str, help="Input ODM v2 sets file to extract the enums from", required=True)

@@ -11,7 +11,7 @@ import pandas as pd
 from typing import Union
 from pathlib import Path
 
-from utils import get_logger, save_schemasheet
+from utils.general_utils import get_logger, save_schemasheet
 from odm_v2.v2_utils import v2_class_names
 
 logger = get_logger(__name__)
@@ -47,7 +47,7 @@ def extract_container_class(output_file: Union[str, Path]):
 if __name__ == "__main__":
     if "get_ipython" in globals():
         class opts:
-            output_file = "../../odm_v2/schemasheets/container.tsv"
+            output_file = "../../gen/odm_v2/schemasheets/container.tsv"
     else:
         args = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
         args.add_argument("--output_file", type=str, help="The TSV file to save the container class Schemasheet to", required=True)

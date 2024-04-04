@@ -12,7 +12,7 @@ import re
 import os
 
 from nwss.nwss_utils import SlotToEnumColumns, TABLE_NAME_COL, splitup_metadata_sheet, parse_enums_sheet
-from utils import get_logger, read_data_frame, save_data_frame, save_schemasheet
+from utils.general_utils import get_logger, read_data_frame, save_data_frame, save_schemasheet
 
 logger = get_logger(__name__)
 
@@ -224,9 +224,9 @@ def extract_all_classes(metadata_file: Union[str, Path], enums_file: Union[str, 
 if __name__ == "__main__":
     if "get_ipython" in globals():
         class opts:
-            metadata_file = "../../nwss_reporting/dictionary/metadata.csv"
-            enums_file = "../../nwss_reporting/dictionary/enums.csv"
-            output_dir = "../../nwss_reporting/schemasheets"
+            metadata_file = "../../gen/nwss_reporting/dictionary/metadata.csv"
+            enums_file = "../../gen/nwss_reporting/dictionary/enums.csv"
+            output_dir = "../../gen/nwss_reporting/schemasheets"
             single_table = True
             detailed_enum_names = ["vs_yne"]
     else:

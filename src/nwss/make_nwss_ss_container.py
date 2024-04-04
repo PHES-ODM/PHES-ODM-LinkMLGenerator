@@ -9,7 +9,7 @@ import pandas as pd
 from typing import Union, Optional
 from pathlib import Path
 
-from utils import read_data_frame, save_schemasheet, get_logger
+from utils.general_utils import read_data_frame, save_schemasheet, get_logger
 from nwss.nwss_utils import splitup_metadata_sheet, SINGLE_TABLE_NAME
 
 logger = get_logger(__name__)
@@ -56,8 +56,8 @@ def extract_container_class(metadata_file: Union[str, Path], output_file: Union[
 if __name__ == "__main__":
     if "get_ipython" in globals():
         class opts:
-            metadata_file = "../../nwss_reporting/dictionary/metadata.csv"
-            output_file = "../../nwss_reporting/schemasheets/container.tsv"
+            metadata_file = "../../gen/nwss_reporting/dictionary/metadata.csv"
+            output_file = "../../gen/nwss_reporting/schemasheets/container.tsv"
     else:
         args = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
         args.add_argument("--metadata_file", type=str, help="Input Metadata sheet from the NWSS data dictionary", required=True)

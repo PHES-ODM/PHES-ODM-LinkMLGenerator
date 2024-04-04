@@ -14,7 +14,7 @@ make_prefixes("odm_v2/schemasheets/prefixes.tsv")
 import pandas as pd
 import argparse
 
-from utils import save_schemasheet, get_logger
+from utils.general_utils import save_schemasheet, get_logger
 
 logger = get_logger(__name__)
 
@@ -36,7 +36,7 @@ def make_prefixes(output_file: str):
 if __name__ == "__main__":
     if "get_ipython" in globals():
         class opts:
-            output_file = "../../odm_v2/schemasheets/prefixes.tsv"
+            output_file = "../../gen/odm_v2/schemasheets/prefixes.tsv"
     else:
         args = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
         args.add_argument("--output_file", type=str, help="The TSV file to save the Schemasheets prefixes file to", required=True)

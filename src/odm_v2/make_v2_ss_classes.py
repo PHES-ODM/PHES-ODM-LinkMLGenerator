@@ -20,7 +20,7 @@ import os
 import argparse
 from typing import Tuple
 
-from utils import save_schemasheet, get_logger
+from utils.general_utils import save_schemasheet, get_logger
 from odm_v2.v2_utils import v2_keep_active_rows, v2_get_enum_name_from_part_id, v2_get_header_rows, v2_class_names
 
 logger = get_logger(__name__)
@@ -161,8 +161,8 @@ def extract_all_classes(parts_file: str, output_dir: str):
 if __name__ == "__main__":
     if "get_ipython" in globals():
         class opts:
-            parts_file = "../../odm_v2/dictionary/parts.csv"
-            output_dir = "../../odm_v2/schemasheets"
+            parts_file = "../../gen/odm_v2/dictionary/parts.csv"
+            output_dir = "../../gen/odm_v2/schemasheets"
     else:
         args = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
         args.add_argument("--parts_file", type=str, help="Input ODM v2 parts file to extract the classes from", required=True)

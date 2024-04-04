@@ -7,7 +7,7 @@ extracted with utils.extract_sheets.
 ## Example
 
 ```python
-from utils import extract_sheets
+from utils.general_utils import extract_sheets
 from make_nwss_ss_enums import extract_enums
 
 extract_sheets("nwss/NWSS-Data-Dictionary_v5.0.0_2023-07-10.xlsx", ["Value Sets"], "nwss/dictionary")
@@ -24,7 +24,7 @@ import pandas as pd
 import argparse
 import os
 
-from utils import read_data_frame, get_logger, save_schemasheet
+from utils.general_utils import read_data_frame, get_logger, save_schemasheet
 from nwss.nwss_utils import parse_enums_sheet, get_detailed_enums
 
 logger = get_logger(__name__)
@@ -84,9 +84,9 @@ def extract_enums(metadata_file: Union[str, Path], valuesets_file: Union[str, Pa
 if __name__ == "__main__":
     if "get_ipython" in globals():
         class opts:
-            metadata_file = "../../nwss_reporting/dictionary/metadata.csv"
-            valuesets_file = "../../nwss_reporting/dictionary/enums.csv"
-            output_dir = "../../nwss_reporting/schemasheets"
+            metadata_file = "../../gen/nwss_reporting/dictionary/metadata.csv"
+            valuesets_file = "../../gen/nwss_reporting/dictionary/enums.csv"
+            output_dir = "../../gen/nwss_reporting/schemasheets"
             detailed_enum_names = ["vs_yne"]
     else:
         args = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)

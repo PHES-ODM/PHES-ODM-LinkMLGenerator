@@ -20,7 +20,7 @@ sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
 import pandas as pd
 import argparse
 
-from utils import save_schemasheet, get_logger
+from utils.general_utils import save_schemasheet, get_logger
 
 logger = get_logger(__name__)
 
@@ -48,7 +48,7 @@ def make_prefixes(output_file: str, dictionary_type: str):
 if __name__ == "__main__":
     if "get_ipython" in globals():
         class opts:
-            output_file = "../../nwss_reporting/schemasheets/prefixes.tsv"
+            output_file = "../../gen/nwss_reporting/schemasheets/prefixes.tsv"
             dictionary_type = "reporting"
     else:
         args = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)

@@ -1,7 +1,7 @@
 from typing import Dict, Tuple, List, Optional
 import pandas as pd
 
-from utils import get_logger
+from utils.general_utils import get_logger
 
 logger = get_logger(__name__)
 
