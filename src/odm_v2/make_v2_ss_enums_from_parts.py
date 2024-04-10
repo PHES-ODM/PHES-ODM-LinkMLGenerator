@@ -16,7 +16,8 @@ extract_parts_enums("odm_v2/dictionary/parts.csv", "odm_v2/schemasheets/enums_pa
 import pandas as pd
 import argparse
 
-from utils.general_utils import get_logger, save_schemasheet, EMPTY_PERMISSIBLE_VALUE
+from utils.general_utils import get_logger, read_data_frame
+from utils.schemasheets_utils import save_schemasheet, EMPTY_PERMISSIBLE_VALUE
 from odm_v2.v2_utils import v2_keep_active_rows, v2_class_names, v2_get_header_rows, v2_get_enum_name_from_part_id
 
 logger = get_logger(__name__)
@@ -40,7 +41,7 @@ def extract_parts_enums(parts_file: str, output_file: str):
             from the ODM v2 data dictionary.
         output_file (str): The TSV file to save the Schemasheet to.
     """
-    df = pd.read_csv(parts_file)
+    df = read_data_frame(parts_file, keep_default_na=False, na_values=[""])
 
     # Use only active rows (indicated in the "status" column)
     df = v2_keep_active_rows(df)

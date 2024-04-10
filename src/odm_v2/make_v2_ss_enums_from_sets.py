@@ -21,7 +21,8 @@ sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
 import pandas as pd
 import argparse
 
-from utils.general_utils import get_logger, EMPTY_PERMISSIBLE_VALUE, save_schemasheet
+from utils.general_utils import get_logger, read_data_frame
+from utils.schemasheets_utils import EMPTY_PERMISSIBLE_VALUE, save_schemasheet
 from odm_v2.v2_utils import v2_keep_active_rows
 
 logger = get_logger(__name__)
@@ -48,8 +49,8 @@ def extract_sets_enums(sets_file: str, parts_file: str, output_file: str):
             the ODM v2 data dictionary.
         output_file (str): The file to save the Schemasheet to. Should be a .tsv file.
     """
-    df = pd.read_csv(sets_file)
-    parts_df = pd.read_csv(parts_file)
+    df = read_data_frame(sets_file, keep_default_na=False, na_values=[""])
+    parts_df = read_data_frame(parts_file, keep_default_na=False, na_values=[""])
 
     # Keep only active status parts
     df = v2_keep_active_rows(df)
@@ -91,7 +92,7 @@ def extract_sets_enums(sets_file: str, parts_file: str, output_file: str):
     # @TODO: Once we figure out how to have blank permissible values, remove this. At the
     # moment Schemasheets treats blank permissible values as corresponding to details about
     # the upper level enum, rather than a value of the enum. After generating the schema
-    # with Schemasheets in utils.make_linkml_schema, we edit the schema in 
+    # with Schemasheets in utils.make_linkml_schema_from_schemasheets, we edit the schema in 
     # utils.fix_schemasheets_generated_schemato replace permissible values equal to EMPTY_PERMISSIBLE_VALUE with "".
     # Drop blank partIDs. 
     # df.loc[df["partID"] == "", "partID"] = None        

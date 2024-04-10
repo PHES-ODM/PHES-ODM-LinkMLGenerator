@@ -20,7 +20,8 @@ import os
 import argparse
 from typing import Tuple
 
-from utils.general_utils import save_schemasheet, get_logger
+from utils.general_utils import get_logger, read_data_frame
+from utils.schemasheets_utils import save_schemasheet
 from odm_v2.v2_utils import v2_keep_active_rows, v2_get_enum_name_from_part_id, v2_get_header_rows, v2_class_names
 
 logger = get_logger(__name__)
@@ -152,7 +153,7 @@ def extract_all_classes(parts_file: str, output_dir: str):
     if not output_dir:
         output_dir = os.path.dirname(parts_file)
 
-    df = pd.read_csv(parts_file)
+    df = read_data_frame(parts_file, keep_default_na=False, na_values=[""])
 
     for class_name in v2_class_names:
         logger.info(f"Processing table {class_name}...")
