@@ -24,7 +24,8 @@ import pandas as pd
 import argparse
 import os
 
-from utils.general_utils import read_data_frame, get_logger, save_schemasheet
+from utils.general_utils import read_data_frame, get_logger
+from utils.schemasheets_utils import save_schemasheet
 from nwss.nwss_utils import parse_enums_sheet, get_detailed_enums
 
 logger = get_logger(__name__)
@@ -76,7 +77,6 @@ def extract_enums(metadata_file: Union[str, Path], valuesets_file: Union[str, Pa
         os.makedirs(output_dir, exist_ok=True)
         
     for enum_name, enum_df in all_enums.items():
-        
         output_file = os.path.join(output_dir, f"enum_{enum_name}.tsv")
         logger.info(f"Saving enum {enum_name} to {output_file}")
         save_schemasheet(enum_df, output_file, headers)

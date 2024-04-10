@@ -16,7 +16,9 @@ Make the NWSS LinkML schemas. There are three schemas:
 IMPORTANT: For restricted_analytics dictionary type: Must copy the "Value Sets" tab from the restricted raw data dictionary to
 the restricted analytics data dictionary, since restricted analytics does not have the "Value Sets" tab
 IMPORTANT: Even when copying "Value Sets" tab to restricted_analytics, we are missing value sets
-IMPROTANT: For restricted_analytics dictionary type: The variable other_norm_unit should be other_norm_units?
+IMPROTANT: For restricted_raw: The value set other_norm_units should be other_norm_unit
+IMPORTANT: For restricted_analytics: categorical slots pcr_gene_target_agg, pcr_target_below_lod, pcr_target_units,
+and quality_flag do not have enumeration definition in "Value Sets" tab.
 """
 
 from pathlib import Path
@@ -24,7 +26,8 @@ import os
 import argparse
 from typing import Optional, Union
 
-from utils.general_utils import extract_sheets, get_logger, clear_dirs, make_linkml_schema
+from utils.general_utils import extract_sheets, get_logger, clear_dirs
+from utils.schemasheets_utils import make_linkml_schema_from_schemasheets
 from nwss.make_nwss_ss_enums import extract_enums
 from nwss.make_nwss_ss_schema import make_schema
 from nwss.make_nwss_ss_classes import extract_all_classes
@@ -107,10 +110,12 @@ def make_nwss(output_dir: Union[str, Path], *, reporting: Optional[Union[str, Pa
 
         # Extract the metadata and Value Sets (enums) sheets from the data dictionary
         if metadata_excel_file == enums_excel_file:
-            extract_sheets(metadata_excel_file, [source_metadata_sheet_name, source_value_sets_sheet_name], dictionary_dir, output_names = [os.path.basename(metadata_file), os.path.basename(enums_file)])
+            # Extract metadata and value sets from single file.
+            extract_sheets(metadata_excel_file, [source_metadata_sheet_name, source_value_sets_sheet_name], dictionary_dir, output_names = [os.path.basename(metadata_file), os.path.basename(enums_file)], na_values={}, default_na_values=[""])
         else:
-            extract_sheets(metadata_excel_file, [source_metadata_sheet_name], dictionary_dir, output_names = [os.path.basename(metadata_file)])
-            extract_sheets(enums_excel_file, [source_value_sets_sheet_name], dictionary_dir, output_names = [os.path.basename(enums_file)])
+            # Extract metadata and value sets from separate files.
+            extract_sheets(metadata_excel_file, [source_metadata_sheet_name], dictionary_dir, output_names = [os.path.basename(metadata_file)], na_values={}, default_na_values=[""])
+            extract_sheets(enums_excel_file, [source_value_sets_sheet_name], dictionary_dir, output_names = [os.path.basename(enums_file)], na_values={}, default_na_values=[""])
 
         # Extract the enumerations from the Value Set. Sometimes there are no enumerations in the metadata.
         if os.path.exists(enums_file):
@@ -129,7 +134,7 @@ def make_nwss(output_dir: Union[str, Path], *, reporting: Optional[Union[str, Pa
         make_schema(schemasheets_dir / "schema.tsv", data_values=default_schema_values)
 
         # Run Schemasheets to make the final LinkML schema
-        make_linkml_schema(schemasheets_dir, linkml_dir / f"nwss_{dictionary_type}.yaml")
+        make_linkml_schema_from_schemasheets(schemasheets_dir, linkml_dir / f"nwss_{dictionary_type}.yaml")
 
     logger.info("Finished!")
         
@@ -141,7 +146,7 @@ if __name__ == "__main__":
             public_concentration = "../gen/nwss/NWSS-Public-Concentration-Data-Dictionary-v1.0.xlsx"
             public_metric = "../gen/nwss/NWSS-Public-Metric-Data-Dictionary-v2.0.xlsx"
             restricted_raw = "../gen/nwss/NWSS Restricted Raw Data Set - Data Dictionary v4.0.0_2023-06-02[66].xlsx"
-            restricted_analytics = None #"../gen/nwss/NWSS Restricted Analytics Data Set - Data Dictionary v4.0.0_2023-06-02[78].xlsx"
+            restricted_analytics = None #"../gen/nwss/NWSS Restricted Analytics Data Set - Data Dictionary v4.0.0_2023-06-02[78]-MODIFIED.xlsx"
     else:
         args = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
         args.add_argument("--output_dir", type=str, help="Directory to save all the output, including the generating LinkML schemas, to. A separate subdirectory is created for each dictionary type.", required=True)

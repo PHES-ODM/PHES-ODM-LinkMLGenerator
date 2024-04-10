@@ -5,7 +5,8 @@ Make the ODMv1 LinkML schema.
 
 from pathlib import Path
 
-from utils.general_utils import make_linkml_schema, get_logger
+from utils.general_utils import get_logger
+from utils.schemasheets_utils import make_linkml_schema_from_schemasheets
 
 if __name__ == "__main__":
     # The directory to save the final odm_v1.yaml LinkML schema file to
@@ -17,6 +18,6 @@ if __name__ == "__main__":
 
     # Make the schema
     linkml_schema = output_dir / "linkml" / "odm_v1.yaml"
-    make_linkml_schema(schemasheets_dir, linkml_schema)
+    make_linkml_schema_from_schemasheets(schemasheets_dir, linkml_schema)
 
     logger.info("Finished!")

@@ -12,7 +12,8 @@ import re
 import os
 
 from nwss.nwss_utils import SlotToEnumColumns, TABLE_NAME_COL, splitup_metadata_sheet, parse_enums_sheet
-from utils.general_utils import get_logger, read_data_frame, save_data_frame, save_schemasheet
+from utils.general_utils import get_logger, read_data_frame
+from utils.schemasheets_utils import save_schemasheet
 
 logger = get_logger(__name__)
 

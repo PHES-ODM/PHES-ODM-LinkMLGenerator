@@ -16,7 +16,8 @@ from typing import Union
 
 from linkml_runtime.linkml_model.meta import SchemaDefinition
 
-from utils.general_utils import clear_dirs, extract_sheets, make_linkml_schema, get_logger
+from utils.general_utils import clear_dirs, extract_sheets, get_logger
+from utils.schemasheets_utils import make_linkml_schema_from_schemasheets
 from odm_v2.make_v2_ss_classes import extract_all_classes
 from odm_v2.make_v2_ss_enums_from_parts import extract_parts_enums
 from odm_v2.make_v2_ss_enums_from_sets import extract_sets_enums
@@ -49,7 +50,7 @@ def make_v2(dictionary_file: Union[str, Path], output_dir: Union[str, Path]) -> 
     clear_dirs([dictionary_dir, schemasheets_dir, linkml_dir])
 
     # Extract the parts and sets sheets from the Excel ODM v2 data dictionary file
-    extract_sheets(dictionary_file, ["parts", "sets"], dictionary_dir)
+    extract_sheets(dictionary_file, ["parts", "sets"], dictionary_dir, na_values = { "parts" : { "partID" : "" }, "sets" : { "partID" : "" }})
 
     # Extract all classes from the parts sheet (and save as a schemasheet)
     extract_all_classes(parts_file, schemasheets_dir)
@@ -72,7 +73,7 @@ def make_v2(dictionary_file: Union[str, Path], output_dir: Union[str, Path]) -> 
     make_schema(schemasheets_dir / "schema.tsv")
 
     # Run Schemasheets to make the final LinkML schema
-    defn = make_linkml_schema(schemasheets_dir, linkml_dir / "odm_v2.yaml")
+    defn = make_linkml_schema_from_schemasheets(schemasheets_dir, linkml_dir / "odm_v2.yaml")
     
     return defn
 
@@ -90,3 +91,4 @@ if __name__ == "__main__":
     make_v2(dictionary_file=opts.dictionary_file, output_dir=opts.output_dir)
 
     logger.info("Finished!")
+    

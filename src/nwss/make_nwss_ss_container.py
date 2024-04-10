@@ -9,7 +9,8 @@ import pandas as pd
 from typing import Union, Optional
 from pathlib import Path
 
-from utils.general_utils import read_data_frame, save_schemasheet, get_logger
+from utils.general_utils import read_data_frame, get_logger
+from utils.schemasheets_utils import save_schemasheet
 from nwss.nwss_utils import splitup_metadata_sheet, SINGLE_TABLE_NAME
 
 logger = get_logger(__name__)

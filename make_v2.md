@@ -41,6 +41,6 @@ This function will make the Schemasheet `gen/odm_v2/schemasheets/prefixes.tsv` t
 
 This function will make the Schemasheet `gen/odm_v2/schemasheets/schema.tsv` that contains metadata for the top-level schema. This includes the schema name, ID, description, and default prefix.
 
-## utils.general_utils.make_linkml_schema
+## utils.schemasheets_utils.make_linkml_schema_from_schemasheets
 
 This function will generate the final LinkML schema for ODM v2. It does this by executing Schemasheets on all the previously generated TSV files. The final schema will be placed at `gen/odm_v2/linkml/odm_v2.yaml`.
