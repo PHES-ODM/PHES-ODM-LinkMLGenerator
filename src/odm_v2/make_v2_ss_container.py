@@ -11,7 +11,8 @@ import pandas as pd
 from typing import Union
 from pathlib import Path
 
-from utils.general_utils import get_logger, save_schemasheet
+from utils.general_utils import get_logger
+from utils.schemasheets_utils import save_schemasheet
 from odm_v2.v2_utils import v2_class_names
 
 logger = get_logger(__name__)
