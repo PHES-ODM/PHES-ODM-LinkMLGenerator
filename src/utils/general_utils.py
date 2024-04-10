@@ -4,22 +4,29 @@ Utility functions for ODM and LinkML.
 
 from pathlib import Path
 import pandas as pd
+from pandas._libs.parsers import STR_NA_VALUES
 import os
 import yaml
-from glob import glob
 from typing import Union, List, Optional, Any, Dict, Tuple
 import logging
 import sys
 
-from schemasheets.schemamaker import SchemaMaker
-from linkml_runtime.linkml_model.meta import SchemaDefinition
-from linkml_runtime.linkml_model import SlotDefinition
-from linkml_runtime.utils.schema_as_dict import schema_as_dict
 from linkml_runtime import SchemaView
 
-EMPTY_PERMISSIBLE_VALUE = "<empty>"
-
 def get_logger(name: str, level: Optional[str] = logging.INFO) -> logging.Logger:
+    """Get the logger with the specified name, setting is configuration as well as output format.
+    The name can be any arbitrary string. For example:
+    
+        logger = get_logger(__name__)
+
+    Args:
+        name (str): The name to give to the logger. This can be any arbitrary string and is
+            typically the name of the caller.
+        level (Optional[str], optional): The logging level of the logger. Defaults to logging.INFO.
+
+    Returns:
+        logging.Logger: The logging object.
+    """
     handlers = [
         logging.StreamHandler(sys.stdout)
     ]
@@ -36,33 +43,6 @@ def get_logger(name: str, level: Optional[str] = logging.INFO) -> logging.Logger
     return logger
 
 logger = get_logger(__name__)
-
-def add_schemasheets_header(df: pd.DataFrame, headers: dict) -> pd.DataFrame:
-    """Insert Schemasheets header line. This is the line that starts with ">" and is
-    inserted as the first row (immediately below the existing Pands column names).
-
-    Args:
-        df (pd.DataFrame): The DataFrame to add the Schemasheets headers to.
-        headers (dict): The Schemasheets headers to add. The keys are names for
-            the existing df column names. The values are the Schemasheet
-            headers to add in the matching column. Note that ">" will be added
-            automatically to the first header. Any DataFrame column not found
-            in this dictionary will receive the Schemasheet header "ignore".
-
-    Returns:
-        pd.DataFrame: The DataFrame with the new Schemasheet header as the first row.
-            A copy of the DataFrame is made.
-    """
-    df = df.copy().reset_index(drop=True)
-    df.loc[-1] = [""] * len(df.columns)
-    df.index = df.index + 1
-    df = df.sort_index()
-    for idx, col in enumerate(df.columns):
-        new_header = headers.get(col, None) or "ignore"
-        if idx == 0:
-            new_header = f"> {new_header}"
-        df.loc[0, col] = new_header
-    return df
 
 def order_columns(df: pd.DataFrame, column_order: List[str]) -> pd.DataFrame:
     """Order the columns in a DataFrame.
@@ -143,39 +123,7 @@ def clear_dirs(dirs: Union[Union[str, Path], List[Union[str, Path]]], extensions
                 if os.path.splitext(file)[1].lower() in extensions:
                     os.remove(file)
 
-def make_linkml_schema(schemasheets_dir: Union[str, Path], output_schema: Union[str, Path]) -> SchemaDefinition:
-    """Create a LinkML schema from all the Schemasheets definition files in the
-    specified directory.
-
-    Args:
-        schemasheets_dir (str): The directory containing all the Schemasheets definition
-            files. All .tsv files are used.
-        output_schema (str): The YAML file to save the LinkML schema to.
-
-    Returns:
-        SchemaDefinition: The generated schema.
-    """
-    logger.info(f"Making LinkML schema at '{output_schema}' from Schemasheets files in '{schemasheets_dir}'")
-    sm = SchemaMaker(use_attributes=False,
-                        unique_slots=False,
-                        gsheet_id=None,
-                        default_name=None,
-                        table_config_path=None)
-    input_sheets = glob(str(Path(schemasheets_dir) / "*.tsv"))
-    schema = sm.create_schema(input_sheets)
-    schema = sm.repair_schema(schema)
-    fix_schemasheets_generated_schema(schema)
-    schema_dict = schema_as_dict(schema)
-
-    if os.path.dirname(output_schema):
-        os.makedirs(os.path.dirname(output_schema), exist_ok=True)
-    with open(output_schema, "w") as f:
-        f.write(yaml.dump(schema_dict, sort_keys=False))
-    logger.info(f"LinkML schema saved to '{output_schema}'")
-    
-    return schema
-
-def extract_sheets(file: Union[str, Path], sheets: Union[str, List[str]], output_dir: Optional[Union[str, Path]] = None, output_names: Union[str, List[str]] = None):
+def extract_sheets(file: Union[str, Path], sheets: Union[str, List[str]], output_dir: Optional[Union[str, Path]] = None, output_names: Union[str, List[str]] = None, na_values: Dict[str, Dict[str, Union[str, List[str]]]] = None, default_na_values: List[str] = STR_NA_VALUES):
     """Extract the specified sheets from Excel file and save them as separate CSV files.
 
     Args:
@@ -188,6 +136,14 @@ def extract_sheets(file: Union[str, Path], sheets: Union[str, List[str]], output
         output_names (Union[str, List[str]], optional): The names of the files to save, each index matching
             the same index in sheets. Extensions are ignored, all files will be CSV files. If None then
             the names will be the same as the sheet names in the sheets parameter.
+        na_values (Dict[str, Dict[str, Union[str, List[str]]]], optional): If specified, then perform special
+            parsing for NA values. The keys specify the sheet names in the Excel file. The values are dictionaries
+            where the key is a column name in the sheet and the values are a list of strings that should be mapped
+            to NA (empty) values. If any column is missing from na_values then default_na_values is used for the
+            column.
+        default_na_values (List[str], optional) If na_values is specified, then use these string values to
+            represent NA values when extracting the sheet for any columns that aren't specified in na_values.
+            Defaults to pandas._libs.parsers.STR_NA_VALUES.
     """
     # Create output directory
     if not output_dir:
@@ -200,17 +156,29 @@ def extract_sheets(file: Union[str, Path], sheets: Union[str, List[str]], output
         sheets = [sheets]
     if isinstance(output_names, str):
         output_names = [output_names]
+    if na_values is None:
+        na_values = {}
+        
+    # Load all the sheet names and columns from the file. We load 0 rows for each sheet,
+    # since we only need to get the sheet names and the column names. This allows us to
+    # load the sheets one at a time while specifying the sheet-specific na_values.
+    pre_dfs = pd.read_excel(file, sheet_name=None, nrows=0)
     if sheets is None or len(sheets) == 0:
-        sheets = None
-    try:
-        logger.info(f"Extracting {'all sheets' if sheets is None else sheets} from file {os.path.basename(file)}...")
-        dfs = pd.read_excel(file, sheet_name = sheets)
-    except ValueError as e:
-        logger.info(f"Could not read sheets {sheets} from {os.path.basename(file)}, trying again")
-        dfs = pd.read_excel(file, sheet_name = None)
-        dfs = { k: v for k, v in dfs.items() if k in sheets }
-        missing = list(set(sheets) - set(dfs.keys()))
-        logger.info(f"Loaded all sheets except for {missing}")
+        sheets = list(dfs.keys())
+
+    # Load all sheets one at a time, using the specified na_values
+    dfs = {}
+    for sheet in sheets:
+        if sheet not in pre_dfs.keys():
+            continue
+        pre_df = pre_dfs[sheet]
+        cur_na_values = na_values.get(sheet, {})
+        cur_na_values = { c: cur_na_values.get(c, default_na_values) for c in pre_df.columns }
+        try:
+            df = pd.read_excel(file, sheet_name=sheet, keep_default_na=False, na_values=cur_na_values)
+            dfs[sheet] = df
+        except:
+            logger.warning(f"Could not extract sheet '{sheet}' from file {file}")
 
     # Save all extracted sheets to disk
     for sheet_name, df in dfs.items():
@@ -258,49 +226,6 @@ def choose_ignore_case_value(val: str, allowable_values: List[str], lowercase_al
     
     return None
 
-def fix_schemasheets_generated_schema(schema: SchemaDefinition):
-    """Do some fixing up of a Schemasheets-generated schema (generated by SchemaMaker). This is
-    to account for errors or deficiencies in Schemasheets, and should hopefully in the long-term
-    be eliminated. This includes:
-    
-    - Converting minimum_value and maximum_value for slots to numbers (Schemasheets makes them
-    strings, which causes problems by downstream LinkML tools).
-    - Replacing any permissible_value equal to EMPTY_PERMISSIBLE_VALUE with "". Schemasheets
-    treats a blank permissible_value in a Schemasheets row as info for the top-level enum,
-    rather than for a permissible value of the enum equal to "".
-
-    Args:
-        schema (SchemaDefinition): The schema
-    """
-    # Replace any permissible_value equal to EMPTY_PERMISSIBLE_VALUE to be blank.
-    # Schemasheets uses a blank permissible_value to represent a row for the top-level
-    # enum (ie. descriptions and titles associated with the enum) rather than a permissible
-    # value of an enum. This makes it impossible to create a blank permissible value (eg.
-    # for values representing not-applicable, NA, etc). To work around this, we've defined
-    # an empty permissible value tag of EMPTY_PERMISSIBLE_VALUE that we replace with "" here.
-    for enum_definition in schema.enums.values():
-        if EMPTY_PERMISSIBLE_VALUE in enum_definition.permissible_values:
-            enum_definition.permissible_values = { ("" if k == EMPTY_PERMISSIBLE_VALUE else k) : v for k, v in enum_definition.permissible_values.items() }
-            
-    # Schemasheets improperly sets minimum_value and maximum_value as strings, which can cause
-    # problems downstream such as with the LinkML validator. We convert them to floats or integers
-    # here.
-    def _make_number(key: str, slot_definition: SlotDefinition):
-        val = slot_definition[key]
-        if pd.isna(val):
-            return
-        try:
-            float_val = float(val)
-            val = int(float_val) if float_val == int(float_val) else float_val
-        except:
-            logger.warning(f"Unrecognized {key}: {val} of type {type(val)}, using None")
-            val = None
-        slot_definition[key] = val
-    for class_definition in schema.classes.values():
-        for slot_definition in class_definition.slot_usage.values():
-            _make_number("minimum_value", slot_definition)
-            _make_number("maximum_value", slot_definition)
-
 def get_class_name_from_file_name(file_name: Union[str, Path], schema: Optional[SchemaView] = None) -> str:
     """Get the LinkML class name based on a data file name. Data files are named as "class_name[...].ext".
 
@@ -318,45 +243,123 @@ def get_class_name_from_file_name(file_name: Union[str, Path], schema: Optional[
         class_name = choose_ignore_case_value(class_name, list(schema.all_classes().keys()))
     return class_name
     
-def save_schemasheet(data: Union[Dict, List, pd.DataFrame], file_name: Union[str, Path], headers: Union[List[str], Dict[str, str]] = None) -> pd.DataFrame:
-    """Create a Schemasheet file from the data. Schemasheets headers (with a row preceded by a '>') are also added
-    according to headers. Headers are ordered according to the order in headers, with any header not found
-    in headers placed at the end.
+def extend_down(df: pd.DataFrame, columns: List[str] = None) -> pd.DataFrame:
+    """Extend all values in the columns down to fill in any blank cells in those columns. (ie. blank cells
+    take on the value from the closest non-blank cell found previously in the column).
+    
+    A copy of the DataFrame is created and returned, the original is left unchanged.
 
     Args:
-        data (Union[Dict, List[Dict], pd.DataFrame]): The data to save to the Schemasheet. If a Dict or List
-            of Dicts then the keys become the headers and the values are the rows.
-        file_name (Union[str, Path]): The file to save the Schemasheet to.
-        headers (Union[List[str], Dict[str, str]], optional): If set and a Dict then defines what Schemasheets header each header in the data
-            maps to. If a List then specifies the order of the headers as well as the headers in the data that map to the a
-            Schemasheet header of the same name. Any header in the data missing in headers is mapped to the Schemasheets header
-            "ignore". Defaults to None.
-            
-    Returns:
-        pd.DataFrame: The final Schemasheets DataFrame saved to disk. It includes the Schemasheets headers row, with the
-            columns sorted according to the headers parameter.
-    """
-    # Create a Pandas DataFrame from the data
-    if isinstance(data, pd.DataFrame):
-        df = data
-    elif isinstance(data, Dict):
-        if isinstance(data[list(data.keys())[0]], (list, tuple)):
-            index = None
-        else:
-            index = [0]
-        df = pd.DataFrame(data, columns = data.keys(), index = index)
-    else:
-        df = pd.DataFrame(data, index = range(0, len(data)))
-    
-    if headers is None:
-        headers = {k:k for k in df.columns}
-    elif not isinstance(headers, dict):
-        headers = {k:k for k in headers}
+        df (pd.DataFrame): The DataFrame to extend downward. It is modified in-place.
+        columns (List[str], optional): The columns to extend downward. If None then all columns
+            in df are extended downward. Defaults to None
         
-    # Order columns and add the Schemasheets headers
-    df = order_columns(df, headers.keys())
-    df = add_schemasheets_header(df, headers)
-
-    save_data_frame(df, file_name, index=False)
+    Returns:
+        pd.DataFrame: A copy of df with values extended downward in the source class/slot
+            and target class/slot columns.
+    """
+    df = df.copy()
+    
+    if columns is None:
+        columns = list(df.columns)
+    
+    def _assign_if_empty(df: pd.DataFrame, idx: int, column: str, value: Any):
+        # If the cell in the column at row index idx is empty then assign the value to that cell
+        if pd.isna(df.loc[idx, column]) or df.loc[idx, column] == "":
+            df.loc[idx, column] = value
+        return df.loc[idx, column]
+    
+    # Extend all values downward
+    prev_values = { k: None for k in columns }
+    for idx in df.index:
+        for k, v in prev_values.items():
+            prev_values[k] = _assign_if_empty(df, idx, k, prev_values[k])
     
     return df
+
+def expand_multi_rows(df: pd.DataFrame, columns: Union[List[str], str]) -> pd.DataFrame:
+    """For all specified columns in the DataFrame df, over all rows, make duplicate rows whenever
+    a column value has a semi-colon (;) in it, with each new row having the different values when
+    splitting the original values by semi-colons.
+    
+    If multiple columns are specified, then the values we select when splitting all the values in all
+    the columns by semi-colons match by index for each new row. If a column doesn't have enough indices
+    when split by semi-colons, then the last item is selected. For example, the following table:
+    
+    | Name                       | Favorite color       | Species      |
+    |----------------------------|----------------------|--------------|
+    | Spatophen;Diblodex;Matimer | Pink;Periwinkle      | Homo sapien  |
+    
+    Would be expanded to:
+
+    | Name                       | Favorite color       | Species      |
+    |----------------------------|----------------------|--------------|
+    | Spatophen                  | Pink                 | Homo sapien  |
+    | Diblodex                   | Periwinkle           | Homo sapien  |
+    | Matimer                    | Periwinkle           | Homo sapien  |
+
+    Args:
+        df (pd.DataFrame): The DataFrame to expand. A copy is made and the original left unchanged.
+        columns (Union[List[str], str]): The columns to expand. We will search for SEP_TAG in all of
+            these columns (in all rows).
+
+    Returns:
+        pd.DataFrame: The expanded DataFrame.
+    """
+    SEP_TAG = ";"
+    
+    if isinstance(columns, str):
+        columns = [columns]
+        
+    # Keep rows where any of the columns have multiple values (ie. a string with SEP_TAG in it)
+    # so we expand them.
+    multi_df = df[df[columns].astype(str).map(lambda x: SEP_TAG in x).any(axis="columns")].copy()
+        
+    # Split all column strings along the string SEP_TAG
+    multi_df[columns] = multi_df[columns].map(lambda x: [x.strip() for x in x.split(SEP_TAG)] if not pd.isna(x) else [""])
+    
+    # Determine the maximum number of multiple values
+    max_multi = multi_df[columns].map(lambda x: len(x)).max(axis=None)
+
+    # Remove all original rows that had multiple values specified. We'll expand these removed
+    # rows below and then readd the expanded rows to the DataFrame.
+    df = df[~df.index.isin(multi_df.index)]
+
+    def _select_element(i: int, arr: List) -> str:
+        # Select element number i in arr. If i is out of bounds then select the last element.
+        if len(arr) > i:
+            val = arr[i]
+        else:
+            val = arr[-1]
+        return val
+    
+    split_rows_dfs = []
+    for i in range(max_multi):
+        # Keep any row where at least one of the columns has i+1 or more values
+        new_rows_df = multi_df[multi_df[columns].map(lambda x: len(x) > i).sum(axis=1) > 0].copy()
+        # Select the ith element
+        new_rows_df[columns] = new_rows_df[columns].map(lambda x: _select_element(i, x))
+        split_rows_dfs.append(new_rows_df)
+
+    df = pd.concat([df, *split_rows_dfs]).reset_index(drop=True)
+    
+    return df
+
+def rename_items(items: List[str], renames: Dict[str, str]) -> List[str]:
+    """Rename the string items in the list according to the renames dictionary. The keys of the 
+    dictionary are the original names and the values are the new values to rename them to. A copy of
+    items is made, the original is left unmodified.
+
+    Args:
+        items (List[str]): The list of items that is the target of the renaming.
+        renames (Dict[str, str]): Dictionary specifying how to rename the values in items. The keys
+            are the original item values, and the values are what to rename them to.
+
+    Returns:
+        List[str]: The renamed items. The order of the items is maintained, and a copy is
+            made with the original left unchanged.
+    """
+    items = list(items).copy()
+    for orig, target in renames.items():
+        items[items.index(orig)] = target
+    return items
