@@ -506,12 +506,10 @@ enums:
       sol:
         description: Solid fraction of a sample.
         title: Solid fraction
-      ? ''
-      : description: The field for which the expected value is not a property of the
-          described object. / The outcome of a measurement is not a valid number (plus
-          or minus infinity, error, ...) / A logical representation of a statement
-          that is neither TRUE nor FALSE.
-        title: Not applicable / Not a number / Null
+      NA:
+        description: The field for which the expected value is not a property of the
+          described object.
+        title: Not applicable
   fullDictionarySheetSet:
     description: Worksheets in the full Excel dictionary.
     title: Full dictionary sheets set
@@ -609,6 +607,10 @@ enums:
     title: General missingness set
     from_schema: https://onto.phes-odm.org/odm/v2
     permissible_values:
+      'null':
+        description: A logical representation of a statement that is neither TRUE
+          nor FALSE.
+        title: 'Null'
       undisc:
         description: A value has been recorded, however it was not included in the
           dataset.
@@ -616,12 +618,14 @@ enums:
       nr:
         description: A value could have been recorded, however, it was not.
         title: Not reported
-      ? ''
-      : description: The field for which the expected value is not a property of the
-          described object. / The outcome of a measurement is not a valid number (plus
-          or minus infinity, error, ...) / A logical representation of a statement
-          that is neither TRUE nor FALSE.
-        title: Not applicable / Not a number / Null
+      nan:
+        description: The outcome of a measurement is not a valid number (plus or minus
+          infinity, error, ...)
+        title: Not a number
+      NA:
+        description: The field for which the expected value is not a property of the
+          described object.
+        title: Not applicable
   genQualitySet:
     description: A quality set to specify any generic quality concerns about a measure
       or sample.
@@ -1251,12 +1255,10 @@ enums:
       nr:
         description: A value could have been recorded, however, it was not.
         title: Not reported
-      ? ''
-      : description: The field for which the expected value is not a property of the
-          described object. / The outcome of a measurement is not a valid number (plus
-          or minus infinity, error, ...) / A logical representation of a statement
-          that is neither TRUE nor FALSE.
-        title: Not applicable / Not a number / Null
+      NA:
+        description: The field for which the expected value is not a property of the
+          described object.
+        title: Not applicable
   orgLevelSet:
     description: Categories of organization levels.
     title: Organization level set
@@ -2647,12 +2649,10 @@ enums:
       sol:
         description: Solid fraction of a sample.
         title: Solid fraction
-      ? ''
-      : description: The field for which the expected value is not a property of the
-          described object. / The outcome of a measurement is not a valid number (plus
-          or minus infinity, error, ...) / A logical representation of a statement
-          that is neither TRUE nor FALSE.
-        title: Not applicable / Not a number / Null
+      NA:
+        description: The field for which the expected value is not a property of the
+          described object.
+        title: Not applicable
       hFr:
         description: An indicator in wide-names to show that information on the fraction
           analyzed in found under a separate header.
