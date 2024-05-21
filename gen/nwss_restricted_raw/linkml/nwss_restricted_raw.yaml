@@ -14,7 +14,8 @@ enums:
     permissible_values:
       'yes': {}
       'no': {}
-      '[empty]': {}
+      ? ''
+      : {}
   vs_pcr_target:
     from_schema: https://onto.phes-odm.org/nwss/restricted_raw
     permissible_values:
@@ -618,7 +619,8 @@ enums:
       log10 micrograms/g dry sludge:
         description: Dry sludge mass is based on the mass of solids after drying in
           a drying oven
-      '[empty]': {}
+      ? ''
+      : {}
   vs_mic_chem_units:
     from_schema: https://onto.phes-odm.org/nwss/restricted_raw
     permissible_values:
@@ -681,7 +683,8 @@ enums:
     permissible_values:
       'yes': {}
       'no': {}
-      '[empty]': {}
+      ? ''
+      : {}
   vs_yn:
     from_schema: https://onto.phes-odm.org/nwss/restricted_raw
     permissible_values:
@@ -696,7 +699,8 @@ enums:
       f+ rna coliphage: {}
       f+ dna coliphage: {}
       PMMoV (GT-Digital): {}
-      '[empty]': {}
+      ? ''
+      : {}
   vs_hum_frac_target_chem:
     from_schema: https://onto.phes-odm.org/nwss/restricted_raw
     permissible_values:
@@ -704,7 +708,8 @@ enums:
       creatinine: {}
       sucralose: {}
       ibuprofen: {}
-      '[empty]': {}
+      ? ''
+      : {}
   vs_solids_separation:
     from_schema: https://onto.phes-odm.org/nwss/restricted_raw
     permissible_values:
@@ -721,7 +726,8 @@ enums:
         description: Solids separated from liquid by allowing solids to settle by
           gravity
       none: {}
-      '[empty]': {}
+      ? ''
+      : {}
   vs_pcr_type:
     from_schema: https://onto.phes-odm.org/nwss/restricted_raw
     permissible_values:
@@ -754,7 +760,8 @@ enums:
       sucralose: {}
       ibuprofen: {}
       rnase p: {}
-      '[empty]': {}
+      ? ''
+      : {}
   vs_rec_eff_spike_matrix:
     from_schema: https://onto.phes-odm.org/nwss/restricted_raw
     permissible_values:
@@ -764,7 +771,8 @@ enums:
       sample concentrate: {}
       lysis buffer: {}
       dewatered solids: {}
-      '[empty]': {}
+      ? ''
+      : {}
   vs_sample_location:
     from_schema: https://onto.phes-odm.org/nwss/restricted_raw
     permissible_values:
@@ -778,13 +786,15 @@ enums:
     permissible_values:
       'yes': {}
       'no': {}
-      '[empty]': {}
+      ? ''
+      : {}
   vs_yne[ext_blank]:
     from_schema: https://onto.phes-odm.org/nwss/restricted_raw
     permissible_values:
       'yes': {}
       'no': {}
-      '[empty]': {}
+      ? ''
+      : {}
   vs_reporting_jurisdiction:
     from_schema: https://onto.phes-odm.org/nwss/restricted_raw
     permissible_values:
@@ -1085,7 +1095,8 @@ enums:
     permissible_values:
       'yes': {}
       'no': {}
-      '[empty]': {}
+      ? ''
+      : {}
   vs_rec_eff_target_name:
     from_schema: https://onto.phes-odm.org/nwss/restricted_raw
     permissible_values:
@@ -1103,7 +1114,8 @@ enums:
       murine hepatitis virus: {}
       MHV (PREvalence): {}
       BCoV (GT-Digital): {}
-      '[empty]': {}
+      ? ''
+      : {}
       parapoxvirus: {}
 slots:
   reporting_jurisdiction:
@@ -1246,6 +1258,8 @@ slots:
     from_schema: https://onto.phes-odm.org/nwss/restricted_raw
   sample_first_reported:
     from_schema: https://onto.phes-odm.org/nwss/restricted_raw
+  key_sewershed:
+    from_schema: https://onto.phes-odm.org/nwss/restricted_raw
   nwss:
     from_schema: https://onto.phes-odm.org/nwss/restricted_raw
 classes:
@@ -1321,6 +1335,7 @@ classes:
     - major_lab_method
     - major_lab_method_desc
     - sample_first_reported
+    - key_sewershed
     slot_usage:
       reporting_jurisdiction:
         description: The CDC Epidemiology and Laboratory Capacity (ELC) jurisdiction,
@@ -1643,6 +1658,11 @@ classes:
           first submitted to CDC NWSS
         range: string
         pattern: ^[0-9]{4}-[0-9]{2}-[0-9]{2}$
+      key_sewershed:
+        description: Composite key that uniquely identifies a sewershed, whether at
+          a treatment plant or upstream of a treatment plant; a concatenation of 'wwtp_jurisdiction',
+          'wwtp_id', 'sample_location',  'sample_location_specify_id', and 'sample_matrix'
+        range: string
   Container:
     from_schema: https://onto.phes-odm.org/nwss/restricted_raw
     slots:

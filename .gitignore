@@ -3,6 +3,9 @@
 /gen/nwss_*/dictionary/
 /gen/nwss_*/schemasheets/
 
+# NWSS restricted
+/gen/nwss_restricted_*/
+
 # ODM v2 input and output
 /gen/odm_v2/*.xlsx
 /gen/odm_v2/dictionary/
