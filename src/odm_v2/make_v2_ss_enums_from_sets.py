@@ -21,8 +21,8 @@ sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
 import pandas as pd
 import argparse
 
-from utils.general_utils import get_logger, read_data_frame
-from utils.schemasheets_utils import EMPTY_PERMISSIBLE_VALUE, save_schemasheet
+from utils.general_utils import get_logger, read_data_frame, EMPTY_PERMISSIBLE_VALUE
+from utils.schemasheets_utils import save_schemasheet
 from odm_v2.v2_utils import v2_keep_active_rows
 
 logger = get_logger(__name__)

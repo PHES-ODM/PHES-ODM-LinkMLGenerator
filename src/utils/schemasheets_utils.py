@@ -10,11 +10,9 @@ from linkml_runtime.linkml_model.meta import SchemaDefinition
 from linkml_runtime.linkml_model import SlotDefinition
 from linkml_runtime.utils.schema_as_dict import schema_as_dict
 
-from utils.general_utils import get_logger, order_columns, save_data_frame
+from utils.general_utils import get_logger, order_columns, save_data_frame, EMPTY_PERMISSIBLE_VALUE
 
 logger = get_logger(__name__)
-
-EMPTY_PERMISSIBLE_VALUE = "<empty>"
 
 def make_linkml_schema_from_schemasheets(schemasheets_dir: Union[str, Path], output_schema: Union[str, Path]) -> SchemaDefinition:
     """Create a LinkML schema from all the Schemasheets definition files in the
