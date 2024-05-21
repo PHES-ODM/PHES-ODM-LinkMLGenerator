@@ -1,7 +1,7 @@
 from typing import Dict, Tuple, List, Optional
 import pandas as pd
 
-from utils.general_utils import get_logger
+from utils.general_utils import get_logger, EMPTY_PERMISSIBLE_VALUE
 
 logger = get_logger(__name__)
 
@@ -21,7 +21,7 @@ def splitup_metadata_sheet(df: pd.DataFrame, single_table: bool = False) -> Dict
     # whever an empty value is found in the "Data Type" column. The rows with the empty values
     # contain the table name in the "Field Name" column. All rows up to but excluding the next
     # empty value define that table.
-    table_boundaries = list(df.index[pd.isna(df["Data Type"])]) + [df.index[-1]]
+    table_boundaries = list(df.index[pd.isna(df["Data Type"])]) + [df.index[-1]+1]
     
     if len(table_boundaries) <= 1:
         # The DataFrame is a single table
@@ -91,11 +91,9 @@ def parse_enums_sheet(df: pd.DataFrame) -> Tuple[pd.DataFrame, Dict[str, pd.Data
         enum_name = enum_value_col
         enum_df = df[[enum_value_col, desc_col]].drop(index=0).dropna(axis=0, how="all").reset_index(drop=True).copy()        
         enum_df.columns = ["permissible_value", "description"]
-
+        
         # Replace [empty] with blank string
-        # @TODO: Schemasheets doesn't allow empty permissible_values, it treats an empty one as being
-        # a row for the top-level enumeration, rather than a value of the enumeration
-        # enum_df["permissible_value"] = enum_df["permissible_value"].map(lambda x: "" if x == "[empty]" else x)
+        enum_df.loc[enum_df["permissible_value"] == "[empty]", "permissible_value"] = EMPTY_PERMISSIBLE_VALUE
         
         # Add the enum name to the DataFrame
         enum_df["enum"] = enum_name
