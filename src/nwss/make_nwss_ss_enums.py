@@ -58,11 +58,14 @@ def extract_enums(metadata_file: Union[str, Path], valuesets_file: Union[str, Pa
     valuesets_df = read_data_frame(valuesets_file) 
     metadata_df = read_data_frame(metadata_file)
     
+    # If "variable name" is a column in metadata_df then rename it to "Field Name"
     if "variable name" in metadata_df.columns:
         columns = list(metadata_df.columns)
         columns[columns.index("variable name")] = "Field Name"
         metadata_df.columns = columns
     
+    # Parse the enums sheet, by breaking it up into multiple DataFrames. Each DataFrame
+    # has the headers permissible_value, description, and enum (the enum name)
     _, all_enums = parse_enums_sheet(valuesets_df)
     detailed_enums = get_detailed_enums(metadata_df, detailed_enum_names=detailed_enum_names)
     for enum_name, target_names in detailed_enums.items():
