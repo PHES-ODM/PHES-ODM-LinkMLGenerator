@@ -1,5 +1,5 @@
 # NWSS input and output
-/gen/nwss/*.xlsx
+/data/nwss/*.xlsx
 /gen/nwss_*/dictionary/
 /gen/nwss_*/schemasheets/
 
