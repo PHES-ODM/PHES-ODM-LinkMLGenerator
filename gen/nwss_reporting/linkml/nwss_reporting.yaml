@@ -14,7 +14,8 @@ enums:
     permissible_values:
       'yes': {}
       'no': {}
-      '[empty]': {}
+      ? ''
+      : {}
   vs_pcr_target:
     from_schema: https://onto.phes-odm.org/nwss/reporting
     permissible_values:
@@ -355,7 +356,8 @@ enums:
     permissible_values:
       'yes': {}
       'no': {}
-      '[empty]': {}
+      ? ''
+      : {}
   vs_num_no_target_control:
     from_schema: https://onto.phes-odm.org/nwss/reporting
     permissible_values:
@@ -695,7 +697,8 @@ enums:
       log10 micrograms/g dry sludge:
         description: Dry sludge mass is based on the mass of solids after drying in
           a drying oven
-      '[empty]': {}
+      ? ''
+      : {}
   vs_mic_chem_units:
     from_schema: https://onto.phes-odm.org/nwss/reporting
     permissible_values:
@@ -759,7 +762,8 @@ enums:
     permissible_values:
       'yes': {}
       'no': {}
-      '[empty]': {}
+      ? ''
+      : {}
   vs_yn:
     from_schema: https://onto.phes-odm.org/nwss/reporting
     permissible_values:
@@ -774,7 +778,8 @@ enums:
       f+ rna coliphage: {}
       f+ dna coliphage: {}
       PMMoV (GT-Digital): {}
-      '[empty]': {}
+      ? ''
+      : {}
   vs_hum_frac_target_chem:
     from_schema: https://onto.phes-odm.org/nwss/reporting
     permissible_values:
@@ -782,7 +787,8 @@ enums:
       creatinine: {}
       sucralose: {}
       ibuprofen: {}
-      '[empty]': {}
+      ? ''
+      : {}
   vs_solids_separation:
     from_schema: https://onto.phes-odm.org/nwss/reporting
     permissible_values:
@@ -799,7 +805,8 @@ enums:
         description: Solids separated from liquid by allowing solids to settle by
           gravity
       none: {}
-      '[empty]': {}
+      ? ''
+      : {}
   vs_pcr_type:
     from_schema: https://onto.phes-odm.org/nwss/reporting
     permissible_values:
@@ -832,13 +839,15 @@ enums:
       sucralose: {}
       ibuprofen: {}
       rnase p: {}
-      '[empty]': {}
+      ? ''
+      : {}
   vs_yne[pcr_target_below_lod]:
     from_schema: https://onto.phes-odm.org/nwss/reporting
     permissible_values:
       'yes': {}
       'no': {}
-      '[empty]': {}
+      ? ''
+      : {}
   vs_rec_eff_spike_matrix:
     from_schema: https://onto.phes-odm.org/nwss/reporting
     permissible_values:
@@ -848,7 +857,8 @@ enums:
       sample concentrate: {}
       lysis buffer: {}
       dewatered solids: {}
-      '[empty]': {}
+      ? ''
+      : {}
   vs_sample_location:
     from_schema: https://onto.phes-odm.org/nwss/reporting
     permissible_values:
@@ -862,19 +872,22 @@ enums:
     permissible_values:
       'yes': {}
       'no': {}
-      '[empty]': {}
+      ? ''
+      : {}
   vs_yne[qc_ignore]:
     from_schema: https://onto.phes-odm.org/nwss/reporting
     permissible_values:
       'yes': {}
       'no': {}
-      '[empty]': {}
+      ? ''
+      : {}
   vs_yne[ext_blank]:
     from_schema: https://onto.phes-odm.org/nwss/reporting
     permissible_values:
       'yes': {}
       'no': {}
-      '[empty]': {}
+      ? ''
+      : {}
   vs_reporting_jurisdiction:
     from_schema: https://onto.phes-odm.org/nwss/reporting
     permissible_values:
@@ -1177,7 +1190,8 @@ enums:
     permissible_values:
       'yes': {}
       'no': {}
-      '[empty]': {}
+      ? ''
+      : {}
   vs_rec_eff_target_name:
     from_schema: https://onto.phes-odm.org/nwss/reporting
     permissible_values:
@@ -1195,14 +1209,16 @@ enums:
       murine hepatitis virus: {}
       MHV (PREvalence): {}
       BCoV (GT-Digital): {}
-      '[empty]': {}
+      ? ''
+      : {}
       parapoxvirus: {}
   vs_yne[dashboard_ignore]:
     from_schema: https://onto.phes-odm.org/nwss/reporting
     permissible_values:
       'yes': {}
       'no': {}
-      '[empty]': {}
+      ? ''
+      : {}
 slots:
   reporting_jurisdiction:
     from_schema: https://onto.phes-odm.org/nwss/reporting
@@ -1376,6 +1392,8 @@ slots:
     from_schema: https://onto.phes-odm.org/nwss/reporting
   major_lab_method:
     from_schema: https://onto.phes-odm.org/nwss/reporting
+  major_lab_method_desc:
+    from_schema: https://onto.phes-odm.org/nwss/reporting
   nwss:
     from_schema: https://onto.phes-odm.org/nwss/reporting
 classes:
@@ -1467,6 +1485,7 @@ classes:
     - other_norm_unit
     - quality_flag
     - major_lab_method
+    - major_lab_method_desc
     slot_usage:
       reporting_jurisdiction:
         description: The CDC Epidemiology and Laboratory Capacity (ELC) jurisdiction,
@@ -1668,7 +1687,7 @@ classes:
         required: true
       pasteurized:
         description: Was the sample pasteurized?
-        range: vs_yne[pasteurized]
+        range: vs_yn
         required: true
       pcr_target:
         description: The target of the PCR quantification
@@ -1872,7 +1891,7 @@ classes:
         description: For qPCR, did any no-template controls on this instrument run
           have a Ct value less than 40? For ddPCR, did any no-template controls on
           this instrument run have 3 or more positive droplets?
-        range: vs_yn
+        range: vs_yne[ntc_amplify]
         required: true
       rec_eff_percent:
         description: Percent of spiked recovery control, specified in 'rec_eff_target_name',
@@ -1923,6 +1942,14 @@ classes:
           be different for the same laboratory if changes made to the laboratory protocol
           rendered concentrations not comparable.
         range: integer
+        required: true
+      major_lab_method_desc:
+        description: "Brief description of the basis for assigning a \u2018major_lab_method\u2019\
+          , e.g., \"this lab uses a lab method distinct from other labs in this reporting\
+          \ jurisdiction\", \"this lab changed lab methods - new concentration method\"\
+          \ or \"lab method is same as other labs in this reporting jurisdiction but\
+          \ performance differs\""
+        range: string
         required: true
   Container:
     from_schema: https://onto.phes-odm.org/nwss/reporting
