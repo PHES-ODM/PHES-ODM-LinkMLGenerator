@@ -24,6 +24,7 @@ from odm_v2.make_v2_ss_enums_from_sets import extract_sets_enums
 from odm_v2.make_v2_ss_prefixes import make_prefixes
 from odm_v2.make_v2_ss_schema import make_schema
 from odm_v2.make_v2_ss_container import extract_container_class
+from odm_v2.v2_utils import get_multi_enums_from_dictionary
 
 logger = get_logger(__name__)
 
@@ -73,7 +74,8 @@ def make_v2(dictionary_file: Union[str, Path], output_dir: Union[str, Path]) -> 
     make_schema(schemasheets_dir / "schema.tsv")
 
     # Run Schemasheets to make the final LinkML schema
-    defn = make_linkml_schema_from_schemasheets(schemasheets_dir, linkml_dir / "odm_v2.yaml")
+    enum_maps = get_multi_enums_from_dictionary(dictionary_file, lists_sheet = "lists")
+    defn = make_linkml_schema_from_schemasheets(schemasheets_dir, linkml_dir / "odm_v2.yaml", enum_maps=enum_maps)
     
     return defn
 
@@ -91,4 +93,3 @@ if __name__ == "__main__":
     make_v2(dictionary_file=opts.dictionary_file, output_dir=opts.output_dir)
 
     logger.info("Finished!")
-    

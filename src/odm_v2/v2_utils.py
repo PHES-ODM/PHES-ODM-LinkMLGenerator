@@ -2,8 +2,10 @@
 Utility functions for ODM LinkML Schema Generator, specific to ODM v2 dictionary.
 """
 
-from typing import Union, Any, List, Optional
+from typing import Union, Any, List, Optional, Dict
 import pandas as pd
+import re
+import openpyxl
 
 # All known table names in ODM v2 (in LinkML they are called classes).
 v2_class_names = [
@@ -123,4 +125,71 @@ def v2_get_enum_name_from_part_id(part_id: str) -> str:
     else:
         name = f"{part_id}s"
     return name
+
+def get_multi_enums_from_dictionary(dictionary_file: str, lists_sheet: str) -> Dict[str, List[str]]:
+    """From the ODM v2 data dictionary (the "lists" sheet), get all enumeration names that should
+    always be combined with other enumerations. For example, the "fractionSet" enumeration should always
+    be combined with the "genMissingnessSet" enumeration, so that missing values (eg. NA, nan, nr, etc).
+    
+    The returned value has keys for an enumeration name and the corresponding value being a list
+    of enumeration names that the source enumeration should take on. The list will include
+    the source enumeration (ie. the key) plus optionally additional enumerations that should be included.
+    
+    For example:
+    
+        {
+            "fractionSet" : [ "fractionSet", "genMissingnessSet" ],
+            "sampleRelSet" : [ "sampleRelSet" ],
+        }
+
+    Args:
+        dictionary_file (str): The path to the ODM v2 data dictionary Excel file.
+        lists_sheet (str): The name of the sheet that contains all lists (typically "lists"). This sheet
+            contains formulas for creating lists for various enumerations, along with optional
+            missingness enumerations.
+
+    Returns:
+        Dict[str, List[str]]: Dictionary mapping enumeration names to lists of enumerations names.
+    """
+    # Get the formulas for all lists.
+    # The formulas are similar to:
+    # =UNIQUE(_xlfn._xlws.FILTER(parts!B:B, ((parts!C:C = "classes")*(parts!AE:AE = "input"))+(parts!C:C = "missingness")))
+    # =UNIQUE(_xlfn._xlws.FILTER(sets!D:D,(sets!A:A="purposeSet")+(sets!A:A = "genMissingnessSet")))
+    # We get all strings enclosed in quotes (as a list of strings), remove the "input" strings, and rename "missingness" to
+    # "genMissingnessSet".
+    # From the results, the first string that is not "genMissingnessSet" becomes the source enum
+    # name (ie. the key in the returned dictionary), while the full results becomes the target enum
+    # name (ie. the value in the returned dictionary).
+    wb = openpyxl.load_workbook(dictionary_file, read_only=True, data_only=False)
+    ws = wb[lists_sheet]
+    df = pd.DataFrame(ws.values)
+    
+    enum_maps = {}
+    for formula in df.iloc[1]:
+        if not hasattr(formula, "text"):
+            continue
+        
+        # Extract all strings enclosed in quotes from the formula. These will be
+        # the enum names that we will process
+        txt = formula.text
+        res = re.findall("\"([^\"]*)\"", txt)
+        
+        if res is not None:
+            # Go through the results, replace "missingness" with "genMissingnessSet",
+            # and find the first string that is not "genMissingnessSet"
+            # We also correct capitalization of "genMissingnessSet", since Excel
+            # treats strings as case-insensitive.
+            non_missing_enum = None
+            for idx in range(len(res)):
+                if res[idx].lower() in ["genmissingnessset", "missingness"]:
+                    res[idx] = "genMissingnessSet"
+                elif non_missing_enum is None:
+                    non_missing_enum = res[idx]
+            # Remove "input"
+            if "input" in res:
+                res.remove("input")
+            # Save to the map
+            enum_maps[non_missing_enum] = res
+
+    return enum_maps
 
