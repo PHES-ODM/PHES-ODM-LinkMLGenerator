@@ -1,13 +1,6 @@
 #%%
 """
 Make the ODMv2 LinkML schema.
-
-Be sure that excel_file points to the ODM v2 data dictionary.
-
-@TODO:
-- collNumPer has minValue "1:1". Currently this is converted to NA. Should use pattern ^[1-9][0-9]*\\.[1-9][0-9]*$
-- relationshipID: Has partType equal to "sampleRelSet, protocolRelSet": Is found in both sampleRelationships and protocolRelationships tables
-- origin: Is categorical, but no origins set (maybe should have mmaSet equal to originSet?)
 """
 
 from pathlib import Path
@@ -17,14 +10,14 @@ from typing import Union
 from linkml_runtime.linkml_model.meta import SchemaDefinition
 
 from utils.general_utils import clear_dirs, extract_sheets, get_logger
-from utils.schemasheets_utils import make_linkml_schema_from_schemasheets
+from utils.schemasheets_utils import make_linkml_schema_from_schemasheets, save_schema_definition
 from odm_v2.make_v2_ss_classes import extract_all_classes
 from odm_v2.make_v2_ss_enums_from_parts import extract_parts_enums
 from odm_v2.make_v2_ss_enums_from_sets import extract_sets_enums
 from odm_v2.make_v2_ss_prefixes import make_prefixes
 from odm_v2.make_v2_ss_schema import make_schema
 from odm_v2.make_v2_ss_container import extract_container_class
-from odm_v2.v2_utils import get_multi_enums_from_dictionary
+from odm_v2.v2_utils import add_missingness_set
 
 logger = get_logger(__name__)
 
@@ -74,10 +67,15 @@ def make_v2(dictionary_file: Union[str, Path], output_dir: Union[str, Path]) -> 
     make_schema(schemasheets_dir / "schema.tsv")
 
     # Run Schemasheets to make the final LinkML schema
-    enum_maps = get_multi_enums_from_dictionary(dictionary_file, lists_sheet = "lists")
-    defn = make_linkml_schema_from_schemasheets(schemasheets_dir, linkml_dir / "odm_v2.yaml", enum_maps=enum_maps)
+    schema = make_linkml_schema_from_schemasheets(schemasheets_dir)
+
+    # Add genMissingnessSet to all ranges where an enum must be paired with genMissingnessSet
+    add_missingness_set(schema, dictionary_file=dictionary_file, lists_sheet = "lists")
+ 
+    # Save the schema to disk
+    save_schema_definition(schema, linkml_dir / "odm_v2.yaml")
     
-    return defn
+    return schema
 
 if __name__ == "__main__":
     if "get_ipython" in globals():

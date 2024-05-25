@@ -6,6 +6,9 @@ from typing import Union, Any, List, Optional, Dict
 import pandas as pd
 import re
 import openpyxl
+from pathlib import Path
+
+from linkml_runtime.linkml_model.meta import SchemaDefinition
 
 # All known table names in ODM v2 (in LinkML they are called classes).
 v2_class_names = [
@@ -193,3 +196,38 @@ def get_multi_enums_from_dictionary(dictionary_file: str, lists_sheet: str) -> D
 
     return enum_maps
 
+def map_enum_ranges(schema: SchemaDefinition, enum_maps: Dict[str, List[str]]):
+    """For any slot_usage that uses the range that is a key in enum_maps, replace
+    the range with the corresponding value in enum_maps. This is typically used
+    to force some enumerations to be always combined with other enumerations, such
+    as for adding a missingness enumeration to other enumerations.
+
+    Args:
+        schema (SchemaDefinition): The SchemaDefinition to change.
+        enum_maps (Dict[str, List[str]]): The enum mappings. For example:
+            {
+                "fractionSet" : [ "fractionSet", "genMissingnessSet" ],
+                "sampleRelSet" : [ "sampleRelSet" ],
+            }
+    """
+    if not enum_maps:
+        return
+    
+    for class_defn in schema.classes.values():
+        for slot_defn in class_defn.slot_usage.values():
+            rng = slot_defn.range
+            if rng in enum_maps:
+                slot_defn.range = enum_maps[rng]
+
+def add_missingness_set(schema: SchemaDefinition, dictionary_file: Union[str, Path], lists_sheet: str = "lists"):
+    """Using the ODM v2 data dictionary, add the genMissingnessSet to any slot range that has an
+    enumeration that should be paired with genMissingnessSet.
+
+    Args:
+        schema (SchemaDefinition): The schema to modify in place.
+        dictionary_file (Union[str, Path]): The ODM v2 data dictionary, in Excel format.
+        lists_sheet (str, optional): The sheet in the dictionary_file that contains the lists of values for the enumerations
+            that are optionally paired with the missingness set. Defaults to "lists".
+    """
+    enum_maps = get_multi_enums_from_dictionary(dictionary_file, lists_sheet = lists_sheet)
+    map_enum_ranges(schema, enum_maps=enum_maps)
