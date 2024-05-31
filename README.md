@@ -44,6 +44,32 @@ python3 make_v2.py --dictionary_file="../gen/odm_v2/v2 ODM dictionary.xlsx" \
 
 The final LinkML schema will be saved at [gen/odm_v2/linkml/odm_v2.yaml](gen/odm_v2/linkml/odm_v2.yaml).
 
+The parameter `missigness_method` specifies how the missingness enumeration/set is included. If it is "multi_range" then any slot that can take on values from the missingness set will be modified to be a list of enumerations that includes both the original enumeration value plus the missingness set. An example slot usage is:
+
+```yaml
+slot_usage:
+    orgType:
+        description: Specifies the type or purpose of a given organization.
+        title: Organization Type
+        range:
+        - orgTypeSet
+        - genMissingnessSet
+        pattern: ^.{0,30}$
+```
+
+If it is "merge" then any enumeration that should include the missingness set will be modified so that its permissible values includes the values found in the missingness set. An example slot usage is:
+
+```yaml
+slot_usage:
+    orgType:
+        description: Specifies the type or purpose of a given organization.
+        title: Organization Type
+        range: orgTypeSet
+        pattern: ^.{0,30}$
+```
+
+Where `orgTypeSet` includes as permissible values `NA`, `null`, `nan`, etc.
+
 If you would like more details of what this script does (as well as all the other scripts referenced by make_v2.py), a description of the processing steps performed by `make_v2.py` can be found in [Generating the ODM v2 LinkML Schema](make_v2.md).
 
 ## Generating the CDC NWSS LinkML Schemas
