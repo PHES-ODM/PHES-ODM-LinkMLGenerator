@@ -37,7 +37,9 @@ Once the Data Dictionary has been put in place, execute the following to generat
 
 ```console
 cd src
-python3 make_v2.py --dictionary_file="../gen/odm_v2/v2 ODM dictionary.xlsx" --output_dir="../gen/odm_v2"
+python3 make_v2.py --dictionary_file="../gen/odm_v2/v2 ODM dictionary.xlsx" \
+    --output_dir="../gen/odm_v2" \
+    --missingness_method="multi_range"
 ```
 
 The final LinkML schema will be saved at [gen/odm_v2/linkml/odm_v2.yaml](gen/odm_v2/linkml/odm_v2.yaml).

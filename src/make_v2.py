@@ -21,13 +21,16 @@ from odm_v2.v2_utils import add_missingness_set
 
 logger = get_logger(__name__)
 
-def make_v2(dictionary_file: Union[str, Path], output_dir: Union[str, Path]) -> SchemaDefinition:
+def make_v2(dictionary_file: Union[str, Path], output_dir: Union[str, Path], missingness_method: str) -> SchemaDefinition:
     """Generate the LinkML schema for ODM v2.
 
     Args:
         dictionary_file (Union[str, Path]): Location of the Excel data dictionary (parts file) for ODM v2.
         output_dir (Union[str, Path]): Location to save all output. The LinkML schema output is
             saved to "{output_dir}/linkml/odm_v2.yaml"
+        missingness_method (str): How to include the missingness set. If 'multi_range' then add the missingness
+            set to a slot's range by changing the range to a list. If 'merge' then combine the missingness set
+            with the permissible values of enumerations.
 
     Returns:
         SchemaDefinition: The generated ODM v2 LinkML schema definition.
@@ -70,7 +73,7 @@ def make_v2(dictionary_file: Union[str, Path], output_dir: Union[str, Path]) -> 
     schema = make_linkml_schema_from_schemasheets(schemasheets_dir)
 
     # Add genMissingnessSet to all ranges where an enum must be paired with genMissingnessSet
-    add_missingness_set(schema, dictionary_file=dictionary_file, lists_sheet = "lists")
+    add_missingness_set(schema, dictionary_file=dictionary_file, lists_sheet = "lists", method = missingness_method)
  
     # Save the schema to disk
     save_schema_definition(schema, linkml_dir / "odm_v2.yaml")
@@ -82,12 +85,14 @@ if __name__ == "__main__":
         class opts:
             dictionary_file = "../gen/odm_v2/v2 ODM dictionary.xlsx"
             output_dir = "../gen/odm_v2"
+            missingness_method = "merge"
     else:
         args = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
         args.add_argument("--dictionary_file", type=str, help="The Excel ODM v2 data dictionary file", required=True)
         args.add_argument("--output_dir", type=str, help="Directory to save all results to", required=True)
+        args.add_argument("--missingness_method", type=str, help="How to include the missingness set. If 'multi_range' then add the missingness set to a slot's range by changing the range to a list. If 'merge' then combine the missingness set with the permissible values of enumerations.", default="multi_range")
         opts = args.parse_args()
 
-    make_v2(dictionary_file=opts.dictionary_file, output_dir=opts.output_dir)
+    make_v2(dictionary_file=opts.dictionary_file, output_dir=opts.output_dir, missingness_method=opts.missingness_method)
 
     logger.info("Finished!")

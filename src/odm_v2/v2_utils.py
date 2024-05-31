@@ -10,6 +10,10 @@ from pathlib import Path
 
 from linkml_runtime.linkml_model.meta import SchemaDefinition
 
+from utils.general_utils import get_logger
+
+logger = get_logger(__name__)
+
 # All known table names in ODM v2 (in LinkML they are called classes).
 v2_class_names = [
     "protocolSteps",
@@ -196,11 +200,15 @@ def get_multi_enums_from_dictionary(dictionary_file: str, lists_sheet: str) -> D
 
     return enum_maps
 
-def map_enum_ranges(schema: SchemaDefinition, enum_maps: Dict[str, List[str]]):
-    """For any slot_usage that uses the range that is a key in enum_maps, replace
-    the range with the corresponding value in enum_maps. This is typically used
-    to force some enumerations to be always combined with other enumerations, such
-    as for adding a missingness enumeration to other enumerations.
+def map_enum_ranges(schema: SchemaDefinition, enum_maps: Dict[str, List[str]], method: str = "multi_range"):
+    """Change the specified enumerations in the schema so that they always occur with one or more other
+    enumerations, or so that they are merged with one or more other enumerations.
+    
+    The enumerations to change are the keys of enum_maps, the values are lists of enumerations that
+    include the key enumeration as well as all other enumerations it should be grouped with. How the
+    grouping occurs depends on the method parameter.
+    
+    This is typically done to add missingness enumerations to other enumerations.
 
     Args:
         schema (SchemaDefinition): The SchemaDefinition to change.
@@ -209,17 +217,41 @@ def map_enum_ranges(schema: SchemaDefinition, enum_maps: Dict[str, List[str]]):
                 "fractionSet" : [ "fractionSet", "genMissingnessSet" ],
                 "sampleRelSet" : [ "sampleRelSet" ],
             }
+        method (str, Optional): If "multi_range" then for any slot that has a range equal to an
+            enumeration in enum_maps.keys(), we change the slot's range so that it is equal to the
+            list of enumerations in enum_maps' value.
+            If "merge" then for any enumeration found in enum_maps.keys(), we merge it with all
+            enumerations found in enum_maps' value. Defaults to "multi_range".
     """
     if not enum_maps:
         return
     
-    for class_defn in schema.classes.values():
-        for slot_defn in class_defn.slot_usage.values():
-            rng = slot_defn.range
-            if rng in enum_maps:
-                slot_defn.range = enum_maps[rng]
+    if method == "multi_range":
+        # Go through all classes
+        for class_defn in schema.classes.values():
+            # Go through all slot usages
+            for slot_defn in class_defn.slot_usage.values():
+                # If the slot's range (rng) is a key in enum_maps, then change the range to
+                # be equal to enum_maps[rng]
+                rng = slot_defn.range
+                if rng in enum_maps:
+                    slot_defn.range = enum_maps[rng]
+    elif method == "merge":
+        # Go through all items in enum_maps
+        for enum_name, enum_target_ranges in enum_maps.items():
+            if enum_name not in schema.enums:
+                logger.warning(f"Unrecognized enumeration name '{enum_name}' for in enum maps for collapsing enumerations")
+                continue
+            cur_enum = schema.enums[enum_name]
+            for new_enum_name in enum_target_ranges:
+                if new_enum_name == enum_name:
+                    continue
+                new_enum = schema.enums[new_enum_name]
+                cur_enum.permissible_values.update(new_enum.permissible_values)
+    else:
+        raise ValueError(f"Unrecognized method '{method}' in map_enum_ranges")
 
-def add_missingness_set(schema: SchemaDefinition, dictionary_file: Union[str, Path], lists_sheet: str = "lists"):
+def add_missingness_set(schema: SchemaDefinition, dictionary_file: Union[str, Path], lists_sheet: str = "lists", method: str = "multi_range"):
     """Using the ODM v2 data dictionary, add the genMissingnessSet to any slot range that has an
     enumeration that should be paired with genMissingnessSet.
 
@@ -228,6 +260,10 @@ def add_missingness_set(schema: SchemaDefinition, dictionary_file: Union[str, Pa
         dictionary_file (Union[str, Path]): The ODM v2 data dictionary, in Excel format.
         lists_sheet (str, optional): The sheet in the dictionary_file that contains the lists of values for the enumerations
             that are optionally paired with the missingness set. Defaults to "lists".
+        method (str, Optional): If "multi_range" then we add the missingness set to slots by changing
+            the slot's range to a list that includes the original range and the missingness set.
+            If "merge" then we modify the enumerations directly so that they include the permissible values
+            found in the missingness set. Defaults to "multi_range".
     """
     enum_maps = get_multi_enums_from_dictionary(dictionary_file, lists_sheet = lists_sheet)
-    map_enum_ranges(schema, enum_maps=enum_maps)
+    map_enum_ranges(schema, enum_maps=enum_maps, method=method)
