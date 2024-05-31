@@ -68,7 +68,7 @@ slot_usage:
         pattern: ^.{0,30}$
 ```
 
-Where `orgTypeSet` includes as permissible values `NA`, `null`, `nan`, etc.
+Where the `orgTypeSet` enumeration (in the LinkML schema's `enums` section) has been modified to include as permissible values `NA`, `null`, `nan`, etc.
 
 If you would like more details of what this script does (as well as all the other scripts referenced by make_v2.py), a description of the processing steps performed by `make_v2.py` can be found in [Generating the ODM v2 LinkML Schema](make_v2.md).
 
