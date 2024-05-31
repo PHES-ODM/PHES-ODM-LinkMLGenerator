@@ -85,7 +85,7 @@ if __name__ == "__main__":
         class opts:
             dictionary_file = "../gen/odm_v2/v2 ODM dictionary.xlsx"
             output_dir = "../gen/odm_v2"
-            missingness_method = "merge"
+            missingness_method = "multi_range"   # "merge" | "multi_range"
     else:
         args = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
         args.add_argument("--dictionary_file", type=str, help="The Excel ODM v2 data dictionary file", required=True)

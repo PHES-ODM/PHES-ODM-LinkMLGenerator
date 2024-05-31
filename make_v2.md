@@ -44,3 +44,29 @@ This function will make the Schemasheet `gen/odm_v2/schemasheets/schema.tsv` tha
 ## utils.schemasheets_utils.make_linkml_schema_from_schemasheets
 
 This function will generate the final LinkML schema for ODM v2. It does this by executing Schemasheets on all the previously generated TSV files. The final schema will be placed at `gen/odm_v2/linkml/odm_v2.yaml`.
+
+The parameter `missigness_method` specifies how the missingness enumeration/set is included. If it is "multi_range" then any slot that has an enumeration range that should be paired with the missingness set will be modified to be a list of enumerations that includes both the original enumeration value plus the missingness set. An example slot usage is:
+
+```yaml
+slot_usage:
+    orgType:
+        description: Specifies the type or purpose of a given organization.
+        title: Organization Type
+        range:
+        - orgTypeSet
+        - genMissingnessSet
+        pattern: ^.{0,30}$
+```
+
+If it is "merge" then any enumeration that should include the missingness set will be modified so that its permissible values includes the values found in the missingness set. An example slot usage is:
+
+```yaml
+slot_usage:
+    orgType:
+        description: Specifies the type or purpose of a given organization.
+        title: Organization Type
+        range: orgTypeSet
+        pattern: ^.{0,30}$
+```
+
+Where `orgTypeSet` includes as permissible values `NA`, `null`, `nan`, etc.
