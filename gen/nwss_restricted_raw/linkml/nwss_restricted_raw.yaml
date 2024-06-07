@@ -54,6 +54,11 @@ enums:
         description: Integrase AMR
       Tet:
         description: Tetracycline AMR
+  vs_yn[pcr_target_below_lod]:
+    from_schema: https://onto.phes-odm.org/nwss/restricted_raw
+    permissible_values:
+      'yes': {}
+      'no': {}
   vs_ynn:
     from_schema: https://onto.phes-odm.org/nwss/restricted_raw
     permissible_values:
@@ -685,11 +690,6 @@ enums:
       'no': {}
       ? ''
       : {}
-  vs_yn:
-    from_schema: https://onto.phes-odm.org/nwss/restricted_raw
-    permissible_values:
-      'yes': {}
-      'no': {}
   vs_hum_frac_target_mic:
     from_schema: https://onto.phes-odm.org/nwss/restricted_raw
     permissible_values:
@@ -950,6 +950,11 @@ enums:
         description: Zuni Pueblo
       PBCI:
         description: Poarch Band of Creek Indians
+  vs_yn[ntc_amplify]:
+    from_schema: https://onto.phes-odm.org/nwss/restricted_raw
+    permissible_values:
+      'yes': {}
+      'no': {}
   vs_wwtp_jurisdiction:
     from_schema: https://onto.phes-odm.org/nwss/restricted_raw
     permissible_values:
@@ -1593,7 +1598,7 @@ classes:
         range: float
       pcr_target_below_lod:
         description: Was the concentration of the PCR target below the limit of detection?
-        range: vs_yn
+        range: vs_yn[pcr_target_below_lod]
       lod_sewage:
         description: PCR target limit of detection back-calculated to unconcentrated
           sample basis
@@ -1602,7 +1607,7 @@ classes:
         description: For qPCR, did any no-template controls on this instrument run
           have a Ct value less than 40? For ddPCR, did any no-template controls on
           this instrument run have 3 or more positive droplets?
-        range: vs_yn
+        range: vs_yn[ntc_amplify]
       rec_eff_percent:
         description: Percent of spiked recovery control, specified in 'rec_eff_target_name',
           that was recovered
