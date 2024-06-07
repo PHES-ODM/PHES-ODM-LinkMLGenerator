@@ -19,6 +19,7 @@ IMPORTANT: Even when copying "Value Sets" tab to restricted_analytics, we are mi
 IMPROTANT: For restricted_raw: The value set other_norm_units should be other_norm_unit
 IMPORTANT: For restricted_analytics: categorical slots pcr_gene_target_agg, pcr_target_below_lod, pcr_target_units,
 and quality_flag do not have enumeration definition in "Value Sets" tab.
+IMPORTANT: In reporting: Changed ntc_amplify in "Value Sets" tab from vs_yne to vs_yn
 """
 
 from pathlib import Path
