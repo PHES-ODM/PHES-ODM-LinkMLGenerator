@@ -245,40 +245,6 @@ def get_class_name_from_file_name(file_name: Union[str, Path], schema: Optional[
         class_name = choose_ignore_case_value(class_name, list(schema.all_classes().keys()))
     return class_name
     
-def extend_down(df: pd.DataFrame, columns: List[str] = None) -> pd.DataFrame:
-    """Extend all values in the columns down to fill in any blank cells in those columns. (ie. blank cells
-    take on the value from the closest non-blank cell found previously in the column).
-    
-    A copy of the DataFrame is created and returned, the original is left unchanged.
-
-    Args:
-        df (pd.DataFrame): The DataFrame to extend downward. It is modified in-place.
-        columns (List[str], optional): The columns to extend downward. If None then all columns
-            in df are extended downward. Defaults to None
-        
-    Returns:
-        pd.DataFrame: A copy of df with values extended downward in the source class/slot
-            and target class/slot columns.
-    """
-    df = df.copy()
-    
-    if columns is None:
-        columns = list(df.columns)
-    
-    def _assign_if_empty(df: pd.DataFrame, idx: int, column: str, value: Any):
-        # If the cell in the column at row index idx is empty then assign the value to that cell
-        if pd.isna(df.loc[idx, column]) or df.loc[idx, column] == "":
-            df.loc[idx, column] = value
-        return df.loc[idx, column]
-    
-    # Extend all values downward
-    prev_values = { k: None for k in columns }
-    for idx in df.index:
-        for k, v in prev_values.items():
-            prev_values[k] = _assign_if_empty(df, idx, k, prev_values[k])
-    
-    return df
-
 def expand_multi_rows(df: pd.DataFrame, columns: Union[List[str], str]) -> pd.DataFrame:
     """For all specified columns in the DataFrame df, over all rows, make duplicate rows whenever
     a column value has a semi-colon (;) in it, with each new row having the different values when
