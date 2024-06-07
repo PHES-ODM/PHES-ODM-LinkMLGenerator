@@ -67,6 +67,11 @@ def extract_enums(metadata_file: Union[str, Path], valuesets_file: Union[str, Pa
     # Parse the enums sheet, by breaking it up into multiple DataFrames. Each DataFrame
     # has the headers permissible_value, description, and enum (the enum name)
     _, all_enums = parse_enums_sheet(valuesets_df)
+    # Any enum that appears in the list detailed_enum_names will be duplicated and renamed
+    # to include both the enum name and the name of the slot that uses the enum (in square brackets)
+    # For example, if detailed_enum_names = ["vs_yne"], then the enum name "vs_yne" will be duplicated
+    # and renamed "vs_yne[stormwater_input]", "vs_yne[ext_blank]", etc. The original enum (eg. vs_yne)
+    # will be deleted, so only the detailed names exist.
     detailed_enums = get_detailed_enums(metadata_df, detailed_enum_names=detailed_enum_names)
     for enum_name, target_names in detailed_enums.items():
         enum_df = all_enums[enum_name]
