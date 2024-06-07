@@ -730,6 +730,11 @@ enums:
       log10 micrograms/g dry sludge:
         description: Dry sludge mass is based on the mass of solids after drying in
           a drying oven
+  vs_yn[pasteurized]:
+    from_schema: https://onto.phes-odm.org/nwss/reporting
+    permissible_values:
+      'yes': {}
+      'no': {}
   vs_concentration_method:
     from_schema: https://onto.phes-odm.org/nwss/reporting
     permissible_values:
@@ -764,7 +769,7 @@ enums:
       'no': {}
       ? ''
       : {}
-  vs_yn:
+  vs_yn[pretreatment]:
     from_schema: https://onto.phes-odm.org/nwss/reporting
     permissible_values:
       'yes': {}
@@ -1043,6 +1048,11 @@ enums:
         description: Zuni Pueblo
       PBCI:
         description: Poarch Band of Creek Indians
+  vs_yn[ntc_amplify]:
+    from_schema: https://onto.phes-odm.org/nwss/reporting
+    permissible_values:
+      'yes': {}
+      'no': {}
   vs_wwtp_jurisdiction:
     from_schema: https://onto.phes-odm.org/nwss/reporting
     permissible_values:
@@ -1687,7 +1697,7 @@ classes:
         required: true
       pasteurized:
         description: Was the sample pasteurized?
-        range: vs_yn
+        range: vs_yn[pasteurized]
         required: true
       pcr_target:
         description: The target of the PCR quantification
@@ -1891,7 +1901,7 @@ classes:
         description: For qPCR, did any no-template controls on this instrument run
           have a Ct value less than 40? For ddPCR, did any no-template controls on
           this instrument run have 3 or more positive droplets?
-        range: vs_yne[ntc_amplify]
+        range: vs_yn[ntc_amplify]
         required: true
       rec_eff_percent:
         description: Percent of spiked recovery control, specified in 'rec_eff_target_name',
