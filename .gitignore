@@ -7,7 +7,7 @@
 /gen/nwss_restricted_*/
 
 # ODM v2 input and output
-/gen/odm_v2/*.xlsx
+/data/odm_v2/*.xlsx
 /gen/odm_v2/dictionary/
 /gen/odm_v2/schemasheets/
 /gen/odm_v2/linkml/docs

@@ -83,7 +83,7 @@ def make_v2(dictionary_file: Union[str, Path], output_dir: Union[str, Path], mis
 if __name__ == "__main__":
     if "get_ipython" in globals():
         class opts:
-            dictionary_file = "../gen/odm_v2/v2 ODM dictionary.xlsx"
+            dictionary_file = "../data/odm_v2/v2 ODM dictionary.xlsx"
             output_dir = "../gen/odm_v2"
             missingness_method = "merge"   # "merge" | "multi_range"
     else:
