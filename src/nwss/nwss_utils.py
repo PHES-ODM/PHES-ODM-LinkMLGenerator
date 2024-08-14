@@ -132,6 +132,8 @@ def get_detailed_enums(metadata_df: pd.DataFrame, detailed_enum_names: Optional[
     def _get_detailed_enum(row: pd.Series, detailed_enum_names: List[str]) -> str:
         """Get the enumeration name from the row, making the name detailed if required
         """
+        if not detailed_enum_names:
+            return None
         if row["Value Set"] in detailed_enum_names:
             return f"{row['Value Set']}[{row['Field Name']}]"
         return None
