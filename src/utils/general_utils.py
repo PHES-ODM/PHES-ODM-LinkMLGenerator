@@ -6,8 +6,8 @@ from pathlib import Path
 import pandas as pd
 from pandas._libs.parsers import STR_NA_VALUES
 import os
-import yaml
-from typing import Union, List, Optional, Any, Dict, Tuple
+import inspect
+from typing import Union, List, Optional, Any, Dict, Tuple, Callable
 import logging
 import sys
 
@@ -125,7 +125,7 @@ def clear_dirs(dirs: Union[Union[str, Path], List[Union[str, Path]]], extensions
                 if os.path.splitext(file)[1].lower() in extensions:
                     os.remove(file)
 
-def extract_sheets(file: Union[str, Path], sheets: Union[str, List[str]], output_dir: Optional[Union[str, Path]] = None, output_names: Union[str, List[str]] = None, na_values: Dict[str, Dict[str, Union[str, List[str]]]] = None, default_na_values: List[str] = STR_NA_VALUES):
+def extract_sheets(file: Union[str, Path], sheets: Union[str, List[str]], output_dir: Optional[Union[str, Path]] = None, output_names: Union[str, List[str]] = None, na_values: Dict[str, Dict[str, Union[str, List[str]]]] = None, default_na_values: List[str] = STR_NA_VALUES, read_excel_kwargs: Dict[str, Any] = None):
     """Extract the specified sheets from Excel file and save them as separate CSV files.
 
     Args:
@@ -142,16 +142,23 @@ def extract_sheets(file: Union[str, Path], sheets: Union[str, List[str]], output
             parsing for NA values. The keys specify the sheet names in the Excel file. The values are dictionaries
             where the key is a column name in the sheet and the values are a list of strings that should be mapped
             to NA (empty) values. If any column is missing from na_values then default_na_values is used for the
-            column.
-        default_na_values (List[str], optional) If na_values is specified, then use these string values to
+            column. These values will override the values in read_excel_kwargs.
+        default_na_values (List[str], optional): If na_values is specified, then use these string values to
             represent NA values when extracting the sheet for any columns that aren't specified in na_values.
-            Defaults to pandas._libs.parsers.STR_NA_VALUES.
+            Defaults to pandas._libs.parsers.STR_NA_VALUES. These values will override the values in 
+            read_excel_kwargs.
+        read_excel_kwargs (Dict[str, Any]): Dictionary of kwargs values to pass to Pandas read_excel function.
     """
     # Create output directory
     if not output_dir:
         output_dir = os.path.dirname(file)
     if output_dir:
         os.makedirs(output_dir, exist_ok=True)
+    
+    if not read_excel_kwargs:
+        read_excel_kwargs = {}
+        
+    read_excel_kwargs = select_func_kwargs(pd.read_excel, read_excel_kwargs)
     
     # Load all sheets from Excel file.
     if isinstance(sheets, str):
@@ -164,7 +171,7 @@ def extract_sheets(file: Union[str, Path], sheets: Union[str, List[str]], output
     # Load all the sheet names and columns from the file. We load 0 rows for each sheet,
     # since we only need to get the sheet names and the column names. This allows us to
     # load the sheets one at a time while specifying the sheet-specific na_values.
-    pre_dfs = pd.read_excel(file, sheet_name=None, nrows=0)
+    pre_dfs = pd.read_excel(file, sheet_name=None, nrows=0, **read_excel_kwargs)
     if sheets is None or len(sheets) == 0:
         sheets = list(dfs.keys())
 
@@ -172,16 +179,20 @@ def extract_sheets(file: Union[str, Path], sheets: Union[str, List[str]], output
     dfs = {}
     for sheet in sheets:
         if sheet not in pre_dfs.keys():
+            logger.error(f"Sheet '{sheet}' does not exist in Excel file: {file}")
             continue
         pre_df = pre_dfs[sheet]
+        
+        # Prepare the kwargs for pd.read_excel
         cur_na_values = na_values.get(sheet, {})
         cur_na_values = { c: cur_na_values.get(c, default_na_values) for c in pre_df.columns }
-        try:
-            df = pd.read_excel(file, sheet_name=sheet, keep_default_na=False, na_values=cur_na_values)
-            dfs[sheet] = df
-        except:
-            logger.warning(f"Could not extract sheet '{sheet}' from file {file}")
-
+        cur_kwargs = read_excel_kwargs.copy()
+        cur_kwargs["keep_default_na"] = False
+        cur_kwargs["na_values"] = cur_na_values
+        
+        df = pd.read_excel(file, sheet_name=sheet, **cur_kwargs)
+        dfs[sheet] = df
+            
     # Save all extracted sheets to disk
     for sheet_name, df in dfs.items():
         output_name = sheet_name
@@ -331,3 +342,21 @@ def rename_items(items: List[str], renames: Dict[str, str]) -> List[str]:
     for orig, target in renames.items():
         items[items.index(orig)] = target
     return items
+
+def select_func_kwargs(func: Callable, kwargs: Dict[str, Any]) -> Dict[str, Any]:
+    """Only select the keyword arguments in the dictionary that are acceptable arguments
+    for the function.
+
+    Args:
+        func (Callable): The function to get the keyword arguments for.
+        kwargs (Dict[str, Any]): The keyword arguments to select from.
+
+    Returns:
+        Dict[str, Any]: A dictionary which is a copy of kwargs where only the keys that
+            exist as arguments to the function func are present.
+    """
+    args, _, _, _, kwonlyargs, *_ = inspect.getfullargspec(func)
+    all_args = set(list(args) + list(kwonlyargs))
+    existing_keywords = all_args.intersection(set(kwargs.keys()))
+    kwargs = { k: kwargs[k] for k in existing_keywords }
+    return kwargs
