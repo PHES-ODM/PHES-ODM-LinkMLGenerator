@@ -49,19 +49,21 @@ def make_v2(dictionary_file: Union[str, Path], output_dir: Union[str, Path], mis
     # Extract the parts and sets sheets from the Excel ODM v2 data dictionary file
     extract_sheets(dictionary_file, ["parts", "sets"], dictionary_dir, na_values = { "parts" : { "partID" : "" }, "sets" : { "partID" : "" }})
 
+    # Extract all enums from the sets sheet (and save as a schemasheet)
+    all_enums = extract_sets_enums(sets_file, parts_file, schemasheets_dir / "enums_sets.tsv")
+
+    # Extract all enums from the parts sheet (except for the mmaSet enums, which were extracted
+    # above by extract_sets_enums) (and save as a schemasheet)
+    all_enums += extract_parts_enums(parts_file, schemasheets_dir / "enums_parts.tsv")
+    
+    all_enums = list(dict.fromkeys(all_enums))
+
     # Extract all classes from the parts sheet (and save as a schemasheet)
-    extract_all_classes(parts_file, schemasheets_dir)
+    extract_all_classes(parts_file, schemasheets_dir, recognized_enums = all_enums)
 
     # Extract the Container class, which is the top-level LinkML class containing all
     # the tables.
     extract_container_class(schemasheets_dir / "container.tsv")
-
-    # Extract all enums from the sets sheet (and save as a schemasheet)
-    extract_sets_enums(sets_file, parts_file, schemasheets_dir / "enums_sets.tsv")
-
-    # Extract all enums from the parts sheet (except for the mmaSet enums, which were extracted
-    # above by extract_sets_enums) (and save as a schemasheet)
-    extract_parts_enums(parts_file, schemasheets_dir / "enums_parts.tsv")
 
     # Make the prefixes schemasheet
     make_prefixes(schemasheets_dir / "prefixes.tsv")
