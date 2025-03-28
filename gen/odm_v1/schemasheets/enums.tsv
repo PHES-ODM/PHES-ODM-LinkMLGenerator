@@ -28,7 +28,7 @@ WWMeasure	type	WWMeasureType	covE	cove	SARS-CoV-2 gene region E	R�gion g�niq
 WWMeasure	type	WWMeasureType	varB117	varb117	Variant B.1.1.7	Variant B.1.1.7
 WWMeasure	type	WWMeasureType	varB1351	varb1351	Variant B.1.351	Variant B.1.351
 WWMeasure	type	WWMeasureType	varP1	varp1	Variant P.1	Variant P.1
-WWMeasure	type	WWMeasureType	covRdRp	covrdrp	SARS-CoV-2 gene region RdRp	R�gion g�nique RdRp du SRAS-CoV-2
+WWMeasure	type	WWMeasureType	covRdrp	covrdrp	SARS-CoV-2 gene region RdRp	R�gion g�nique RdRp du SRAS-CoV-2
 WWMeasure	type	WWMeasureType	nPMMoV	npmmov	Pepper mild mottle virus	Virus de la marbrure l�g�re du piment
 WWMeasure	type	WWMeasureType	ncrA	ncra	cross-assembly phage	CrAssphage
 WWMeasure	type	WWMeasureType	nbrsv	nbrsv	bovine respiratory syncytial virus	Virus respiratoire syncytial bovin
@@ -125,7 +125,7 @@ SiteMeasure	type	SiteMeasureType	wwTurb	wwturb	Turbidity of the wastewater.	Turb
 SiteMeasure	type	SiteMeasureType	wwOPhos	wwophos	Ortho-phosphate concentration.	Concentration d'ortho-phosphates
 SiteMeasure	type	SiteMeasureType	wwNH4N	wwnh4n	"Ammonium nitrogen concentration, as N."	"Concentrsation d'azote ammoniacal, exprim� en N."
 SiteMeasure	type	SiteMeasureType	wwTN	wwtn	"Total nitrogen concentration, as N."	"Azote total, exprim� en N"
-SiteMeasure	type	SiteMeasureType	wwpH	wwph	pH of the wastewater.	pH
+SiteMeasure	type	SiteMeasureType	wwPh	wwph	pH of the wastewater.	pH
 SiteMeasure	type	SiteMeasureType	wwBOD5t	wwbod5t	5 day total biochemical oxygen demand	Demande biochimique totale en oxygene sur 5 jours
 SiteMeasure	type	SiteMeasureType	wwBOD5c	wwbod5c	5 day carbonaceous biochemical oxygen demand	Demande biochinique carbonnee en oxygene sur 5 jours
 SiteMeasure	type	SiteMeasureType	wwPtot	wwptot	Total phosphates	Phosphates totaux
@@ -135,9 +135,10 @@ SiteMeasure	unit	SiteMeasureUnit	c	c	Degrees Celcius	Degr�s Celcius
 SiteMeasure	unit	SiteMeasureUnit	mm	mm	Millimeters	Millim�tres
 SiteMeasure	unit	SiteMeasureUnit	m3H	m3h	Cubic meters per hour	M�tres cubes par heure
 SiteMeasure	unit	SiteMeasureUnit	m3D	m3d	Cubic meters per day	M�tres cubes par jour
+SiteMeasure	unit	SiteMeasureUnit	m3S	m3s	Not Available	Not Available
 SiteMeasure	unit	SiteMeasureUnit	mgL	mgl	Milligrams per liter	Milligrammes par litre
 SiteMeasure	unit	SiteMeasureUnit	pH	ph	pH units	Unit�s de pH
-SiteMeasure	unit	SiteMeasureUnit	usCM	uscm	Micro-siemens per centimeter	Micro-siemens par centim�tre
+SiteMeasure	unit	SiteMeasureUnit	uScm	uscm	Micro-siemens per centimeter	Micro-siemens par centim�tre
 SiteMeasure	aggregation	SiteMeasureAggregation	single	single	"This value is not an aggregate measurement in any way (ie. not a mean, median, max or any other) and can be a replicate value."	"La valeur n'a subi aucune agr�gation (donc, la valeur n'est pas une moyenne, un maximum, etc.). La valeur peut �tre un r�plica."
 SiteMeasure	aggregation	SiteMeasureAggregation	mean	mean	Arithmetic mean	Moyenne arithm�tique.
 SiteMeasure	aggregation	SiteMeasureAggregation	geoMn	geomn	Geometric mean	Moyenne g�om�trique.

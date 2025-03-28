@@ -82,7 +82,7 @@ enums:
         description: Variant B.1.351
       varP1:
         description: Variant P.1
-      covRdRp:
+      covRdrp:
         description: SARS-CoV-2 gene region RdRp
       nPMMoV:
         description: Pepper mild mottle virus
@@ -305,7 +305,7 @@ enums:
         description: Ammonium nitrogen concentration, as N.
       wwTN:
         description: Total nitrogen concentration, as N.
-      wwpH:
+      wwPh:
         description: pH of the wastewater.
       wwBOD5t:
         description: 5 day total biochemical oxygen demand
@@ -328,11 +328,13 @@ enums:
         description: Cubic meters per hour
       m3D:
         description: Cubic meters per day
+      m3S:
+        description: Not Available
       mgL:
         description: Milligrams per liter
       pH:
         description: pH units
-      usCM:
+      uScm:
         description: Micro-siemens per centimeter
   SiteMeasureAggregation:
     from_schema: https://onto.phes-odm.org/odm/v1
