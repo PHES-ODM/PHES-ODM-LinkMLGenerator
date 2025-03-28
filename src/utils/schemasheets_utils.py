@@ -105,6 +105,13 @@ def fix_schemasheets_generated_schema(schema: SchemaDefinition):
         for slot_definition in class_definition.slot_usage.values():
             _make_number("minimum_value", slot_definition)
             _make_number("maximum_value", slot_definition)
+            
+    # For slots that have multiple ranges, change the range string into an array (eg.
+    # If "range: sampleRelSet, protocolRelSet" then change it to "range: ['sampleRelSet', 'protocolRelSet']")
+    for class_definition in schema.classes.values():
+        for slot_definition in class_definition.slot_usage.values():
+            if slot_definition.range and "," in slot_definition.range:
+                slot_definition.range = [s.strip() for s in slot_definition.range.split(",")]
 
 def save_schemasheet(data: Union[Dict, List, pd.DataFrame], file_name: Union[str, Path], headers: Union[List[str], Dict[str, str]] = None) -> pd.DataFrame:
     """Create a Schemasheet file from the data. Schemasheets headers (with a row preceded by a '>') are also added
