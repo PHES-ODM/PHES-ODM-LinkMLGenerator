@@ -117,12 +117,15 @@ def v2_keep_active_rows(df: pd.DataFrame, status_column: str = "status", keep_st
     df = df[keep_filt]
     return df.copy()
 
-def v2_get_enum_name_from_part_id(part_id: str) -> str:
+def v2_get_enum_name_from_part_id(part_id: str, recognized_enums: Optional[List[str]] = None) -> str:
     """Get the enumeration name for the specified part ID.
 
     Args:
         part_id (str): The partID to get the enumeration name for. This is typically equal
             to the partID with a trailing "s", but there are some exceptions.
+        recognized_enums (Optional[List[str]]): If not None then a list of recognized enumeration
+            names. If the calculated enum name exists in this list then the enum name is returned,
+            otherwise the value "string" is returned (ie. the data type is a string, rather than an enum).
 
     Returns:
         str: The enumeration name (for the partID)
@@ -131,6 +134,8 @@ def v2_get_enum_name_from_part_id(part_id: str) -> str:
         name = _v2_enum_name_exceptions[part_id]
     else:
         name = f"{part_id}s"
+    if recognized_enums is not None and name not in recognized_enums:
+        return "string"
     return name
 
 def get_multi_enums_from_dictionary(dictionary_file: str, lists_sheet: str) -> Dict[str, List[str]]:
