@@ -15,6 +15,7 @@ extract_parts_enums("odm_v2/dictionary/parts.csv", "odm_v2/schemasheets/enums_pa
 
 import pandas as pd
 import argparse
+from typing import List
 
 from utils.general_utils import get_logger, read_data_frame, EMPTY_PERMISSIBLE_VALUE
 from utils.schemasheets_utils import save_schemasheet
@@ -31,7 +32,7 @@ headers = {
     "partLabel" : "title",
 }
 
-def extract_parts_enums(parts_file: str, output_file: str):
+def extract_parts_enums(parts_file: str, output_file: str) -> List[str]:
     """Create a Schemasheet for all enumerations found in the parts sheet of the ODM v2
     data dictionary. This does not include any enums that are found in the sets sheet
     (see make_v2_ss_enums_from_sets.py for extracting enums from the sets sheet)/
@@ -40,6 +41,9 @@ def extract_parts_enums(parts_file: str, output_file: str):
         parts_file (str): The full path and filename for the CSV parts sheet extracted
             from the ODM v2 data dictionary.
         output_file (str): The TSV file to save the Schemasheet to.
+        
+    Returns:
+        List[str]: List of all enum names extracted.
     """
     df = read_data_frame(parts_file, keep_default_na=False, na_values=[""])
 
@@ -68,7 +72,7 @@ def extract_parts_enums(parts_file: str, output_file: str):
         "partType",
         "partID",
         "partLabel",
-        "shortName",
+        # "shortName",
         "partDesc",
         "partInstr",
     ]
@@ -93,6 +97,8 @@ def extract_parts_enums(parts_file: str, output_file: str):
     # Save to disk
     logger.info(f"Saving enums from parts to '{output_file}'")
     save_schemasheet(output_df, output_file, headers)
+    
+    return output_df["partType"].unique().tolist()
 
 if __name__ == "__main__":
     if "get_ipython" in globals():
