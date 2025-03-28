@@ -20,6 +20,7 @@ sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
 
 import pandas as pd
 import argparse
+from typing import List
 
 from utils.general_utils import get_logger, read_data_frame, EMPTY_PERMISSIBLE_VALUE
 from utils.schemasheets_utils import save_schemasheet
@@ -36,7 +37,7 @@ headers = {
     "partDesc": "description",
 }
 
-def extract_sets_enums(sets_file: str, parts_file: str, output_file: str):
+def extract_sets_enums(sets_file: str, parts_file: str, output_file: str) -> List[str]:
     """Create a Schemasheet for all the enumerations found in the ODM v2 data dictionary
     sets sheet. Note that this does not consistute all of the enums found in ODM v2.
     Additional enumerations that are not found in the sets sheet are extracted from the
@@ -48,6 +49,9 @@ def extract_sets_enums(sets_file: str, parts_file: str, output_file: str):
         parts_file (str): The full path and filename to the parts CSV sheet extracted from
             the ODM v2 data dictionary.
         output_file (str): The file to save the Schemasheet to. Should be a .tsv file.
+    
+    Returns:
+        List[str]: List of all enum names extracted.
     """
     df = read_data_frame(sets_file, keep_default_na=False, na_values=[""])
     parts_df = read_data_frame(parts_file, keep_default_na=False, na_values=[""])
@@ -115,6 +119,8 @@ def extract_sets_enums(sets_file: str, parts_file: str, output_file: str):
     # Save to disk
     logger.info(f"Saving enums from sets to '{output_file}'")
     save_schemasheet(df, output_file, headers)
+    
+    return df["setID"].unique().tolist()
 
 if __name__ == "__main__":
     if "get_ipython" in globals():
