@@ -18,7 +18,7 @@ from pathlib import Path
 import pandas as pd
 import os
 import argparse
-from typing import Tuple
+from typing import Tuple, Optional, List
 
 from utils.general_utils import get_logger, read_data_frame
 from utils.schemasheets_utils import save_schemasheet
@@ -72,7 +72,48 @@ def _extract_pattern(row: pd.Series) -> str:
     pattern = "^.{%s,%s}$" % (min_length, max_length)
     return pattern
 
-def extract_class(df: pd.DataFrame, class_name: str, output_dir: str) -> Tuple[str, pd.DataFrame]:
+def get_fk_target_class(df: pd.DataFrame, part_id: str) -> Optional[str]:
+    """Get the name of the class that the foreign key, that has the part id part_id, is a primary
+    key for.
+
+    Args:
+        df (pd.DataFrame): The full parts DataFrame. It must contain a row where "partID" is equal
+            to part_id, and a column for each class name (ie. each v2_class_names) where the
+            value is "pK" (ignoring case) if part_id is a primary key in that class.
+        part_id (str): The part_id to get the class that it is a primary key for.
+
+    Raises:
+        ValueError: Either the part_id was not found in df["partID"] or it is a primary key in
+            more than one class.
+
+    Returns:
+        Optional[str]: The class that the part ID is a primary key for. Or None if it is not
+            a primary key.
+    """
+    # Get the row in df that matches the part_id
+    part_id_filt = df["partID"] == part_id
+    if part_id_filt.sum() == 0:
+        return None
+    if part_id_filt.sum() > 1:
+        raise ValueError(f"Matched multiple partID rows for partID '{part_id}'")
+    
+    # Get a DataFrame with columns "variable" and "value", where each row has a class name from v2_class_names
+    # in the "variable" column and the value "pk" in the "value" column if our part_id is a primary key in
+    # the class
+    class_values = pd.melt(df.loc[part_id_filt, v2_class_names].map(lambda x: "" if pd.isna(x) else str(x).lower()))
+    
+    # Get the row(s) where the value is "pk", we should get 0 or no rows.
+    fk_name_filt = class_values["value"] == "pk"
+    all_pks = class_values[fk_name_filt]["variable"].tolist()
+    if len(all_pks) == 0:
+        logger.warning(f"Foreign key '{part_id}' is not a primary key in any table")
+        return None
+    if len(all_pks) > 1:
+        raise ValueError(f"Foreign key '{part_id}' is a primary key in multiple tables: {', '.join(all_pks)}")
+    
+    return all_pks[0]
+
+def extract_class(df: pd.DataFrame, class_name: str, output_dir: str, recognized_enums: List[str]) -> Tuple[str, pd.DataFrame]:
     """Create a Schemasheet for the specified class name using the data in a
     DataFrame loaded from the parts sheet of the ODM v2 data dictionary.
 
@@ -81,9 +122,10 @@ def extract_class(df: pd.DataFrame, class_name: str, output_dir: str) -> Tuple[s
         class_name (str): The name of the class (ie. table) to extract.
         output_dir (str): The location to save the Schemasheet. The actual
             Schemasheet will be named "class_{class_name}.tsv".
+        recognized_enums (List[str]): List of all recognized enumeration names.
 
     Returns:
-        List[str, pd.DataFrame]: The full path and file name to the saved Schemasheet as
+        Tuple[str, pd.DataFrame]: The full path and file name to the saved Schemasheet as
             well as the DataFrame of the Schemasheet.
     """
     
@@ -118,17 +160,30 @@ def extract_class(df: pd.DataFrame, class_name: str, output_dir: str) -> Tuple[s
     # The enumeration names are a variant of the value found in the partID column (eg. we often just need to add an "s" to
     # the end of the partID column, see utils.v2_get_enum_name_from_part_id)
     categorical_filt = (~mmaset_filt) & (table_output_df["dataType"] == "categorical")
-    table_output_df.loc[categorical_filt, "dataType"] = table_output_df.loc[categorical_filt, "partID"].apply(v2_get_enum_name_from_part_id)
+    table_output_df.loc[categorical_filt, "dataType"] = table_output_df.loc[categorical_filt, "partID"].apply(lambda part_id: v2_get_enum_name_from_part_id(part_id, recognized_enums=recognized_enums))
 
     # Set identifiers (primary keys)
     table_output_df["identifier"] = table_output_df["headerType"].astype(str).str.lower() == "pk"
-    
+
+    # Look for all foreign keys, change the dataType to be the class name of the class the foreign key points to
+    fk_filt = table_output_df["headerType"].astype(str).str.lower() == "fk"
+    for idx in table_output_df.loc[fk_filt, "partID"].index:
+        fk_name = table_output_df.loc[idx, "partID"]
+        fk_target = get_fk_target_class(df, fk_name)
+        if fk_target is not None:
+            table_output_df.loc[idx, "dataType"] = fk_target
+        
     # Set the regex "pattern" where required
     table_output_df["pattern"] = table_output_df.apply(_extract_pattern, axis=1)
 
     # Sort by "order" column
     table_output_df = table_output_df.sort_values("order")
 
+    # Add the description and title of the class
+    class_info = df[df["partID"] == class_name][["partLabel", "partDesc"]].to_dict(orient="records")[0]
+    class_info_df = pd.DataFrame(class_info, index=[max(table_output_df.index)+1])
+    table_output_df = pd.concat([table_output_df, class_info_df])
+    
     # Set the table name for all the rows (class). We're only working with one table name
     # at a time, so they're all the same.
     table_output_df["class"] = class_name
@@ -140,7 +195,7 @@ def extract_class(df: pd.DataFrame, class_name: str, output_dir: str) -> Tuple[s
     
     return output_file, table_output_df
 
-def extract_all_classes(parts_file: str, output_dir: str):
+def extract_all_classes(parts_file: str, output_dir: str, recognized_enums: List[str]):
     """Create a Schemasheet for all classes (tables) found in the parts sheet that was
     extracted from the ODM v2 data dictionary.
 
@@ -149,6 +204,7 @@ def extract_all_classes(parts_file: str, output_dir: str):
             dictionary.
         output_dir (str): The location to save all the Schemasheets. One Schemasheet per
             class is created, with the name "class_{class_name}.tsv" 
+        recognized_enums (List[str]): List of all recognized enumeration names.
     """
     if not output_dir:
         output_dir = os.path.dirname(parts_file)
@@ -157,7 +213,7 @@ def extract_all_classes(parts_file: str, output_dir: str):
 
     for class_name in v2_class_names:
         logger.info(f"Processing table {class_name}...")
-        extract_class(df, class_name, output_dir)
+        extract_class(df, class_name, output_dir, recognized_enums = recognized_enums)
 
 if __name__ == "__main__":
     if "get_ipython" in globals():
