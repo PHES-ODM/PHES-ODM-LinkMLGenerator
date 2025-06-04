@@ -1,6 +1,4 @@
 #%%
-%load_ext autoreload
-%autoreload 2
 """
 Make the ODM LinkML schema.
 """
