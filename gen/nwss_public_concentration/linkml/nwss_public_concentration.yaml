@@ -21,6 +21,7 @@ slots:
     from_schema: https://onto.phes-odm.org/nwss/public_concentration
 classes:
   nwss:
+    from_schema: https://onto.phes-odm.org/nwss/public_concentration
     slots:
     - key_plot_id
     - date
@@ -62,7 +63,7 @@ classes:
     slot_usage:
       nwss:
         title: nwss
-        multivalued: true
         range: nwss
+        multivalued: true
         inlined_as_list: true
     tree_root: true

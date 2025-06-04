@@ -306,6 +306,7 @@ slots:
     from_schema: https://onto.phes-odm.org/nwss/public_metric
 classes:
   nwss:
+    from_schema: https://onto.phes-odm.org/nwss/public_metric
     slots:
     - wwtp_jurisdiction
     - wwtp_id
@@ -429,7 +430,7 @@ classes:
     slot_usage:
       nwss:
         title: nwss
-        multivalued: true
         range: nwss
+        multivalued: true
         inlined_as_list: true
     tree_root: true
