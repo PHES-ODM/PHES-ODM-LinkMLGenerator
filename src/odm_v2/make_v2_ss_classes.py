@@ -100,7 +100,7 @@ def get_fk_target_class(df: pd.DataFrame, part_id: str) -> Optional[str]:
     # Get a DataFrame with columns "variable" and "value", where each row has a class name from v2_get_available_class_names
     # in the "variable" column and the value "pk" in the "value" column if our part_id is a primary key in
     # the class
-    class_names = v2_get_available_class_names(df.columns)
+    class_names = v2_get_available_class_names(df)
     class_values = pd.melt(df.loc[part_id_filt, class_names].map(lambda x: "" if pd.isna(x) else str(x).lower()))
     
     # Get the row(s) where the value is "pk", we should get 0 or no rows.
@@ -215,7 +215,7 @@ def extract_all_classes(parts_file: str, output_dir: str, recognized_enums: List
 
     df = read_data_frame(parts_file, keep_default_na=False, na_values=[""])
 
-    for class_name in v2_get_available_class_names(df.columns):
+    for class_name in v2_get_available_class_names(df):
         logger.info(f"Processing table {class_name}...")
         extract_class(df, class_name, output_dir, recognized_enums = recognized_enums)
 

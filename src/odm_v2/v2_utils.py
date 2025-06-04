@@ -39,16 +39,19 @@ _v2_enum_name_exceptions = {
     "specimenSets" : "specimenSets",                 # No change
 }
 
-def v2_get_available_class_names(headers: List[str]) -> List[str]:
+def v2_get_available_class_names(headers: Union[pd.DataFrame, List[str]]) -> List[str]:
     """Get a list of all ODM class/table names that are defined in a ODM parts sheet that contains
     the specified headers.
 
     Args:
-        headers (List[str]): List of all headers in the ODM parts sheet.
+        headers (Union[pd.DataFrame, List[str]]): Either a list of all headers in the ODM parts sheet, or the actual
+            DataFrame for the parts sheet.
 
     Returns:
         List[str]: List of all class/table names that the parts sheet defines.
     """
+    if isinstance(headers, pd.DataFrame):
+        headers = headers.columns
     match_tag = "Order"
     headers = [h[:-len(match_tag)] for h in headers if h.endswith(match_tag) and len(h) > len(match_tag)]
     return headers

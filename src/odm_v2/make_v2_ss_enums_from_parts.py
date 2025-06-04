@@ -54,7 +54,7 @@ def extract_parts_enums(parts_file: str, output_file: str) -> List[str]:
     # and do not have an mmaSet. Once we have all the header rows, we get the enumeration name based on the 
     # partID. We do not extract the ones with mmaSet set, since those are fully defined in the sets
     # sheet, not the parts sheet (see make_v2_ss_enums_from_sets.py).
-    class_names = v2_get_available_class_names(df.columns)
+    class_names = v2_get_available_class_names(df)
     headers_df = v2_get_header_rows(df, class_names)
     filt = headers_df["dataType"].isin(["categorical"])
     filt = filt & pd.isna(headers_df["mmaSet"])
