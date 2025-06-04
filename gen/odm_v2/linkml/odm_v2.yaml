@@ -3945,6 +3945,7 @@ enums:
   dataTypes:
     description: The data type for a part.
     title: Data types
+    from_schema: https://onto.phes-odm.org/odm/v2
     permissible_values:
       blob:
         description: The data type for Binary Large Object (BLOB) data.
@@ -5696,6 +5697,7 @@ enums:
   partType:
     description: Part types describe the purpose or use of the part.
     title: Part types
+    from_schema: https://onto.phes-odm.org/odm/v2
     permissible_values:
       aggregations:
         description: Statistical measures used to report a measure. Each measure reported
@@ -6526,6 +6528,16 @@ slots:
     from_schema: https://onto.phes-odm.org/odm/v2
   stepIDSub:
     from_schema: https://onto.phes-odm.org/odm/v2
+  protocolID:
+    from_schema: https://onto.phes-odm.org/odm/v2
+  siteID:
+    from_schema: https://onto.phes-odm.org/odm/v2
+  purpose:
+    from_schema: https://onto.phes-odm.org/odm/v2
+  saMaterial:
+    from_schema: https://onto.phes-odm.org/odm/v2
+  origin:
+    from_schema: https://onto.phes-odm.org/odm/v2
   repType:
     from_schema: https://onto.phes-odm.org/odm/v2
   collType:
@@ -6546,17 +6558,7 @@ slots:
     from_schema: https://onto.phes-odm.org/odm/v2
   recDate:
     from_schema: https://onto.phes-odm.org/odm/v2
-  protocolID:
-    from_schema: https://onto.phes-odm.org/odm/v2
   reportable:
-    from_schema: https://onto.phes-odm.org/odm/v2
-  siteID:
-    from_schema: https://onto.phes-odm.org/odm/v2
-  purpose:
-    from_schema: https://onto.phes-odm.org/odm/v2
-  saMaterial:
-    from_schema: https://onto.phes-odm.org/odm/v2
-  origin:
     from_schema: https://onto.phes-odm.org/odm/v2
   polygonID:
     from_schema: https://onto.phes-odm.org/odm/v2
@@ -6834,6 +6836,7 @@ classes:
   wideNames:
     description: The table for wide names.
     title: Wide name table
+    from_schema: https://onto.phes-odm.org/odm/v2
     slots:
     - wideName
     - label
@@ -7036,6 +7039,7 @@ classes:
   organizations:
     description: The table that contains information about a laboratory.
     title: Organization table
+    from_schema: https://onto.phes-odm.org/odm/v2
     slots:
     - organizationID
     - name
@@ -7141,6 +7145,7 @@ classes:
     description: The table for recording the various quality metrics and indicators
       for samples and measures.
     title: Quality reports table
+    from_schema: https://onto.phes-odm.org/odm/v2
     slots:
     - qualityReportID
     - measureRepID
@@ -7222,6 +7227,7 @@ classes:
     description: Look up table for translations of the description, label, and instruction
       for all parts.
     title: Translation look-up table
+    from_schema: https://onto.phes-odm.org/odm/v2
     slots:
     - translationID
     - lang
@@ -7331,6 +7337,7 @@ classes:
     description: Look up table for all languages, used to give structure to the translation
       table.
     title: Language Look-up table
+    from_schema: https://onto.phes-odm.org/odm/v2
     slots:
     - lang
     - langFam
@@ -7587,6 +7594,7 @@ classes:
     description: The table for collecting metadata on individual steps in a protocol,
       methodological process, or assay.
     title: Protocol steps table
+    from_schema: https://onto.phes-odm.org/odm/v2
     slots:
     - stepID
     - method
@@ -7730,6 +7738,7 @@ classes:
       (such as order) about a given protocol, recorded as a series of protocol steps
       (protocolSteps).
     title: Protocol relationships table
+    from_schema: https://onto.phes-odm.org/odm/v2
     slots:
     - protocolRelationshipsID
     - protocolIDContainer
@@ -7845,8 +7854,17 @@ classes:
       as a representative volume of wastewater (or other forms of water or liquid),
       air, or surface area taken from a site.
     title: Sample report table
+    from_schema: https://onto.phes-odm.org/odm/v2
     slots:
     - sampleID
+    - protocolID
+    - organizationID
+    - contactID
+    - siteID
+    - purpose
+    - saMaterial
+    - datasetID
+    - origin
     - repType
     - collType
     - collPer
@@ -7857,17 +7875,9 @@ classes:
     - collDTEnd
     - sentDate
     - recDate
-    - protocolID
     - reportable
     - lastEdited
     - notes
-    - organizationID
-    - contactID
-    - siteID
-    - purpose
-    - saMaterial
-    - datasetID
-    - origin
     slot_usage:
       sampleID:
         description: Unique identifier for a sample.
@@ -7877,6 +7887,56 @@ classes:
         identifier: true
         range: string
         required: true
+        pattern: ^.{0,30}$
+      protocolID:
+        description: A unique identifier for a given protocol.
+        title: Protocol ID
+        range: protocols
+        pattern: ^.{0,30}$
+      organizationID:
+        description: A unique identifier for the organization to which the reporter
+          is affiliated.
+        title: Organization ID
+        range: string
+        pattern: ^.{0,100}$
+      contactID:
+        description: A unique identifier for a given contact person.
+        title: Contact ID
+        range: contacts
+        pattern: ^.{0,30}$
+      siteID:
+        description: Unique identifier for the location where a sample was taken.
+        title: Site ID
+        range: sites
+        required: true
+        pattern: ^.{0,30}$
+      purpose:
+        description: The reason the measure or sample was taken.
+        title: Purpose
+        notes:
+        - 'See allowed categories: report, quality control, validation study, test'
+        range: purposeSet
+        pattern: ^.{0,30}$
+      saMaterial:
+        description: Type of sample.
+        title: Sample material
+        range: sampleMatSet
+        required: true
+        pattern: ^.{0,30}$
+      datasetID:
+        description: The name of the dataset that stores information for MeasureReport,
+          SampleReport and other reporting tables.
+        title: Dataset ID
+        notes:
+        - Where possible, datasetID name should correspond the orignial data custodian
+          responsible for generating environmental data. (suggestion for a default
+          name convention.)
+        range: datasets
+        pattern: ^.{0,30}$
+      origin:
+        description: An attribute of a sample specifying the origin.
+        title: Sample origin
+        range: originSet
         pattern: ^.{0,30}$
       repType:
         description: Attirbute of a sample, specifying whether the sample is unique,
@@ -7942,11 +8002,6 @@ classes:
         title: Date sample recieved
         range: datetime
         pattern: ^.{0,30}$
-      protocolID:
-        description: A unique identifier for a given protocol.
-        title: Protocol ID
-        range: protocols
-        pattern: ^.{0,30}$
       reportable:
         description: Flag for whether a measure is reportable or not, based on confidence
           in the measure and methods applied.
@@ -7979,54 +8034,10 @@ classes:
         - There is no recommended structure of a note. Use notes as needed.
         range: string
         pattern: ^.{0,200}$
-      organizationID:
-        description: A unique identifier for the organization to which the reporter
-          is affiliated.
-        title: Organization ID
-        range: string
-        pattern: ^.{0,100}$
-      contactID:
-        description: A unique identifier for a given contact person.
-        title: Contact ID
-        range: contacts
-        pattern: ^.{0,30}$
-      siteID:
-        description: Unique identifier for the location where a sample was taken.
-        title: Site ID
-        range: sites
-        required: true
-        pattern: ^.{0,30}$
-      purpose:
-        description: The reason the measure or sample was taken.
-        title: Purpose
-        notes:
-        - 'See allowed categories: report, quality control, validation study, test'
-        range: purposeSet
-        pattern: ^.{0,30}$
-      saMaterial:
-        description: Type of sample.
-        title: Sample material
-        range: sampleMatSet
-        required: true
-        pattern: ^.{0,30}$
-      datasetID:
-        description: The name of the dataset that stores information for MeasureReport,
-          SampleReport and other reporting tables.
-        title: Dataset ID
-        notes:
-        - Where possible, datasetID name should correspond the orignial data custodian
-          responsible for generating environmental data. (suggestion for a default
-          name convention.)
-        range: datasets
-        pattern: ^.{0,30}$
-      origin:
-        description: An attribute of a sample specifying the origin.
-        title: Sample origin
-        range: originSet
-        pattern: ^.{0,30}$
   measures:
     description: The table that contains information and details about a given measure
     title: Measure report table
+    from_schema: https://onto.phes-odm.org/odm/v2
     slots:
     - measureRepID
     - protocolID
@@ -8305,6 +8316,7 @@ classes:
   parts:
     description: Look up table containing all parts in of the data model.
     title: Parts Look-up table
+    from_schema: https://onto.phes-odm.org/odm/v2
     slots:
     - partID
     - label
@@ -9043,6 +9055,7 @@ classes:
   protocols:
     description: The table for protocols.
     title: Protocols table
+    from_schema: https://onto.phes-odm.org/odm/v2
     slots:
     - sourceProtocol
     - protocolID
@@ -9156,6 +9169,7 @@ classes:
     description: Look up table for all sets, managing how categorical inputs for various
       methods and attributes are grouped together.
     title: Sets look-up table
+    from_schema: https://onto.phes-odm.org/odm/v2
     slots:
     - setCompID
     - setID
@@ -9277,6 +9291,7 @@ classes:
     description: The table that contains information about the geometry of a geographic
       area.
     title: Polygon table
+    from_schema: https://onto.phes-odm.org/odm/v2
     slots:
     - polygonID
     - datasetID
@@ -9409,6 +9424,7 @@ classes:
     description: A report table for capturing details about data's parental data set
       and data custodians. Supplying attribution for data collectors.
     title: Dataset table
+    from_schema: https://onto.phes-odm.org/odm/v2
     slots:
     - parDatasetID
     - datasetID
@@ -9554,9 +9570,9 @@ classes:
     description: The table that contains information about addresses. Addresses can
       recorded for sites, organizations or contacts (indivduals).
     title: Address table
+    from_schema: https://onto.phes-odm.org/odm/v2
     slots:
     - addressID
-    - notes
     - datasetID
     - addL1
     - addL2
@@ -9565,6 +9581,7 @@ classes:
     - pCode
     - country
     - lastEdited
+    - notes
     slot_usage:
       addressID:
         description: A unique identifier for an address.
@@ -9573,14 +9590,6 @@ classes:
         range: string
         required: true
         pattern: ^.{0,30}$
-      notes:
-        description: A note used to describe details that are not captured in other
-          attrbitutes
-        title: Notes
-        notes:
-        - There is no recommended structure of a note. Use notes as needed.
-        range: string
-        pattern: ^.{0,200}$
       datasetID:
         description: The name of the dataset that stores information for MeasureReport,
           SampleReport and other reporting tables.
@@ -9648,9 +9657,18 @@ classes:
           and replace occurred.
         range: datetime
         pattern: ^.{0,30}$
+      notes:
+        description: A note used to describe details that are not captured in other
+          attrbitutes
+        title: Notes
+        notes:
+        - There is no recommended structure of a note. Use notes as needed.
+        range: string
+        pattern: ^.{0,200}$
   sampleRelationships:
     description: Table for recording the relationships between samples.
     title: Sample relationships table
+    from_schema: https://onto.phes-odm.org/odm/v2
     slots:
     - sampleRelationshipsID
     - sampleIDSubject
@@ -9730,6 +9748,7 @@ classes:
   instruments:
     description: The table that contains information about instruments.
     title: Instrument table
+    from_schema: https://onto.phes-odm.org/odm/v2
     slots:
     - instrumentID
     - datasetID
@@ -9863,6 +9882,7 @@ classes:
     description: The table that contains information about a site; the location where
       an environmental sample was taken.
     title: Sites table
+    from_schema: https://onto.phes-odm.org/odm/v2
     slots:
     - parSiteID
     - siteID
@@ -10057,6 +10077,7 @@ classes:
     description: The table that contains information about a contact; a person who
       is the contact of a site or laboratory.
     title: Contact table
+    from_schema: https://onto.phes-odm.org/odm/v2
     slots:
     - contactID
     - datasetID
@@ -10148,6 +10169,7 @@ classes:
   measureSets:
     description: The table that identifies sets of measures.
     title: Measure set report table
+    from_schema: https://onto.phes-odm.org/odm/v2
     slots:
     - measureSetRepID
     - protocolID
@@ -10219,6 +10241,7 @@ classes:
   countries:
     description: Look up table for the possible country inputs.
     title: Countries look-up tables
+    from_schema: https://onto.phes-odm.org/odm/v2
     slots:
     - isoCode
     - isoCodeX
@@ -10372,6 +10395,7 @@ classes:
   zones:
     description: Look up table for the possible sub-national region or zone inputs.
     title: Zones look-up table
+    from_schema: https://onto.phes-odm.org/odm/v2
     slots:
     - isoCode
     - isoZone
