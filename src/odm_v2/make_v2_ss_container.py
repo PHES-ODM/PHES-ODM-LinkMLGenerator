@@ -1,6 +1,6 @@
 #%%
 """
-Create the Container class Schemasheet for ODM v2. This is the top-level (tree_root) class that contains
+Create the Container class Schemasheet for ODM. This is the top-level (tree_root) class that contains
 all the top-level tables (eg. measures, protocols, etc.)
 
 @TODO: We currently don't have any descriptions or titles for the tables. These should be added.
@@ -11,25 +11,28 @@ import pandas as pd
 from typing import Union
 from pathlib import Path
 
-from utils.general_utils import get_logger
+from utils.general_utils import get_logger, read_data_frame
 from utils.schemasheets_utils import save_schemasheet
-from odm_v2.v2_utils import v2_class_names
+from odm_v2.v2_utils import v2_get_available_class_names
 
 logger = get_logger(__name__)
 
-def extract_container_class(output_file: Union[str, Path]):
+def extract_container_class(parts_file: Union[str, Path], output_file: Union[str, Path]):
     """Extract and create the Schemasheets file for the top-level Container class. This class
-    contains a multivalued slot for each table found in the ODM v2 data dictionary.
+    contains a multivalued slot for each table found in the ODM data dictionary.
 
     Args:
+        parts_file (Union[str, Path]): The ODM data dictionary parts file.
         output_file (Union[str, Path]): The TSV file to save the Container class Schemasheet
             to.
     """
     # First row is for the Container only (ie. no slot is specified)
     df = pd.DataFrame([{ "class" : "Container", "tree_root" : True }])
 
-    # Make a row for each ODM v2 class (one slot per class)
-    for class_name in v2_class_names:
+    parts_df = read_data_frame(parts_file, keep_default_na=False, na_values=[""])
+
+    # Make a row for each ODM class (one slot per class)
+    for class_name in v2_get_available_class_names(parts_df):
         row = pd.DataFrame([{
             "class" : "Container",
             "slot" : class_name,
@@ -48,14 +51,16 @@ def extract_container_class(output_file: Union[str, Path]):
 if __name__ == "__main__":
     if "get_ipython" in globals():
         class opts:
+            parts_file = "../../gen/odm_v2/dictionary/parts.csv"
             output_file = "../../gen/odm_v2/schemasheets/container.tsv"
     else:
         args = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+        args.add_argument("--parts_file", type=str, help="Input ODM parts file to extract the classes from", required=True)
         args.add_argument("--output_file", type=str, help="The TSV file to save the container class Schemasheet to", required=True)
         opts = args.parse_args()
 
-    logger.info("Making ODM v2 Container class...")
+    logger.info("Making ODM Container class...")
 
-    extract_container_class(opts.output_file)
+    extract_container_class(opts.parts_file, opts.output_file)
 
     logger.info("Finished!")

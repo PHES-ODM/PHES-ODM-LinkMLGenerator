@@ -1,5 +1,5 @@
 """
-Utility functions for ODM LinkML Schema Generator, specific to ODM v2 dictionary.
+Utility functions for ODM LinkML Schema Generator, specific to ODM dictionary.
 """
 
 from typing import Union, Any, List, Optional, Dict
@@ -14,35 +14,9 @@ from utils.general_utils import get_logger
 
 logger = get_logger(__name__)
 
-# All known table names in ODM v2 (in LinkML they are called classes).
-v2_class_names = [
-    "protocolSteps",
-    "protocolRelationships",
-    "measures",
-    "measureSets",
-    "datasets",
-    "sites",
-    "samples",
-    "addresses",
-    "contacts",
-    "organizations",
-    "instruments",
-    "polygons",
-    "languages",
-    "translations",
-    "parts",
-    "sets",
-    "qualityReports",
-    "sampleRelationships",
-    "protocols",
-    "countries",
-    "zones",
-    "wideNames",
-]
-
-# In the ODM v2 data dictionary, in the parts sheet, each table (eg. samples, sites, measures) has
+# In the ODM data dictionary, in the parts sheet, each table (eg. samples, sites, measures) has
 # a column with the same name as the table. If a row has any of the following _v2_header_tags in that
-# column, then the partID for that row is a column header in the ODM v2 table.
+# column, then the partID for that row is a column header in the ODM table.
 _v2_header_tags = [
     "header",   # Regular header
     "fK",       # Foreign key
@@ -65,9 +39,23 @@ _v2_enum_name_exceptions = {
     "specimenSets" : "specimenSets",                 # No change
 }
 
+def v2_get_available_class_names(headers: List[str]) -> List[str]:
+    """Get a list of all ODM class/table names that are defined in a ODM parts sheet that contains
+    the specified headers.
+
+    Args:
+        headers (List[str]): List of all headers in the ODM parts sheet.
+
+    Returns:
+        List[str]: List of all class/table names that the parts sheet defines.
+    """
+    match_tag = "Order"
+    headers = [h[:-len(match_tag)] for h in headers if h.endswith(match_tag) and len(h) > len(match_tag)]
+    return headers
+
 def v2_get_header_rows(df: pd.DataFrame, tables: Union[str, List[str]], header_tags: Optional[Union[str, List[str]]] = None) -> pd.DataFrame:
     """Retrieve all rows in the DataFrame that correspond to a column in any of the specified
-    ODM v2 tables.
+    ODM tables.
     
     This corresponds to rows that are either a primary key, a foreign key, or a header in any
     of the tables. Note that to determine if a row is a column, the DataFrame df must
@@ -139,7 +127,7 @@ def v2_get_enum_name_from_part_id(part_id: str, recognized_enums: Optional[List[
     return name
 
 def get_multi_enums_from_dictionary(dictionary_file: str, lists_sheet: str) -> Dict[str, List[str]]:
-    """From the ODM v2 data dictionary (the "lists" sheet), get all enumeration names that should
+    """From the ODM data dictionary (the "lists" sheet), get all enumeration names that should
     always be combined with other enumerations. For example, the "fractionSet" enumeration should always
     be combined with the "genMissingnessSet" enumeration, so that missing values (eg. NA, nan, nr, etc).
     
@@ -155,7 +143,7 @@ def get_multi_enums_from_dictionary(dictionary_file: str, lists_sheet: str) -> D
         }
 
     Args:
-        dictionary_file (str): The path to the ODM v2 data dictionary Excel file.
+        dictionary_file (str): The path to the ODM data dictionary Excel file.
         lists_sheet (str): The name of the sheet that contains all lists (typically "lists"). This sheet
             contains formulas for creating lists for various enumerations, along with optional
             missingness enumerations.
@@ -257,12 +245,12 @@ def map_enum_ranges(schema: SchemaDefinition, enum_maps: Dict[str, List[str]], m
         raise ValueError(f"Unrecognized method '{method}' in map_enum_ranges")
 
 def add_missingness_set(schema: SchemaDefinition, dictionary_file: Union[str, Path], lists_sheet: str = "lists", method: str = "multi_range"):
-    """Using the ODM v2 data dictionary, add the genMissingnessSet to any slot range that has an
+    """Using the ODM data dictionary, add the genMissingnessSet to any slot range that has an
     enumeration that should be paired with genMissingnessSet.
 
     Args:
         schema (SchemaDefinition): The schema to modify in place.
-        dictionary_file (Union[str, Path]): The ODM v2 data dictionary, in Excel format.
+        dictionary_file (Union[str, Path]): The ODM data dictionary, in Excel format.
         lists_sheet (str, optional): The sheet in the dictionary_file that contains the lists of values for the enumerations
             that are optionally paired with the missingness set. Defaults to "lists".
         method (str, Optional): If "multi_range" then we add the missingness set to slots by changing

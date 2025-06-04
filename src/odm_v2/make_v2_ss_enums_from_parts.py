@@ -19,7 +19,7 @@ from typing import List
 
 from utils.general_utils import get_logger, read_data_frame, EMPTY_PERMISSIBLE_VALUE
 from utils.schemasheets_utils import save_schemasheet
-from odm_v2.v2_utils import v2_keep_active_rows, v2_class_names, v2_get_header_rows, v2_get_enum_name_from_part_id
+from odm_v2.v2_utils import v2_keep_active_rows, v2_get_available_class_names, v2_get_header_rows, v2_get_enum_name_from_part_id
 
 logger = get_logger(__name__)
 
@@ -33,7 +33,7 @@ headers = {
 }
 
 def extract_parts_enums(parts_file: str, output_file: str) -> List[str]:
-    """Create a Schemasheet for all enumerations found in the parts sheet of the ODM v2
+    """Create a Schemasheet for all enumerations found in the parts sheet of the ODM
     data dictionary. This does not include any enums that are found in the sets sheet
     (see make_v2_ss_enums_from_sets.py for extracting enums from the sets sheet)/
 
@@ -54,7 +54,8 @@ def extract_parts_enums(parts_file: str, output_file: str) -> List[str]:
     # and do not have an mmaSet. Once we have all the header rows, we get the enumeration name based on the 
     # partID. We do not extract the ones with mmaSet set, since those are fully defined in the sets
     # sheet, not the parts sheet (see make_v2_ss_enums_from_sets.py).
-    headers_df = v2_get_header_rows(df, v2_class_names)
+    class_names = v2_get_available_class_names(df.columns)
+    headers_df = v2_get_header_rows(df, class_names)
     filt = headers_df["dataType"].isin(["categorical"])
     filt = filt & pd.isna(headers_df["mmaSet"])
     enum_source_names = sorted(headers_df[filt]["partID"].unique())
@@ -107,11 +108,11 @@ if __name__ == "__main__":
             output_file = "../../gen/odm_v2/schemasheets/enums_parts.tsv"
     else:
         args = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
-        args.add_argument("--parts_file", type=str, help="Input ODM v2 parts file to extract the enums from", required=True)
+        args.add_argument("--parts_file", type=str, help="Input ODM parts file to extract the enums from", required=True)
         args.add_argument("--output_file", type=str, help="The TSV file to save the extracted enums to", required=True)
         opts = args.parse_args()
         
-    logger.info("Making ODM v2 Enums from Parts List...")
+    logger.info("Making ODM Enums from Parts List...")
     
     extract_parts_enums(opts.parts_file, opts.output_file)
 

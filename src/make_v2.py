@@ -1,6 +1,8 @@
 #%%
+%load_ext autoreload
+%autoreload 2
 """
-Make the ODMv2 LinkML schema.
+Make the ODM LinkML schema.
 """
 
 from pathlib import Path
@@ -21,11 +23,12 @@ from odm_v2.v2_utils import add_missingness_set
 
 logger = get_logger(__name__)
 
-def make_v2(dictionary_file: Union[str, Path], output_dir: Union[str, Path], missingness_method: str) -> SchemaDefinition:
-    """Generate the LinkML schema for ODM v2.
+def make_v2(version: str, dictionary_file: Union[str, Path], output_dir: Union[str, Path], missingness_method: str) -> SchemaDefinition:
+    """Generate the LinkML schema for ODM.
 
     Args:
-        dictionary_file (Union[str, Path]): Location of the Excel data dictionary (parts file) for ODM v2.
+        version (str): The ODM version number we are making (eg. "2", "3")
+        dictionary_file (Union[str, Path]): Location of the Excel data dictionary (parts file) for ODM.
         output_dir (Union[str, Path]): Location to save all output. The LinkML schema output is
             saved to "{output_dir}/linkml/odm_v2.yaml"
         missingness_method (str): How to include the missingness set. If 'multi_range' then add the missingness
@@ -33,7 +36,7 @@ def make_v2(dictionary_file: Union[str, Path], output_dir: Union[str, Path], mis
             with the permissible values of enumerations.
 
     Returns:
-        SchemaDefinition: The generated ODM v2 LinkML schema definition.
+        SchemaDefinition: The generated ODM LinkML schema definition.
     """
     # Some paths
     output_dir = Path(output_dir)
@@ -46,7 +49,7 @@ def make_v2(dictionary_file: Union[str, Path], output_dir: Union[str, Path], mis
     # Clean up the output directories (ie. delete old csv, tsv, and yaml files)
     clear_dirs([dictionary_dir, schemasheets_dir, linkml_dir])
 
-    # Extract the parts and sets sheets from the Excel ODM v2 data dictionary file
+    # Extract the parts and sets sheets from the Excel ODM data dictionary file
     extract_sheets(dictionary_file, ["parts", "sets"], dictionary_dir, na_values = { "parts" : { "partID" : "" }, "sets" : { "partID" : "" }})
 
     # Extract all enums from the sets sheet (and save as a schemasheet)
@@ -63,13 +66,13 @@ def make_v2(dictionary_file: Union[str, Path], output_dir: Union[str, Path], mis
 
     # Extract the Container class, which is the top-level LinkML class containing all
     # the tables.
-    extract_container_class(schemasheets_dir / "container.tsv")
+    extract_container_class(parts_file, schemasheets_dir / "container.tsv")
 
     # Make the prefixes schemasheet
-    make_prefixes(schemasheets_dir / "prefixes.tsv")
+    make_prefixes(version, schemasheets_dir / "prefixes.tsv")
 
     # Make the schema definition schemasheet
-    make_schema(schemasheets_dir / "schema.tsv")
+    make_schema(version, schemasheets_dir / "schema.tsv")
 
     # Run Schemasheets to make the final LinkML schema
     schema = make_linkml_schema_from_schemasheets(schemasheets_dir)
@@ -78,23 +81,27 @@ def make_v2(dictionary_file: Union[str, Path], output_dir: Union[str, Path], mis
     add_missingness_set(schema, dictionary_file=dictionary_file, lists_sheet = "lists", method = missingness_method)
  
     # Save the schema to disk
-    save_schema_definition(schema, linkml_dir / "odm_v2.yaml")
+    save_schema_definition(schema, linkml_dir / f"odm_v{version}.yaml")
     
     return schema
 
 if __name__ == "__main__":
     if "get_ipython" in globals():
+        VERSION = "3"
         class opts:
-            dictionary_file = "../data/odm_v2/v2 ODM dictionary.xlsx"
-            output_dir = "../gen/odm_v2"
+            version = VERSION
+            dictionary_file = f"../data/odm_v{VERSION}/v{VERSION} ODM dictionary.xlsx"
+            output_dir = f"../gen/odm_v{VERSION}"
+            
             missingness_method = "merge"   # "merge" | "multi_range"
     else:
         args = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
-        args.add_argument("--dictionary_file", type=str, help="The Excel ODM v2 data dictionary file", required=True)
+        args.add_argument("--version", type=str, help="The version of ODM that the LinkML schema is for (eg. \"2\", \"3\")", required=True)
+        args.add_argument("--dictionary_file", type=str, help="The Excel ODM data dictionary file", required=True)
         args.add_argument("--output_dir", type=str, help="Directory to save all results to", required=True)
         args.add_argument("--missingness_method", type=str, help="How to include the missingness set. If 'multi_range' then add the missingness set to a slot's range by changing the range to a list. If 'merge' then combine the missingness set with the permissible values of enumerations.", default="multi_range")
         opts = args.parse_args()
 
-    make_v2(dictionary_file=opts.dictionary_file, output_dir=opts.output_dir, missingness_method=opts.missingness_method)
+    make_v2(version=opts.version, dictionary_file=opts.dictionary_file, output_dir=opts.output_dir, missingness_method=opts.missingness_method)
 
     logger.info("Finished!")

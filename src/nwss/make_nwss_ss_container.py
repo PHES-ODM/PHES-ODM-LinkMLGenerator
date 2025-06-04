@@ -35,7 +35,7 @@ def extract_container_class(metadata_file: Union[str, Path], output_file: Union[
     # We'll append all the top-level table slots after this first row.
     df = pd.DataFrame([{ "class" : "Container", "tree_root" : True }])
 
-    # Make a row for each ODM v2 class (one slot per class)
+    # Make a row for each ODM class (one slot per class)
     class_names = [SINGLE_TABLE_NAME] if single_table else all_tables.keys()
     for class_name in class_names:
         row = pd.DataFrame([{

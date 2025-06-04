@@ -1,6 +1,6 @@
 #%%
 """
-Create Schemasheets for all enumerations found within the ODM v2 data dictionary sets sheet. This
+Create Schemasheets for all enumerations found within the ODM data dictionary sets sheet. This
 does NOT include the enumerations whose values are found within the parts sheet (those can be created
 with make_v2_ss_enums_from_parts.py).
 
@@ -38,16 +38,16 @@ headers = {
 }
 
 def extract_sets_enums(sets_file: str, parts_file: str, output_file: str) -> List[str]:
-    """Create a Schemasheet for all the enumerations found in the ODM v2 data dictionary
-    sets sheet. Note that this does not consistute all of the enums found in ODM v2.
+    """Create a Schemasheet for all the enumerations found in the ODM data dictionary
+    sets sheet. Note that this does not consistute all of the enums found in ODM.
     Additional enumerations that are not found in the sets sheet are extracted from the
     parts sheet by make_v2_ss_enums_from_parts.py.
 
     Args:
         sets_file (str): The full path and filename to the sets CSV sheet extracted from
-            the ODM v2 data dictionary.
+            the ODM data dictionary.
         parts_file (str): The full path and filename to the parts CSV sheet extracted from
-            the ODM v2 data dictionary.
+            the ODM data dictionary.
         output_file (str): The file to save the Schemasheet to. Should be a .tsv file.
     
     Returns:
@@ -130,12 +130,12 @@ if __name__ == "__main__":
             output_file = "../../gen/odm_v2/schemasheets/enums_sets.tsv"
     else:
         args = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
-        args.add_argument("--sets_file", type=str, help="Input ODM v2 sets file to extract the enums from", required=True)
-        args.add_argument("--parts_file", type=str, help="Input ODM v2 parts file. This file contains additional info about the enum, such as the top-level description.", required=True)
+        args.add_argument("--sets_file", type=str, help="Input ODM sets file to extract the enums from", required=True)
+        args.add_argument("--parts_file", type=str, help="Input ODM parts file. This file contains additional info about the enum, such as the top-level description.", required=True)
         args.add_argument("--output_file", type=str, help="The TSV file to save the extracted enums to", required=True)
         opts = args.parse_args()
         
-    logger.info("Making ODM v2 from Sets List...")
+    logger.info("Making ODM from Sets List...")
     
     extract_sets_enums(opts.sets_file, opts.parts_file, opts.output_file)
 
