@@ -1,6 +1,6 @@
 #%%
 """
-Creates Schemasheets for all classes (ie. tables) based on the ODM v2 data dictionary parts sheet.
+Creates Schemasheets for all classes (ie. tables) based on the ODM data dictionary parts sheet.
 The outputs will be named "class_{table_name}.tsv".
 
 @TODO: We currently don't have any descriptions or titles for the classes. These should be added.
@@ -22,7 +22,7 @@ from typing import Tuple, Optional, List
 
 from utils.general_utils import get_logger, read_data_frame
 from utils.schemasheets_utils import save_schemasheet
-from odm_v2.v2_utils import v2_keep_active_rows, v2_get_enum_name_from_part_id, v2_get_header_rows, v2_class_names
+from odm_v2.v2_utils import v2_keep_active_rows, v2_get_enum_name_from_part_id, v2_get_header_rows, v2_get_available_class_names
 
 logger = get_logger(__name__)
 
@@ -78,7 +78,7 @@ def get_fk_target_class(df: pd.DataFrame, part_id: str) -> Optional[str]:
 
     Args:
         df (pd.DataFrame): The full parts DataFrame. It must contain a row where "partID" is equal
-            to part_id, and a column for each class name (ie. each v2_class_names) where the
+            to part_id, and a column for each class name (ie. each v2_get_available_class_names) where the
             value is "pK" (ignoring case) if part_id is a primary key in that class.
         part_id (str): The part_id to get the class that it is a primary key for.
 
@@ -97,10 +97,11 @@ def get_fk_target_class(df: pd.DataFrame, part_id: str) -> Optional[str]:
     if part_id_filt.sum() > 1:
         raise ValueError(f"Matched multiple partID rows for partID '{part_id}'")
     
-    # Get a DataFrame with columns "variable" and "value", where each row has a class name from v2_class_names
+    # Get a DataFrame with columns "variable" and "value", where each row has a class name from v2_get_available_class_names
     # in the "variable" column and the value "pk" in the "value" column if our part_id is a primary key in
     # the class
-    class_values = pd.melt(df.loc[part_id_filt, v2_class_names].map(lambda x: "" if pd.isna(x) else str(x).lower()))
+    class_names = v2_get_available_class_names(df.columns)
+    class_values = pd.melt(df.loc[part_id_filt, class_names].map(lambda x: "" if pd.isna(x) else str(x).lower()))
     
     # Get the row(s) where the value is "pk", we should get 0 or no rows.
     fk_name_filt = class_values["value"] == "pk"
@@ -115,10 +116,10 @@ def get_fk_target_class(df: pd.DataFrame, part_id: str) -> Optional[str]:
 
 def extract_class(df: pd.DataFrame, class_name: str, output_dir: str, recognized_enums: List[str]) -> Tuple[str, pd.DataFrame]:
     """Create a Schemasheet for the specified class name using the data in a
-    DataFrame loaded from the parts sheet of the ODM v2 data dictionary.
+    DataFrame loaded from the parts sheet of the ODM data dictionary.
 
     Args:
-        df (pd.DataFrame): The parts sheet of the ODM v2 data dictionary.
+        df (pd.DataFrame): The parts sheet of the ODM data dictionary.
         class_name (str): The name of the class (ie. table) to extract.
         output_dir (str): The location to save the Schemasheet. The actual
             Schemasheet will be named "class_{class_name}.tsv".
@@ -143,6 +144,9 @@ def extract_class(df: pd.DataFrame, class_name: str, output_dir: str, recognized
     columns[columns.index(f"{class_name}Required")] = "required"
     columns[columns.index(f"{class_name}Order")] = "order"
     table_output_df.columns = columns
+    
+    # Cast "order" to floats
+    table_output_df["order"] = table_output_df["order"].astype(float)
 
     # Set "required" field (ie. row has the value "mandatory" in the "required" column)
     table_output_df["required"] = table_output_df["required"].isin(["mandatory"])
@@ -197,10 +201,10 @@ def extract_class(df: pd.DataFrame, class_name: str, output_dir: str, recognized
 
 def extract_all_classes(parts_file: str, output_dir: str, recognized_enums: List[str]):
     """Create a Schemasheet for all classes (tables) found in the parts sheet that was
-    extracted from the ODM v2 data dictionary.
+    extracted from the ODM data dictionary.
 
     Args:
-        parts_file (str): The parts sheet (CSV) that was extracted from the ODM v2 data
+        parts_file (str): The parts sheet (CSV) that was extracted from the ODM data
             dictionary.
         output_dir (str): The location to save all the Schemasheets. One Schemasheet per
             class is created, with the name "class_{class_name}.tsv" 
@@ -211,7 +215,7 @@ def extract_all_classes(parts_file: str, output_dir: str, recognized_enums: List
 
     df = read_data_frame(parts_file, keep_default_na=False, na_values=[""])
 
-    for class_name in v2_class_names:
+    for class_name in v2_get_available_class_names(df.columns):
         logger.info(f"Processing table {class_name}...")
         extract_class(df, class_name, output_dir, recognized_enums = recognized_enums)
 
@@ -222,11 +226,11 @@ if __name__ == "__main__":
             output_dir = "../../gen/odm_v2/schemasheets"
     else:
         args = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
-        args.add_argument("--parts_file", type=str, help="Input ODM v2 parts file to extract the classes from", required=True)
+        args.add_argument("--parts_file", type=str, help="Input ODM parts file to extract the classes from", required=True)
         args.add_argument("--output_dir", type=str, help="The directory to save the Schemasheets classes files. If not specified then the directory of the input file is used.", required=False)
         opts = args.parse_args()
 
-    logger.info("Making ODM v2 Classes...")
+    logger.info("Making ODM Classes...")
 
     extract_all_classes(opts.parts_file, opts.output_dir)
 
