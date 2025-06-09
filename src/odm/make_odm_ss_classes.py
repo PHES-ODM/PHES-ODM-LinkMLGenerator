@@ -8,7 +8,7 @@ The outputs will be named "class_{table_name}.tsv".
 ## Example
 
 ```python
-from make_v2_ss_classes import extract_all_classes
+from make_odm_ss_classes import extract_all_classes
 
 extract_all_classes("odm_v2/dictionary/parts.csv", "odm_v2/schemasheets")
 ```
@@ -22,7 +22,7 @@ from typing import Tuple, Optional, List
 
 from utils.general_utils import get_logger, read_data_frame
 from utils.schemasheets_utils import save_schemasheet
-from odm_v2.v2_utils import v2_keep_active_rows, v2_get_enum_name_from_part_id, v2_get_header_rows, v2_get_available_class_names
+from odm.odm_utils import odm_keep_active_rows, odm_get_enum_name_from_part_id, odm_get_header_rows, odm_get_available_class_names
 
 logger = get_logger(__name__)
 
@@ -41,7 +41,7 @@ headers = {
     "partInstr" : "notes",
 }
 
-# For mapping the ODM v2 data types to LinkML datatypes
+# For mapping the ODM data types to LinkML datatypes
 _data_types_map = {
     "varchar" : "string",
     "dateTime" : "datetime",
@@ -78,7 +78,7 @@ def get_fk_target_class(df: pd.DataFrame, part_id: str) -> Optional[str]:
 
     Args:
         df (pd.DataFrame): The full parts DataFrame. It must contain a row where "partID" is equal
-            to part_id, and a column for each class name (ie. each v2_get_available_class_names) where the
+            to part_id, and a column for each class name (ie. each odm_get_available_class_names) where the
             value is "pK" (ignoring case) if part_id is a primary key in that class.
         part_id (str): The part_id to get the class that it is a primary key for.
 
@@ -97,10 +97,10 @@ def get_fk_target_class(df: pd.DataFrame, part_id: str) -> Optional[str]:
     if part_id_filt.sum() > 1:
         raise ValueError(f"Matched multiple partID rows for partID '{part_id}'")
     
-    # Get a DataFrame with columns "variable" and "value", where each row has a class name from v2_get_available_class_names
+    # Get a DataFrame with columns "variable" and "value", where each row has a class name from odm_get_available_class_names
     # in the "variable" column and the value "pk" in the "value" column if our part_id is a primary key in
     # the class
-    class_names = v2_get_available_class_names(df)
+    class_names = odm_get_available_class_names(df)
     class_values = pd.melt(df.loc[part_id_filt, class_names].map(lambda x: "" if pd.isna(x) else str(x).lower()))
     
     # Get the row(s) where the value is "pk", we should get 0 or no rows.
@@ -132,10 +132,10 @@ def extract_class(df: pd.DataFrame, class_name: str, output_dir: str, recognized
     
     # Get all rows in the table that correspond to a header in the parts sheet (ie. rows identified
     # as a primary key, foreign key, or header)
-    table_df = v2_get_header_rows(df, class_name)
+    table_df = odm_get_header_rows(df, class_name)
     
     # Only keep rows that are marked as "active" under the "status" column
-    table_df = v2_keep_active_rows(table_df)
+    table_df = odm_keep_active_rows(table_df)
 
     # Select the columns of interest, and rename some of the columns
     table_output_df = table_df[["partID", "partLabel", "partDesc", "partType", "partInstr", "mmaSet", f"{class_name}", f"{class_name}Required", f"{class_name}Order", "dataType", "minValue", "maxValue", "minLength", "maxLength"]].copy()
@@ -162,9 +162,9 @@ def extract_class(df: pd.DataFrame, class_name: str, output_dir: str, recognized
 
     # Set the dataType for remaining enumerations that are categorical (ie. the ones that do not have an mmaSet that was set previously)
     # The enumeration names are a variant of the value found in the partID column (eg. we often just need to add an "s" to
-    # the end of the partID column, see utils.v2_get_enum_name_from_part_id)
+    # the end of the partID column, see utils.odm_get_enum_name_from_part_id)
     categorical_filt = (~mmaset_filt) & (table_output_df["dataType"] == "categorical")
-    table_output_df.loc[categorical_filt, "dataType"] = table_output_df.loc[categorical_filt, "partID"].apply(lambda part_id: v2_get_enum_name_from_part_id(part_id, recognized_enums=recognized_enums))
+    table_output_df.loc[categorical_filt, "dataType"] = table_output_df.loc[categorical_filt, "partID"].apply(lambda part_id: odm_get_enum_name_from_part_id(part_id, recognized_enums=recognized_enums))
 
     # Set identifiers (primary keys)
     table_output_df["identifier"] = table_output_df["headerType"].astype(str).str.lower() == "pk"
@@ -215,7 +215,7 @@ def extract_all_classes(parts_file: str, output_dir: str, recognized_enums: List
 
     df = read_data_frame(parts_file, keep_default_na=False, na_values=[""])
 
-    for class_name in v2_get_available_class_names(df):
+    for class_name in odm_get_available_class_names(df):
         logger.info(f"Processing table {class_name}...")
         extract_class(df, class_name, output_dir, recognized_enums = recognized_enums)
 

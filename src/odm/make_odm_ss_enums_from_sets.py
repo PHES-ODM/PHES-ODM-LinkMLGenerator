@@ -2,12 +2,12 @@
 """
 Create Schemasheets for all enumerations found within the ODM data dictionary sets sheet. This
 does NOT include the enumerations whose values are found within the parts sheet (those can be created
-with make_v2_ss_enums_from_parts.py).
+with make_odm_ss_enums_from_parts.py).
 
 ## Example
 
 ```python
-from make_v2_ss_enums_from_sets import extract_sets_enums
+from make_odm_ss_enums_from_sets import extract_sets_enums
 
 extract_sets_enums("odm_v2/dictionary/sets.csv", 
                    "odm_v2/dictionary/parts.csv", 
@@ -24,7 +24,7 @@ from typing import List
 
 from utils.general_utils import get_logger, read_data_frame, EMPTY_PERMISSIBLE_VALUE
 from utils.schemasheets_utils import save_schemasheet
-from odm_v2.v2_utils import v2_keep_active_rows
+from odm.odm_utils import odm_keep_active_rows
 
 logger = get_logger(__name__)
 
@@ -41,7 +41,7 @@ def extract_sets_enums(sets_file: str, parts_file: str, output_file: str) -> Lis
     """Create a Schemasheet for all the enumerations found in the ODM data dictionary
     sets sheet. Note that this does not consistute all of the enums found in ODM.
     Additional enumerations that are not found in the sets sheet are extracted from the
-    parts sheet by make_v2_ss_enums_from_parts.py.
+    parts sheet by make_odm_ss_enums_from_parts.py.
 
     Args:
         sets_file (str): The full path and filename to the sets CSV sheet extracted from
@@ -57,7 +57,7 @@ def extract_sets_enums(sets_file: str, parts_file: str, output_file: str) -> Lis
     parts_df = read_data_frame(parts_file, keep_default_na=False, na_values=[""])
 
     # Keep only active status parts
-    df = v2_keep_active_rows(df)
+    df = odm_keep_active_rows(df)
 
     # Get the description (partDesc) and title (partLabel) from the parts list, by joining on partID
     df = df.merge(parts_df[["partID", "partDesc", "partLabel"]], on="partID", how="left")

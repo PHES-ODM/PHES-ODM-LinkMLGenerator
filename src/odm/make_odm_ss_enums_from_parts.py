@@ -1,13 +1,13 @@
 #%%
 """
-Create Schemasheets for all enumerations found within the ODM v2 data dictionary parts sheet. This
+Create Schemasheets for all enumerations found within the ODM data dictionary parts sheet. This
 does NOT include the enumerations found within the sets sheet (those can be created with
-make_v2_ss_enums_from_sets.py).
+make_odm_ss_enums_from_sets.py).
 
 ## Example
 
 ```python
-from make_v2_ss_enums_from_parts import extract_parts_enums
+from make_odm_ss_enums_from_parts import extract_parts_enums
 
 extract_parts_enums("odm_v2/dictionary/parts.csv", "odm_v2/schemasheets/enums_parts.tsv")
 ```
@@ -19,7 +19,7 @@ from typing import List
 
 from utils.general_utils import get_logger, read_data_frame, EMPTY_PERMISSIBLE_VALUE
 from utils.schemasheets_utils import save_schemasheet
-from odm_v2.v2_utils import v2_keep_active_rows, v2_get_available_class_names, v2_get_header_rows, v2_get_enum_name_from_part_id
+from odm.odm_utils import odm_keep_active_rows, odm_get_available_class_names, odm_get_header_rows, odm_get_enum_name_from_part_id
 
 logger = get_logger(__name__)
 
@@ -35,11 +35,11 @@ headers = {
 def extract_parts_enums(parts_file: str, output_file: str) -> List[str]:
     """Create a Schemasheet for all enumerations found in the parts sheet of the ODM
     data dictionary. This does not include any enums that are found in the sets sheet
-    (see make_v2_ss_enums_from_sets.py for extracting enums from the sets sheet)/
+    (see make_odm_ss_enums_from_sets.py for extracting enums from the sets sheet)/
 
     Args:
         parts_file (str): The full path and filename for the CSV parts sheet extracted
-            from the ODM v2 data dictionary.
+            from the ODM data dictionary.
         output_file (str): The TSV file to save the Schemasheet to.
         
     Returns:
@@ -48,18 +48,18 @@ def extract_parts_enums(parts_file: str, output_file: str) -> List[str]:
     df = read_data_frame(parts_file, keep_default_na=False, na_values=[""])
 
     # Use only active rows (indicated in the "status" column)
-    df = v2_keep_active_rows(df)
+    df = odm_keep_active_rows(df)
 
     # Get all enum names by getting the partID of categorical variables that are headers (pK, fK, or header) 
     # and do not have an mmaSet. Once we have all the header rows, we get the enumeration name based on the 
     # partID. We do not extract the ones with mmaSet set, since those are fully defined in the sets
-    # sheet, not the parts sheet (see make_v2_ss_enums_from_sets.py).
-    class_names = v2_get_available_class_names(df)
-    headers_df = v2_get_header_rows(df, class_names)
+    # sheet, not the parts sheet (see make_odm_ss_enums_from_sets.py).
+    class_names = odm_get_available_class_names(df)
+    headers_df = odm_get_header_rows(df, class_names)
     filt = headers_df["dataType"].isin(["categorical"])
     filt = filt & pd.isna(headers_df["mmaSet"])
     enum_source_names = sorted(headers_df[filt]["partID"].unique())
-    enum_names = [v2_get_enum_name_from_part_id(name) for name in enum_source_names]
+    enum_names = [odm_get_enum_name_from_part_id(name) for name in enum_source_names]
     
     # @TODO: Check if it's ok to no longer use the above for calculating the enum_names and instead use the
     # simpler single line of code below for enum_names
@@ -79,7 +79,7 @@ def extract_parts_enums(parts_file: str, output_file: str) -> List[str]:
     ]
     output_df = pd.DataFrame()
     # @TODO: Check if it's ok to no longer look for "input" partIDs, but instead use the full DataFrame
-    # is_input = df[v2_class_names].isin(["input"])
+    # is_input = df[odm_class_names].isin(["input"])
     # is_input = is_input.sum(axis=1)
     # input_df = df[is_input > 0]
     input_df = df

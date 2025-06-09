@@ -13,7 +13,7 @@ from pathlib import Path
 
 from utils.general_utils import get_logger, read_data_frame
 from utils.schemasheets_utils import save_schemasheet
-from odm_v2.v2_utils import v2_get_available_class_names
+from odm.odm_utils import odm_get_available_class_names
 
 logger = get_logger(__name__)
 
@@ -32,7 +32,7 @@ def extract_container_class(parts_file: Union[str, Path], output_file: Union[str
     parts_df = read_data_frame(parts_file, keep_default_na=False, na_values=[""])
 
     # Make a row for each ODM class (one slot per class)
-    for class_name in v2_get_available_class_names(parts_df):
+    for class_name in odm_get_available_class_names(parts_df):
         row = pd.DataFrame([{
             "class" : "Container",
             "slot" : class_name,

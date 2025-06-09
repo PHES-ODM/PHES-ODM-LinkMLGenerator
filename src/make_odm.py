@@ -11,24 +11,24 @@ from linkml_runtime.linkml_model.meta import SchemaDefinition
 
 from utils.general_utils import clear_dirs, extract_sheets, get_logger
 from utils.schemasheets_utils import make_linkml_schema_from_schemasheets, save_schema_definition
-from odm_v2.make_v2_ss_classes import extract_all_classes
-from odm_v2.make_v2_ss_enums_from_parts import extract_parts_enums
-from odm_v2.make_v2_ss_enums_from_sets import extract_sets_enums
-from odm_v2.make_v2_ss_prefixes import make_prefixes
-from odm_v2.make_v2_ss_schema import make_schema
-from odm_v2.make_v2_ss_container import extract_container_class
-from odm_v2.v2_utils import add_missingness_set
+from odm.make_odm_ss_classes import extract_all_classes
+from odm.make_odm_ss_enums_from_parts import extract_parts_enums
+from odm.make_odm_ss_enums_from_sets import extract_sets_enums
+from odm.make_odm_ss_prefixes import make_prefixes
+from odm.make_odm_ss_schema import make_schema
+from odm.make_odm_ss_container import extract_container_class
+from odm.odm_utils import add_missingness_set
 
 logger = get_logger(__name__)
 
-def make_v2(version: str, dictionary_file: Union[str, Path], output_dir: Union[str, Path], missingness_method: str) -> SchemaDefinition:
+def make_odm(version: str, dictionary_file: Union[str, Path], output_dir: Union[str, Path], missingness_method: str) -> SchemaDefinition:
     """Generate the LinkML schema for ODM.
 
     Args:
         version (str): The ODM version number we are making (eg. "2", "3")
         dictionary_file (Union[str, Path]): Location of the Excel data dictionary (parts file) for ODM.
         output_dir (Union[str, Path]): Location to save all output. The LinkML schema output is
-            saved to "{output_dir}/linkml/odm_v2.yaml"
+            saved to "{output_dir}/linkml/odm_v{version}.yaml"
         missingness_method (str): How to include the missingness set. If 'multi_range' then add the missingness
             set to a slot's range by changing the range to a list. If 'merge' then combine the missingness set
             with the permissible values of enumerations.
@@ -85,7 +85,7 @@ def make_v2(version: str, dictionary_file: Union[str, Path], output_dir: Union[s
 
 if __name__ == "__main__":
     if "get_ipython" in globals():
-        VERSION = "3"
+        VERSION = "2"
         class opts:
             version = VERSION
             dictionary_file = f"../data/odm_v{VERSION}/v{VERSION} ODM dictionary.xlsx"
@@ -100,6 +100,6 @@ if __name__ == "__main__":
         args.add_argument("--missingness_method", type=str, help="How to include the missingness set. If 'multi_range' then add the missingness set to a slot's range by changing the range to a list. If 'merge' then combine the missingness set with the permissible values of enumerations.", default="multi_range")
         opts = args.parse_args()
 
-    make_v2(version=opts.version, dictionary_file=opts.dictionary_file, output_dir=opts.output_dir, missingness_method=opts.missingness_method)
+    make_odm(version=opts.version, dictionary_file=opts.dictionary_file, output_dir=opts.output_dir, missingness_method=opts.missingness_method)
 
     logger.info("Finished!")

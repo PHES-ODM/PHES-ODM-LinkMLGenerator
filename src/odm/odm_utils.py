@@ -15,9 +15,9 @@ from utils.general_utils import get_logger
 logger = get_logger(__name__)
 
 # In the ODM data dictionary, in the parts sheet, each table (eg. samples, sites, measures) has
-# a column with the same name as the table. If a row has any of the following _v2_header_tags in that
+# a column with the same name as the table. If a row has any of the following _odm_header_tags in that
 # column, then the partID for that row is a column header in the ODM table.
-_v2_header_tags = [
+_odm_header_tags = [
     "header",   # Regular header
     "fK",       # Foreign key
     "pK",       # Primary key
@@ -28,7 +28,7 @@ _v2_header_tags = [
 # the enumerations for these rows are created by adding an "s" to the end of the "partID". However, some
 # enumeration names do not follow this pattern. The exceptions are listed below, with the "partID" as the 
 # key and the corresponding enumeration name as the value.
-_v2_enum_name_exceptions = {
+_odm_enum_name_exceptions = {
     "aggragationScale" : "aggregationScales",        # TYPO! Should be aggregationScale / Only in parts table
     "class" : "classes",                             # Add "es" instead of "s"
     "dataTypes" : "dataTypes",                       # No change
@@ -39,7 +39,7 @@ _v2_enum_name_exceptions = {
     "specimenSets" : "specimenSets",                 # No change
 }
 
-def v2_get_available_class_names(headers: Union[pd.DataFrame, List[str]]) -> List[str]:
+def odm_get_available_class_names(headers: Union[pd.DataFrame, List[str]]) -> List[str]:
     """Get a list of all ODM class/table names that are defined in a ODM parts sheet that contains
     the specified headers.
 
@@ -56,7 +56,7 @@ def v2_get_available_class_names(headers: Union[pd.DataFrame, List[str]]) -> Lis
     headers = [h[:-len(match_tag)] for h in headers if h.endswith(match_tag) and len(h) > len(match_tag)]
     return headers
 
-def v2_get_header_rows(df: pd.DataFrame, tables: Union[str, List[str]], header_tags: Optional[Union[str, List[str]]] = None) -> pd.DataFrame:
+def odm_get_header_rows(df: pd.DataFrame, tables: Union[str, List[str]], header_tags: Optional[Union[str, List[str]]] = None) -> pd.DataFrame:
     """Retrieve all rows in the DataFrame that correspond to a column in any of the specified
     ODM tables.
     
@@ -78,7 +78,7 @@ def v2_get_header_rows(df: pd.DataFrame, tables: Union[str, List[str]], header_t
             one of the tables. A copy of the DataFrame is made.
     """
     if header_tags is None:
-        header_tags = _v2_header_tags
+        header_tags = _odm_header_tags
     if isinstance(header_tags, str):
         header_tags = [header_tags]
     if isinstance(tables, str):
@@ -89,7 +89,7 @@ def v2_get_header_rows(df: pd.DataFrame, tables: Union[str, List[str]], header_t
     is_header = is_header.sum(axis=1)
     return df[is_header > 0].copy()
 
-def v2_keep_active_rows(df: pd.DataFrame, status_column: str = "status", keep_status: Union[Any, List[Any]] = "active") -> pd.DataFrame:
+def odm_keep_active_rows(df: pd.DataFrame, status_column: str = "status", keep_status: Union[Any, List[Any]] = "active") -> pd.DataFrame:
     """Keep only rows that have an "active" status. Status is specified in a single column in the
     DataFrame.
 
@@ -108,7 +108,7 @@ def v2_keep_active_rows(df: pd.DataFrame, status_column: str = "status", keep_st
     df = df[keep_filt]
     return df.copy()
 
-def v2_get_enum_name_from_part_id(part_id: str, recognized_enums: Optional[List[str]] = None) -> str:
+def odm_get_enum_name_from_part_id(part_id: str, recognized_enums: Optional[List[str]] = None) -> str:
     """Get the enumeration name for the specified part ID.
 
     Args:
@@ -121,8 +121,8 @@ def v2_get_enum_name_from_part_id(part_id: str, recognized_enums: Optional[List[
     Returns:
         str: The enumeration name (for the partID)
     """
-    if part_id in _v2_enum_name_exceptions.keys():
-        name = _v2_enum_name_exceptions[part_id]
+    if part_id in _odm_enum_name_exceptions.keys():
+        name = _odm_enum_name_exceptions[part_id]
     else:
         name = f"{part_id}s"
     if recognized_enums is not None and name not in recognized_enums:

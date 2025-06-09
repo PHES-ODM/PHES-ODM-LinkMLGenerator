@@ -6,7 +6,7 @@ schema, such as the id, description of the schema, and the default prefix to use
 ## Example
 
 ```python
-from make_v2_ss_schema import make_schema
+from make_odm_ss_schema import make_schema
 
 make_schema("odm_v2/schemasheets/schema.tsv")
 ```

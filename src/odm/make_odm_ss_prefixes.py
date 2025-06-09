@@ -5,7 +5,7 @@ Creates the Schemasheets prefixes table, which defines all prefixes used by the 
 ## Example
 
 ```python
-from make_v2_ss_prefixes import make_prefixes
+from make_odm_ss_prefixes import make_prefixes
 
 make_prefixes("odm_v2/schemasheets/prefixes.tsv")
 ```
