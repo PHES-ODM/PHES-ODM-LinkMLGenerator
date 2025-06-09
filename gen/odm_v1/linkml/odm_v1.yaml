@@ -657,8 +657,8 @@ classes:
         description: The sample is a representative volume of wastewater taken from
           a Site which is then analysed by a lab.
         title: Wastewater sample data
-        multivalued: true
         range: Sample
+        multivalued: true
         inlined_as_list: true
       WWMeasure:
         description: Measurement result (ie. single variable) from a wastewater sample.
@@ -667,15 +667,15 @@ classes:
           but can also be performed using specific instruments (see Instruments. Measures
           performed at the site of the wastewater sample are reported in SiteMeasure.
         title: Wastewater measurement data
-        multivalued: true
         range: WWMeasure
+        multivalued: true
         inlined_as_list: true
       Site:
         description: The site of wastewater sampling, including several defaults that
           can be used to populate new samples upon creation.
         title: site of sample
-        multivalued: true
         range: Site
+        multivalued: true
         inlined_as_list: true
       SiteMeasure:
         description: Measurement result (ie. single variable) obtained by at the site
@@ -685,22 +685,22 @@ classes:
           additional context necessary for the interpretation of the results. Measures
           performed on the wastewater sample are reported in WWMeasure.
         title: Site Measurement
-        multivalued: true
         range: SiteMeasure
+        multivalued: true
         inlined_as_list: true
       Reporter:
         description: The individual or organization that is reporting and responsible
           for the quality of the data.
         title: Reporter of data
-        multivalued: true
         range: Reporter
+        multivalued: true
         inlined_as_list: true
       Lab:
         description: Laboratory that performs SARS-CoV-2 wastewater testing at one
           or more sites.
         title: Lab
-        multivalued: true
         range: Lab
+        multivalued: true
         inlined_as_list: true
       AssayMethod:
         description: The assay method that was used to perform testing. Create a new
@@ -710,41 +710,42 @@ classes:
           existing fields to allow each record to clearly describe all steps. Add
           a current date when recording a new version to an assay.
         title: Assay Method
-        multivalued: true
         range: AssayMethod
+        multivalued: true
         inlined_as_list: true
       Instrument:
         description: Instruments that are used for measures in WWMeasure and SiteMeasure.
           The assay method for viral measurement are described in AssayMethod.
         title: Instrument
-        multivalued: true
         range: Instrument
+        multivalued: true
         inlined_as_list: true
       Polygon:
         description: A simple polygon that encloses an area on the surface of the
           earth, normally these polygons will either be of a sewer catchment area
           or of a health region or other reporting area.
         title: Area
-        multivalued: true
         range: Polygon
+        multivalued: true
         inlined_as_list: true
       CovidPublicHealthData:
         description: Covid-19 patient data for a specified polygon.
         title: Covid Public Health
-        multivalued: true
         range: CovidPublicHealthData
+        multivalued: true
         inlined_as_list: true
       Lookup:
         description: Used for lookup values of all category based columns
         title: Lookup Table
-        multivalued: true
         range: Lookup
+        multivalued: true
         inlined_as_list: true
     tree_root: true
   Sample:
     description: The sample is a representative volume of wastewater taken from a
       Site which is then analysed by a lab.
     title: Wastewater sample data
+    from_schema: https://onto.phes-odm.org/odm/v1
     slots:
     - sampleID
     - siteID
@@ -883,6 +884,7 @@ classes:
       can also be performed using specific instruments (see Instruments. Measures
       performed at the site of the wastewater sample are reported in SiteMeasure.
     title: Wastewater measurement data
+    from_schema: https://onto.phes-odm.org/odm/v1
     slots:
     - uWwMeasureID
     - wwMeasureID
@@ -1053,6 +1055,7 @@ classes:
     description: The site of wastewater sampling, including several defaults that
       can be used to populate new samples upon creation.
     title: site of sample
+    from_schema: https://onto.phes-odm.org/odm/v1
     slots:
     - siteID
     - name
@@ -1176,6 +1179,7 @@ classes:
       necessary for the interpretation of the results. Measures performed on the wastewater
       sample are reported in WWMeasure.
     title: Site Measurement
+    from_schema: https://onto.phes-odm.org/odm/v1
     slots:
     - uSiteMeasureID
     - siteMeasureID
@@ -1327,6 +1331,7 @@ classes:
     description: The individual or organization that is reporting and responsible
       for the quality of the data.
     title: Reporter of data
+    from_schema: https://onto.phes-odm.org/odm/v1
     slots:
     - reporterID
     - siteIDDefault
@@ -1377,6 +1382,7 @@ classes:
     description: Laboratory that performs SARS-CoV-2 wastewater testing at one or
       more sites.
     title: Lab
+    from_schema: https://onto.phes-odm.org/odm/v1
     slots:
     - labID
     - assayMethodIDDefault
@@ -1424,6 +1430,7 @@ classes:
       allow each record to clearly describe all steps. Add a current date when recording
       a new version to an assay.
     title: Assay Method
+    from_schema: https://onto.phes-odm.org/odm/v1
     slots:
     - assayMethodID
     - instrumentID
@@ -1533,6 +1540,7 @@ classes:
     description: Instruments that are used for measures in WWMeasure and SiteMeasure.
       The assay method for viral measurement are described in AssayMethod.
     title: Instrument
+    from_schema: https://onto.phes-odm.org/odm/v1
     slots:
     - instrumentID
     - name
@@ -1582,6 +1590,7 @@ classes:
       normally these polygons will either be of a sewer catchment area or of a health
       region or other reporting area.
     title: Area
+    from_schema: https://onto.phes-odm.org/odm/v1
     slots:
     - polygonID
     - name
@@ -1624,6 +1633,7 @@ classes:
   CovidPublicHealthData:
     description: Covid-19 patient data for a specified polygon.
     title: Covid Public Health
+    from_schema: https://onto.phes-odm.org/odm/v1
     slots:
     - cphdID
     - reporterID
@@ -1673,6 +1683,7 @@ classes:
   Lookup:
     description: Used for lookup values of all category based columns
     title: Lookup Table
+    from_schema: https://onto.phes-odm.org/odm/v1
     slots:
     - tableName
     - columnName
