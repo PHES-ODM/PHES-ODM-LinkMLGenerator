@@ -12,7 +12,6 @@ make_schema("odm_v2/schemasheets/schema.tsv")
 ```
 """
 
-import pandas as pd
 import argparse
 
 from utils.general_utils import get_logger

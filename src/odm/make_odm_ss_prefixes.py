@@ -11,7 +11,6 @@ make_prefixes("odm_v2/schemasheets/prefixes.tsv")
 ```
 """
 
-import pandas as pd
 import argparse
 
 from utils.general_utils import get_logger

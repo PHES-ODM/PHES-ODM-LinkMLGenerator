@@ -17,7 +17,6 @@ import sys
 import os
 sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
 
-import pandas as pd
 import argparse
 
 from utils.general_utils import get_logger

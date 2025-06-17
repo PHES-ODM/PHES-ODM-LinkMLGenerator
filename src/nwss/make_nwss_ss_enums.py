@@ -20,7 +20,6 @@ sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
 
 from typing import List, Union, Optional
 from pathlib import Path
-import pandas as pd
 import argparse
 import os
 
