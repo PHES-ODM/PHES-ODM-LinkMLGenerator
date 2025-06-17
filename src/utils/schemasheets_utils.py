@@ -97,7 +97,7 @@ def fix_schemasheets_generated_schema(schema: SchemaDefinition):
         try:
             float_val = float(val)
             val = int(float_val) if float_val == int(float_val) else float_val
-        except:
+        except Exception:
             logger.warning(f"Unrecognized {key}: {val} of type {type(val)}, using None")
             val = None
         slot_definition[key] = val
