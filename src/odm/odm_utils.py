@@ -39,6 +39,11 @@ _odm_enum_name_exceptions = {
     "specimenSets" : "specimenSets",                 # No change
 }
 
+# In the ODM data dictionary parts sheet, any column that ends with the string ODM_PARTS_COLUMN_CLASS_TAG begins
+# with the name of an ODM class (eg. measuresOrder, protocolStepsOrder, etc). This is used by
+# odm_get_available_class_names to extract all the known class names from the data dictionary.
+ODM_PARTS_COLUMN_CLASS_TAG = "Order"
+
 def odm_get_available_class_names(headers: Union[pd.DataFrame, List[str]]) -> List[str]:
     """Get a list of all ODM class/table names that are defined in a ODM parts sheet that contains
     the specified headers.
@@ -52,8 +57,7 @@ def odm_get_available_class_names(headers: Union[pd.DataFrame, List[str]]) -> Li
     """
     if isinstance(headers, pd.DataFrame):
         headers = headers.columns
-    match_tag = "Order"
-    headers = [h[:-len(match_tag)] for h in headers if h.endswith(match_tag) and len(h) > len(match_tag)]
+    headers = [h[:-len(ODM_PARTS_COLUMN_CLASS_TAG)] for h in headers if h.endswith(ODM_PARTS_COLUMN_CLASS_TAG) and len(h) > len(ODM_PARTS_COLUMN_CLASS_TAG)]
     return headers
 
 def odm_get_header_rows(df: pd.DataFrame, tables: Union[str, List[str]], header_tags: Optional[Union[str, List[str]]] = None) -> pd.DataFrame:
