@@ -45,7 +45,7 @@ def extract_container_class(parts_file: Union[str, Path], output_file: Union[str
         df = pd.concat([df, row]).reset_index(drop=True)
         
     # Put the headers in a nice order and add the Schemasheets header
-    logger.info(f"Saving Schemasheets container to 'output_file'")
+    logger.info("Saving Schemasheets container to 'output_file'")
     save_schemasheet(df, output_file, ["class", "slot", "range", "tree_root", "multivalued", "inlined_as_list", "title", "description"])
 
 if __name__ == "__main__":

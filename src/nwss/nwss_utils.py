@@ -67,7 +67,7 @@ def parse_enums_sheet(df: pd.DataFrame) -> Tuple[pd.DataFrame, Dict[str, pd.Data
             Schemasheets DataFrame as the values.
             
     """
-    logger.info(f"Parsing all enumerations")
+    logger.info("Parsing all enumerations")
     
     # Drop empty columns
     df = df.dropna(axis=1, how="all")
