@@ -7,7 +7,7 @@ import pandas as pd
 from pandas._libs.parsers import STR_NA_VALUES
 import os
 import inspect
-from typing import Union, List, Optional, Any, Dict, Tuple, Callable
+from typing import Union, List, Optional, Any, Dict, Callable
 import logging
 import sys
 
@@ -173,7 +173,7 @@ def extract_sheets(file: Union[str, Path], sheets: Union[str, List[str]], output
     # load the sheets one at a time while specifying the sheet-specific na_values.
     pre_dfs = pd.read_excel(file, sheet_name=None, nrows=0, **read_excel_kwargs)
     if sheets is None or len(sheets) == 0:
-        sheets = list(dfs.keys())
+        sheets = list(pre_dfs.keys())
 
     # Load all sheets one at a time, using the specified na_values
     dfs = {}
