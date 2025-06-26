@@ -1,4 +1,4 @@
-#%%
+# %%
 """
 Creates the Schemasheets schema table for NWSS, which provides the top-level meta data about the NWSS
 schema, such as the id, description of the schema, and the default prefix to use.
@@ -16,8 +16,8 @@ import pandas as pd
 import argparse
 from typing import Dict
 
-from utils.general_utils import get_logger
-from utils.schemasheets_utils import save_schemasheet
+from odm_linkmlgen.utils.general_utils import get_logger
+from odm_linkmlgen.utils.schemasheets_utils import save_schemasheet
 
 logger = get_logger(__name__)
 
@@ -32,7 +32,8 @@ default_data = {
     # "default_prefix" : "nwss",
 }
 
-def make_schema(output_file: str, data_values: Dict={}):
+
+def make_schema(output_file: str, data_values: Dict = {}):
     """Make the schema metadata Schemasheet for NWSS. This sheet contains top-level meta data
     about the NWSS LinkML schema, such as the id, description, and default prefix.
 
@@ -44,22 +45,31 @@ def make_schema(output_file: str, data_values: Dict={}):
     use_data = default_data.copy()
     if data_values is not None:
         use_data.update(data_values)
-    
-    df = pd.DataFrame(use_data, columns = use_data.keys(), index = [0])
+
+    df = pd.DataFrame(use_data, columns=use_data.keys(), index=[0])
     logger.info(f"Saving schema to '{output_file}'")
     save_schemasheet(df, output_file, use_data.keys())
 
+
 if __name__ == "__main__":
     if "get_ipython" in globals():
+
         class opts:
             output_file = "../../gen/nwss_reporting/schemasheets/schema.tsv"
     else:
-        args = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
-        args.add_argument("--output_file", type=str, help="The TSV file to save the Schemasheets schema file to", required=True)
+        args = argparse.ArgumentParser(
+            formatter_class=argparse.ArgumentDefaultsHelpFormatter
+        )
+        args.add_argument(
+            "--output_file",
+            type=str,
+            help="The TSV file to save the Schemasheets schema file to",
+            required=True,
+        )
         opts = args.parse_args()
 
     logger.info("Making NWSS Schema...")
-        
+
     make_schema(opts.output_file)
 
     logger.info("Finished!")

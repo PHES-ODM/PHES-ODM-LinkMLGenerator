@@ -235,28 +235,6 @@ enums:
         description: Used to specify a passive sampling method not otherwise specified
           was used to collect the sample.
         title: Passive Sample - General
-      restrict:
-        description: Missing data is witheld because it is restricted access.
-        title: Restricted data
-      'null':
-        description: A logical representation of a statement that is neither TRUE
-          nor FALSE.
-        title: 'Null'
-      undisc:
-        description: A value has been recorded, however it was not included in the
-          dataset.
-        title: Undisclosed
-      nr:
-        description: A value could have been recorded, however, it was not.
-        title: Not reported
-      nan:
-        description: The outcome of a measurement is not a valid number (plus or minus
-          infinity, error, ...)
-        title: Not a number
-      NA:
-        description: The field for which the expected value is not a property of the
-          described object.
-        title: Not applicable
   conductivityUnitSet:
     description: Unit set related to conductivity measurements.
     title: Conductivity unit set
@@ -693,24 +671,6 @@ enums:
         description: The field for which the expected value is not a property of the
           described object.
         title: Not applicable
-      restrict:
-        description: Missing data is witheld because it is restricted access.
-        title: Restricted data
-      'null':
-        description: A logical representation of a statement that is neither TRUE
-          nor FALSE.
-        title: 'Null'
-      undisc:
-        description: A value has been recorded, however it was not included in the
-          dataset.
-        title: Undisclosed
-      nr:
-        description: A value could have been recorded, however, it was not.
-        title: Not reported
-      nan:
-        description: The outcome of a measurement is not a valid number (plus or minus
-          infinity, error, ...)
-        title: Not a number
   fullDictionarySheetSet:
     description: Worksheets in the full Excel dictionary.
     title: Full dictionary sheets set
@@ -919,28 +879,6 @@ enums:
       swrSet:
         description: Sewer catchment area.
         title: Sewer catchment area
-      restrict:
-        description: Missing data is witheld because it is restricted access.
-        title: Restricted data
-      'null':
-        description: A logical representation of a statement that is neither TRUE
-          nor FALSE.
-        title: 'Null'
-      undisc:
-        description: A value has been recorded, however it was not included in the
-          dataset.
-        title: Undisclosed
-      nr:
-        description: A value could have been recorded, however, it was not.
-        title: Not reported
-      nan:
-        description: The outcome of a measurement is not a valid number (plus or minus
-          infinity, error, ...)
-        title: Not a number
-      NA:
-        description: The field for which the expected value is not a property of the
-          described object.
-        title: Not applicable
   humanCompartmentSet:
     description: A compartment set for measures and methods in the human compartment.
     title: Human compartment set
@@ -980,28 +918,6 @@ enums:
       onse:
         description: Online sensor
         title: Online Sensor
-      restrict:
-        description: Missing data is witheld because it is restricted access.
-        title: Restricted data
-      'null':
-        description: A logical representation of a statement that is neither TRUE
-          nor FALSE.
-        title: 'Null'
-      undisc:
-        description: A value has been recorded, however it was not included in the
-          dataset.
-        title: Undisclosed
-      nr:
-        description: A value could have been recorded, however, it was not.
-        title: Not reported
-      nan:
-        description: The outcome of a measurement is not a valid number (plus or minus
-          infinity, error, ...)
-        title: Not a number
-      NA:
-        description: The field for which the expected value is not a property of the
-          described object.
-        title: Not applicable
   licSet:
     description: The set to describe valid categorical values for the licensing fields
       for measures or datasets.
@@ -1551,28 +1467,6 @@ enums:
       countyLevel:
         description: Districts, counties, regions
         title: Districts, counties, regions
-      restrict:
-        description: Missing data is witheld because it is restricted access.
-        title: Restricted data
-      'null':
-        description: A logical representation of a statement that is neither TRUE
-          nor FALSE.
-        title: 'Null'
-      undisc:
-        description: A value has been recorded, however it was not included in the
-          dataset.
-        title: Undisclosed
-      nr:
-        description: A value could have been recorded, however, it was not.
-        title: Not reported
-      nan:
-        description: The outcome of a measurement is not a valid number (plus or minus
-          infinity, error, ...)
-        title: Not a number
-      NA:
-        description: The field for which the expected value is not a property of the
-          described object.
-        title: Not applicable
   orgSectorSet:
     description: Cateogries of organization sectors.
     title: Organization sector set
@@ -1619,28 +1513,6 @@ enums:
         description: An organisation type that describes governmental organizations
           that manage or administer programs.
         title: Public Administration
-      restrict:
-        description: Missing data is witheld because it is restricted access.
-        title: Restricted data
-      'null':
-        description: A logical representation of a statement that is neither TRUE
-          nor FALSE.
-        title: 'Null'
-      undisc:
-        description: A value has been recorded, however it was not included in the
-          dataset.
-        title: Undisclosed
-      nr:
-        description: A value could have been recorded, however, it was not.
-        title: Not reported
-      nan:
-        description: The outcome of a measurement is not a valid number (plus or minus
-          infinity, error, ...)
-        title: Not a number
-      NA:
-        description: The field for which the expected value is not a property of the
-          described object.
-        title: Not applicable
   orgTypeSet:
     description: The set for storing organization types.
     title: Organization type set
@@ -1658,28 +1530,6 @@ enums:
         description: The category of organization type used for private sector or
           non-profit groups that are not otherwise captured by the academic category.
         title: Private sector
-      restrict:
-        description: Missing data is witheld because it is restricted access.
-        title: Restricted data
-      'null':
-        description: A logical representation of a statement that is neither TRUE
-          nor FALSE.
-        title: 'Null'
-      undisc:
-        description: A value has been recorded, however it was not included in the
-          dataset.
-        title: Undisclosed
-      nr:
-        description: A value could have been recorded, however, it was not.
-        title: Not reported
-      nan:
-        description: The outcome of a measurement is not a valid number (plus or minus
-          infinity, error, ...)
-        title: Not a number
-      NA:
-        description: The field for which the expected value is not a property of the
-          described object.
-        title: Not applicable
   originSet:
     description: The set for storing the valid categorical values of sample origin.
     title: Sample Origin set
@@ -1695,28 +1545,6 @@ enums:
       synthetic:
         description: A synthetic or artificially generated sample.
         title: Synthetic sample
-      restrict:
-        description: Missing data is witheld because it is restricted access.
-        title: Restricted data
-      'null':
-        description: A logical representation of a statement that is neither TRUE
-          nor FALSE.
-        title: 'Null'
-      undisc:
-        description: A value has been recorded, however it was not included in the
-          dataset.
-        title: Undisclosed
-      nr:
-        description: A value could have been recorded, however, it was not.
-        title: Not reported
-      nan:
-        description: The outcome of a measurement is not a valid number (plus or minus
-          infinity, error, ...)
-        title: Not a number
-      NA:
-        description: The field for which the expected value is not a property of the
-          described object.
-        title: Not applicable
   otherAggrSet:
     description: Aggregation set used for unitless measures.
     title: Other aggregation set
@@ -2352,28 +2180,6 @@ enums:
       International travel surveillance: {}
       Viral passage experiment: {}
       Protocol testing experiment: {}
-      restrict:
-        description: Missing data is witheld because it is restricted access.
-        title: Restricted data
-      'null':
-        description: A logical representation of a statement that is neither TRUE
-          nor FALSE.
-        title: 'Null'
-      undisc:
-        description: A value has been recorded, however it was not included in the
-          dataset.
-        title: Undisclosed
-      nr:
-        description: A value could have been recorded, however, it was not.
-        title: Not reported
-      nan:
-        description: The outcome of a measurement is not a valid number (plus or minus
-          infinity, error, ...)
-        title: Not a number
-      NA:
-        description: The field for which the expected value is not a property of the
-          described object.
-        title: Not applicable
   regularReportTableSet:
     description: Tables used for daily reporting of new measurements and information
       on sample collection.
@@ -2431,28 +2237,6 @@ enums:
       unique:
         description: A unique sample, not duplicated.
         title: Unique sample
-      restrict:
-        description: Missing data is witheld because it is restricted access.
-        title: Restricted data
-      'null':
-        description: A logical representation of a statement that is neither TRUE
-          nor FALSE.
-        title: 'Null'
-      undisc:
-        description: A value has been recorded, however it was not included in the
-          dataset.
-        title: Undisclosed
-      nr:
-        description: A value could have been recorded, however, it was not.
-        title: Not reported
-      nan:
-        description: The outcome of a measurement is not a valid number (plus or minus
-          infinity, error, ...)
-        title: Not a number
-      NA:
-        description: The field for which the expected value is not a property of the
-          described object.
-        title: Not applicable
   resusSet:
     description: The set to describe valid categorical values for the resuspension
       method.
@@ -2550,28 +2334,6 @@ enums:
       swrSed:
         description: Sediments obtained in sewer
         title: Sewer sediment
-      restrict:
-        description: Missing data is witheld because it is restricted access.
-        title: Restricted data
-      'null':
-        description: A logical representation of a statement that is neither TRUE
-          nor FALSE.
-        title: 'Null'
-      undisc:
-        description: A value has been recorded, however it was not included in the
-          dataset.
-        title: Undisclosed
-      nr:
-        description: A value could have been recorded, however, it was not.
-        title: Not reported
-      nan:
-        description: The outcome of a measurement is not a valid number (plus or minus
-          infinity, error, ...)
-        title: Not a number
-      NA:
-        description: The field for which the expected value is not a property of the
-          described object.
-        title: Not applicable
   sampleQualitySet:
     description: Quality set for a sample.
     title: Sample quality set
@@ -2774,28 +2536,6 @@ enums:
         description: Indicates a very sever quality issue, likely meaning the data
           should not be reported.
         title: High severity
-      restrict:
-        description: Missing data is witheld because it is restricted access.
-        title: Restricted data
-      'null':
-        description: A logical representation of a statement that is neither TRUE
-          nor FALSE.
-        title: 'Null'
-      undisc:
-        description: A value has been recorded, however it was not included in the
-          dataset.
-        title: Undisclosed
-      nr:
-        description: A value could have been recorded, however, it was not.
-        title: Not reported
-      nan:
-        description: The outcome of a measurement is not a valid number (plus or minus
-          infinity, error, ...)
-        title: Not a number
-      NA:
-        description: The field for which the expected value is not a property of the
-          described object.
-        title: Not applicable
   shedSet:
     description: The set for all valid values of sampleshed.
     title: Sampleshed set
@@ -2872,28 +2612,6 @@ enums:
         description: Specifies a site type which is a commercial facility/worksite
           that is not otherwise captured or described in the geotype set.
         title: Commercial facility - not specified
-      restrict:
-        description: Missing data is witheld because it is restricted access.
-        title: Restricted data
-      'null':
-        description: A logical representation of a statement that is neither TRUE
-          nor FALSE.
-        title: 'Null'
-      undisc:
-        description: A value has been recorded, however it was not included in the
-          dataset.
-        title: Undisclosed
-      nr:
-        description: A value could have been recorded, however, it was not.
-        title: Not reported
-      nan:
-        description: The outcome of a measurement is not a valid number (plus or minus
-          infinity, error, ...)
-        title: Not a number
-      NA:
-        description: The field for which the expected value is not a property of the
-          described object.
-        title: Not applicable
   shrtNameSet:
     description: The abbreviated short name used to reference the The table that contains
       information about addresses. Addresses can recorded for sites, organizations
@@ -3107,28 +2825,6 @@ enums:
         description: Indicates a wastewater treatment plant where multiple labs are
           or were sampling, and where secondary samples are being taken taken.
         title: Back-up wastewater treatment site
-      restrict:
-        description: Missing data is witheld because it is restricted access.
-        title: Restricted data
-      'null':
-        description: A logical representation of a statement that is neither TRUE
-          nor FALSE.
-        title: 'Null'
-      undisc:
-        description: A value has been recorded, however it was not included in the
-          dataset.
-        title: Undisclosed
-      nr:
-        description: A value could have been recorded, however, it was not.
-        title: Not reported
-      nan:
-        description: The outcome of a measurement is not a valid number (plus or minus
-          infinity, error, ...)
-        title: Not a number
-      NA:
-        description: The field for which the expected value is not a property of the
-          described object.
-        title: Not applicable
   solidSeparationSet:
     description: set for the separation of solids.
     title: Solid separation set
@@ -3873,28 +3569,6 @@ enums:
       weather:
         description: Measures and methods relating to weather.
         title: Weather class
-      restrict:
-        description: Missing data is witheld because it is restricted access.
-        title: Restricted data
-      'null':
-        description: A logical representation of a statement that is neither TRUE
-          nor FALSE.
-        title: 'Null'
-      undisc:
-        description: A value has been recorded, however it was not included in the
-          dataset.
-        title: Undisclosed
-      nr:
-        description: A value could have been recorded, however, it was not.
-        title: Not reported
-      nan:
-        description: The outcome of a measurement is not a valid number (plus or minus
-          infinity, error, ...)
-        title: Not a number
-      NA:
-        description: The field for which the expected value is not a property of the
-          described object.
-        title: Not applicable
   compartments:
     description: The substance from which a sample was taken.
     title: Compartments
@@ -3920,28 +3594,6 @@ enums:
         description: A measure or observation made from a substance in the water,
           including wastewater.
         title: Water compartment
-      restrict:
-        description: Missing data is witheld because it is restricted access.
-        title: Restricted data
-      'null':
-        description: A logical representation of a statement that is neither TRUE
-          nor FALSE.
-        title: 'Null'
-      undisc:
-        description: A value has been recorded, however it was not included in the
-          dataset.
-        title: Undisclosed
-      nr:
-        description: A value could have been recorded, however, it was not.
-        title: Not reported
-      nan:
-        description: The outcome of a measurement is not a valid number (plus or minus
-          infinity, error, ...)
-        title: Not a number
-      NA:
-        description: The field for which the expected value is not a property of the
-          described object.
-        title: Not applicable
   dataTypes:
     description: The data type for a part.
     title: Data types
@@ -4280,28 +3932,6 @@ enums:
       yersiniaGrp:
         description: A group of measures/methods related to yersinia bacteria.
         title: Yersinia Group
-      restrict:
-        description: Missing data is witheld because it is restricted access.
-        title: Restricted data
-      'null':
-        description: A logical representation of a statement that is neither TRUE
-          nor FALSE.
-        title: 'Null'
-      undisc:
-        description: A value has been recorded, however it was not included in the
-          dataset.
-        title: Undisclosed
-      nr:
-        description: A value could have been recorded, however, it was not.
-        title: Not reported
-      nan:
-        description: The outcome of a measurement is not a valid number (plus or minus
-          infinity, error, ...)
-        title: Not a number
-      NA:
-        description: The field for which the expected value is not a property of the
-          described object.
-        title: Not applicable
   measurements:
     description: The attribute to describe a part type of measures. All measures have
       `partType` = "measure".
@@ -5672,28 +5302,6 @@ enums:
         description: Specifies variant or genetic nomenclature as set out by the World
           Health Organization.
         title: WHO nomenclature
-      restrict:
-        description: Missing data is witheld because it is restricted access.
-        title: Restricted data
-      'null':
-        description: A logical representation of a statement that is neither TRUE
-          nor FALSE.
-        title: 'Null'
-      undisc:
-        description: A value has been recorded, however it was not included in the
-          dataset.
-        title: Undisclosed
-      nr:
-        description: A value could have been recorded, however, it was not.
-        title: Not reported
-      nan:
-        description: The outcome of a measurement is not a valid number (plus or minus
-          infinity, error, ...)
-        title: Not a number
-      NA:
-        description: The field for which the expected value is not a property of the
-          described object.
-        title: Not applicable
   partType:
     description: Part types describe the purpose or use of the part.
     title: Part types
@@ -5911,28 +5519,6 @@ enums:
       wrongTemp:
         description: Sample was stored at an inappropriate temperature.
         title: Sample stored at wrong temperature
-      restrict:
-        description: Missing data is witheld because it is restricted access.
-        title: Restricted data
-      'null':
-        description: A logical representation of a statement that is neither TRUE
-          nor FALSE.
-        title: 'Null'
-      undisc:
-        description: A value has been recorded, however it was not included in the
-          dataset.
-        title: Undisclosed
-      nr:
-        description: A value could have been recorded, however, it was not.
-        title: Not reported
-      nan:
-        description: The outcome of a measurement is not a valid number (plus or minus
-          infinity, error, ...)
-        title: Not a number
-      NA:
-        description: The field for which the expected value is not a property of the
-          described object.
-        title: Not applicable
   specimens:
     description: 'Measures or observations are taken from three types of substances:
       populations (humans or geographic areas), samples, sites.'
@@ -5956,28 +5542,6 @@ enums:
       sit:
         description: A measure made on a compartment or property at a site.
         title: Site
-      restrict:
-        description: Missing data is witheld because it is restricted access.
-        title: Restricted data
-      'null':
-        description: A logical representation of a statement that is neither TRUE
-          nor FALSE.
-        title: 'Null'
-      undisc:
-        description: A value has been recorded, however it was not included in the
-          dataset.
-        title: Undisclosed
-      nr:
-        description: A value could have been recorded, however, it was not.
-        title: Not reported
-      nan:
-        description: The outcome of a measurement is not a valid number (plus or minus
-          infinity, error, ...)
-        title: Not a number
-      NA:
-        description: The field for which the expected value is not a property of the
-          described object.
-        title: Not applicable
   units:
     description: The unit of the measurement.
     title: Units
@@ -7100,7 +6664,9 @@ classes:
       orgType:
         description: Specifies the type or purpose of a given organization.
         title: Organization Type
-        range: orgTypeSet
+        range:
+        - orgTypeSet
+        - genMissingnessSet
         pattern: ^.{0,30}$
       orgLevel:
         description: The geographic level of an organization.
@@ -7108,12 +6674,16 @@ classes:
         notes:
         - There are six levels based on International Standard Classification of Administrative
           Units (ISCU).
-        range: orgLevelSet
+        range:
+        - orgLevelSet
+        - genMissingnessSet
         pattern: ^.{0,30}$
       orgSector:
         description: The sector of an organization
         title: Organization sector
-        range: orgSectorSet
+        range:
+        - orgSectorSet
+        - genMissingnessSet
         pattern: ^.{0,30}$
       lastEdited:
         description: The date the entry was last updated.
@@ -7189,13 +6759,17 @@ classes:
         notes:
         - Types of quality flag vary on context; please see the qulaityFlagSet to
           be confirm.
-        range: qualityIndicators
+        range:
+        - qualityIndicators
+        - genMissingnessSet
         required: true
         pattern: ^.{0,30}$
       severity:
         description: An indicator of the severity or seriousness of a quality flag.
         title: Severity indicator
-        range: sevSet
+        range:
+        - sevSet
+        - genMissingnessSet
         pattern: ^.{0,30}$
       lastEdited:
         description: The date the entry was last updated.
@@ -7915,12 +7489,16 @@ classes:
         title: Purpose
         notes:
         - 'See allowed categories: report, quality control, validation study, test'
-        range: purposeSet
+        range:
+        - purposeSet
+        - genMissingnessSet
         pattern: ^.{0,30}$
       saMaterial:
         description: Type of sample.
         title: Sample material
-        range: sampleMatSet
+        range:
+        - sampleMatSet
+        - genMissingnessSet
         required: true
         pattern: ^.{0,30}$
       datasetID:
@@ -7936,18 +7514,24 @@ classes:
       origin:
         description: An attribute of a sample specifying the origin.
         title: Sample origin
-        range: originSet
+        range:
+        - originSet
+        - genMissingnessSet
         pattern: ^.{0,30}$
       repType:
         description: Attirbute of a sample, specifying whether the sample is unique,
           or a replicate. And if it is a replicate, what type of replicate is it?
         title: Replicate Type
-        range: replicateSet
+        range:
+        - replicateSet
+        - genMissingnessSet
         pattern: ^.{0,30}$
       collType:
         description: The type of collection.
         title: Sample collection type
-        range: collectSet
+        range:
+        - collectSet
+        - genMissingnessSet
         required: true
         pattern: ^.{0,12}$
       collPer:
@@ -8098,7 +7682,9 @@ classes:
         title: Purpose
         notes:
         - 'See allowed categories: report, quality control, validation study, test'
-        range: purposeSet
+        range:
+        - purposeSet
+        - genMissingnessSet
         pattern: ^.{0,30}$
       polygonID:
         description: Unique identifier for the polygon.
@@ -8165,20 +7751,26 @@ classes:
         description: The attribute identifying the substance from which where a sample
           was taken. For more information, see partID = compartment.
         title: Compartment
-        range: compartments
+        range:
+        - compartments
+        - genMissingnessSet
         pattern: ^.{0,30}$
       specimen:
         description: The substance or thing upon which the observation was made.
         title: Specimen
         notes:
         - 'Specimens include: site, sample, person and population.'
-        range: specimens
+        range:
+        - specimens
+        - genMissingnessSet
         required: true
         pattern: ^.{0,12}$
       fraction:
         description: Fraction of the sample that is analyzed.
         title: Fraction analyzed
-        range: fractionSet
+        range:
+        - fractionSet
+        - genMissingnessSet
         pattern: ^.{0,30}$
       group:
         description: Unique identifier for a group of measures. Mostly applicable
@@ -8189,7 +7781,9 @@ classes:
           the SARS-CoV-2 group, there are measure classes tht include RNA alleles
           (N1, N2, E, etc.), mutations, (E484K0), an entire sequence, viral proteins,
           etc. Currently groups are used for measures only.
-        range: groups
+        range:
+        - groups
+        - genMissingnessSet
         pattern: ^.{0,30}$
       class:
         description: A unique identifier for a class, which is akin to a sub-group;
@@ -8200,7 +7794,9 @@ classes:
         - Currently, class is only used for biologics. For example, SARS-CoV-2 is
           a group of measures with the following classes of allele, variant, mutation,
           sequence, and protein.
-        range: classes
+        range:
+        - classes
+        - genMissingnessSet
         pattern: ^.{0,30}$
       measure:
         description: A measurement or observation of any substance including a biological,
@@ -8246,7 +7842,9 @@ classes:
         notes:
         - Currently only used for class = variant, mutation, or disease. Valid options
           are currently restricted to 'NextClade', 'Pangolin', 'WHO', or 'ICD'.
-        range: nomenclatures
+        range:
+        - nomenclatures
+        - genMissingnessSet
         pattern: ^.{0,30}$
       index:
         description: Index number in case the measurement was taken multiple times.
@@ -8510,7 +8108,9 @@ classes:
           the SARS-CoV-2 group, there are measure classes tht include RNA alleles
           (N1, N2, E, etc.), mutations, (E484K0), an entire sequence, viral proteins,
           etc. Currently groups are used for measures only.
-        range: groups
+        range:
+        - groups
+        - genMissingnessSet
         required: true
         pattern: ^.{0,30}$
       class:
@@ -8522,7 +8122,9 @@ classes:
         - Currently, class is only used for biologics. For example, SARS-CoV-2 is
           a group of measures with the following classes of allele, variant, mutation,
           sequence, and protein.
-        range: classes
+        range:
+        - classes
+        - genMissingnessSet
         required: true
         pattern: ^.{0,30}$
       nomenclature:
@@ -8532,7 +8134,9 @@ classes:
         notes:
         - Currently only used for class = variant, mutation, or disease. Valid options
           are currently restricted to 'NextClade', 'Pangolin', 'WHO', or 'ICD'.
-        range: nomenclatures
+        range:
+        - nomenclatures
+        - genMissingnessSet
         pattern: ^.{0,30}$
       ontologyRef:
         description: Ontology reference for a part.
@@ -9351,7 +8955,9 @@ classes:
       geoType:
         description: Type of geography that is represented by the polygon.
         title: Type of geography
-        range: geoTypeSet
+        range:
+        - geoTypeSet
+        - genMissingnessSet
         required: true
         pattern: ^.{0,30}$
       geoEPSG:
@@ -9839,7 +9445,9 @@ classes:
       insType:
         description: Type of instrument used to perform the measurement.
         title: Instrument Type
-        range: insTypeSet
+        range:
+        - insTypeSet
+        - genMissingnessSet
         required: true
         pattern: ^.{0,30}$
       insTypeOth:
@@ -9942,7 +9550,9 @@ classes:
       siteType:
         description: Type of site or institution where sample was taken.
         title: Site Type
-        range: siteTypeSet
+        range:
+        - siteTypeSet
+        - genMissingnessSet
         required: true
         pattern: ^.{0,30}$
       sampleShed:
@@ -9952,7 +9562,9 @@ classes:
         notes:
         - 'Examples: Airplane, Long-term care home, Neighbourhood, University campus,
           Municipality'
-        range: shedSet
+        range:
+        - shedSet
+        - genMissingnessSet
         required: true
         pattern: ^.{0,30}$
       addressID:

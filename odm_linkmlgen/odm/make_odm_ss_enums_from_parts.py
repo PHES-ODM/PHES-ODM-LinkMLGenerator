@@ -1,4 +1,4 @@
-#%%
+# %%
 """
 Create Schemasheets for all enumerations found within the ODM data dictionary parts sheet. This
 does NOT include the enumerations found within the sets sheet (those can be created with
@@ -17,20 +17,26 @@ import pandas as pd
 import argparse
 from typing import List
 
-from utils.general_utils import get_logger, read_data_frame, EMPTY_PERMISSIBLE_VALUE
-from utils.schemasheets_utils import save_schemasheet
-from odm.odm_utils import odm_keep_active_rows, odm_get_available_class_names, odm_get_header_rows, odm_get_enum_name_from_part_id
+from odm_linkmlgen.utils.general_utils import get_logger, read_data_frame, EMPTY_PERMISSIBLE_VALUE
+from odm_linkmlgen.utils.schemasheets_utils import save_schemasheet
+from odm_linkmlgen.odm.odm_utils import (
+    odm_keep_active_rows,
+    odm_get_available_class_names,
+    odm_get_header_rows,
+    odm_get_enum_name_from_part_id,
+)
 
 logger = get_logger(__name__)
 
 # For mapping the columns in our final DataFrame to columns recognized by Schemasheets
 # Required schemasheets headers: "enum", "permissible_value", "description"
 headers = {
-    "partType" : "enum",
-    "partID" : "permissible_value",
-    "partDesc" : "description",
-    "partLabel" : "title",
+    "partType": "enum",
+    "partID": "permissible_value",
+    "partDesc": "description",
+    "partLabel": "title",
 }
+
 
 def extract_parts_enums(parts_file: str, output_file: str) -> List[str]:
     """Create a Schemasheet for all enumerations found in the parts sheet of the ODM
@@ -41,7 +47,7 @@ def extract_parts_enums(parts_file: str, output_file: str) -> List[str]:
         parts_file (str): The full path and filename for the CSV parts sheet extracted
             from the ODM data dictionary.
         output_file (str): The TSV file to save the Schemasheet to.
-        
+
     Returns:
         List[str]: List of all enum names extracted.
     """
@@ -50,8 +56,8 @@ def extract_parts_enums(parts_file: str, output_file: str) -> List[str]:
     # Use only active rows (indicated in the "status" column)
     df = odm_keep_active_rows(df)
 
-    # Get all enum names by getting the partID of categorical variables that are headers (pK, fK, or header) 
-    # and do not have an mmaSet. Once we have all the header rows, we get the enumeration name based on the 
+    # Get all enum names by getting the partID of categorical variables that are headers (pK, fK, or header)
+    # and do not have an mmaSet. Once we have all the header rows, we get the enumeration name based on the
     # partID. We do not extract the ones with mmaSet set, since those are fully defined in the sets
     # sheet, not the parts sheet (see make_odm_ss_enums_from_sets.py).
     class_names = odm_get_available_class_names(df)
@@ -60,16 +66,16 @@ def extract_parts_enums(parts_file: str, output_file: str) -> List[str]:
     filt = filt & pd.isna(headers_df["mmaSet"])
     enum_source_names = sorted(headers_df[filt]["partID"].unique())
     enum_names = [odm_get_enum_name_from_part_id(name) for name in enum_source_names]
-    
+
     # @TODO: Check if it's ok to no longer use the above for calculating the enum_names and instead use the
     # simpler single line of code below for enum_names
     # enum_names = list(df[(df["mmaSet"] == "") | pd.isna(df["mmaSet"])]["partType"].unique())
-    
+
     # Get all rows for all enums. We only keep the columns in keep_columns.
     # Each row (or enum value) should be an "input" for at least one class.
     # "partType" matches the enum name (corresponds to a permissible value of the enum)
     # OR: "partID" matches the enum name (corresponds to the top-level enum)
-    keep_columns = [ 
+    keep_columns = [
         "partType",
         "partID",
         "partLabel",
@@ -85,35 +91,53 @@ def extract_parts_enums(parts_file: str, output_file: str) -> List[str]:
     input_df = df
     for enum_name in enum_names:
         # Get the top-level enum row (where the partID is the same as the enum_name)
-        enum_toplevel_df = input_df[input_df["partID"] == enum_name][keep_columns].copy()
+        enum_toplevel_df = input_df[input_df["partID"] == enum_name][
+            keep_columns
+        ].copy()
         enum_toplevel_df["partID"] = ""
         enum_toplevel_df["partType"] = enum_name
         # Get all rows where the part is a member of the enumeration (by checking the partType column)
         enum_df = input_df[input_df["partType"] == enum_name][keep_columns].copy()
-        enum_df.loc[(enum_df["partID"] == "") | (pd.isna(enum_df["partID"])), "partID"] = EMPTY_PERMISSIBLE_VALUE
+        enum_df.loc[
+            (enum_df["partID"] == "") | (pd.isna(enum_df["partID"])), "partID"
+        ] = EMPTY_PERMISSIBLE_VALUE
 
         # Add the top-level enum row and the enum values rows to our final DataFrame
         output_df = pd.concat([output_df, enum_toplevel_df, enum_df])
-        
+
     # Save to disk
     logger.info(f"Saving enums from parts to '{output_file}'")
     save_schemasheet(output_df, output_file, headers)
-    
+
     return output_df["partType"].unique().tolist()
+
 
 if __name__ == "__main__":
     if "get_ipython" in globals():
+
         class opts:
             parts_file = "../../gen/odm_v2/dictionary/parts.csv"
             output_file = "../../gen/odm_v2/schemasheets/enums_parts.tsv"
     else:
-        args = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
-        args.add_argument("--parts_file", type=str, help="Input ODM parts file to extract the enums from", required=True)
-        args.add_argument("--output_file", type=str, help="The TSV file to save the extracted enums to", required=True)
+        args = argparse.ArgumentParser(
+            formatter_class=argparse.ArgumentDefaultsHelpFormatter
+        )
+        args.add_argument(
+            "--parts_file",
+            type=str,
+            help="Input ODM parts file to extract the enums from",
+            required=True,
+        )
+        args.add_argument(
+            "--output_file",
+            type=str,
+            help="The TSV file to save the extracted enums to",
+            required=True,
+        )
         opts = args.parse_args()
-        
+
     logger.info("Making ODM Enums from Parts List...")
-    
+
     extract_parts_enums(opts.parts_file, opts.output_file)
 
     logger.info("Finished!")
