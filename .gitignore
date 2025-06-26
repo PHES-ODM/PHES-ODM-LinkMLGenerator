@@ -1,5 +1,5 @@
 # NWSS input and output
-/data/nwss/*.xlsx
+/odm_linkmlgen/data/nwss/*.xlsx
 /gen/nwss_*/dictionary/
 /gen/nwss_*/schemasheets/
 
