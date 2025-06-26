@@ -84,7 +84,7 @@ The Centers for Disease Control and Prevention National Wastewater Surveillance 
 
 The data formats for each of these are single tables (eg. For the reporting data, all data are in a single table, rather than separate tables such as with ODM).
 
-The script [src/make_nwss.py](src/make_nwss.py) will generate the various LinkML schemas. Be sure to download the Excel versions of the data dictionaries at [Wastewater Surveillance Data Reporting and Analytics](https://www.cdc.gov/nwss/reporting.html), in the "Data Dictionaries" box. The two restricted datasets (4 and 5 in the above list) are not available publicly. If you do not have access to these then they can be ignored. If a path for a data dictionary is ommitted then the corresponding schema will not be generated. The final outputs, including the generated LinkML schemas, will be saved in the directory specified by the `output_dir` command-line argument. A separate subdirectory will be created for each dictionary type:
+The script [odm_linkmlgen/make_nwss.py](odm_linkmlgen/make_nwss.py) will generate the various LinkML schemas. Be sure to download the Excel versions of the data dictionaries at [Wastewater Surveillance Data Reporting and Analytics](https://www.cdc.gov/nwss/reporting.html), in the "Data Dictionaries" box. The two restricted datasets (4 and 5 in the above list) are not available publicly. If you do not have access to these then they can be ignored. If a path for a data dictionary is ommitted then the corresponding schema will not be generated. The final outputs, including the generated LinkML schemas, will be saved in the directory specified by the `output_dir` command-line argument. A separate subdirectory will be created for each dictionary type:
 
 ```console
 cd src

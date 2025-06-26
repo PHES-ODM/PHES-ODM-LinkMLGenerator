@@ -1,8 +1,8 @@
 # Generating the ODM LinkML Schema
 
-The ODM Data Dictionary for versions above ODM v1 is much more complicated than the v1 dictionary. As such generating the ODM LinkML schema is more complex. To make things simple, we have included a single script that will do all the processing and generation of the LinkML schema in one easy step. For details on running the [src/make_odm.py](src/make_odm.py) script see the main [README](README.md). Importantly, you must obtain the ODM data dictionary Excel file, see the [README](README.md) for details.
+The ODM Data Dictionary for versions above ODM v1 is much more complicated than the v1 dictionary. As such generating the ODM LinkML schema is more complex. To make things simple, we have included a single script that will do all the processing and generation of the LinkML schema in one easy step. For details on running the [odm_linkmlgen/make_odm.py](odm_linkmlgen/make_odm.py) script see the main [README](README.md). Importantly, you must obtain the ODM data dictionary Excel file, see the [README](README.md) for details.
 
-A detailed description of the steps that the [src/make_odm.py](src/make_odm.py) script performs to generate the schema are described below.
+A detailed description of the steps that the [odm_linkmlgen/make_odm.py](odm_linkmlgen/make_odm.py) script performs to generate the schema are described below.
 
 ## utils.general_utils.clear_dirs
 
