@@ -6,7 +6,6 @@ all the top-level tables (eg. measures, protocols, etc.)
 @TODO: We currently don't have any descriptions or titles for the tables. These should be added.
 """
 
-import argparse
 import pandas as pd
 from typing import Union
 from pathlib import Path
@@ -71,30 +70,13 @@ def extract_container_class(
 
 if __name__ == "__main__":
     if "get_ipython" in globals():
+        opts = {
+            "parts_file": "../../gen/odm_v2/dictionary/parts.csv",
+            "output_file": "../../gen/odm_v2/schemasheets/container.tsv",
+        }
 
-        class opts:
-            parts_file = "../../gen/odm_v2/dictionary/parts.csv"
-            output_file = "../../gen/odm_v2/schemasheets/container.tsv"
-    else:
-        args = argparse.ArgumentParser(
-            formatter_class=argparse.ArgumentDefaultsHelpFormatter
-        )
-        args.add_argument(
-            "--parts_file",
-            type=str,
-            help="Input ODM parts file to extract the classes from",
-            required=True,
-        )
-        args.add_argument(
-            "--output_file",
-            type=str,
-            help="The TSV file to save the container class Schemasheet to",
-            required=True,
-        )
-        opts = args.parse_args()
+        logger.info("Making ODM Container class...")
 
-    logger.info("Making ODM Container class...")
+        extract_container_class(**opts)
 
-    extract_container_class(opts.parts_file, opts.output_file)
-
-    logger.info("Finished!")
+        logger.info("Finished!")

@@ -4,7 +4,6 @@ Create the Container class Schemasheet for NWSS. This is the top-level (tree_roo
 all the top-level tables (eg. measures, protocols, etc.)
 """
 
-import argparse
 import pandas as pd
 from typing import Union, Optional
 from pathlib import Path
@@ -75,30 +74,12 @@ def extract_container_class(
 
 if __name__ == "__main__":
     if "get_ipython" in globals():
+        opts = {
+            "metadata_file": "../../gen/nwss_reporting/dictionary/metadata.csv",
+            "output_file": "../../gen/nwss_reporting/schemasheets/container.tsv",
+        }
+        logger.info("Making NWSS Container class...")
 
-        class opts:
-            metadata_file = "../../gen/nwss_reporting/dictionary/metadata.csv"
-            output_file = "../../gen/nwss_reporting/schemasheets/container.tsv"
-    else:
-        args = argparse.ArgumentParser(
-            formatter_class=argparse.ArgumentDefaultsHelpFormatter
-        )
-        args.add_argument(
-            "--metadata_file",
-            type=str,
-            help="Input Metadata sheet from the NWSS data dictionary",
-            required=True,
-        )
-        args.add_argument(
-            "--output_file",
-            type=str,
-            help="The TSV file to save the container class Schemasheet to",
-            required=True,
-        )
-        opts = args.parse_args()
+        extract_container_class(**opts)
 
-    logger.info("Making NWSS Container class...")
-
-    extract_container_class(opts.metadata_file, opts.output_file)
-
-    logger.info("Finished!")
+        logger.info("Finished!")

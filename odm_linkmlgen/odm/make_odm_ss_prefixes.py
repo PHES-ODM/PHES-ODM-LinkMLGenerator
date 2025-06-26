@@ -5,13 +5,11 @@ Creates the Schemasheets prefixes table, which defines all prefixes used by the 
 ## Example
 
 ```python
-from make_odm_ss_prefixes import make_prefixes
+from odm_linkmlgen.odm.make_odm_ss_prefixes import make_prefixes
 
 make_prefixes("odm_v2/schemasheets/prefixes.tsv")
 ```
 """
-
-import argparse
 
 from odm_linkmlgen.utils.general_utils import get_logger
 from odm_linkmlgen.utils.schemasheets_utils import save_schemasheet
@@ -55,29 +53,13 @@ def make_prefixes(version: str, output_file: str):
 
 if __name__ == "__main__":
     if "get_ipython" in globals():
+        opts = {
+            "version": "2",
+            "output_file": "../../gen/odm_v2/schemasheets/prefixes.tsv",
+        }
 
-        class opts:
-            output_file = "../../gen/odm_v2/schemasheets/prefixes.tsv"
-    else:
-        args = argparse.ArgumentParser(
-            formatter_class=argparse.ArgumentDefaultsHelpFormatter
-        )
-        args.add_argument(
-            "--version",
-            type=str,
-            help='The version of ODM that the LinkML schema is for (eg. "2", "3")',
-            required=True,
-        )
-        args.add_argument(
-            "--output_file",
-            type=str,
-            help="The TSV file to save the Schemasheets prefixes file to",
-            required=True,
-        )
-        opts = args.parse_args()
+        logger.info(f"Making ODM v{opts['version']} Prefixes...")
 
-    logger.info(f"Making ODM v{opts.version} Prefixes...")
+        make_prefixes(**opts)
 
-    make_prefixes(opts.version, opts.output_file)
-
-    logger.info("Finished!")
+        logger.info("Finished!")

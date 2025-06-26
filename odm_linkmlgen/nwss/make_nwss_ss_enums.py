@@ -7,8 +7,8 @@ extracted with utils.extract_sheets.
 ## Example
 
 ```python
-from utils.general_utils import extract_sheets
-from make_nwss_ss_enums import extract_enums
+from odm_linkmlgen.utils.general_utils import extract_sheets
+from odm_linkmlgen.nwss.make_nwss_ss_enums import extract_enums
 
 extract_sheets("nwss/NWSS-Data-Dictionary_v5.0.0_2023-07-10.xlsx", ["Value Sets"], "nwss/dictionary")
 extract_enums("nwss/dictionary/Value Sets.csv", "nwss/schemasheets")
@@ -18,8 +18,6 @@ extract_enums("nwss/dictionary/Value Sets.csv", "nwss/schemasheets")
 import os
 from typing import List, Union, Optional
 from pathlib import Path
-import argparse
-import os
 
 from odm_linkmlgen.utils.general_utils import read_data_frame, get_logger
 from odm_linkmlgen.utils.schemasheets_utils import save_schemasheet
@@ -97,50 +95,15 @@ def extract_enums(
 
 if __name__ == "__main__":
     if "get_ipython" in globals():
+        opts = {
+            "metadata_file": "../../gen/nwss_reporting/dictionary/metadata.csv",
+            "valuesets_file": "../../gen/nwss_reporting/dictionary/enums.csv",
+            "output_dir": "../../gen/nwss_reporting/schemasheets",
+            "detailed_enum_names": ["vs_yne"],
+        }
 
-        class opts:
-            metadata_file = "../../gen/nwss_reporting/dictionary/metadata.csv"
-            valuesets_file = "../../gen/nwss_reporting/dictionary/enums.csv"
-            output_dir = "../../gen/nwss_reporting/schemasheets"
-            detailed_enum_names = ["vs_yne"]
-    else:
-        args = argparse.ArgumentParser(
-            formatter_class=argparse.ArgumentDefaultsHelpFormatter
-        )
-        args.add_argument(
-            "--metadata_file",
-            type=str,
-            help="Input Metadata sheet from the NWSS data dictionary",
-            required=True,
-        )
-        args.add_argument(
-            "--valuesets_file",
-            type=str,
-            help="Input Values Sets sheet from the NWSS data dictionary",
-            required=True,
-        )
-        args.add_argument(
-            "--output_dir",
-            type=str,
-            help="Directory to save the Schemasheets enums files to",
-            required=True,
-        )
-        args.add_argument(
-            "--detailed_enum_names",
-            type=str,
-            nargs="+",
-            help="Convert these enums to use detailed names. For each slot that uses one of these enums, we will use a different enum name for the slot. eg. Instead of vs_yne, we would use enum names like vs_yne[stormwater_input]",
-            required=False,
-        )
-        opts = args.parse_args()
+        logger.info("Making NWSS enums...")
 
-    logger.info("Making NWSS enums...")
+        extract_enums(**opts)
 
-    extract_enums(
-        opts.metadata_file,
-        opts.valuesets_file,
-        opts.output_dir,
-        detailed_enum_names=opts.detailed_enum_names,
-    )
-
-    logger.info("Finished!")
+        logger.info("Finished!")

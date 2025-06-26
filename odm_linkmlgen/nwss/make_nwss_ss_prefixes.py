@@ -7,16 +7,11 @@ make_prefixes.
 ## Example
 
 ```python
-from make_nwss_ss_prefixes import make_prefixes
+from odm_linkmlgen.nwss.make_nwss_ss_prefixes import make_prefixes
 
 make_prefixes("odm_v2/schemasheets/prefixes.tsv", dictionary_type="reporting")
 ```
 """
-
-import sys
-import os
-
-import argparse
 
 from odm_linkmlgen.utils.general_utils import get_logger
 from odm_linkmlgen.utils.schemasheets_utils import save_schemasheet
@@ -48,30 +43,13 @@ def make_prefixes(output_file: str, dictionary_type: str):
 
 if __name__ == "__main__":
     if "get_ipython" in globals():
+        opts = {
+            "output_file": "../../gen/nwss_reporting/schemasheets/prefixes.tsv",
+            "dictionary_type": "reporting",
+        }
 
-        class opts:
-            output_file = "../../gen/nwss_reporting/schemasheets/prefixes.tsv"
-            dictionary_type = "reporting"
-    else:
-        args = argparse.ArgumentParser(
-            formatter_class=argparse.ArgumentDefaultsHelpFormatter
-        )
-        args.add_argument(
-            "--output_file",
-            type=str,
-            help="The TSV file to save the Schemasheets prefixes file to",
-            required=True,
-        )
-        args.add_argument(
-            "--dictionary_type",
-            type=str,
-            help="The dictionary type of NWSS. Can be 'public_concentration', 'public_metric', 'reporting', 'restricted_analytics', or 'restricted_raw'",
-            required=True,
-        )
-        opts = args.parse_args()
+        logger.info(f"Making NWSS Prefixes for {opts['dictionary_type']}...")
 
-    logger.info(f"Making NWSS Prefixes for {opts.dictionary_type}...")
+        make_prefixes(**opts)
 
-    make_prefixes(opts.output_file, opts.dictionary_type)
-
-    logger.info("Finished!")
+        logger.info("Finished!")

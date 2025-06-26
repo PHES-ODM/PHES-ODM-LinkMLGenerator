@@ -6,14 +6,13 @@ schema, such as the id, description of the schema, and the default prefix to use
 ## Example
 
 ```python
-from make_nwss_ss_schema import make_schema
+from odm_linkmlgen.nwss.make_nwss_ss_schema import make_schema
 
 make_schema("nwss/schemasheets/schema.tsv")
 ```
 """
 
 import pandas as pd
-import argparse
 from typing import Dict
 
 from odm_linkmlgen.utils.general_utils import get_logger
@@ -53,23 +52,21 @@ def make_schema(output_file: str, data_values: Dict = {}):
 
 if __name__ == "__main__":
     if "get_ipython" in globals():
+        dictionary_type = "reporting"
+        default_schema_values = {
+            "schema": f"NWSS_{dictionary_type}",
+            "id": f"https://onto.phes-odm.org/nwss/{dictionary_type}",
+            "description": f"National Wastewater Surveillance System (NWSS-{dictionary_type})",
+            "default_prefix": f"nwss_{dictionary_type}",
+        }
 
-        class opts:
-            output_file = "../../gen/nwss_reporting/schemasheets/schema.tsv"
-    else:
-        args = argparse.ArgumentParser(
-            formatter_class=argparse.ArgumentDefaultsHelpFormatter
-        )
-        args.add_argument(
-            "--output_file",
-            type=str,
-            help="The TSV file to save the Schemasheets schema file to",
-            required=True,
-        )
-        opts = args.parse_args()
+        opts = {
+            "output_file": "../../gen/nwss_reporting/schemasheets/schema.tsv",
+            "data_values": default_schema_values,
+        }
 
-    logger.info("Making NWSS Schema...")
+        logger.info("Making NWSS Schema...")
 
-    make_schema(opts.output_file)
+        make_schema(**opts)
 
-    logger.info("Finished!")
+        logger.info("Finished!")

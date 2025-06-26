@@ -7,7 +7,7 @@ with make_odm_ss_enums_from_parts.py).
 ## Example
 
 ```python
-from make_odm_ss_enums_from_sets import extract_sets_enums
+from odm_linkmlgen.odm.make_odm_ss_enums_from_sets import extract_sets_enums
 
 extract_sets_enums("odm_v2/dictionary/sets.csv",
                    "odm_v2/dictionary/parts.csv",
@@ -16,10 +16,13 @@ extract_sets_enums("odm_v2/dictionary/sets.csv",
 """
 
 import pandas as pd
-import argparse
 from typing import List
 
-from odm_linkmlgen.utils.general_utils import get_logger, read_data_frame, EMPTY_PERMISSIBLE_VALUE
+from odm_linkmlgen.utils.general_utils import (
+    get_logger,
+    read_data_frame,
+    EMPTY_PERMISSIBLE_VALUE,
+)
 from odm_linkmlgen.utils.schemasheets_utils import save_schemasheet
 from odm_linkmlgen.odm.odm_utils import odm_keep_active_rows
 
@@ -136,37 +139,14 @@ def extract_sets_enums(sets_file: str, parts_file: str, output_file: str) -> Lis
 
 if __name__ == "__main__":
     if "get_ipython" in globals():
+        opts = {
+            "sets_file": "../../gen/odm_v2/dictionary/sets.csv",
+            "parts_file": "../../gen/odm_v2/dictionary/parts.csv",
+            "output_file": "../../gen/odm_v2/schemasheets/enums_sets.tsv",
+        }
 
-        class opts:
-            sets_file = "../../gen/odm_v2/dictionary/sets.csv"
-            parts_file = "../../gen/odm_v2/dictionary/parts.csv"
-            output_file = "../../gen/odm_v2/schemasheets/enums_sets.tsv"
-    else:
-        args = argparse.ArgumentParser(
-            formatter_class=argparse.ArgumentDefaultsHelpFormatter
-        )
-        args.add_argument(
-            "--sets_file",
-            type=str,
-            help="Input ODM sets file to extract the enums from",
-            required=True,
-        )
-        args.add_argument(
-            "--parts_file",
-            type=str,
-            help="Input ODM parts file. This file contains additional info about the enum, such as the top-level description.",
-            required=True,
-        )
-        args.add_argument(
-            "--output_file",
-            type=str,
-            help="The TSV file to save the extracted enums to",
-            required=True,
-        )
-        opts = args.parse_args()
+        logger.info("Making ODM from Sets List...")
 
-    logger.info("Making ODM from Sets List...")
+        extract_sets_enums(**opts)
 
-    extract_sets_enums(opts.sets_file, opts.parts_file, opts.output_file)
-
-    logger.info("Finished!")
+        logger.info("Finished!")

@@ -7,17 +7,20 @@ make_odm_ss_enums_from_sets.py).
 ## Example
 
 ```python
-from make_odm_ss_enums_from_parts import extract_parts_enums
+from odm_linkmlgen.odm.make_odm_ss_enums_from_parts import extract_parts_enums
 
 extract_parts_enums("odm_v2/dictionary/parts.csv", "odm_v2/schemasheets/enums_parts.tsv")
 ```
 """
 
 import pandas as pd
-import argparse
 from typing import List
 
-from odm_linkmlgen.utils.general_utils import get_logger, read_data_frame, EMPTY_PERMISSIBLE_VALUE
+from odm_linkmlgen.utils.general_utils import (
+    get_logger,
+    read_data_frame,
+    EMPTY_PERMISSIBLE_VALUE,
+)
 from odm_linkmlgen.utils.schemasheets_utils import save_schemasheet
 from odm_linkmlgen.odm.odm_utils import (
     odm_keep_active_rows,
@@ -114,30 +117,13 @@ def extract_parts_enums(parts_file: str, output_file: str) -> List[str]:
 
 if __name__ == "__main__":
     if "get_ipython" in globals():
+        opts = {
+            "parts_file": "../../gen/odm_v2/dictionary/parts.csv",
+            "output_file": "../../gen/odm_v2/schemasheets/enums_parts.tsv",
+        }
 
-        class opts:
-            parts_file = "../../gen/odm_v2/dictionary/parts.csv"
-            output_file = "../../gen/odm_v2/schemasheets/enums_parts.tsv"
-    else:
-        args = argparse.ArgumentParser(
-            formatter_class=argparse.ArgumentDefaultsHelpFormatter
-        )
-        args.add_argument(
-            "--parts_file",
-            type=str,
-            help="Input ODM parts file to extract the enums from",
-            required=True,
-        )
-        args.add_argument(
-            "--output_file",
-            type=str,
-            help="The TSV file to save the extracted enums to",
-            required=True,
-        )
-        opts = args.parse_args()
+        logger.info("Making ODM Enums from Parts List...")
 
-    logger.info("Making ODM Enums from Parts List...")
+        extract_parts_enums(**opts)
 
-    extract_parts_enums(opts.parts_file, opts.output_file)
-
-    logger.info("Finished!")
+        logger.info("Finished!")

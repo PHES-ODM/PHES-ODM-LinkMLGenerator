@@ -8,7 +8,7 @@ The outputs will be named "class_{table_name}.tsv".
 ## Example
 
 ```python
-from make_odm_ss_classes import extract_all_classes
+from odm_linkmlgen.odm.make_odm_ss_classes import extract_all_classes
 
 extract_all_classes("odm_v2/dictionary/parts.csv", "odm_v2/schemasheets")
 ```
@@ -17,7 +17,6 @@ extract_all_classes("odm_v2/dictionary/parts.csv", "odm_v2/schemasheets")
 from pathlib import Path
 import pandas as pd
 import os
-import argparse
 from typing import Tuple, Optional, List
 
 from odm_linkmlgen.utils.general_utils import get_logger, read_data_frame
@@ -268,30 +267,14 @@ def extract_all_classes(parts_file: str, output_dir: str, recognized_enums: List
 
 if __name__ == "__main__":
     if "get_ipython" in globals():
+        opts = {
+            "parts_file": "../../gen/odm_v2/dictionary/parts.csv",
+            "output_dir": "../../gen/odm_v2/schemasheets",
+            "recognized_enums": [],
+        }
 
-        class opts:
-            parts_file = "../../gen/odm_v2/dictionary/parts.csv"
-            output_dir = "../../gen/odm_v2/schemasheets"
-    else:
-        args = argparse.ArgumentParser(
-            formatter_class=argparse.ArgumentDefaultsHelpFormatter
-        )
-        args.add_argument(
-            "--parts_file",
-            type=str,
-            help="Input ODM parts file to extract the classes from",
-            required=True,
-        )
-        args.add_argument(
-            "--output_dir",
-            type=str,
-            help="The directory to save the Schemasheets classes files. If not specified then the directory of the input file is used.",
-            required=False,
-        )
-        opts = args.parse_args()
+        logger.info("Making ODM Classes...")
 
-    logger.info("Making ODM Classes...")
+        extract_all_classes(**opts)
 
-    extract_all_classes(opts.parts_file, opts.output_dir)
-
-    logger.info("Finished!")
+        logger.info("Finished!")

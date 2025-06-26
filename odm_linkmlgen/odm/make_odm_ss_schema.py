@@ -6,13 +6,11 @@ schema, such as the id, description of the schema, and the default prefix to use
 ## Example
 
 ```python
-from make_odm_ss_schema import make_schema
+from odm_linkmlgen.odm.make_odm_ss_schema import make_schema
 
 make_schema("odm_v2/schemasheets/schema.tsv")
 ```
 """
-
-import argparse
 
 from odm_linkmlgen.utils.general_utils import get_logger
 from odm_linkmlgen.utils.schemasheets_utils import save_schemasheet
@@ -58,30 +56,13 @@ def make_schema(version: str, output_file: str):
 
 if __name__ == "__main__":
     if "get_ipython" in globals():
+        opts = {
+            "version": "2",
+            "output_file": "../../gen/odm_v2/schemasheets/schema.tsv",
+        }
 
-        class opts:
-            version = "2"
-            output_file = "../../gen/odm_v2/schemasheets/schema.tsv"
-    else:
-        args = argparse.ArgumentParser(
-            formatter_class=argparse.ArgumentDefaultsHelpFormatter
-        )
-        args.add_argument(
-            "--version",
-            type=str,
-            help='The version of ODM that the LinkML schema is for (eg. "2", "3")',
-            required=True,
-        )
-        args.add_argument(
-            "--output_file",
-            type=str,
-            help="The TSV file to save the Schemasheets schema file to",
-            required=True,
-        )
-        opts = args.parse_args()
+        logger.info(f"Making ODM v{opts['version']} Schema...")
 
-    logger.info(f"Making ODM v{opts.version} Schema...")
+        make_schema(**opts)
 
-    make_schema(opts.version, opts.output_file)
-
-    logger.info("Finished!")
+        logger.info("Finished!")
