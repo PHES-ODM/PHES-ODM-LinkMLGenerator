@@ -184,7 +184,7 @@ def save_schemasheet(
 
 def add_schemasheets_header(df: pd.DataFrame, headers: dict) -> pd.DataFrame:
     """Insert Schemasheets header line. This is the line that starts with ">" and is
-    inserted as the first row (immediately below the existing Pands column names).
+    inserted as the first row (immediately below the existing Pandas column names).
 
     Args:
         df (pd.DataFrame): The DataFrame to add the Schemasheets headers to.
@@ -198,6 +198,10 @@ def add_schemasheets_header(df: pd.DataFrame, headers: dict) -> pd.DataFrame:
         pd.DataFrame: The DataFrame with the new Schemasheet header as the first row.
             A copy of the DataFrame is made.
     """
+    if len(df.columns) == 0 or len(df.index) == 0:
+        raise ValueError(
+            "DataFrame must not be empty in order to add a Schemasheets header"
+        )
     df = df.copy().reset_index(drop=True)
     df.loc[-1] = [""] * len(df.columns)
     df.index = df.index + 1
