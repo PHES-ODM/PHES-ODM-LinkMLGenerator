@@ -52,12 +52,12 @@ class MissingnessMethods(str, Enum):
 
 @app.command(help=MAIN_HELP)
 def make_odm(
-    version: Annotated[str, typer.Argument(show_default=False, help=VERSION_HELP)],
+    version: Annotated[str, typer.Option(show_default=False, help=VERSION_HELP)],
     dictionary_file: Annotated[
-        Path, typer.Argument(show_default=False, help=DICTIONARY_FILE_HELP)
+        Path, typer.Option(show_default=False, help=DICTIONARY_FILE_HELP)
     ],
     output_dir: Annotated[
-        Path, typer.Argument(show_default=False, help=OUTPUT_DIR_HELP)
+        Path, typer.Option(show_default=False, help=OUTPUT_DIR_HELP)
     ],
     missingness_method: Annotated[
         MissingnessMethods, typer.Option(help=MISSINGNESS_METHOD_HELP)

@@ -64,7 +64,7 @@ RESTRICTED_ANALYTICS_HELP = """NWSS restricted analytics data dictionary (Excel
 @app.command(help=MAIN_HELP)
 def make_nwss(
     output_dir: Annotated[
-        Path, typer.Argument(show_default=False, help=OUTPUT_DIR_HELP)
+        Path, typer.Option(show_default=False, help=OUTPUT_DIR_HELP)
     ],
     reporting: Annotated[
         Path, typer.Option(show_default=False, help=REPORTING_HELP)
