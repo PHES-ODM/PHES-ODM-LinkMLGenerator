@@ -1,4 +1,3 @@
-# %%
 """
 Make the NWSS LinkML schemas. There are three schemas:
 
@@ -226,15 +225,4 @@ def make_nwss(
 
 
 if __name__ == "__main__":
-    if "get_ipython" in globals():
-        opts = {
-            "output_dir": "../gen/",
-            "reporting": "data/nwss/NWSS-Data-Dictionary_v5.0.0_2023-07-10.xlsx",
-            "public_concentration": "data/nwss/NWSS-Public-Concentration-Data-Dictionary-v1.0.xlsx",
-            "public_metric": "data/nwss/NWSS-Public-Metric-Data-Dictionary-v2.0.xlsx",
-            "restricted_raw": "data/nwss/NWSS Restricted Raw Data Set - Data Dictionary v4.0.0_2023-06-02[66].xlsx",
-            "restricted_analytics": None,  # "data/nwss/NWSS Restricted Analytics Data Set - Data Dictionary v4.0.0_2023-06-02[78]-MODIFIED.xlsx",
-        }
-        make_nwss(**opts)
-    else:
-        app()
+    app()

@@ -1,4 +1,3 @@
-# %%
 """
 Make the ODM LinkML schema.
 """
@@ -67,8 +66,8 @@ def make_odm(
 
     Args:
         version (str): The ODM version number we are making (eg. "2", "3")
-        dictionary_file (Union[str, Path]): Location of the Excel data dictionary (parts file) for ODM.
-        output_dir (Union[str, Path]): Location to save all output. The LinkML schema output is
+        dictionary_file (Path): Location of the Excel data dictionary (parts file) for ODM.
+        output_dir (Path): Location to save all output. The LinkML schema output is
             saved to "{output_dir}/linkml/odm_v{version}.yaml"
         missingness_method (str): How to include the missingness set. If 'multi_range' then add the missingness
             set to a slot's range by changing the range to a list. If 'merge' then combine the missingness set
@@ -138,15 +137,4 @@ def make_odm(
 
 
 if __name__ == "__main__":
-    if "get_ipython" in globals():
-        VERSION = "2"
-
-        opts = {
-            "version": VERSION,
-            "dictionary_file": f"data/odm_v{VERSION}/v{VERSION} ODM dictionary.xlsx",
-            "output_dir": f"../gen/odm_v{VERSION}",
-            "missingness_method": "multi_range",  # "merge" | "multi_range"
-        }
-        make_odm(**opts)
-    else:
-        app()
+    app()

@@ -1,4 +1,3 @@
-# %%
 """
 Make the ODMv1 LinkML schema.
 """
@@ -39,12 +38,4 @@ def main(
 
 
 if __name__ == "__main__":
-    if "get_ipython" in globals():
-        output_dir = Path("../gen/odm_v1")
-        opts = {
-            # The directory to save the final odm_v1.yaml LinkML schema file to
-            "output_dir": output_dir,
-        }
-        main(**opts)
-    else:
-        app()
+    app()
