@@ -25,10 +25,7 @@ from odm_linkmlgen.nwss.nwss_utils import parse_enums_sheet, get_detailed_enums
 
 logger = get_logger(__name__)
 
-app = typer.Typer(
-    pretty_exceptions_show_locals=False,
-    rich_markup_mode="rich"
-)
+app = typer.Typer(pretty_exceptions_show_locals=False, rich_markup_mode="rich")
 
 MAIN_HELP = """Extract all enumerations from a NWSS Value Sets sheet and
 save them to disk as Schemasheets. One Schemasheet per enum is created."""
@@ -116,19 +113,26 @@ def extract_enums(
         logger.info(f"Saving enum {enum_name} to {output_file}")
         save_schemasheet(enum_df, output_file, headers)
 
+
 @app.command(help=MAIN_HELP)
 def main(
-    metadata_file: Annotated[Path, typer.Option(show_default=False, help=METADATA_FILE_HELP)],
-    valuesets_file: Annotated[Path, typer.Option(show_default=False, help=VALUESETS_FILE_HELP)],
+    metadata_file: Annotated[
+        Path, typer.Option(show_default=False, help=METADATA_FILE_HELP)
+    ],
+    valuesets_file: Annotated[
+        Path, typer.Option(show_default=False, help=VALUESETS_FILE_HELP)
+    ],
     output_dir: Annotated[Path, typer.Option(show_default=False, help=OUTPUT_DIR_HELP)],
-    detailed_enum_names: Annotated[List[str], typer.Option(show_default=False, help=DETAILED_ENUM_NAMES_HELP)]
+    detailed_enum_names: Annotated[
+        List[str], typer.Option(show_default=False, help=DETAILED_ENUM_NAMES_HELP)
+    ],
 ):
     logger.info("Making NWSS enums...")
     extract_enums(
         metadata_file=metadata_file,
         valuesets_file=valuesets_file,
         output_dir=output_dir,
-        detailed_enum_names=detailed_enum_names
+        detailed_enum_names=detailed_enum_names,
     )
     logger.info("Finished!")
 

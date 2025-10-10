@@ -14,10 +14,7 @@ from odm_linkmlgen.nwss.nwss_utils import splitup_metadata_sheet, SINGLE_TABLE_N
 
 logger = get_logger(__name__)
 
-app = typer.Typer(
-    pretty_exceptions_show_locals=False,
-    rich_markup_mode="rich"
-)
+app = typer.Typer(pretty_exceptions_show_locals=False, rich_markup_mode="rich")
 
 MAIN_HELP = """Extract and create the Schemasheets file for the top-level
 Container class. This class contains a multivalued slot for each table found in
@@ -88,20 +85,25 @@ def extract_container_class(
     columns = columns + [c for c in df.columns if c not in columns]
     save_schemasheet(df, output_file, columns)
 
+
 @app.command(help=MAIN_HELP)
 def main(
-    metadata_file: Annotated[Path, typer.Option(show_default=False, help=METADATA_FILE_HELP)],
-    output_file: Annotated[Path, typer.Option(show_default=False, help=OUTPUT_FILE_HELP)],
-    single_table: Annotated[bool, typer.Option(show_default=True, help=SINGLE_TABLE_HELP)] = False,
+    metadata_file: Annotated[
+        Path, typer.Option(show_default=False, help=METADATA_FILE_HELP)
+    ],
+    output_file: Annotated[
+        Path, typer.Option(show_default=False, help=OUTPUT_FILE_HELP)
+    ],
+    single_table: Annotated[
+        bool, typer.Option(show_default=True, help=SINGLE_TABLE_HELP)
+    ] = False,
 ):
     logger.info("Making NWSS Container class...")
     extract_container_class(
-        metadata_file=metadata_file,
-        output_file=output_file,
-        single_table=single_table
+        metadata_file=metadata_file, output_file=output_file, single_table=single_table
     )
     logger.info("Finished!")
-    
+
 
 if __name__ == "__main__":
     app()

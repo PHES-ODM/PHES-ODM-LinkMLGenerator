@@ -16,10 +16,7 @@ from odm_linkmlgen.utils.schemasheets_utils import save_schemasheet
 
 logger = get_logger(__name__)
 
-app = typer.Typer(
-    pretty_exceptions_show_locals=False,
-    rich_markup_mode="rich"
-)
+app = typer.Typer(pretty_exceptions_show_locals=False, rich_markup_mode="rich")
 
 MAIN_HELP = """Extract all classes from the Metadata file extracted from 
 a NWSS data dictionary Excel file, and save all the classes as Schemasheets to
@@ -270,13 +267,20 @@ def extract_all_classes(
         logger.info(f"Saving class to {output_file}")
         save_schemasheet(cur_df, output_file, headers)
 
+
 @app.command(help=MAIN_HELP)
 def main(
-    metadata_file: Annotated[Path, typer.Option(show_default=False, help=METADATA_FILE_HELP)],
+    metadata_file: Annotated[
+        Path, typer.Option(show_default=False, help=METADATA_FILE_HELP)
+    ],
     enums_file: Annotated[Path, typer.Option(show_default=False, help=ENUMS_FILE_HELP)],
     output_dir: Annotated[Path, typer.Option(show_default=False, help=OUTPUT_DIR_HELP)],
-    single_table: Annotated[bool, typer.Option(show_default=True, help=SINGLE_TABLE_HELP)] = False,
-    detailed_enum_names: Annotated[List[str], typer.Option(show_default=False, help=DETAILED_ENUM_NAMES_HELP)] = None
+    single_table: Annotated[
+        bool, typer.Option(show_default=True, help=SINGLE_TABLE_HELP)
+    ] = False,
+    detailed_enum_names: Annotated[
+        List[str], typer.Option(show_default=False, help=DETAILED_ENUM_NAMES_HELP)
+    ] = None,
 ):
     logger.info("Making NWSS enums...")
     extract_all_classes(
@@ -284,9 +288,10 @@ def main(
         enums_file=enums_file,
         output_dir=output_dir,
         single_table=single_table,
-        detailed_enum_names=detailed_enum_names
+        detailed_enum_names=detailed_enum_names,
     )
     logger.info("Finished!")
-    
+
+
 if __name__ == "__main__":
     app()

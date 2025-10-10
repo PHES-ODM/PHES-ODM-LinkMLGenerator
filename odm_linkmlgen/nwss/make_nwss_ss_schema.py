@@ -21,10 +21,7 @@ from odm_linkmlgen.utils.schemasheets_utils import save_schemasheet
 
 logger = get_logger(__name__)
 
-app = typer.Typer(
-    pretty_exceptions_show_locals=False,
-    rich_markup_mode="rich"
-)
+app = typer.Typer(pretty_exceptions_show_locals=False, rich_markup_mode="rich")
 
 MAIN_HELP = """Make the schema metadata Schemasheet for NWSS. This sheet
             contains top-level meta data about the NWSS LinkML schema, such as
@@ -67,10 +64,15 @@ def make_schema(output_file: Union[str, Path], data_values: Dict = {}):
     logger.info(f"Saving schema to '{output_file}'")
     save_schemasheet(df, output_file, use_data.keys())
 
+
 @app.command(help=MAIN_HELP)
 def main(
-    output_file: Annotated[Path, typer.Option(show_default=False, help=OUTPUT_FILE_HELP)],
-    dictionary_type: Annotated[str, typer.Option(show_default=False, help=DICTIONARY_TYPE_HELP)]
+    output_file: Annotated[
+        Path, typer.Option(show_default=False, help=OUTPUT_FILE_HELP)
+    ],
+    dictionary_type: Annotated[
+        str, typer.Option(show_default=False, help=DICTIONARY_TYPE_HELP)
+    ],
 ):
     data_values = {
         "schema": f"NWSS_{dictionary_type}",
@@ -79,12 +81,9 @@ def main(
         "default_prefix": f"nwss_{dictionary_type}",
     }
     logger.info("Making NWSS Schema...")
-    make_schema(
-        output_file=output_file,
-        data_values=data_values
-    )
+    make_schema(output_file=output_file, data_values=data_values)
     logger.info("Finished!")
-    
+
 
 if __name__ == "__main__":
     app()

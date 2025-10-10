@@ -21,10 +21,7 @@ from odm_linkmlgen.utils.schemasheets_utils import save_schemasheet
 
 logger = get_logger(__name__)
 
-app = typer.Typer(
-    pretty_exceptions_show_locals=False,
-    rich_markup_mode="rich"
-)
+app = typer.Typer(pretty_exceptions_show_locals=False, rich_markup_mode="rich")
 
 MAIN_HELP = """Make the prefixes Schemasheet for NWSS, with the specified
 --dictionary-type. This sheet contains all the CURIE prefixes used by the
@@ -60,16 +57,18 @@ def make_prefixes(output_file: Path, dictionary_type: str):
         cur_data[k] = v.format(dictionary_type=dictionary_type)
     save_schemasheet(cur_data, output_file)
 
+
 @app.command(help=MAIN_HELP)
 def main(
-    output_file: Annotated[Path, typer.Option(show_default=False, help=OUTPUT_FILE_HELP)], 
-    dictionary_type: Annotated[str, typer.Option(show_default=False, help=DICTIONARY_TYPE_HELP)]
+    output_file: Annotated[
+        Path, typer.Option(show_default=False, help=OUTPUT_FILE_HELP)
+    ],
+    dictionary_type: Annotated[
+        str, typer.Option(show_default=False, help=DICTIONARY_TYPE_HELP)
+    ],
 ):
     logger.info(f"Making NWSS Prefixes for {dictionary_type}...")
-    make_prefixes(
-        output_file=output_file,
-        dictionary_type=dictionary_type
-    )
+    make_prefixes(output_file=output_file, dictionary_type=dictionary_type)
     logger.info("Finished!")
 
 
