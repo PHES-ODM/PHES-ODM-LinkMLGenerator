@@ -271,7 +271,12 @@ def map_enum_ranges(
                         new_range.append(rng)
                 if new_range:
                     new_range = list(dict.fromkeys(new_range))
-                    slot_defn.range = new_range if len(new_range) > 1 else new_range[0]
+                    if len(new_range) > 1:
+                        slot_defn.range = None
+                        slot_defn.any_of = [ { "range": rng } for rng in new_range ]
+                    else:
+                        slot_defn.range = new_range[0]
+                    # slot_defn.range = new_range if len(new_range) > 1 else new_range[0]
     elif method == "merge":
         # Go through all items in enum_maps
         for enum_name, enum_target_ranges in enum_maps.items():
