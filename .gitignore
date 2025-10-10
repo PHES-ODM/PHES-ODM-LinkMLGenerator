@@ -1,7 +1,8 @@
+.DS_Store
+.vscode
+
 # NWSS input and output
 /odm_linkmlgen/data/nwss/*.xlsx
-/gen/nwss_*/dictionary/
-/gen/nwss_*/schemasheets/
 
 # NWSS restricted
 /gen/nwss_restricted_*/
