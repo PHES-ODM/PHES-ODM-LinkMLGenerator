@@ -1,4 +1,3 @@
-# %%
 """
 Creates the Schemasheets prefixes table, which defines all prefixes used by the ODM schema.
 
@@ -11,10 +10,23 @@ make_prefixes("odm_v2/schemasheets/prefixes.tsv")
 ```
 """
 
+from typing import Annotated
+from pathlib import Path
+import typer
+
 from odm_linkmlgen.utils.general_utils import get_logger
 from odm_linkmlgen.utils.schemasheets_utils import save_schemasheet
 
 logger = get_logger(__name__)
+
+app = typer.Typer(pretty_exceptions_show_locals=False, rich_markup_mode="rich")
+
+MAIN_HELP = """Creates the Schemasheets prefixes table, which defines
+all prefixes used by the ODM schema."""
+
+VERSION_HELP = """The ODM version number (eg. "2", "3")."""
+
+OUTPUT_FILE_HELP = """The .tsv file to save the prefixes Schemasheet to."""
 
 # The full prefixes schemasheet: Column names and values
 _data = {
@@ -51,15 +63,17 @@ def make_prefixes(version: str, output_file: str):
     save_schemasheet(get_prefixes_data(version), output_file)
 
 
+@app.command(help=MAIN_HELP)
+def main(
+    version: Annotated[str, typer.Option(show_default=False, help=VERSION_HELP)],
+    output_file: Annotated[
+        Path, typer.Option(show_default=False, help=OUTPUT_FILE_HELP)
+    ],
+):
+    logger.info(f"Making ODM v{version} Prefixes...")
+    make_prefixes(version=version, output_file=output_file)
+    logger.info("Finished!")
+
+
 if __name__ == "__main__":
-    if "get_ipython" in globals():
-        opts = {
-            "version": "2",
-            "output_file": "../../gen/odm_v2/schemasheets/prefixes.tsv",
-        }
-
-        logger.info(f"Making ODM v{opts['version']} Prefixes...")
-
-        make_prefixes(**opts)
-
-        logger.info("Finished!")
+    app()

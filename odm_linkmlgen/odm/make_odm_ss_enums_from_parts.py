@@ -1,4 +1,3 @@
-# %%
 """
 Create Schemasheets for all enumerations found within the ODM data dictionary parts sheet. This
 does NOT include the enumerations found within the sets sheet (those can be created with
@@ -14,7 +13,9 @@ extract_parts_enums("odm_v2/dictionary/parts.csv", "odm_v2/schemasheets/enums_pa
 """
 
 import pandas as pd
-from typing import List
+from typing import List, Annotated
+import typer
+from pathlib import Path
 
 from odm_linkmlgen.utils.general_utils import (
     get_logger,
@@ -30,6 +31,18 @@ from odm_linkmlgen.odm.odm_utils import (
 )
 
 logger = get_logger(__name__)
+
+app = typer.Typer(pretty_exceptions_show_locals=False, rich_markup_mode="rich")
+
+MAIN_HELP = """Create Schemasheets for all enumerations found within the ODM
+data dictionary parts sheet. This does NOT include the enumerations found
+within the sets sheet (those can be created with
+make_odm_ss_enums_from_sets.py)."""
+
+PARTS_FILE_HELP = """The parts sheet (CSV) that was extracted from the ODM data
+dictionary."""
+
+OUTPUT_FILE_HELP = """The TSV file to save the Schemasheet to."""
 
 # For mapping the columns in our final DataFrame to columns recognized by Schemasheets
 # Required schemasheets headers: "enum", "permissible_value", "description"
@@ -115,15 +128,17 @@ def extract_parts_enums(parts_file: str, output_file: str) -> List[str]:
     return output_df["partType"].unique().tolist()
 
 
+@app.command(help=MAIN_HELP)
+def main(
+    parts_file: Annotated[Path, typer.Option(show_default=False, help=PARTS_FILE_HELP)],
+    output_file: Annotated[
+        Path, typer.Option(show_default=False, help=OUTPUT_FILE_HELP)
+    ],
+):
+    logger.info("Making ODM Enums from Parts List...")
+    extract_parts_enums(parts_file=parts_file, output_file=output_file)
+    logger.info("Finished!")
+
+
 if __name__ == "__main__":
-    if "get_ipython" in globals():
-        opts = {
-            "parts_file": "../../gen/odm_v2/dictionary/parts.csv",
-            "output_file": "../../gen/odm_v2/schemasheets/enums_parts.tsv",
-        }
-
-        logger.info("Making ODM Enums from Parts List...")
-
-        extract_parts_enums(**opts)
-
-        logger.info("Finished!")
+    app()

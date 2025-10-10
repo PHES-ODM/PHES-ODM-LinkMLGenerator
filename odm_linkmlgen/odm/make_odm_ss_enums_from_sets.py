@@ -1,4 +1,3 @@
-# %%
 """
 Create Schemasheets for all enumerations found within the ODM data dictionary sets sheet. This
 does NOT include the enumerations whose values are found within the parts sheet (those can be created
@@ -16,7 +15,9 @@ extract_sets_enums("odm_v2/dictionary/sets.csv",
 """
 
 import pandas as pd
-from typing import List
+from typing import List, Annotated
+import typer
+from pathlib import Path
 
 from odm_linkmlgen.utils.general_utils import (
     get_logger,
@@ -27,6 +28,21 @@ from odm_linkmlgen.utils.schemasheets_utils import save_schemasheet
 from odm_linkmlgen.odm.odm_utils import odm_keep_active_rows
 
 logger = get_logger(__name__)
+
+app = typer.Typer(pretty_exceptions_show_locals=False, rich_markup_mode="rich")
+
+MAIN_HELP = """Create Schemasheets for all enumerations found within the
+ODM data dictionary sets sheet. This does NOT include the enumerations whose
+values are found within the parts sheet (those can be created with
+make_odm_ss_enums_from_parts.py)."""
+
+SETS_FILE_HELP = """The full path and filename to the sets CSV sheet
+extracted from the ODM data dictionary."""
+
+PARTS_FILE_HELP = """The parts sheet (CSV) that was extracted from the ODM data
+dictionary."""
+
+OUTPUT_FILE_HELP = """The TSV file to save the Schemasheet to."""
 
 # For mapping the columns in our final DataFrame to columns recognized by Schemasheets
 # Required schemasheets headers: "enum", "permissible_value", "description", "title"
@@ -137,16 +153,20 @@ def extract_sets_enums(sets_file: str, parts_file: str, output_file: str) -> Lis
     return df["setID"].unique().tolist()
 
 
+@app.command(help=MAIN_HELP)
+def main(
+    sets_file: Annotated[Path, typer.Option(show_default=False, help=SETS_FILE_HELP)],
+    parts_file: Annotated[Path, typer.Option(show_default=False, help=PARTS_FILE_HELP)],
+    output_file: Annotated[
+        Path, typer.Option(show_default=False, help=OUTPUT_FILE_HELP)
+    ],
+):
+    logger.info("Making ODM from Sets List...")
+    extract_sets_enums(
+        sets_file=sets_file, parts_file=parts_file, output_file=output_file
+    )
+    logger.info("Finished!")
+
+
 if __name__ == "__main__":
-    if "get_ipython" in globals():
-        opts = {
-            "sets_file": "../../gen/odm_v2/dictionary/sets.csv",
-            "parts_file": "../../gen/odm_v2/dictionary/parts.csv",
-            "output_file": "../../gen/odm_v2/schemasheets/enums_sets.tsv",
-        }
-
-        logger.info("Making ODM from Sets List...")
-
-        extract_sets_enums(**opts)
-
-        logger.info("Finished!")
+    app()

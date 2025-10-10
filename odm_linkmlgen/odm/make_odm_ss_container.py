@@ -1,4 +1,3 @@
-# %%
 """
 Create the Container class Schemasheet for ODM. This is the top-level (tree_root) class that contains
 all the top-level tables (eg. measures, protocols, etc.)
@@ -7,14 +6,26 @@ all the top-level tables (eg. measures, protocols, etc.)
 """
 
 import pandas as pd
-from typing import Union
+from typing import Union, Annotated
 from pathlib import Path
+import typer
 
 from odm_linkmlgen.utils.general_utils import get_logger, read_data_frame
 from odm_linkmlgen.utils.schemasheets_utils import save_schemasheet
 from odm_linkmlgen.odm.odm_utils import odm_get_available_class_names
 
 logger = get_logger(__name__)
+
+app = typer.Typer(pretty_exceptions_show_locals=False, rich_markup_mode="rich")
+
+MAIN_HELP = """Create the Container class Schemasheet for ODM. This is the
+top-level (tree_root) class that contains all the top-level tables (eg.
+measures, protocols, etc.)"""
+
+PARTS_FILE_HELP = """The parts sheet (CSV) that was extracted from the ODM data
+dictionary."""
+
+OUTPUT_FILE_HELP = """The TSV file to save the Container class Schemasheet to."""
 
 
 def extract_container_class(
@@ -51,7 +62,7 @@ def extract_container_class(
         df = pd.concat([df, row]).reset_index(drop=True)
 
     # Put the headers in a nice order and add the Schemasheets header
-    logger.info("Saving Schemasheets container to 'output_file'")
+    logger.info(f"Saving Schemasheets container to {output_file}")
     save_schemasheet(
         df,
         output_file,
@@ -68,15 +79,17 @@ def extract_container_class(
     )
 
 
+@app.command(help=MAIN_HELP)
+def main(
+    parts_file: Annotated[Path, typer.Option(show_default=False, help=PARTS_FILE_HELP)],
+    output_file: Annotated[
+        Path, typer.Option(show_default=False, help=OUTPUT_FILE_HELP)
+    ],
+):
+    logger.info("Making ODM Container class...")
+    extract_container_class(parts_file=parts_file, output_file=output_file)
+    logger.info("Finished!")
+
+
 if __name__ == "__main__":
-    if "get_ipython" in globals():
-        opts = {
-            "parts_file": "../../gen/odm_v2/dictionary/parts.csv",
-            "output_file": "../../gen/odm_v2/schemasheets/container.tsv",
-        }
-
-        logger.info("Making ODM Container class...")
-
-        extract_container_class(**opts)
-
-        logger.info("Finished!")
+    app()

@@ -1,4 +1,3 @@
-# %%
 """
 Creates Schemasheets for all classes (ie. tables) based on the ODM data dictionary parts sheet.
 The outputs will be named "class_{table_name}.tsv".
@@ -14,10 +13,11 @@ extract_all_classes("odm_v2/dictionary/parts.csv", "odm_v2/schemasheets")
 ```
 """
 
+from typing import Tuple, Optional, List, Annotated
 from pathlib import Path
 import pandas as pd
 import os
-from typing import Tuple, Optional, List
+import typer
 
 from odm_linkmlgen.utils.general_utils import get_logger, read_data_frame
 from odm_linkmlgen.utils.schemasheets_utils import save_schemasheet
@@ -29,6 +29,20 @@ from odm_linkmlgen.odm.odm_utils import (
 )
 
 logger = get_logger(__name__)
+
+app = typer.Typer(pretty_exceptions_show_locals=False, rich_markup_mode="rich")
+
+MAIN_HELP = """Create a Schemasheet for all classes (tables) found in the parts
+sheet that was extracted from the ODM data dictionary."""
+
+PARTS_FILE_HELP = """The parts sheet (CSV) that was extracted from the ODM data
+dictionary."""
+
+OUTPUT_DIR_HELP = """The location to save all the Schemasheets. One Schemasheet
+per class is created, with the name \"class_{class_name}.tsv\""""
+
+RECOGNIZED_ENUMS_HELP = """List of all recognized enumeration names."""
+
 
 # For mapping the columns in our final DataFrame to columns recognized by Schemasheets
 headers = {
@@ -265,16 +279,20 @@ def extract_all_classes(parts_file: str, output_dir: str, recognized_enums: List
         extract_class(df, class_name, output_dir, recognized_enums=recognized_enums)
 
 
+@app.command(help=MAIN_HELP)
+def main(
+    parts_file: Annotated[Path, typer.Option(show_default=False, help=PARTS_FILE_HELP)],
+    output_dir: Annotated[Path, typer.Option(show_default=False, help=OUTPUT_DIR_HELP)],
+    recognized_enums: Annotated[
+        List[str], typer.Option(show_default=False, help=RECOGNIZED_ENUMS_HELP)
+    ] = None,
+):
+    logger.info("Making ODM Classes...")
+    extract_all_classes(
+        parts_file=parts_file, output_dir=output_dir, recognized_enums=recognized_enums
+    )
+    logger.info("Finished!")
+
+
 if __name__ == "__main__":
-    if "get_ipython" in globals():
-        opts = {
-            "parts_file": "../../gen/odm_v2/dictionary/parts.csv",
-            "output_dir": "../../gen/odm_v2/schemasheets",
-            "recognized_enums": [],
-        }
-
-        logger.info("Making ODM Classes...")
-
-        extract_all_classes(**opts)
-
-        logger.info("Finished!")
+    app()
