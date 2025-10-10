@@ -26,9 +26,7 @@ SCHEMASHEETS_DIR = Path(os.path.dirname(__file__)) / "data" / "odm_v1" / "schema
 
 @app.command(help=MAIN_HELP)
 def main(
-    output_dir: Annotated[
-        Path, typer.Option(show_default=False, help=OUTPUT_DIR_HELP)
-    ],
+    output_dir: Annotated[Path, typer.Option(show_default=False, help=OUTPUT_DIR_HELP)],
 ):
     # Make the schema
     linkml_schema = output_dir / "linkml" / "odm_v1.yaml"

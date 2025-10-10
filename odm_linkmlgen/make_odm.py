@@ -55,9 +55,7 @@ def make_odm(
     dictionary_file: Annotated[
         Path, typer.Option(show_default=False, help=DICTIONARY_FILE_HELP)
     ],
-    output_dir: Annotated[
-        Path, typer.Option(show_default=False, help=OUTPUT_DIR_HELP)
-    ],
+    output_dir: Annotated[Path, typer.Option(show_default=False, help=OUTPUT_DIR_HELP)],
     missingness_method: Annotated[
         MissingnessMethods, typer.Option(help=MISSINGNESS_METHOD_HELP)
     ] = MissingnessMethods.multi_range,

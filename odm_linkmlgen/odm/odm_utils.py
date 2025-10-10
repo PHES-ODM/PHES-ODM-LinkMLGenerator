@@ -273,7 +273,7 @@ def map_enum_ranges(
                     new_range = list(dict.fromkeys(new_range))
                     if len(new_range) > 1:
                         slot_defn.range = None
-                        slot_defn.any_of = [ { "range": rng } for rng in new_range ]
+                        slot_defn.any_of = [{"range": rng} for rng in new_range]
                     else:
                         slot_defn.range = new_range[0]
                     # slot_defn.range = new_range if len(new_range) > 1 else new_range[0]
