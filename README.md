@@ -37,7 +37,8 @@ Once the Data Dictionary has been put in place, execute the following to generat
 
 ```console
 cd src
-python3 make_odm.py --dictionary_file="../data/odm_v2/v2 ODM dictionary.xlsx" \
+python3 make_odm.py \
+    --dictionary_file="../data/odm_v2/v2 ODM dictionary.xlsx" \
     --output_dir="../gen/odm_v2" \
     --missingness_method="multi_range"
 ```
@@ -51,9 +52,9 @@ slot_usage:
     orgType:
         description: Specifies the type or purpose of a given organization.
         title: Organization Type
-        range:
-        - orgTypeSet
-        - genMissingnessSet
+        any_of:
+        - range: orgTypeSet
+        - range: genMissingnessSet
         pattern: ^.{0,30}$
 ```
 
@@ -88,7 +89,8 @@ The script [odm_linkmlgen/make_nwss.py](odm_linkmlgen/make_nwss.py) will generat
 
 ```console
 cd src
-python3 make_nwss.py --output_dir "path/to/output/dir" \
+python3 make_nwss.py \
+    --output_dir "path/to/output/dir" \
     --reporting "path/to/reporting.xlsx" \
     --public_concentration "path/to/public_concentration.xlsx" \
     --public_metric "path/to/public_metric.xlsx" \
