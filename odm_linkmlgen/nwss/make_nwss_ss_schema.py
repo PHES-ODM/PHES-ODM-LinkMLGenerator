@@ -1,4 +1,3 @@
-# %%
 """
 Creates the Schemasheets schema table for NWSS, which provides the top-level meta data about the NWSS
 schema, such as the id, description of the schema, and the default prefix to use.
@@ -13,12 +12,31 @@ make_schema("nwss/schemasheets/schema.tsv")
 """
 
 import pandas as pd
-from typing import Dict
+from typing import Dict, Annotated, Union
+import typer
+from pathlib import Path
 
 from odm_linkmlgen.utils.general_utils import get_logger
 from odm_linkmlgen.utils.schemasheets_utils import save_schemasheet
 
 logger = get_logger(__name__)
+
+app = typer.Typer(
+    pretty_exceptions_show_locals=False,
+    rich_markup_mode="rich"
+)
+
+MAIN_HELP = """Make the schema metadata Schemasheet for NWSS. This sheet
+            contains top-level meta data about the NWSS LinkML schema, such as
+            the id, description, and default prefix."""
+
+OUTPUT_FILE_HELP = """The .tsv file to save the schema Schemasheet to."""
+
+DICTIONARY_TYPE_HELP = """The dictionary type for this NWSS shema file. NWSS
+has multiple formats, --dictionary-type identifies the format. (can be
+"public_concentration", "public_metric", "reporting", "restricted_analytics",
+or "restricted_raw")"""
+
 
 # The default schema metadata schemasheet: Column names and values
 # These are updated with values from the data_values dictionary passed to make_schema.
@@ -32,7 +50,7 @@ default_data = {
 }
 
 
-def make_schema(output_file: str, data_values: Dict = {}):
+def make_schema(output_file: Union[str, Path], data_values: Dict = {}):
     """Make the schema metadata Schemasheet for NWSS. This sheet contains top-level meta data
     about the NWSS LinkML schema, such as the id, description, and default prefix.
 
@@ -49,24 +67,24 @@ def make_schema(output_file: str, data_values: Dict = {}):
     logger.info(f"Saving schema to '{output_file}'")
     save_schemasheet(df, output_file, use_data.keys())
 
+@app.command(help=MAIN_HELP)
+def main(
+    output_file: Annotated[Path, typer.Option(show_default=False, help=OUTPUT_FILE_HELP)],
+    dictionary_type: Annotated[str, typer.Option(show_default=False, help=DICTIONARY_TYPE_HELP)]
+):
+    data_values = {
+        "schema": f"NWSS_{dictionary_type}",
+        "id": f"https://onto.phes-odm.org/nwss/{dictionary_type}",
+        "description": f"National Wastewater Surveillance System (NWSS-{dictionary_type})",
+        "default_prefix": f"nwss_{dictionary_type}",
+    }
+    logger.info("Making NWSS Schema...")
+    make_schema(
+        output_file=output_file,
+        data_values=data_values
+    )
+    logger.info("Finished!")
+    
 
 if __name__ == "__main__":
-    if "get_ipython" in globals():
-        dictionary_type = "reporting"
-        default_schema_values = {
-            "schema": f"NWSS_{dictionary_type}",
-            "id": f"https://onto.phes-odm.org/nwss/{dictionary_type}",
-            "description": f"National Wastewater Surveillance System (NWSS-{dictionary_type})",
-            "default_prefix": f"nwss_{dictionary_type}",
-        }
-
-        opts = {
-            "output_file": "../../gen/nwss_reporting/schemasheets/schema.tsv",
-            "data_values": default_schema_values,
-        }
-
-        logger.info("Making NWSS Schema...")
-
-        make_schema(**opts)
-
-        logger.info("Finished!")
+    app()

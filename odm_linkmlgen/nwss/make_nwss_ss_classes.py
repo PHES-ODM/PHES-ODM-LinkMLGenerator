@@ -1,10 +1,9 @@
-# %%
-
 import os
-from typing import Union, Dict, Any, List, Optional
+from typing import Union, Dict, Any, List, Optional, Annotated
 from pathlib import Path
 import pandas as pd
 import re
+import typer
 
 from odm_linkmlgen.nwss.nwss_utils import (
     SlotToEnumColumns,
@@ -16,6 +15,34 @@ from odm_linkmlgen.utils.general_utils import get_logger, read_data_frame
 from odm_linkmlgen.utils.schemasheets_utils import save_schemasheet
 
 logger = get_logger(__name__)
+
+app = typer.Typer(
+    pretty_exceptions_show_locals=False,
+    rich_markup_mode="rich"
+)
+
+MAIN_HELP = """Extract all classes from the Metadata file extracted from 
+a NWSS data dictionary Excel file, and save all the classes as Schemasheets to
+the output_dir. The saved Schemasheets files are named
+\"classes_{table_name}.tsv\""""
+
+METADATA_FILE_HELP = """The Metadata sheet extracted from a NWSS data dictionary
+Excel file."""
+
+ENUMS_FILE_HELP = """The enums (Value Sets) sheet extracted from a NWSS data
+dictionary Excel file."""
+
+OUTPUT_DIR_HELP = """The directory to save all the class Schemasheets files to. One
+file per NWSS class is saved."""
+
+SINGLE_TABLE_HELP = """If set then merge all classes into a single class called
+nwss_utils.SINGLE_TABLE_NAME, otherwise keep all classes separate."""
+
+DETAILED_ENUM_NAMES_HELP = """If specified, then a list of enum names where we want
+to use detailed enum names. Detailed enum names are in the format
+"enum_name[slot]" where "slot" is the name of the slot whose range is the enum
+(ie. each time the enum is used by a slot it uses a different enum name, eg
+"vs_yne[stormwater_input]")."""
 
 headers = {
     "class": "class",
@@ -243,16 +270,23 @@ def extract_all_classes(
         logger.info(f"Saving class to {output_file}")
         save_schemasheet(cur_df, output_file, headers)
 
-
-if __name__ == "__main__":
-    if "get_ipython" in globals():
-        opts = {
-            "metadata_file": "../../gen/nwss_reporting/dictionary/metadata.csv",
-            "enums_file": "../../gen/nwss_reporting/dictionary/enums.csv",
-            "output_dir": "../../gen/nwss_reporting/schemasheets",
-            "single_table": True,
-            "detailed_enum_names": ["vs_yne"],
-        }
-        logger.info("Making NWSS enums...")
-        extract_all_classes(**opts)
+@app.command(help=MAIN_HELP)
+def main(
+    metadata_file: Annotated[Path, typer.Option(show_default=False, help=METADATA_FILE_HELP)],
+    enums_file: Annotated[Path, typer.Option(show_default=False, help=ENUMS_FILE_HELP)],
+    output_dir: Annotated[Path, typer.Option(show_default=False, help=OUTPUT_DIR_HELP)],
+    single_table: Annotated[bool, typer.Option(show_default=True, help=SINGLE_TABLE_HELP)] = False,
+    detailed_enum_names: Annotated[List[str], typer.Option(show_default=False, help=DETAILED_ENUM_NAMES_HELP)] = None
+):
+    logger.info("Making NWSS enums...")
+    extract_all_classes(
+        metadata_file=metadata_file,
+        enums_file=enums_file,
+        output_dir=output_dir,
+        single_table=single_table,
+        detailed_enum_names=detailed_enum_names
+    )
     logger.info("Finished!")
+    
+if __name__ == "__main__":
+    app()

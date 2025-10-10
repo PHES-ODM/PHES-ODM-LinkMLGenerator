@@ -1,4 +1,3 @@
-# %%
 """
 Create the Schemasheets for all the enumerations found in the NWSS data dictionary. The enumerations
 are found in the "Value Sets" sheet of the Excel data dictionary, and should have been previously
@@ -16,14 +15,39 @@ extract_enums("nwss/dictionary/Value Sets.csv", "nwss/schemasheets")
 """
 
 import os
-from typing import List, Union, Optional
+from typing import List, Union, Optional, Annotated
 from pathlib import Path
+import typer
 
 from odm_linkmlgen.utils.general_utils import read_data_frame, get_logger
 from odm_linkmlgen.utils.schemasheets_utils import save_schemasheet
 from odm_linkmlgen.nwss.nwss_utils import parse_enums_sheet, get_detailed_enums
 
 logger = get_logger(__name__)
+
+app = typer.Typer(
+    pretty_exceptions_show_locals=False,
+    rich_markup_mode="rich"
+)
+
+MAIN_HELP = """Extract all enumerations from a NWSS Value Sets sheet and
+save them to disk as Schemasheets. One Schemasheet per enum is created."""
+
+METADATA_FILE_HELP = """The Metadata sheet extracted from a NWSS
+data dictionary Excel file."""
+
+VALUESETS_FILE_HELP = """The Value Sets sheet extracted from a NWSS
+data dictionary Excel file."""
+
+OUTPUT_DIR_HELP = """Directory to save the enum Schemasheets to. They
+have the name "enum_{enum_name}.tsv"."""
+
+DETAILED_ENUM_NAMES_HELP = """If specified, then a list of enum
+names where we want to use detailed enum names. Detailed enum names are in the
+format "enum_name[slot]" where "slot" is the name of the slot whose range is
+the enum (ie. each time the enum is used by a slot it uses a different enum
+name, eg "vs_yne[stormwater_input]")."""
+
 
 # Schemasheets headers
 headers = {
@@ -92,18 +116,22 @@ def extract_enums(
         logger.info(f"Saving enum {enum_name} to {output_file}")
         save_schemasheet(enum_df, output_file, headers)
 
+@app.command(help=MAIN_HELP)
+def main(
+    metadata_file: Annotated[Path, typer.Option(show_default=False, help=METADATA_FILE_HELP)],
+    valuesets_file: Annotated[Path, typer.Option(show_default=False, help=VALUESETS_FILE_HELP)],
+    output_dir: Annotated[Path, typer.Option(show_default=False, help=OUTPUT_DIR_HELP)],
+    detailed_enum_names: Annotated[List[str], typer.Option(show_default=False, help=DETAILED_ENUM_NAMES_HELP)]
+):
+    logger.info("Making NWSS enums...")
+    extract_enums(
+        metadata_file=metadata_file,
+        valuesets_file=valuesets_file,
+        output_dir=output_dir,
+        detailed_enum_names=detailed_enum_names
+    )
+    logger.info("Finished!")
+
 
 if __name__ == "__main__":
-    if "get_ipython" in globals():
-        opts = {
-            "metadata_file": "../../gen/nwss_reporting/dictionary/metadata.csv",
-            "valuesets_file": "../../gen/nwss_reporting/dictionary/enums.csv",
-            "output_dir": "../../gen/nwss_reporting/schemasheets",
-            "detailed_enum_names": ["vs_yne"],
-        }
-
-        logger.info("Making NWSS enums...")
-
-        extract_enums(**opts)
-
-        logger.info("Finished!")
+    app()
