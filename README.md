@@ -49,62 +49,27 @@ LinkML schema.
 Before generating the schema, you must first obtain the Excel data dictionary
 for the ODM. This file is currently not publicly available. To obtain the file
 please contact [Mathew Thomson](mailto:matthomson@ohri.ca). Once you obtain the
-data dictionary, save it as `v# ODM dictionary.xlsx` in the `data/odm_v#`
-directory (where `#` is the ODM version number, such as 2 or 3). Since this
-spreadsheet uses several Excel functions not supported in some older versions
-of Excel (such as the FILTER and XLOOKUP functions), it is recommended that you
-do not load and resave the file in Excel, as doing so will make the file
-unusable.
+data dictionary, save it as `v# ODM dictionary.xlsx` (where `#` is the ODM
+version number, such as 2 or 3). Since this spreadsheet uses several Excel
+functions not supported in some older versions of Excel (such as the FILTER and
+XLOOKUP functions), it is recommended that you do not load and resave the file
+in older versions of Excel, as doing so will make the file unusable.
 
 Once the Data Dictionary has been put in place, execute the following to
-generate the LinkML schema (replace `v2` with the ODM version number, eg. `v2`
-or `v3`):
+generate the LinkML schema, replacing the `--dictionary-file` path with the
+path where the data dictionary was saved, and also specifying the ODM version
+you are generating:
 
 ```console
 cd src
 python3 make_odm.py \
-    --dictionary_file="../data/odm_v2/v2 ODM dictionary.xlsx" \
-    --output_dir="../gen/odm_v2" \
-    --missingness_method="multi_range"
+    --version 2 \
+    --dictionary-file="path/to/v2 ODM dictionary.xlsx" \
+    --output-dir="gen/odm_v2"
 ```
 
-The final LinkML schema will be saved at
-[gen/odm_v2/linkml/odm_v2.yaml](gen/odm_v2/linkml/odm_v2.yaml) or
-[gen/odm_v3/linkml/odm_v3.yaml](gen/odm_v3/linkml/odm_v3.yaml) or whatever ODM
-version number you chose.
-
-The parameter `missigness_method` specifies how the missingness enumeration/set
-is included. If it is "multi_range" then any slot that can take on values from
-the missingness set will be modified to be a list of enumerations that includes
-both the original enumeration value plus the missingness set. An example slot
-usage is:
-
-```yaml
-slot_usage:
-    orgType:
-        description: Specifies the type or purpose of a given organization.
-        title: Organization Type
-        any_of:
-        - range: orgTypeSet
-        - range: genMissingnessSet
-        pattern: ^.{0,30}$
-```
-
-If it is "merge" then any enumeration that should include the missingness set
-will be modified so that its permissible values includes the values found in
-the missingness set. An example slot usage is:
-
-```yaml
-slot_usage:
-    orgType:
-        description: Specifies the type or purpose of a given organization.
-        title: Organization Type
-        range: orgTypeSet
-        pattern: ^.{0,30}$
-```
-
-Where the `orgTypeSet` enumeration (in the LinkML schema's `enums` section) has
-been modified to include as permissible values `NA`, `null`, `nan`, etc.
+The final LinkML schema will be saved in the directory specified by
+`--output-dir`.
 
 If you would like more details of what this script does (as well as all the
 other scripts referenced by make_odm.py), a description of the processing steps
@@ -143,12 +108,12 @@ A separate subdirectory will be created for each dictionary type:
 ```console
 cd src
 python3 make_nwss.py \
-    --output_dir "path/to/output/dir" \
+    --output-dir "path/to/output/dir" \
     --reporting "path/to/reporting.xlsx" \
-    --public_concentration "path/to/public_concentration.xlsx" \
-    --public_metric "path/to/public_metric.xlsx" \
-    --restricted_raw "path/to/restricted_raw.xlsx" \
-    --restricted_analytics "path/to/restricted_analytics.xlsx"
+    --public-concentration "path/to/public_concentration.xlsx" \
+    --public-metric "path/to/public_metric.xlsx" \
+    --restricted-raw "path/to/restricted_raw.xlsx" \
+    --restricted-analytics "path/to/restricted_analytics.xlsx"
 ```
 
 Both the `restricted_raw` and `restricted_analytics` data dictionaries are not
