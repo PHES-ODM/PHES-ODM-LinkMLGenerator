@@ -37,13 +37,6 @@ DICTIONARY_FILE_HELP = """Location of the Excel data dictionary (parts file) for
 
 OUTPUT_DIR_HELP = """Directory to save the LinkML schema to."""
 
-MISSINGNESS_METHOD_HELP = """How to include the missingness set. If
-'multi_range' then add the missingness set to a
-slot's range by changing the range to a list. If
-'merge' then combine the missingness set with the
-permissible values of enumerations."""
-
-
 class MissingnessMethods(str, Enum):
     multi_range = "multi_range"
     merge = "merge"
@@ -56,9 +49,6 @@ def make_odm(
         Path, typer.Option(show_default=False, help=DICTIONARY_FILE_HELP)
     ],
     output_dir: Annotated[Path, typer.Option(show_default=False, help=OUTPUT_DIR_HELP)],
-    missingness_method: Annotated[
-        MissingnessMethods, typer.Option(help=MISSINGNESS_METHOD_HELP)
-    ] = MissingnessMethods.multi_range,
 ) -> SchemaDefinition:
     """Generate the LinkML schema for ODM.
 
@@ -67,9 +57,6 @@ def make_odm(
         dictionary_file (Path): Location of the Excel data dictionary (parts file) for ODM.
         output_dir (Path): Location to save all output. The LinkML schema output is
             saved to "{output_dir}/linkml/odm_v{version}.yaml"
-        missingness_method (str): How to include the missingness set. If 'multi_range' then add the missingness
-            set to a slot's range by changing the range to a list. If 'merge' then combine the missingness set
-            with the permissible values of enumerations.
 
     Returns:
         SchemaDefinition: The generated ODM LinkML schema definition.
@@ -123,9 +110,7 @@ def make_odm(
     # Add genMissingnessSet to all ranges where an enum must be paired with genMissingnessSet
     add_missingness_set(
         schema,
-        dictionary_file=dictionary_file,
-        lists_sheet="lists",
-        method=missingness_method,
+        parts_file
     )
 
     # Save the schema to disk
