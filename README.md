@@ -20,6 +20,21 @@ source .env/bin/activate
 pip3 install -r requirements.txt
 ```
 
+## Running the Unit Tests
+
+Install the dev dependencies, then run `pytest` from the repository root:
+
+```console
+pip install -e ".[dev]"
+pytest
+```
+
+To see per-test output add the `-v` flag:
+
+```console
+pytest -v
+```
+
 ## Generating the ODM v1 LinkML Schema
 
 Generation of the ODM v1 schema is fairly simple and is not expected to change
