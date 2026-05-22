@@ -7,6 +7,7 @@ import typer
 
 from odm_linkmlgen.nwss.nwss_utils import (
     SlotToEnumColumns,
+    DictionaryColumns,
     TABLE_NAME_COL,
     splitup_metadata_sheet,
     parse_enums_sheet,
@@ -50,7 +51,7 @@ headers = {
     "pattern": "pattern",
 }
 
-# If "Data Type" for a row matches a key in _data_types_validation_info, then use the corresponding values in the dictionary
+# If DictionaryColumns.DATA_TYPE for a row matches a key in _data_types_validation_info, then use the corresponding values in the dictionary
 # for the slot
 _data_types_validation_info = {
     r"^date ": {
@@ -110,15 +111,15 @@ def _get_range_and_validation_info(
             specify a categorical slot name in NWSS) and SlotToEnumColumns.ENUM (to specify the enum to
             assign to the slot). This is to get an enumeration name for the current slot if
             applicable. If enums_df is None, or if an enum for the current slot is not found in
-            enums_df, then we try to get the enum name from the "Value Set" column in the row.
+            enums_df, then we try to get the enum name from the DictionaryColumns.VALUE_SET column in the row.
 
     Returns:
         Dict[str, Any]: Key-value pairs to set for the slot usage corresponding to the row.
     """
     results = {}
 
-    # For category data types, use the enum found in "Value Set"
-    if row["Data Type"] == "category":
+    # For category data types, use the enum found in DictionaryColumns.VALUE_SET
+    if row[DictionaryColumns.DATA_TYPE] == "category":
         val = None
         slot_name = row["slot"]
         # First try to get the enum name from enums_df
@@ -126,36 +127,39 @@ def _get_range_and_validation_info(
             enums_row = enums_df[enums_df[SlotToEnumColumns.SLOT] == slot_name]
             if len(enums_row) > 0:
                 val = enums_row[SlotToEnumColumns.ENUM].iloc[0].strip()
-        # If we did not get the enum name from enums_df then try to get it from the "Value Set" column
-        if val is None and "Value Set" in row.index:
-            val = row["Value Set"]
-            val = val.strip("[] ").split(":")[1].strip()
-        if val is None:
-            # logger.error(f"No enumeration for categorical slot {slot_name}")
-            raise ValueError(f"No enumeration for categorical slot {slot_name}")
+        # If we did not get the enum name from enums_df then try to get it from the DictionaryColumns.VALUE_SET column
+        if val is None and DictionaryColumns.VALUE_SET in row.index:
+            val = row[DictionaryColumns.VALUE_SET]
+            if isinstance(val, (str)):
+                val = val.strip("[] ").split(":")[1].strip()
+            else:
+                val = None
+        if pd.isna(val):
+            logger.error(f"No enumeration for categorical slot {slot_name}")
+            # raise ValueError(f"No enumeration for categorical slot {slot_name}")
         results["range"] = val
         return results
 
     # See if any custom regex matches occur with _data_types_validation_info.
-    # If the key (pattern) matches row["Data Type"], then the returned
+    # If the key (pattern) matches row[DictionaryColumns.DATA_TYPE], then the returned
     # info is the value of _data_types_validation_info.
     for pattern, dict in _data_types_validation_info.items():
-        if re.match(pattern, row["Data Type"]) is not None:
+        if re.match(pattern, row[DictionaryColumns.DATA_TYPE]) is not None:
             for k, v in dict.items():
                 results[k] = v
             return results
 
-    if "#" in row["Data Type"]:
-        # If there are # symbols in the "Data Type", then convert the #'s to
+    if "#" in row[DictionaryColumns.DATA_TYPE]:
+        # If there are # symbols in the DictionaryColumns.DATA_TYPE, then convert the #'s to
         # [0-9] regex matches.
-        val = row["Data Type"]
+        val = row[DictionaryColumns.DATA_TYPE]
         val = val[val.index("#") : val.rindex("#") + 1]
         val = val.replace("#", "[0-9]")
         results["range"] = "string"
         results["pattern"] = val
     else:
-        # Copy the "Data Type" to the "range" unchanged
-        results["range"] = row["Data Type"]
+        # Copy the DictionaryColumns.DATA_TYPE to the "range" unchanged
+        results["range"] = row[DictionaryColumns.DATA_TYPE]
 
     return results
 
@@ -176,7 +180,7 @@ def parse_table_df(
             SlotToEnumColumns.SLOT and SlotToEnumColumns.ENUM, where the slot is a categorical
             column name in NWSS and the enum is the name of the enum assigned to the slot.
             the name of the enumeration to assign to the slot. If None then
-            we assume that the enum name is found in the "Value Set" column of
+            we assume that the enum name is found in the DictionaryColumns.VALUE_SET column of
             df.
         detailed_enum_names (Optional[List[str]], optional): If specified, then a list of enum
             names where we want to use detailed enum names. Detailed enum names are in
@@ -195,15 +199,15 @@ def parse_table_df(
     df["pattern"] = ""
 
     # Parse required column
-    if "Submission Requirement" in df.columns:
-        df["required"] = df["Submission Requirement"].map(
-            lambda x: x.strip(" .").lower() in ["required"]
+    if DictionaryColumns.SUBMISSION_REQUIREMENT in df.columns:
+        df["required"] = df[DictionaryColumns.SUBMISSION_REQUIREMENT].map(
+            lambda x: isinstance(x, str) and x.strip(" .").lower() in ["required"]
         )
     else:
         df["required"] = False
 
     # Add description
-    df["description"] = df["Description"]
+    df["description"] = df[DictionaryColumns.DESCRIPTION]
 
     # Add validation and range info
     for idx, row in df.iterrows():
