@@ -10,7 +10,8 @@ from pathlib import Path
 
 from linkml_runtime.linkml_model.meta import SchemaDefinition
 
-from odm_linkmlgen.utils.general_utils import get_logger
+from odm_linkmlgen.utils.general_utils import read_data_frame, get_logger
+from odm_linkmlgen.utils.schema_utils import get_ranges_of_slot_defn
 
 logger = get_logger(__name__)
 
@@ -153,168 +154,38 @@ def odm_get_enum_name_from_part_id(
     return name
 
 
-def get_multi_enums_from_dictionary(
-    dictionary_file: str, lists_sheet: str
-) -> Dict[str, List[str]]:
-    """From the ODM data dictionary (the "lists" sheet), get all enumeration names that should
-    always be combined with other enumerations. For example, the "fractionSet" enumeration should always
-    be combined with the "genMissingnessSet" enumeration, so that missing values (eg. NA, nan, nr, etc).
-
-    The returned value has keys for an enumeration name and the corresponding value being a list
-    of enumeration names that the source enumeration should take on. The list will include
-    the source enumeration (ie. the key) plus optionally additional enumerations that should be included.
-
-    For example:
-
-        {
-            "fractionSet" : [ "fractionSet", "genMissingnessSet" ],
-            "sampleRelSet" : [ "sampleRelSet" ],
-        }
-
-    Args:
-        dictionary_file (str): The path to the ODM data dictionary Excel file.
-        lists_sheet (str): The name of the sheet that contains all lists (typically "lists"). This sheet
-            contains formulas for creating lists for various enumerations, along with optional
-            missingness enumerations.
-
-    Returns:
-        Dict[str, List[str]]: Dictionary mapping enumeration names to lists of enumerations names.
-    """
-    # Get the formulas for all lists.
-    # The formulas are similar to:
-    # =UNIQUE(_xlfn._xlws.FILTER(parts!B:B, ((parts!C:C = "classes")*(parts!AE:AE = "input"))+(parts!C:C = "missingness")))
-    # =UNIQUE(_xlfn._xlws.FILTER(sets!D:D,(sets!A:A="purposeSet")+(sets!A:A = "genMissingnessSet")))
-    # We get all strings enclosed in quotes (as a list of strings), remove the "input" strings, and rename "missingness" to
-    # "genMissingnessSet".
-    # From the results, the first string that is not "genMissingnessSet" becomes the source enum
-    # name (ie. the key in the returned dictionary), while the full results becomes the target enum
-    # name (ie. the value in the returned dictionary).
-    wb = openpyxl.load_workbook(dictionary_file, read_only=True, data_only=False)
-    ws = wb[lists_sheet]
-    df = pd.DataFrame(ws.values)
-
-    enum_maps = {}
-    for formula in df.iloc[1]:
-        if not hasattr(formula, "text"):
-            continue
-
-        # Extract all strings enclosed in quotes from the formula. These will be
-        # the enum names that we will process
-        txt = formula.text
-        res = re.findall('"([^"]*)"', txt)
-
-        if res is not None:
-            # Go through the results, replace "missingness" with "genMissingnessSet",
-            # and find the first string that is not "genMissingnessSet"
-            # We also correct capitalization of "genMissingnessSet", since Excel
-            # treats strings as case-insensitive.
-            non_missing_enum = None
-            for idx in range(len(res)):
-                if res[idx].lower() in ["genmissingnessset", "missingness"]:
-                    res[idx] = "genMissingnessSet"
-                elif non_missing_enum is None:
-                    non_missing_enum = res[idx]
-            # Remove "input"
-            if "input" in res:
-                res.remove("input")
-            # Save to the map
-            enum_maps[non_missing_enum] = res
-
-    return enum_maps
-
-
-def map_enum_ranges(
-    schema: SchemaDefinition,
-    enum_maps: Dict[str, List[str]],
-    method: str = "multi_range",
-):
-    """Change the specified enumerations in the schema so that they always occur with one or more other
-    enumerations, or so that they are merged with one or more other enumerations.
-
-    The enumerations to change are the keys of enum_maps, the values are lists of enumerations that
-    include the key enumeration as well as all other enumerations it should be grouped with. How the
-    grouping occurs depends on the method parameter.
-
-    This is typically done to add missingness enumerations to other enumerations.
-
-    Args:
-        schema (SchemaDefinition): The SchemaDefinition to change.
-        enum_maps (Dict[str, List[str]]): The enum mappings. For example:
-            {
-                "fractionSet" : [ "fractionSet", "genMissingnessSet" ],
-                "sampleRelSet" : [ "sampleRelSet" ],
-            }
-        method (str, Optional): If "multi_range" then for any slot that has a range equal to an
-            enumeration in enum_maps.keys(), we change the slot's range so that it is equal to the
-            list of enumerations in enum_maps' value.
-            If "merge" then for any enumeration found in enum_maps.keys(), we merge it with all
-            enumerations found in enum_maps' value. Defaults to "multi_range".
-    """
-    if not enum_maps:
-        return
-
-    if method == "multi_range":
-        # Go through all classes
-        for class_defn in schema.classes.values():
-            # Go through all slot usages
-            for slot_defn in class_defn.slot_usage.values():
-                # If the slot's range (rng) is a key in enum_maps, then change the range to
-                # be equal to enum_maps[rng]
-                ranges = slot_defn.range
-                if not isinstance(ranges, list):
-                    ranges = [ranges]
-                new_range = []
-                for rng in ranges:
-                    if rng in enum_maps:
-                        new_range.extend(enum_maps[rng])
-                    else:
-                        new_range.append(rng)
-                if new_range:
-                    new_range = list(dict.fromkeys(new_range))
-                    if len(new_range) > 1:
-                        slot_defn.range = None
-                        slot_defn.any_of = [{"range": rng} for rng in new_range]
-                    else:
-                        slot_defn.range = new_range[0]
-                    # slot_defn.range = new_range if len(new_range) > 1 else new_range[0]
-    elif method == "merge":
-        # Go through all items in enum_maps
-        for enum_name, enum_target_ranges in enum_maps.items():
-            if enum_name not in schema.enums:
-                logger.warning(
-                    f"Unrecognized enumeration name '{enum_name}' for in enum maps for collapsing enumerations"
-                )
-                continue
-            cur_enum = schema.enums[enum_name]
-            for new_enum_name in enum_target_ranges:
-                if new_enum_name == enum_name:
-                    continue
-                new_enum = schema.enums[new_enum_name]
-                cur_enum.permissible_values.update(new_enum.permissible_values)
+def set_range_of_slot(schema: SchemaDefinition, class_name: str, slot_name: str, rng: Union[str, List[str]]):
+    class_defn = schema.classes[class_name]
+    slot_defn = class_defn.slot_usage[slot_name]
+    if isinstance(rng, str):
+        rng = [rng]
+    if len(rng) > 1:
+        slot_defn.range = None
+        slot_defn.any_of = [{"range": r} for r in rng]
     else:
-        raise ValueError(f"Unrecognized method '{method}' in map_enum_ranges")
-
+        slot_defn.range = rng[0]
+    
 
 def add_missingness_set(
     schema: SchemaDefinition,
-    dictionary_file: Union[str, Path],
-    lists_sheet: str = "lists",
-    method: str = "multi_range",
+    parts_file: Union[str, Path]
 ):
-    """Using the ODM data dictionary, add the genMissingnessSet to any slot range that has an
-    enumeration that should be paired with genMissingnessSet.
+    """Based on the parts sheet of the ODM data dictionary, add the missingness sets
+    (ie. genMissingNessSet/nrNAMissingnessSet) to any slot that should have one of these missingness sets.
 
     Args:
         schema (SchemaDefinition): The schema to modify in place.
-        dictionary_file (Union[str, Path]): The ODM data dictionary, in Excel format.
-        lists_sheet (str, optional): The sheet in the dictionary_file that contains the lists of values for the enumerations
-            that are optionally paired with the missingness set. Defaults to "lists".
-        method (str, Optional): If "multi_range" then we add the missingness set to slots by changing
-            the slot's range to a list that includes the original range and the missingness set.
-            If "merge" then we modify the enumerations directly so that they include the permissible values
-            found in the missingness set. Defaults to "multi_range".
+        parts_file (Union[str, Path]): The ODM data dictionary parts file.
     """
-    enum_maps = get_multi_enums_from_dictionary(
-        dictionary_file, lists_sheet=lists_sheet
-    )
-    map_enum_ranges(schema, enum_maps=enum_maps, method=method)
+    parts_df = read_data_frame(parts_file, keep_default_na=False, na_values=[""])
+    for class_defn in schema.classes.values():
+        # Go through all slot usages
+        for slot_defn in class_defn.slot_usage.values():
+            rows = parts_df[parts_df["partID"] == slot_defn.name]
+            missingness_set = rows["missingnessSet"].iloc[0]
+            if not pd.isna(missingness_set):
+                ranges = get_ranges_of_slot_defn(slot_defn)
+                # Add the missingness set if it is not already in the range
+                if missingness_set not in ranges:
+                    ranges.append(missingness_set)
+                    set_range_of_slot(schema, class_defn.name, slot_defn.name, ranges)
