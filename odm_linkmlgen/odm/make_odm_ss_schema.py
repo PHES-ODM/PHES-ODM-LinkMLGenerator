@@ -65,7 +65,8 @@ def make_schema(version: str, output_file: str):
         version (str): The version of ODM that the schema is for (eg. "2", "3").
         output_file (str): The .tsv file to save the schema Schemasheet to.
     """
-    save_schemasheet(get_schema_data(version), output_file)
+    if len(_data) > 0:
+        save_schemasheet(get_schema_data(version), output_file)
 
 
 @app.command(help=MAIN_HELP)
