@@ -1,4 +1,4 @@
-from typing import Union, Dict, List
+from typing import Union, Dict, List, Optional
 from pathlib import Path
 from glob import glob
 import yaml
@@ -159,7 +159,7 @@ def save_schemasheet(
     # Create a Pandas DataFrame from the data
     if isinstance(data, pd.DataFrame):
         df = data
-    elif isinstance(data, Dict):
+    elif isinstance(data, dict):
         if isinstance(data[list(data.keys())[0]], (list, tuple)):
             index = None
         else:
@@ -180,6 +180,39 @@ def save_schemasheet(
     save_data_frame(df, file_name, index=False)
 
     return df
+
+
+def make_container_schemasheet(
+    class_names: List[str],
+    output_file: Union[str, Path],
+    class_titles: Optional[Dict[str, str]] = None,
+) -> None:
+    """Build and save the top-level Container class Schemasheet.
+
+    Each class in class_names becomes a multivalued, inlined slot on the Container class.
+
+    Args:
+        class_names: The names of the classes to include as slots.
+        output_file: The TSV file to save to.
+        class_titles: Optional mapping of class name to slot title. Missing or None entries
+            produce an empty title string.
+    """
+    import pandas as pd
+
+    columns = ["class", "slot", "range", "tree_root", "multivalued", "inlined_as_list", "title", "description"]
+    rows = [{"class": "Container", "tree_root": True}]
+    for class_name in class_names:
+        rows.append({
+            "class": "Container",
+            "slot": class_name,
+            "range": class_name,
+            "multivalued": True,
+            "inlined_as_list": True,
+            "title": (class_titles or {}).get(class_name, ""),
+            "description": "",
+        })
+    df = pd.DataFrame(rows)
+    save_schemasheet(df, output_file, columns)
 
 
 def add_schemasheets_header(df: pd.DataFrame, headers: dict) -> pd.DataFrame:

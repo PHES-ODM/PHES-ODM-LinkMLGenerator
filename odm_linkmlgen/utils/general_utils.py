@@ -15,29 +15,26 @@ from linkml_runtime import SchemaView
 
 EMPTY_PERMISSIBLE_VALUE = "<empty>"
 
+logging.basicConfig(
+    handlers=[logging.StreamHandler(sys.stdout)],
+    format="%(levelname)s %(asctime)s %(filename)s:%(lineno)d: %(message)s",
+    level=logging.INFO,
+    datefmt="%Y-%m-%d %H:%M:%S",
+)
 
-def get_logger(name: str, level: Optional[str] = logging.INFO) -> logging.Logger:
-    """Get the logger with the specified name, setting is configuration as well as output format.
-    The name can be any arbitrary string. For example:
+
+def get_logger(name: str, level: Optional[int] = logging.INFO) -> logging.Logger:
+    """Get the logger with the specified name. The name can be any arbitrary string, for example:
 
         logger = get_logger(__name__)
 
     Args:
-        name (str): The name to give to the logger. This can be any arbitrary string and is
-            typically the name of the caller.
-        level (Optional[str], optional): The logging level of the logger. Defaults to logging.INFO.
+        name (str): The name to give to the logger.
+        level (Optional[int], optional): The logging level of the logger. Defaults to logging.INFO.
 
     Returns:
         logging.Logger: The logging object.
     """
-    handlers = [logging.StreamHandler(sys.stdout)]
-    logging.basicConfig(
-        handlers=handlers,
-        format="%(levelname)s %(asctime)s %(filename)s:%(lineno)d: %(message)s",
-        level=level,
-        datefmt="%Y-%m-%d %H:%M:%S",
-    )
-
     logger = logging.getLogger(name)
     if level:
         logger.setLevel(level)
@@ -114,7 +111,7 @@ def strip_whitespace(df: pd.DataFrame) -> pd.DataFrame:
 
 def clear_dirs(
     dirs: Union[Union[str, Path], List[Union[str, Path]]],
-    extensions: Union[str, List[str]] = [".tsv", ".csv", ".yaml"],
+    extensions: Union[str, List[str]] = None,
 ):
     """Remove all TSV, CSV, and YAML files in all the specified directories.
 
@@ -122,9 +119,10 @@ def clear_dirs(
         dirs (Union[Union[str, Path], List[Union[str, Path]]]): One or more directories to clean.
         extensions (Union[str, List[str]]): One or more extensions. All files with these
             extensions found in the directories are deleted. These are case-insensitive and
-            should be prefixed by a dot.
-            (Defaults to [".tsv", ".csv", ".yaml"])
+            should be prefixed by a dot. If None then [".tsv", ".csv", ".yaml"] is used.
+            (Defaults to None)
     """
+    extensions = extensions or [".tsv", ".csv", ".yaml"] 
     if isinstance(extensions, str):
         extensions = [extensions]
     extensions = [e.lower() for e in extensions]
@@ -337,8 +335,11 @@ def expand_multi_rows(df: pd.DataFrame, columns: Union[List[str], str]) -> pd.Da
         lambda x: [x.strip() for x in x.split(SEP_TAG)] if not pd.isna(x) else [""]
     )
 
+    if multi_df.empty:
+        return df.copy()
+
     # Determine the maximum number of multiple values
-    max_multi = multi_df[columns].map(lambda x: len(x)).max(axis=None)
+    max_multi = int(multi_df[columns].map(lambda x: len(x)).max(axis=None))
 
     # Remove all original rows that had multiple values specified. We'll expand these removed
     # rows below and then readd the expanded rows to the DataFrame.

@@ -86,6 +86,8 @@ def get_ranges_of_slot_defn(
         slot_defn = [slot_defn]
     ranges = []
     for cur_defn in slot_defn:
+        cur_ranges = []
+
         if not isinstance(cur_defn, dict):
             cur_defn = asdict(cur_defn)
         # Try getting the range

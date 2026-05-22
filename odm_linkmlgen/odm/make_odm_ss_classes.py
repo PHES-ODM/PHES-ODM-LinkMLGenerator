@@ -167,24 +167,26 @@ def extract_class(
     table_df = odm_keep_active_rows(table_df)
 
     # Select the columns of interest, and rename some of the columns
-    table_output_df = table_df[
-        [
-            "partID",
-            "partLabel",
-            "partDesc",
-            "partType",
-            "partInstr",
-            "mmaSet",
-            f"{class_name}",
-            f"{class_name}Required",
-            f"{class_name}Order",
-            "dataType",
-            "minValue",
-            "maxValue",
-            "minLength",
-            "maxLength",
-        ]
-    ].copy()
+    keep_cols = [
+        "partID",
+        "partLabel",
+        "partDesc",
+        "partType",
+        "partInstr",
+        "mmaSet",
+        f"{class_name}",
+        f"{class_name}Required",
+        f"{class_name}Order",
+        "dataType",
+        "minValue",
+        "maxValue",
+        "minLength",
+        "maxLength",
+    ]
+    missing_cols = [c for c in keep_cols if c not in table_df.columns]
+    if len(missing_cols) > 0:
+        raise RuntimeError(f"Missing columns in parts sheet for class {class_name}: {', '.join(missing_cols)}")
+    table_output_df = table_df[keep_cols].copy()
     columns = list(table_output_df.columns)
     columns[columns.index(class_name)] = "headerType"
     columns[columns.index(f"{class_name}Required")] = "required"

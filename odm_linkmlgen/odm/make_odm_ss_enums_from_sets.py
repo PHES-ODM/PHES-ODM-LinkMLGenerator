@@ -53,6 +53,9 @@ headers = {
     "partDesc": "description",
 }
 
+# Reverse mapping: Schemasheets header name → data column name
+_headers_by_role = {v: k for k, v in headers.items()}
+
 
 def extract_sets_enums(sets_file: str, parts_file: str, output_file: str) -> List[str]:
     """Create a Schemasheet for all the enumerations found in the ODM data dictionary
@@ -91,12 +94,10 @@ def extract_sets_enums(sets_file: str, parts_file: str, output_file: str) -> Lis
     # eg. If the "MyEnum" enum has multiple blank permissible_values (usually corresponding
     # to "not applicable"), then we will merge them into one. The resulting title might look
     # like "Not applicable / Not a number / Null".
-    enum_col = [k for k, v in headers.items() if v == "enum"][0]
-    permissible_value_col = [k for k, v in headers.items() if v == "permissible_value"][
-        0
-    ]
-    description_col = [k for k, v in headers.items() if v == "description"][0]
-    title_col = [k for k, v in headers.items() if v == "title"][0]
+    enum_col = _headers_by_role["enum"]
+    permissible_value_col = _headers_by_role["permissible_value"]
+    description_col = _headers_by_role["description"]
+    title_col = _headers_by_role["title"]
     # Strip leading and trailing whitespace from the columns
     for k in [enum_col, description_col, title_col]:
         df[k] = df[k].str.strip()
@@ -116,14 +117,9 @@ def extract_sets_enums(sets_file: str, parts_file: str, output_file: str) -> Lis
     # Drop the duplicates
     df = df.drop_duplicates(subset=[enum_col, permissible_value_col], keep="first")
 
-    # @TODO: Once we figure out how to have blank permissible values, remove this. At the
-    # moment Schemasheets treats blank permissible values as corresponding to details about
-    # the upper level enum, rather than a value of the enum. After generating the schema
-    # with Schemasheets in utils.make_linkml_schema_from_schemasheets, we edit the schema in
-    # utils.fix_schemasheets_generated_schemato replace permissible values equal to EMPTY_PERMISSIBLE_VALUE with "".
-    # Drop blank partIDs.
-    # df.loc[df["partID"] == "", "partID"] = None
-    # df = df.dropna(axis = 0, subset="partID")
+    # Schemasheets treats a blank permissible_value as metadata for the top-level enum rather
+    # than an actual permissible value of "". We use EMPTY_PERMISSIBLE_VALUE as a sentinel here
+    # and replace it with "" after schema generation in fix_schemasheets_generated_schema.
     df.loc[(df["partID"] == "") | (pd.isna(df["partID"])), "partID"] = (
         EMPTY_PERMISSIBLE_VALUE
     )

@@ -182,6 +182,8 @@ def add_missingness_set(
         # Go through all slot usages
         for slot_defn in class_defn.slot_usage.values():
             rows = parts_df[parts_df["partID"] == slot_defn.name]
+            if rows.empty:
+                continue
             missingness_set = rows["missingnessSet"].iloc[0]
             if not pd.isna(missingness_set):
                 ranges = get_ranges_of_slot_defn(slot_defn)

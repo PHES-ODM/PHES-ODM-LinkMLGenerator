@@ -5,7 +5,6 @@ Make the ODM LinkML schema.
 from pathlib import Path
 from typing import Annotated
 import typer
-from enum import Enum
 
 from linkml_runtime.linkml_model.meta import SchemaDefinition
 
@@ -36,10 +35,6 @@ VERSION_HELP = """Version string of ODM to generate the schema for. eg. '2', '3'
 DICTIONARY_FILE_HELP = """Location of the Excel data dictionary (parts file) for ODM."""
 
 OUTPUT_DIR_HELP = """Directory to save the LinkML schema to."""
-
-class MissingnessMethods(str, Enum):
-    multi_range = "multi_range"
-    merge = "merge"
 
 
 @app.command(help=MAIN_HELP)
@@ -99,10 +94,10 @@ def make_odm(
     extract_container_class(parts_file, schemasheets_dir / "container.tsv")
 
     # Make the prefixes schemasheet
-    make_prefixes(version, schemasheets_dir / "prefixes.tsv")
+    make_prefixes(schemasheets_dir / "prefixes.tsv", version)
 
     # Make the schema definition schemasheet
-    make_schema(version, schemasheets_dir / "schema.tsv")
+    make_schema(schemasheets_dir / "schema.tsv", version)
 
     # Run Schemasheets to make the final LinkML schema
     schema = make_linkml_schema_from_schemasheets(schemasheets_dir)

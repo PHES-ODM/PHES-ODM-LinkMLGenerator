@@ -57,13 +57,13 @@ def get_schema_data(version: str) -> dict:
     return d
 
 
-def make_schema(version: str, output_file: str):
+def make_schema(output_file: str, version: str):
     """Make the schema metadata Schemasheet for ODM. This sheet contains top-level meta data
     about the ODM LinkML schema, such as the id, description, and default prefix.
 
     Args:
-        version (str): The version of ODM that the schema is for (eg. "2", "3").
         output_file (str): The .tsv file to save the schema Schemasheet to.
+        version (str): The version of ODM that the schema is for (eg. "2", "3").
     """
     if len(_data) > 0:
         save_schemasheet(get_schema_data(version), output_file)
@@ -71,13 +71,13 @@ def make_schema(version: str, output_file: str):
 
 @app.command(help=MAIN_HELP)
 def main(
-    version: Annotated[str, typer.Option(show_default=False, help=VERSION_HELP)],
     output_file: Annotated[
         Path, typer.Option(show_default=False, help=OUTPUT_FILE_HELP)
     ],
+    version: Annotated[str, typer.Option(show_default=False, help=VERSION_HELP)],
 ):
     logger.info(f"Making ODM v{version} Schema...")
-    make_schema(version=version, output_file=output_file)
+    make_schema(output_file=output_file, version=version)
     logger.info("Finished!")
 
 

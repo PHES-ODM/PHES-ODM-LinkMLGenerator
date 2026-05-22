@@ -52,13 +52,13 @@ def get_prefixes_data(version: str) -> dict:
     return d
 
 
-def make_prefixes(version: str, output_file: str):
+def make_prefixes(output_file: str, version: str):
     """Make the prefixes Schemasheet for ODM. This sheet contains all the CURIE prefixes
     used by the dictionary.
 
     Args:
-        version (str): The ODM version number (eg. "2", "3").
         output_file (str): The .tsv file to save the prefixes Schemasheet to.
+        version (str): The ODM version number (eg. "2", "3").
     """
     if len(_data) > 0:
         save_schemasheet(get_prefixes_data(version), output_file)
@@ -66,13 +66,13 @@ def make_prefixes(version: str, output_file: str):
 
 @app.command(help=MAIN_HELP)
 def main(
-    version: Annotated[str, typer.Option(show_default=False, help=VERSION_HELP)],
     output_file: Annotated[
         Path, typer.Option(show_default=False, help=OUTPUT_FILE_HELP)
     ],
+    version: Annotated[str, typer.Option(show_default=False, help=VERSION_HELP)],
 ):
     logger.info(f"Making ODM v{version} Prefixes...")
-    make_prefixes(version=version, output_file=output_file)
+    make_prefixes(output_file=output_file, version=version)
     logger.info("Finished!")
 
 

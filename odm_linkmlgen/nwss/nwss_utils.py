@@ -28,6 +28,9 @@ def splitup_metadata_sheet(
 ) -> Dict[str, pd.DataFrame]:
     df = df.dropna(axis=0, how="all").reset_index(drop=True)
 
+    if df.empty:
+        return {}
+
     all_tables = {}
 
     # Get the table boundaries. After dropping empty rows (done previously), each new table occurs
@@ -166,7 +169,7 @@ def get_detailed_enums(
         if not detailed_enum_names:
             return None
         if row[DictionaryColumns.VALUE_SET] in detailed_enum_names:
-            return f"{row['Value Set']}[{row['Field Name']}]"
+            return f"{row[DictionaryColumns.VALUE_SET]}[{row[DictionaryColumns.FIELD_NAME]}]"
         return None
 
     enum_map = {}

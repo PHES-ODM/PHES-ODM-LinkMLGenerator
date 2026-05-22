@@ -83,10 +83,6 @@ def extract_parts_enums(parts_file: str, output_file: str) -> List[str]:
     enum_source_names = sorted(headers_df[filt]["partID"].unique())
     enum_names = [odm_get_enum_name_from_part_id(name) for name in enum_source_names]
 
-    # @TODO: Check if it's ok to no longer use the above for calculating the enum_names and instead use the
-    # simpler single line of code below for enum_names
-    # enum_names = list(df[(df["mmaSet"] == "") | pd.isna(df["mmaSet"])]["partType"].unique())
-
     # Get all rows for all enums. We only keep the columns in keep_columns.
     # Each row (or enum value) should be an "input" for at least one class.
     # "partType" matches the enum name (corresponds to a permissible value of the enum)
@@ -100,10 +96,6 @@ def extract_parts_enums(parts_file: str, output_file: str) -> List[str]:
         "partInstr",
     ]
     output_df = pd.DataFrame()
-    # @TODO: Check if it's ok to no longer look for "input" partIDs, but instead use the full DataFrame
-    # is_input = df[odm_class_names].isin(["input"])
-    # is_input = is_input.sum(axis=1)
-    # input_df = df[is_input > 0]
     input_df = df
     for enum_name in enum_names:
         # Get the top-level enum row (where the partID is the same as the enum_name)
