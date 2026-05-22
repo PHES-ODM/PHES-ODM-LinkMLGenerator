@@ -60,7 +60,8 @@ def make_prefixes(version: str, output_file: str):
         version (str): The ODM version number (eg. "2", "3").
         output_file (str): The .tsv file to save the prefixes Schemasheet to.
     """
-    save_schemasheet(get_prefixes_data(version), output_file)
+    if len(_data) > 0:
+        save_schemasheet(get_prefixes_data(version), output_file)
 
 
 @app.command(help=MAIN_HELP)
