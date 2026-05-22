@@ -1,4 +1,4 @@
-from typing import Dict, Tuple, List, Optional
+from typing import Dict, Tuple, List, Optional, Any
 import pandas as pd
 
 from odm_linkmlgen.utils.general_utils import get_logger, EMPTY_PERMISSIBLE_VALUE
@@ -12,6 +12,15 @@ SINGLE_TABLE_NAME = "nwss"
 class SlotToEnumColumns:
     SLOT: str = "slot"
     ENUM: str = "enum"
+    
+class DictionaryColumns:
+    FIELD_NAME: str = "Field Name"
+    DATA_TYPE: str = "Data Type"
+    VALUE_SET: str = "Value Set"
+    FIELD: str = "Field"
+    VALUE_SET_NAME: str = "Value Set Name"
+    DESCRIPTION: str = "Description"
+    SUBMISSION_REQUIREMENT: str = "Submission Requirement"
 
 
 def splitup_metadata_sheet(
@@ -22,10 +31,10 @@ def splitup_metadata_sheet(
     all_tables = {}
 
     # Get the table boundaries. After dropping empty rows (done previously), each new table occurs
-    # whever an empty value is found in the "Data Type" column. The rows with the empty values
-    # contain the table name in the "Field Name" column. All rows up to but excluding the next
+    # whever an empty value is found in the DictionaryColumns.DATA_TYPE column. The rows with the empty values
+    # contain the table name in the DictionaryColumns.FIELD_NAME column. All rows up to but excluding the next
     # empty value define that table.
-    table_boundaries = list(df.index[pd.isna(df["Data Type"])]) + [df.index[-1] + 1]
+    table_boundaries = list(df.index[pd.isna(df[DictionaryColumns.DATA_TYPE])]) + [df.index[-1] + 1]
 
     if len(table_boundaries) <= 1:
         # The DataFrame is a single table
@@ -34,10 +43,10 @@ def splitup_metadata_sheet(
         return {table_name: df}
 
     # Split up the DataFrame along the table boundaries. The table name is the value in
-    # the "Field Name" column at the top of each table boundary.
+    # the DictionaryColumns.FIELD_NAME column at the top of each table boundary.
     for cur_index, next_index in zip(table_boundaries[0:-1], table_boundaries[1:]):
         # Get table name and extract the table
-        cur_table_name = df.loc[cur_index, "Field Name"]
+        cur_table_name = df.loc[cur_index, DictionaryColumns.FIELD_NAME]
         cur_table_df = df.loc[cur_index + 1 : next_index - 1]
 
         if cur_table_name in all_tables:
@@ -79,21 +88,21 @@ def parse_enums_sheet(df: pd.DataFrame) -> Tuple[pd.DataFrame, Dict[str, pd.Data
     # Drop empty columns
     df = df.dropna(axis=1, how="all")
 
-    # The "Field" and "Value Set Name" maps the Field name in the data dictionary to
+    # The DictionaryColumns.FIELD and DictionaryColumns.VALUE_SET_NAME maps the Field name in the data dictionary to
     # the enum name that that field uses.
-    fields_df = df[["Field", "Value Set Name"]].copy()
+    fields_df = df[[DictionaryColumns.FIELD, DictionaryColumns.VALUE_SET_NAME]].copy()
     fields_df.columns = [SlotToEnumColumns.SLOT, SlotToEnumColumns.ENUM]
     fields_df = fields_df.dropna(axis=0, how="all")
 
     # Extract all enums: Iterate over columns and first row
     # The column will indicate the enum name, although there are many unnamed columns.
-    # In the first row below the enum name columns, there should be a "Value Set" column
+    # In the first row below the enum name columns, there should be a DictionaryColumns.VALUE_SET column
     # (indicating the enum's allowable values) and in the next column a "Description" column.
     all_enums = {}
     for enum_value_col, desc_col in zip(df.columns[0:-1], df.columns[1:]):
         if (
-            str(df.loc[0, enum_value_col]).strip().lower() != "value set"
-            or str(df.loc[0, desc_col]).strip().lower() != "description"
+            str(df.loc[0, enum_value_col]).strip().lower() != DictionaryColumns.VALUE_SET.lower()
+            or str(df.loc[0, desc_col]).strip().lower() != DictionaryColumns.DESCRIPTION.lower()
         ):
             continue
 
@@ -142,21 +151,21 @@ def get_detailed_enums(
         Dict[str, List[str]]: A dictionary that maps non-detailed enum names to a list of all
             detailed enum names used for that enum in the Metadata.
     """
-    if "Value Set" not in metadata_df.columns:
+    if DictionaryColumns.VALUE_SET not in metadata_df.columns:
         return {}
 
     # Get all categorical rows
-    categories = metadata_df[metadata_df["Data Type"] == "category"].copy()
+    categories = metadata_df[metadata_df[DictionaryColumns.DATA_TYPE] == "category"].copy()
     # Extract the (non-detailed) enum names used for each row
-    categories["Value Set"] = categories["Value Set"].map(
-        lambda x: x.strip("[] ").split(":")[1].strip()
+    categories[DictionaryColumns.VALUE_SET] = categories[DictionaryColumns.VALUE_SET].map(
+        lambda x: x.strip("[] ").split(":")[1].strip() if isinstance(x, str) else None
     )
 
     def _get_detailed_enum(row: pd.Series, detailed_enum_names: List[str]) -> str:
         """Get the enumeration name from the row, making the name detailed if required"""
         if not detailed_enum_names:
             return None
-        if row["Value Set"] in detailed_enum_names:
+        if row[DictionaryColumns.VALUE_SET] in detailed_enum_names:
             return f"{row['Value Set']}[{row['Field Name']}]"
         return None
 
@@ -164,7 +173,7 @@ def get_detailed_enums(
     for _, row in categories.iterrows():
         # Get the enum name for the current row and its detailed name
         # eg. enum name is vs_yne and detailed name is vs_yne[stormwater_input]
-        enum_name = row["Value Set"]
+        enum_name = row[DictionaryColumns.VALUE_SET]
         detailed_enum_name = _get_detailed_enum(row, detailed_enum_names)
 
         # If there is a detailed name, then add it to the enum_map that maps regular enum name
