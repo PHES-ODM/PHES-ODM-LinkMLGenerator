@@ -1,4 +1,4 @@
-from typing import Dict, Tuple, List, Optional, Any
+from typing import Dict, Tuple, List, Optional
 import pandas as pd
 
 from odm_linkmlgen.utils.general_utils import get_logger, EMPTY_PERMISSIBLE_VALUE

@@ -1,4 +1,3 @@
-import pytest
 import pandas as pd
 
 from odm_linkmlgen.odm.odm_utils import (

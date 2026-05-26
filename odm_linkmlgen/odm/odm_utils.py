@@ -2,10 +2,8 @@
 Utility functions for ODM LinkML Schema Generator, specific to ODM dictionary.
 """
 
-from typing import Union, Any, List, Optional, Dict
+from typing import Union, Any, List, Optional
 import pandas as pd
-import re
-import openpyxl
 from pathlib import Path
 
 from linkml_runtime.linkml_model.meta import SchemaDefinition

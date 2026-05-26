@@ -1,5 +1,3 @@
-import pytest
-
 from odm_linkmlgen.utils.schema_utils import get_ranges_of_slot_defn
 
 
