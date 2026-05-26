@@ -15,7 +15,10 @@ def _boundary_row(table_name: str) -> dict:
 
 
 def _data_row(field_name: str, data_type: str = "string") -> dict:
-    return {DictionaryColumns.FIELD_NAME: field_name, DictionaryColumns.DATA_TYPE: data_type}
+    return {
+        DictionaryColumns.FIELD_NAME: field_name,
+        DictionaryColumns.DATA_TYPE: data_type,
+    }
 
 
 def _make_metadata_df(*table_defs) -> pd.DataFrame:
@@ -28,6 +31,7 @@ def _make_metadata_df(*table_defs) -> pd.DataFrame:
 
 
 # --- splitup_metadata_sheet ---
+
 
 def test_splitup_two_tables():
     df = _make_metadata_df(
@@ -76,7 +80,9 @@ def test_splitup_duplicate_table_name_raises():
 
 def test_splitup_drops_all_na_rows():
     df = _make_metadata_df(("tableA", [_data_row("f1")]))
-    empty_row = pd.DataFrame([{DictionaryColumns.FIELD_NAME: None, DictionaryColumns.DATA_TYPE: None}])
+    empty_row = pd.DataFrame(
+        [{DictionaryColumns.FIELD_NAME: None, DictionaryColumns.DATA_TYPE: None}]
+    )
     df = pd.concat([df, empty_row]).reset_index(drop=True)
     result = splitup_metadata_sheet(df)
     # The all-NaN row should be dropped, not appear as a new table

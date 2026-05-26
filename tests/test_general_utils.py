@@ -12,6 +12,7 @@ from odm_linkmlgen.utils.general_utils import (
 
 # --- order_columns ---
 
+
 def test_order_columns_reorders():
     df = pd.DataFrame({"b": [1], "a": [2], "c": [3]})
     result = order_columns(df, ["a", "b"])
@@ -33,6 +34,7 @@ def test_order_columns_returns_copy():
 
 # --- strip_whitespace ---
 
+
 def test_strip_whitespace_trims_strings():
     df = pd.DataFrame({"a": ["  hello  ", " world "], "b": [1, 2]})
     result = strip_whitespace(df)
@@ -47,6 +49,7 @@ def test_strip_whitespace_ignores_non_strings():
 
 
 # --- expand_multi_rows ---
+
 
 def test_expand_multi_rows_single_column():
     df = pd.DataFrame({"name": ["a;b;c"], "val": ["x"]})
@@ -84,6 +87,7 @@ def test_expand_multi_rows_original_unchanged():
 
 # --- rename_items ---
 
+
 def test_rename_items_renames_target():
     assert rename_items(["a", "b", "c"], {"b": "B"}) == ["a", "B", "c"]
 
@@ -99,6 +103,7 @@ def test_rename_items_multiple_renames():
 
 
 # --- choose_ignore_case_value ---
+
 
 def test_choose_ignore_case_value_matches_lowercase():
     assert choose_ignore_case_value("HELLO", ["hello", "world"]) == "hello"
@@ -122,6 +127,7 @@ def test_choose_ignore_case_value_non_string_passthrough():
 
 
 # --- get_class_name_from_file_name ---
+
 
 def test_get_class_name_from_file_name_simple():
     assert get_class_name_from_file_name("samples.csv") == "samples"

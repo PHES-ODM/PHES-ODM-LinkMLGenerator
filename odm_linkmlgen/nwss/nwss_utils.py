@@ -12,7 +12,8 @@ SINGLE_TABLE_NAME = "nwss"
 class SlotToEnumColumns:
     SLOT: str = "slot"
     ENUM: str = "enum"
-    
+
+
 class DictionaryColumns:
     FIELD_NAME: str = "Field Name"
     DATA_TYPE: str = "Data Type"
@@ -37,7 +38,9 @@ def splitup_metadata_sheet(
     # whever an empty value is found in the DictionaryColumns.DATA_TYPE column. The rows with the empty values
     # contain the table name in the DictionaryColumns.FIELD_NAME column. All rows up to but excluding the next
     # empty value define that table.
-    table_boundaries = list(df.index[pd.isna(df[DictionaryColumns.DATA_TYPE])]) + [df.index[-1] + 1]
+    table_boundaries = list(df.index[pd.isna(df[DictionaryColumns.DATA_TYPE])]) + [
+        df.index[-1] + 1
+    ]
 
     if len(table_boundaries) <= 1:
         # The DataFrame is a single table
@@ -104,8 +107,10 @@ def parse_enums_sheet(df: pd.DataFrame) -> Tuple[pd.DataFrame, Dict[str, pd.Data
     all_enums = {}
     for enum_value_col, desc_col in zip(df.columns[0:-1], df.columns[1:]):
         if (
-            str(df.loc[0, enum_value_col]).strip().lower() != DictionaryColumns.VALUE_SET.lower()
-            or str(df.loc[0, desc_col]).strip().lower() != DictionaryColumns.DESCRIPTION.lower()
+            str(df.loc[0, enum_value_col]).strip().lower()
+            != DictionaryColumns.VALUE_SET.lower()
+            or str(df.loc[0, desc_col]).strip().lower()
+            != DictionaryColumns.DESCRIPTION.lower()
         ):
             continue
 
@@ -158,9 +163,13 @@ def get_detailed_enums(
         return {}
 
     # Get all categorical rows
-    categories = metadata_df[metadata_df[DictionaryColumns.DATA_TYPE] == "category"].copy()
+    categories = metadata_df[
+        metadata_df[DictionaryColumns.DATA_TYPE] == "category"
+    ].copy()
     # Extract the (non-detailed) enum names used for each row
-    categories[DictionaryColumns.VALUE_SET] = categories[DictionaryColumns.VALUE_SET].map(
+    categories[DictionaryColumns.VALUE_SET] = categories[
+        DictionaryColumns.VALUE_SET
+    ].map(
         lambda x: x.strip("[] ").split(":")[1].strip() if isinstance(x, str) else None
     )
 

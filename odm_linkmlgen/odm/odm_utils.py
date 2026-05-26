@@ -152,7 +152,12 @@ def odm_get_enum_name_from_part_id(
     return name
 
 
-def set_range_of_slot(schema: SchemaDefinition, class_name: str, slot_name: str, rng: Union[str, List[str]]):
+def set_range_of_slot(
+    schema: SchemaDefinition,
+    class_name: str,
+    slot_name: str,
+    rng: Union[str, List[str]],
+):
     class_defn = schema.classes[class_name]
     slot_defn = class_defn.slot_usage[slot_name]
     if isinstance(rng, str):
@@ -162,12 +167,9 @@ def set_range_of_slot(schema: SchemaDefinition, class_name: str, slot_name: str,
         slot_defn.any_of = [{"range": r} for r in rng]
     else:
         slot_defn.range = rng[0]
-    
 
-def add_missingness_set(
-    schema: SchemaDefinition,
-    parts_file: Union[str, Path]
-):
+
+def add_missingness_set(schema: SchemaDefinition, parts_file: Union[str, Path]):
     """Based on the parts sheet of the ODM data dictionary, add the missingness sets
     (ie. genMissingNessSet/nrNAMissingnessSet) to any slot that should have one of these missingness sets.
 

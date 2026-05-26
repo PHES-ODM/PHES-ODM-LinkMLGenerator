@@ -7,6 +7,7 @@ from dataclasses import asdict
 from linkml_runtime import SchemaView
 from linkml_runtime.linkml_model import SlotDefinition
 
+
 def get_slot_definition(
     cls: str, slot: str, schema: SchemaView, exception_on_error: bool = True
 ) -> Dict:
@@ -32,6 +33,7 @@ def get_slot_definition(
             return asdict(schema.induced_slot(slot, cls))
         except Exception:
             return None
+
 
 def get_ranges_of_slot(
     class_name: str,

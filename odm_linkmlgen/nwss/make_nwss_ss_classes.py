@@ -210,7 +210,9 @@ def parse_table_df(
     df["description"] = df[DictionaryColumns.DESCRIPTION]
 
     # Add validation and range info
-    results = [_get_range_and_validation_info(row, enums_df) for _, row in df.iterrows()]
+    results = [
+        _get_range_and_validation_info(row, enums_df) for _, row in df.iterrows()
+    ]
     all_keys = {k for vals in results for k in vals}
     for k in all_keys:
         df[k] = [vals.get(k) for vals in results]

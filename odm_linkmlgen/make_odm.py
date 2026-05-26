@@ -103,10 +103,7 @@ def make_odm(
     schema = make_linkml_schema_from_schemasheets(schemasheets_dir)
 
     # Add genMissingnessSet to all ranges where an enum must be paired with genMissingnessSet
-    add_missingness_set(
-        schema,
-        parts_file
-    )
+    add_missingness_set(schema, parts_file)
 
     # Save the schema to disk
     save_schema_definition(schema, linkml_dir / f"odm_v{version}.yaml")

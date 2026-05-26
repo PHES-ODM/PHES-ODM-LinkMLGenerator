@@ -199,18 +199,29 @@ def make_container_schemasheet(
     """
     import pandas as pd
 
-    columns = ["class", "slot", "range", "tree_root", "multivalued", "inlined_as_list", "title", "description"]
+    columns = [
+        "class",
+        "slot",
+        "range",
+        "tree_root",
+        "multivalued",
+        "inlined_as_list",
+        "title",
+        "description",
+    ]
     rows = [{"class": "Container", "tree_root": True}]
     for class_name in class_names:
-        rows.append({
-            "class": "Container",
-            "slot": class_name,
-            "range": class_name,
-            "multivalued": True,
-            "inlined_as_list": True,
-            "title": (class_titles or {}).get(class_name, ""),
-            "description": "",
-        })
+        rows.append(
+            {
+                "class": "Container",
+                "slot": class_name,
+                "range": class_name,
+                "multivalued": True,
+                "inlined_as_list": True,
+                "title": (class_titles or {}).get(class_name, ""),
+                "description": "",
+            }
+        )
     df = pd.DataFrame(rows)
     save_schemasheet(df, output_file, columns)
 

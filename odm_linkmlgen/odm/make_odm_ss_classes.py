@@ -185,7 +185,9 @@ def extract_class(
     ]
     missing_cols = [c for c in keep_cols if c not in table_df.columns]
     if len(missing_cols) > 0:
-        raise RuntimeError(f"Missing columns in parts sheet for class {class_name}: {', '.join(missing_cols)}")
+        raise RuntimeError(
+            f"Missing columns in parts sheet for class {class_name}: {', '.join(missing_cols)}"
+        )
     table_output_df = table_df[keep_cols].copy()
     columns = list(table_output_df.columns)
     columns[columns.index(class_name)] = "headerType"

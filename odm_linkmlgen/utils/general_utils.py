@@ -122,7 +122,7 @@ def clear_dirs(
             should be prefixed by a dot. If None then [".tsv", ".csv", ".yaml"] is used.
             (Defaults to None)
     """
-    extensions = extensions or [".tsv", ".csv", ".yaml"] 
+    extensions = extensions or [".tsv", ".csv", ".yaml"]
     if isinstance(extensions, str):
         extensions = [extensions]
     extensions = [e.lower() for e in extensions]
