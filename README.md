@@ -1,5 +1,10 @@
 # <img src="img/ODM-logo.png" align="right" alt="" width="180"/> PHES-ODM LinkML Schema Generator
 
+<!-- badges: start -->
+[![lint.yaml](https://github.com/Big-Life-Lab/PHES-ODM-LinkMLGenerator/actions/workflows/lint.yaml/badge.svg)](https://github.com/Big-Life-Lab/PHES-ODM-LinkMLGenerator/actions/workflows/lint.yaml)
+[![pytest.yaml](https://github.com/Big-Life-Lab/PHES-ODM-LinkMLGenerator/actions/workflows/pytest.yaml/badge.svg)](https://github.com/Big-Life-Lab/PHES-ODM-LinkMLGenerator/actions/workflows/pytest.yaml)
+<!-- badges: end -->
+
 This repository generates [LinkML](https://linkml.io/) schemas for two public health datasets:
 
 - **[PHES-ODM](https://phes-odm.org)** — The Public Health Environmental Surveillance Open Data Model (versions 1, 2, and 3+)
