@@ -67,6 +67,14 @@ def main(
         str, typer.Option(show_default=False, help=DICTIONARY_TYPE_HELP)
     ],
 ):
+    """CLI entry point: make the prefixes Schemasheet for NWSS, which contains all the CURIE
+    prefixes used by the dictionary.
+
+    Args:
+        output_file (Path): The .tsv file to save the prefixes Schemasheet to.
+        dictionary_type (str): The dictionary type for this NWSS prefixes file. NWSS has
+            multiple data dictionaries, each with its own prefixes.
+    """
     logger.info(f"Making NWSS Prefixes for {dictionary_type}...")
     make_prefixes(output_file=output_file, dictionary_type=dictionary_type)
     logger.info("Finished!")

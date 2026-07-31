@@ -249,6 +249,17 @@ def main(
         List[str], typer.Option(show_default=False, help=RECOGNIZED_ENUMS_HELP)
     ] = None,
 ):
+    """CLI entry point: create a Schemasheet for every class (table) found in the ODM
+    parts sheet.
+
+    Args:
+        parts_file (Path): The parts sheet (CSV) that was extracted from the ODM data
+            dictionary.
+        output_dir (Path): The location to save all the Schemasheets to. One Schemasheet
+            is saved per class.
+        recognized_enums (List[str], optional): List of all recognized enumeration names.
+            Defaults to None.
+    """
     logger.info("Making ODM Classes...")
     extract_all_classes(
         parts_file=parts_file, output_dir=output_dir, recognized_enums=recognized_enums

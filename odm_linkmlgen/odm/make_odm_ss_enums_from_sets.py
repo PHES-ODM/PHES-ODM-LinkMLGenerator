@@ -157,6 +157,17 @@ def main(
         Path, typer.Option(show_default=False, help=OUTPUT_FILE_HELP)
     ],
 ):
+    """CLI entry point: create a Schemasheet for all enumerations whose permissible values
+    are found within the ODM sets sheet. This does NOT include the enumerations defined in
+    the parts sheet (use make_odm_ss_enums_from_parts.py for those).
+
+    Args:
+        sets_file (Path): The sets sheet (CSV) that was extracted from the ODM data
+            dictionary.
+        parts_file (Path): The parts sheet (CSV) that was extracted from the ODM data
+            dictionary.
+        output_file (Path): The TSV file to save the Schemasheet to.
+    """
     logger.info("Making ODM from Sets List...")
     extract_sets_enums(
         sets_file=sets_file, parts_file=parts_file, output_file=output_file

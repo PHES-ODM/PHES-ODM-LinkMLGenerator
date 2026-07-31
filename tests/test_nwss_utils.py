@@ -15,6 +15,7 @@ def _boundary_row(table_name: str) -> dict:
 
 
 def _data_row(field_name: str, data_type: str = "string") -> dict:
+    """A regular (non-boundary) row: a field name and a non-empty Data Type."""
     return {
         DictionaryColumns.FIELD_NAME: field_name,
         DictionaryColumns.DATA_TYPE: data_type,

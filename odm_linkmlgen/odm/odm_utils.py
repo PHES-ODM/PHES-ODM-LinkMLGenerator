@@ -214,6 +214,16 @@ def set_range_of_slot(
     slot_name: str,
     rng: Union[str, List[str]],
 ):
+    """Set the range of a slot usage in the schema, in place.
+
+    Args:
+        schema (SchemaDefinition): The schema to modify in place.
+        class_name (str): The name of the class that has the slot usage to modify.
+        slot_name (str): The name of the slot usage to set the range of.
+        rng (Union[str, List[str]]): The range(s) to set. A single range is set as the slot's
+            range. Multiple ranges are set as any_of (and the slot's range is cleared), which is
+            how LinkML represents a slot that accepts more than one range.
+    """
     class_defn = schema.classes[class_name]
     slot_defn = class_defn.slot_usage[slot_name]
     if isinstance(rng, str):

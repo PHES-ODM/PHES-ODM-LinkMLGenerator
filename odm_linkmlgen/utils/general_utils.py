@@ -346,7 +346,15 @@ def expand_multi_rows(df: pd.DataFrame, columns: Union[List[str], str]) -> pd.Da
     df = df[~df.index.isin(multi_df.index)]
 
     def _select_element(i: int, arr: List) -> str:
-        # Select element number i in arr. If i is out of bounds then select the last element.
+        """Select element number i in arr. If i is out of bounds then select the last element.
+
+        Args:
+            i (int): The index of the element to select.
+            arr (List): The list to select the element from. Must not be empty.
+
+        Returns:
+            str: Element i of arr, or the last element if i is out of bounds.
+        """
         if len(arr) > i:
             val = arr[i]
         else:

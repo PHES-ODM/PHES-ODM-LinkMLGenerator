@@ -127,6 +127,16 @@ def main(
         List[str], typer.Option(show_default=False, help=DETAILED_ENUM_NAMES_HELP)
     ],
 ):
+    """CLI entry point: extract all enumerations from a NWSS Value Sets sheet and save them
+    to disk as Schemasheets, one Schemasheet per enum.
+
+    Args:
+        metadata_file (Path): The Metadata sheet extracted from a NWSS data dictionary.
+        valuesets_file (Path): The Value Sets sheet extracted from a NWSS data dictionary.
+        output_dir (Path): Directory to save the enum Schemasheets to.
+        detailed_enum_names (List[str]): List of enum names where we want to use the
+            per-field (detailed) version of the enumeration.
+    """
     logger.info("Making NWSS enums...")
     extract_enums(
         metadata_file=metadata_file,

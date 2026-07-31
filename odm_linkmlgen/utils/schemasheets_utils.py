@@ -108,6 +108,16 @@ def fix_schemasheets_generated_schema(schema: SchemaDefinition):
     # problems downstream such as with the LinkML validator. We convert them to floats or integers
     # here.
     def _make_number(key: str, slot_definition: SlotDefinition):
+        """Convert one of the slot definition's values from a string to a number, in place.
+
+        Integer-valued numbers are converted to int, everything else to float. A value that
+        cannot be converted is set to None (and a warning is logged), and an NA value is
+        left untouched.
+
+        Args:
+            key (str): The slot definition key to convert (eg. "minimum_value").
+            slot_definition (SlotDefinition): The slot definition to modify in place.
+        """
         val = slot_definition[key]
         if pd.isna(val):
             return

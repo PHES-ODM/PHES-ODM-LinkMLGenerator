@@ -50,6 +50,14 @@ def main(
         Path, typer.Option(show_default=False, help=OUTPUT_FILE_HELP)
     ],
 ):
+    """CLI entry point: create the Container class Schemasheet for ODM, the top-level
+    (tree_root) class that contains all the ODM tables.
+
+    Args:
+        parts_file (Path): The parts sheet (CSV) that was extracted from the ODM data
+            dictionary.
+        output_file (Path): The TSV file to save the Container class Schemasheet to.
+    """
     logger.info("Making ODM Container class...")
     extract_container_class(parts_file=parts_file, output_file=output_file)
     logger.info("Finished!")

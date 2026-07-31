@@ -74,6 +74,14 @@ def main(
         str, typer.Option(show_default=False, help=DICTIONARY_TYPE_HELP)
     ],
 ):
+    """CLI entry point: make the schema metadata Schemasheet for NWSS, which contains the
+    top-level meta data about the schema (id, description, and default prefix). The metadata
+    is derived from dictionary_type, since each NWSS dictionary gets its own schema.
+
+    Args:
+        output_file (Path): The .tsv file to save the schema Schemasheet to.
+        dictionary_type (str): The dictionary type for this NWSS schema file.
+    """
     data_values = {
         "schema": f"NWSS_{dictionary_type}",
         "id": f"https://onto.phes-odm.org/nwss/{dictionary_type}",

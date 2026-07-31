@@ -62,6 +62,15 @@ def main(
         bool, typer.Option(show_default=True, help=SINGLE_TABLE_HELP)
     ] = False,
 ):
+    """CLI entry point: create the Container class Schemasheet for NWSS, the top-level
+    (tree_root) class that contains all the NWSS tables.
+
+    Args:
+        metadata_file (Path): The Metadata sheet extracted from a NWSS data dictionary.
+        output_file (Path): The TSV file to save the Container class Schemasheet to.
+        single_table (bool, optional): If set then merge all classes into a single class.
+            Defaults to False.
+    """
     logger.info("Making NWSS Container class...")
     extract_container_class(
         metadata_file=metadata_file, output_file=output_file, single_table=single_table

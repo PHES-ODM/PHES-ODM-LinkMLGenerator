@@ -286,7 +286,20 @@ def main(
         List[str], typer.Option(show_default=False, help=DETAILED_ENUM_NAMES_HELP)
     ] = None,
 ):
-    logger.info("Making NWSS enums...")
+    """CLI entry point: extract all classes from the Metadata sheet of a NWSS data dictionary
+    and save each one as a Schemasheet.
+
+    Args:
+        metadata_file (Path): The Metadata sheet extracted from a NWSS data dictionary.
+        enums_file (Path): The enums (Value Sets) sheet extracted from a NWSS data dictionary.
+        output_dir (Path): The directory to save all the class Schemasheets files to. One
+            Schemasheet is saved per class.
+        single_table (bool, optional): If set then merge all classes into a single class.
+            Defaults to False.
+        detailed_enum_names (List[str], optional): List of enum names where we want to use the
+            per-field (detailed) version of the enumeration. Defaults to None.
+    """
+    logger.info("Making NWSS classes...")
     extract_all_classes(
         metadata_file=metadata_file,
         enums_file=enums_file,

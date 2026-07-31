@@ -28,6 +28,13 @@ SCHEMASHEETS_DIR = Path(os.path.dirname(__file__)) / "data" / "odm_v1" / "schema
 def main(
     output_dir: Annotated[Path, typer.Option(show_default=False, help=OUTPUT_DIR_HELP)],
 ):
+    """CLI entry point: generate the ODM v1 LinkML schema from the bundled Schemasheets
+    files in SCHEMASHEETS_DIR.
+
+    Args:
+        output_dir (Path): Directory to save the ODM v1 schema to. The schema is saved to
+            "{output_dir}/linkml/odm_v1.yaml".
+    """
     # Make the schema
     linkml_schema = output_dir / "linkml" / "odm_v1.yaml"
     make_linkml_schema_from_schemasheets(SCHEMASHEETS_DIR, linkml_schema)

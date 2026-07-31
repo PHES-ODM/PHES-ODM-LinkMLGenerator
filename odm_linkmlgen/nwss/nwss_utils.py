@@ -10,11 +10,15 @@ SINGLE_TABLE_NAME = "nwss"
 
 
 class SlotToEnumColumns:
+    """Column names of the DataFrame that maps each slot to the enumeration it uses."""
+
     SLOT: str = "slot"
     ENUM: str = "enum"
 
 
 class DictionaryColumns:
+    """Column headers used by the sheets of a NWSS data dictionary Excel file."""
+
     FIELD_NAME: str = "Field Name"
     DATA_TYPE: str = "Data Type"
     VALUE_SET: str = "Value Set"
@@ -27,6 +31,27 @@ class DictionaryColumns:
 def splitup_metadata_sheet(
     df: pd.DataFrame, single_table: bool = False
 ) -> Dict[str, pd.DataFrame]:
+    """Split the flat Metadata sheet of a NWSS data dictionary into one DataFrame per table.
+
+    The Metadata sheet lists every table one after another. Once fully blank rows are dropped,
+    each new table starts at a row with an empty DictionaryColumns.DATA_TYPE value, and that
+    row holds the table name in the DictionaryColumns.FIELD_NAME column. All rows up to (but
+    excluding) the next such row belong to that table. If no boundary row is found then the
+    whole sheet is treated as a single table named SINGLE_TABLE_NAME.
+
+    A TABLE_NAME_COL column, containing the table name, is added to each returned DataFrame.
+
+    Args:
+        df (pd.DataFrame): The Metadata sheet to split up.
+        single_table (bool, optional): If True then all the tables are concatenated into a
+            single table named SINGLE_TABLE_NAME. Defaults to False.
+
+    Raises:
+        ValueError: The same table name appears more than once in the Metadata sheet.
+
+    Returns:
+        Dict[str, pd.DataFrame]: The tables, keyed by table name. Empty if df has no rows.
+    """
     df = df.dropna(axis=0, how="all").reset_index(drop=True)
 
     if df.empty:

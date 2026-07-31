@@ -76,6 +76,13 @@ def main(
     ],
     version: Annotated[str, typer.Option(show_default=False, help=VERSION_HELP)],
 ):
+    """CLI entry point: create the Schemasheets schema table, which provides the top-level
+    meta data about the ODM schema, such as the id, description, and default prefix.
+
+    Args:
+        output_file (Path): The .tsv file to save the schema Schemasheet to.
+        version (str): The ODM version number (eg. "2", "3").
+    """
     logger.info(f"Making ODM v{version} Schema...")
     make_schema(output_file=output_file, version=version)
     logger.info("Finished!")
