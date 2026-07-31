@@ -134,18 +134,18 @@ The final schema will be saved to `gen/odm_v1/linkml/odm_v1.yaml`.
 
 ODM v2 and above is generated from the official ODM Excel data dictionary. Since this file is not publicly available, contact [Mathew Thomson](mailto:matthomson@ohri.ca) to obtain it.
 
-Save the file as `v# ODM dictionary.xlsx` where `#` is the version number (e.g., `v2 ODM dictionary.xlsx`). Use a recent version of Excel to open this file; older versions do not support the FILTER and XLOOKUP functions it relies on, and resaving with an older version will corrupt the workbook.
+Save the file as `v# ODM dictionary.xlsx` where `#` is the version number (e.g., `v3 ODM dictionary.xlsx`). Use a recent version of Excel to open this file; older versions do not support the FILTER and XLOOKUP functions it relies on, and resaving with an older version will corrupt the workbook.
 
 To generate the schema:
 
 ```console
 odm-linkmlgen-odm \
-    --version 2 \
-    --dictionary-file "path/to/v2 ODM dictionary.xlsx" \
-    --output-dir "gen/odm_v2"
+    --version 3 \
+    --dictionary-file "path/to/v3 ODM dictionary.xlsx" \
+    --output-dir "gen/odm_v3"
 ```
 
-The final LinkML schema will be saved to `gen/odm_v2/linkml/odm_v2.yaml`.
+The final LinkML schema will be saved to `gen/odm_v3/linkml/odm_v3.yaml`.
 
 For a detailed description of every processing step performed by the generator, see [Generating the ODM LinkML Schema](make_odm.md).
 
@@ -189,9 +189,9 @@ The three main generator functions can also be called programmatically:
 from odm_linkmlgen.make_odm import make_odm
 
 schema = make_odm(
-    version="2",
-    dictionary_file="path/to/v2 ODM dictionary.xlsx",
-    output_dir="gen/odm_v2",
+    version="3",
+    dictionary_file="path/to/v3 ODM dictionary.xlsx",
+    output_dir="gen/odm_v3",
 )
 ```
 
@@ -213,93 +213,198 @@ schema = make_linkml_schema_from_schemasheets(schemasheets_dir, "gen/odm_v1/link
 Each processing step is independently importable if you need finer-grained control:
 
 ```python
-from odm_linkmlgen.utils.general_utils import extract_sheets
+from odm_linkmlgen.utils.general_utils import clear_dirs, extract_sheets
 from odm_linkmlgen.odm.make_odm_ss_enums_from_sets import extract_sets_enums
 from odm_linkmlgen.odm.make_odm_ss_enums_from_parts import extract_parts_enums
 from odm_linkmlgen.odm.make_odm_ss_classes import extract_all_classes
 from odm_linkmlgen.odm.make_odm_ss_container import extract_container_class
 from odm_linkmlgen.odm.make_odm_ss_prefixes import make_prefixes
 from odm_linkmlgen.odm.make_odm_ss_schema import make_schema
-from odm_linkmlgen.utils.schemasheets_utils import make_linkml_schema_from_schemasheets
+from odm_linkmlgen.odm.odm_utils import add_missingness_set
+from odm_linkmlgen.utils.schemasheets_utils import (
+    make_linkml_schema_from_schemasheets,
+    save_schema_definition,
+)
 
-# 1. Extract sheets from Excel to CSV
-extract_sheets("v2 ODM dictionary.xlsx", ["parts", "sets"], "gen/odm_v2/dictionary")
+version = "3"
+dictionary_file = f"path/to/v{version} ODM dictionary.xlsx"
+output_dir = f"gen/odm_v{version}"
+dictionary_dir = f"{output_dir}/dictionary"
+schemasheets_dir = f"{output_dir}/schemasheets"
+linkml_dir = f"{output_dir}/linkml"
+parts_file = f"{dictionary_dir}/parts.csv"
+sets_file = f"{dictionary_dir}/sets.csv"
 
-# 2. Extract enumerations
-all_enums  = extract_sets_enums("gen/odm_v2/dictionary/sets.csv",
-                                "gen/odm_v2/dictionary/parts.csv",
-                                "gen/odm_v2/schemasheets/enums_sets.tsv")
-all_enums += extract_parts_enums("gen/odm_v2/dictionary/parts.csv",
-                                 "gen/odm_v2/schemasheets/enums_parts.tsv")
+# 1. Remove any stale csv/tsv/yaml files from a previous run
+clear_dirs([dictionary_dir, schemasheets_dir, linkml_dir])
 
-# 3. Extract classes
-extract_all_classes("gen/odm_v2/dictionary/parts.csv",
-                    "gen/odm_v2/schemasheets",
-                    recognized_enums=all_enums)
+# 2. Extract sheets from Excel to CSV. The na_values argument keeps partID values
+#    such as "NA" and "None" as literal strings instead of empty (NA) values.
+extract_sheets(
+    dictionary_file,
+    ["parts", "sets"],
+    dictionary_dir,
+    na_values={"parts": {"partID": ""}, "sets": {"partID": ""}},
+)
 
-# 4. Extract Container class, prefixes, and schema metadata
-extract_container_class("gen/odm_v2/dictionary/parts.csv",
-                        "gen/odm_v2/schemasheets/container.tsv")
-make_prefixes("gen/odm_v2/schemasheets/prefixes.tsv", version="2")
-make_schema("gen/odm_v2/schemasheets/schema.tsv", version="2")
+# 3. Extract enumerations, first from the sets sheet (including the mmaSet enums),
+#    then the remaining ones from the parts sheet
+all_enums = extract_sets_enums(
+    sets_file, parts_file, f"{schemasheets_dir}/enums_sets.tsv"
+)
+all_enums += extract_parts_enums(parts_file, f"{schemasheets_dir}/enums_parts.tsv")
+all_enums = list(dict.fromkeys(all_enums))
 
-# 5. Generate the final LinkML schema
-schema = make_linkml_schema_from_schemasheets("gen/odm_v2/schemasheets",
-                                              "gen/odm_v2/linkml/odm_v2.yaml")
+# 4. Extract classes (one schemasheet per ODM table)
+extract_all_classes(parts_file, schemasheets_dir, recognized_enums=all_enums)
+
+# 5. Extract Container class, prefixes, and schema metadata
+extract_container_class(parts_file, f"{schemasheets_dir}/container.tsv")
+make_prefixes(f"{schemasheets_dir}/prefixes.tsv", version)
+make_schema(f"{schemasheets_dir}/schema.tsv", version)
+
+# 6. Run Schemasheets over all the generated TSV files
+schema = make_linkml_schema_from_schemasheets(schemasheets_dir)
+
+# 7. Add genMissingnessSet to all ranges where an enum must be paired with it
+add_missingness_set(schema, parts_file)
+
+# 8. Save the final LinkML schema
+save_schema_definition(schema, f"{linkml_dir}/odm_v{version}.yaml")
 ```
 
 ---
 
 ## Module Reference
 
-### `odm_linkmlgen.make_odm`
+### Top-level generators
+
+#### `odm_linkmlgen.make_odm`
 
 Top-level CLI and function for generating the ODM v2+ LinkML schema. Orchestrates all processing steps in sequence.
 
-### `odm_linkmlgen.make_odm_v1`
+- `make_odm` — runs the full pipeline for one ODM version and returns the `SchemaDefinition`
+
+#### `odm_linkmlgen.make_odm_v1`
 
 CLI for generating the ODM v1 schema from the bundled Schemasheets files.
 
-### `odm_linkmlgen.make_nwss`
+#### `odm_linkmlgen.make_nwss`
 
 Top-level CLI for generating all NWSS LinkML schemas. Iterates over each requested dictionary type and runs the full pipeline for each.
 
-### `odm_linkmlgen.odm.odm_utils`
+- `make_nwss` — runs the full pipeline for every dictionary type that was supplied
 
-Shared helpers for working with the ODM parts sheet, including:
-- `odm_get_available_class_names` — discovers all class/table names by inspecting column headers
+### ODM processing steps
+
+Each of these modules is both an importable function and a standalone CLI (`python -m odm_linkmlgen.odm.<module> --help`).
+
+#### `odm_linkmlgen.odm.make_odm_ss_classes`
+
+Creates one Schemasheet per ODM class (table) from the parts sheet, named `class_{table_name}.tsv`.
+
+- `extract_class` — builds the Schemasheet DataFrame for a single class
+- `extract_all_classes` — builds and saves a Schemasheet for every class in the parts sheet
+
+#### `odm_linkmlgen.odm.make_odm_ss_enums_from_sets`
+
+- `extract_sets_enums` — extracts the enumerations whose permissible values live in the sets sheet (including the `mmaSet` enums) and returns their names
+
+#### `odm_linkmlgen.odm.make_odm_ss_enums_from_parts`
+
+- `extract_parts_enums` — extracts the enumerations whose permissible values live in the parts sheet (everything not handled by `extract_sets_enums`) and returns their names
+
+#### `odm_linkmlgen.odm.make_odm_ss_container`
+
+- `extract_container_class` — builds the top-level `tree_root` Container class Schemasheet, with one multivalued slot per ODM table
+
+#### `odm_linkmlgen.odm.make_odm_ss_prefixes`
+
+- `get_prefixes_data` — returns the CURIE prefixes used by the schema for a given ODM version
+- `make_prefixes` — writes the prefixes Schemasheet
+
+#### `odm_linkmlgen.odm.make_odm_ss_schema`
+
+- `get_schema_data` — returns the schema-level metadata (id, name, description, default prefix) for a given ODM version
+- `make_schema` — writes the schema metadata Schemasheet
+
+### NWSS processing steps
+
+Each of these modules is both an importable function and a standalone CLI (`python -m odm_linkmlgen.nwss.<module> --help`).
+
+#### `odm_linkmlgen.nwss.make_nwss_ss_classes`
+
+- `parse_table_df` — prepares the metadata rows of a single NWSS table for Schemasheets processing
+- `extract_all_classes` — saves a Schemasheet per NWSS table (or a single merged class when `single_table` is set)
+
+#### `odm_linkmlgen.nwss.make_nwss_ss_enums`
+
+- `extract_enums` — extracts every enumeration from a NWSS "Value Sets" sheet, one Schemasheet per enum
+
+#### `odm_linkmlgen.nwss.make_nwss_ss_container`
+
+- `extract_container_class` — builds the top-level Container class Schemasheet for NWSS
+
+#### `odm_linkmlgen.nwss.make_nwss_ss_prefixes`
+
+- `make_prefixes` — writes the prefixes Schemasheet for a given NWSS dictionary type
+
+#### `odm_linkmlgen.nwss.make_nwss_ss_schema`
+
+- `make_schema` — writes the schema metadata Schemasheet for a given NWSS dictionary type
+
+### Shared helpers
+
+#### `odm_linkmlgen.odm.odm_utils`
+
+Shared helpers for working with the ODM parts sheet:
+
+- `odm_get_available_class_names` — discovers all class/table names by inspecting column headers (any header ending in `ODM_PARTS_COLUMN_CLASS_TAG`)
+- `odm_get_fk_target_class` — for a foreign key part ID, returns the class that part ID is the primary key of, or `None` if the part ID is unknown or is not a key. Falls back to the optional `fKAliasID` column when the part ID is an alias for a primary key (v2 dictionaries have no `fKAliasID` column)
 - `odm_get_header_rows` — filters the parts sheet to rows that define a column in a given table (pK, fK, header)
 - `odm_keep_active_rows` — removes deprecated/inactive rows
-- `odm_get_enum_name_from_part_id` — derives the enumeration name from a part ID
+- `odm_get_enum_name_from_part_id` — derives the enumeration name from a part ID, falling back to `string` for unrecognized enums
+- `set_range_of_slot` — sets a slot usage's range, emitting `any_of` when more than one range is given
 - `add_missingness_set` — post-processes the schema to add missingness enumerations to slots that require them
 
-### `odm_linkmlgen.nwss.nwss_utils`
+#### `odm_linkmlgen.nwss.nwss_utils`
 
-Shared helpers for working with NWSS metadata sheets, including:
+Shared helpers for working with NWSS metadata sheets:
+
 - `splitup_metadata_sheet` — splits a flat metadata sheet into per-table DataFrames
 - `parse_enums_sheet` — extracts enumeration definitions from the NWSS "Value Sets" sheet
 - `get_detailed_enums` — identifies per-field variants of shared enumerations
 
-### `odm_linkmlgen.utils.general_utils`
+#### `odm_linkmlgen.utils.general_utils`
 
 General-purpose utilities:
+
+- `get_logger` — returns a configured logger, used by every module
 - `extract_sheets` — extracts named sheets from an Excel file to CSV with per-column NA handling
 - `clear_dirs` — removes stale CSV/TSV/YAML files from output directories
 - `save_data_frame` / `read_data_frame` — CSV/TSV I/O that auto-detects separators from file extension
+- `order_columns` — reorders DataFrame columns to a preferred order
+- `strip_whitespace` — strips surrounding whitespace from every string in a DataFrame
 - `expand_multi_rows` — expands semicolon-delimited values in a DataFrame into multiple rows
 - `get_class_name_from_file_name` — extracts a class name from a data file name
+- `choose_ignore_case_value` — normalizes a value's capitalization to match a list of allowable values
+- `rename_items` — renames the items of a list using a mapping
+- `select_func_kwargs` — filters a kwargs dictionary down to the arguments a function accepts
 
-### `odm_linkmlgen.utils.schemasheets_utils`
+#### `odm_linkmlgen.utils.schemasheets_utils`
 
 Utilities for creating and consuming Schemasheets files:
+
 - `save_schemasheet` — writes a DataFrame as a Schemasheets-formatted TSV (adds the `> header` row)
+- `add_schemasheets_header` — inserts the `>`-prefixed Schemasheets header row into a DataFrame
 - `make_container_schemasheet` — builds the top-level Container class TSV
 - `make_linkml_schema_from_schemasheets` — runs Schemasheets over all TSV files in a directory and returns a `SchemaDefinition`
 - `save_schema_definition` — serializes a `SchemaDefinition` to YAML
 - `fix_schemasheets_generated_schema` — post-processes a Schemasheets-generated schema to correct known Schemasheets limitations (e.g. minimum/maximum values stored as strings, empty permissible value sentinel)
 
-### `odm_linkmlgen.utils.schema_utils`
+#### `odm_linkmlgen.utils.schema_utils`
 
 Helpers for inspecting a `SchemaDefinition`:
+
 - `get_slot_definition` — returns the fully induced slot definition for a class+slot pair
 - `get_ranges_of_slot` / `get_ranges_of_slot_defn` — extracts the range(s) of a slot, handling both `range` and `any_of` patterns
