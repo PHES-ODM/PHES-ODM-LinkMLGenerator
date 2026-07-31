@@ -11,10 +11,11 @@ make_schema("nwss/schemasheets/schema.tsv")
 ```
 """
 
-import pandas as pd
-from typing import Dict, Annotated, Union
-import typer
 from pathlib import Path
+from typing import Annotated
+
+import pandas as pd
+import typer
 
 from odm_linkmlgen.utils.general_utils import get_logger
 from odm_linkmlgen.utils.schemasheets_utils import save_schemasheet
@@ -47,14 +48,15 @@ default_data = {
 }
 
 
-def make_schema(output_file: Union[str, Path], data_values: Dict = {}):
+def make_schema(output_file: str | Path, data_values: dict | None = None):
     """Make the schema metadata Schemasheet for NWSS. This sheet contains top-level meta data
     about the NWSS LinkML schema, such as the id, description, and default prefix.
 
     Args:
-        output_file (str): The .tsv file to save the schema Schemasheet to.
-        data_values (Dict): Update the default schema data with these values when saving the schema.
-            They should be key-value pairs where the key is the Schemasheets header.
+        output_file (str | Path): The .tsv file to save the schema Schemasheet to.
+        data_values (dict | None, optional): Update the default schema data with these values when
+            saving the schema. They should be key-value pairs where the key is the Schemasheets
+            header. Defaults to None.
     """
     use_data = default_data.copy()
     if data_values is not None:

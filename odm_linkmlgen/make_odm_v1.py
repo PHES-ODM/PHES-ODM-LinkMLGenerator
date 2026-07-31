@@ -3,8 +3,9 @@ Make the ODMv1 LinkML schema.
 """
 
 import os
-from typing import Annotated
 from pathlib import Path
+from typing import Annotated
+
 import typer
 
 from odm_linkmlgen.utils.general_utils import get_logger

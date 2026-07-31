@@ -3,13 +3,14 @@ Create the Container class Schemasheet for NWSS. This is the top-level (tree_roo
 all the top-level tables (eg. measures, protocols, etc.)
 """
 
-from typing import Union, Optional, Annotated
 from pathlib import Path
+from typing import Annotated
+
 import typer
 
-from odm_linkmlgen.utils.general_utils import read_data_frame, get_logger
+from odm_linkmlgen.nwss.nwss_utils import SINGLE_TABLE_NAME, splitup_metadata_sheet
+from odm_linkmlgen.utils.general_utils import get_logger, read_data_frame
 from odm_linkmlgen.utils.schemasheets_utils import make_container_schemasheet
-from odm_linkmlgen.nwss.nwss_utils import splitup_metadata_sheet, SINGLE_TABLE_NAME
 
 logger = get_logger(__name__)
 
@@ -29,18 +30,18 @@ nwss_utils.SINGLE_TABLE_NAME, otherwise keep all classes separate."""
 
 
 def extract_container_class(
-    metadata_file: Union[str, Path],
-    output_file: Union[str, Path],
-    single_table: Optional[bool] = False,
+    metadata_file: str | Path,
+    output_file: str | Path,
+    single_table: bool | None = False,
 ):
     """Extract and create the Schemasheets file for the top-level Container class. This class
     contains a multivalued slot for each table found in the NWSS data dictionary.
 
     Args:
-        metadata_file (Union[str, Path]): The path to the Metadata sheet extracted from the
+        metadata_file (str | Path): The path to the Metadata sheet extracted from the
             NWSS data dictionary.
-        output_file (Union[str, Path]): The TSV file to save the Container class Schemasheet to.
-        single_table (Optional[bool]): If True then merge all classes into a single class called
+        output_file (str | Path): The TSV file to save the Container class Schemasheet to.
+        single_table (bool | None): If True then merge all classes into a single class called
             nwss_utils.SINGLE_TABLE_NAME, otherwise keep all classes separate. Defaults to False.
     """
     metadata_df = read_data_frame(metadata_file)

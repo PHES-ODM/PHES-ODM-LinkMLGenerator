@@ -18,6 +18,6 @@ jobs:
       - name: Install Ruff (linting and formatting)
         run: pipx install ruff
       - name: Lint code with Ruff
-        run: ruff check --output-format=github --target-version=py39
+        run: ruff check --output-format=github
       - name: Check code formatting with Ruff
-        run: ruff format --diff --target-version=py39
+        run: ruff format --diff

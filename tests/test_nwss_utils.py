@@ -1,11 +1,11 @@
-import pytest
 import pandas as pd
+import pytest
 
 from odm_linkmlgen.nwss.nwss_utils import (
-    splitup_metadata_sheet,
-    DictionaryColumns,
-    TABLE_NAME_COL,
     SINGLE_TABLE_NAME,
+    TABLE_NAME_COL,
+    DictionaryColumns,
+    splitup_metadata_sheet,
 )
 
 

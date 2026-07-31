@@ -3,10 +3,9 @@ import pandas as pd
 from odm_linkmlgen.odm.odm_utils import (
     odm_get_available_class_names,
     odm_get_enum_name_from_part_id,
-    odm_keep_active_rows,
     odm_get_header_rows,
+    odm_keep_active_rows,
 )
-
 
 # --- odm_get_available_class_names ---
 

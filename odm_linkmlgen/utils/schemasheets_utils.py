@@ -1,41 +1,35 @@
-from typing import Union, Dict, List, Optional
-from pathlib import Path
-from glob import glob
-import yaml
 import os
-import pandas as pd
+from glob import glob
+from pathlib import Path
 
-from schemasheets.schemamaker import SchemaMaker
-from linkml_runtime.linkml_model.meta import SchemaDefinition
+import pandas as pd
+import yaml
 from linkml_runtime.linkml_model import SlotDefinition
+from linkml_runtime.linkml_model.meta import SchemaDefinition
 from linkml_runtime.utils.schema_as_dict import schema_as_dict
+from schemasheets.schemamaker import SchemaMaker
 
 from odm_linkmlgen.utils.general_utils import (
+    EMPTY_PERMISSIBLE_VALUE,
     get_logger,
     order_columns,
     save_data_frame,
-    EMPTY_PERMISSIBLE_VALUE,
 )
 
 logger = get_logger(__name__)
 
 
 def make_linkml_schema_from_schemasheets(
-    schemasheets_dir: Union[str, Path], output_schema: Union[str, Path] = None
+    schemasheets_dir: str | Path, output_schema: str | Path | None = None
 ) -> SchemaDefinition:
     """Create a LinkML schema from all the Schemasheets definition files in the
     specified directory.
 
     Args:
-        schemasheets_dir (str): The directory containing all the Schemasheets definition
+        schemasheets_dir (str | Path): The directory containing all the Schemasheets definition
             files. All .tsv files are used.
-        output_schema (Union[str, Path], Optional): The YAML file to save the LinkML schema to.
+        output_schema (str | Path | None, optional): The YAML file to save the LinkML schema to.
             Defaults to None.
-        enum_maps (Dict[str, List[str]], Optional): If specified, then for any slot that
-            has a range that is a key in this dictionary, we replace that slot's range with
-            the corresponding value in the dictionary. This allows us to replace a range with
-            a single enumeration to a range of multiple enumerations (eg. if we want to add a
-            missingness enum). Defaults to None.
 
     Returns:
         SchemaDefinition: The generated schema.
@@ -61,12 +55,12 @@ def make_linkml_schema_from_schemasheets(
     return schema
 
 
-def save_schema_definition(schema: SchemaDefinition, output_file: Union[str, Path]):
+def save_schema_definition(schema: SchemaDefinition, output_file: str | Path):
     """Save the schema to disk as a LinkML YAML schema file.
 
     Args:
         schema (SchemaDefinition): The SchemaDefinition to save to disk.
-        output_file (Union[str, Path]): The YAML file to save to.
+        output_file (str | Path): The YAML file to save to.
     """
     schema_dict = schema_as_dict(schema)
 
@@ -124,7 +118,7 @@ def fix_schemasheets_generated_schema(schema: SchemaDefinition):
         try:
             float_val = float(val)
             val = int(float_val) if float_val == int(float_val) else float_val
-        except Exception:
+        except (TypeError, ValueError):
             logger.warning(f"Unrecognized {key}: {val} of type {type(val)}, using None")
             val = None
         slot_definition[key] = val
@@ -145,20 +139,20 @@ def fix_schemasheets_generated_schema(schema: SchemaDefinition):
 
 
 def save_schemasheet(
-    data: Union[Dict, List, pd.DataFrame],
-    file_name: Union[str, Path],
-    headers: Union[List[str], Dict[str, str]] = None,
+    data: dict | list | pd.DataFrame,
+    file_name: str | Path,
+    headers: list[str] | dict[str, str] | None = None,
 ) -> pd.DataFrame:
     """Create a Schemasheet file from the data. Schemasheets headers (with a row preceded by a '>') are also added
     according to headers. Headers are ordered according to the order in headers, with any header not found
     in headers placed at the end.
 
     Args:
-        data (Union[Dict, List[Dict], pd.DataFrame]): The data to save to the Schemasheet. If a Dict or List
-            of Dicts then the keys become the headers and the values are the rows.
-        file_name (Union[str, Path]): The file to save the Schemasheet to.
-        headers (Union[List[str], Dict[str, str]], optional): If set and a Dict then defines what Schemasheets header each header in the data
-            maps to. If a List then specifies the order of the headers as well as the headers in the data that map to the a
+        data (dict | list | pd.DataFrame): The data to save to the Schemasheet. If a dict or a list
+            of dicts then the keys become the headers and the values are the rows.
+        file_name (str | Path): The file to save the Schemasheet to.
+        headers (list[str] | dict[str, str] | None, optional): If set and a dict then defines what Schemasheets header each header in the data
+            maps to. If a list then specifies the order of the headers as well as the headers in the data that map to the a
             Schemasheet header of the same name. Any header in the data missing in headers is mapped to the Schemasheets header
             "ignore". Defaults to None.
 
@@ -170,13 +164,13 @@ def save_schemasheet(
     if isinstance(data, pd.DataFrame):
         df = data
     elif isinstance(data, dict):
-        if isinstance(data[list(data.keys())[0]], (list, tuple)):
+        if isinstance(data[next(iter(data))], (list, tuple)):
             index = None
         else:
             index = [0]
         df = pd.DataFrame(data, columns=data.keys(), index=index)
     else:
-        df = pd.DataFrame(data, index=range(0, len(data)))
+        df = pd.DataFrame(data, index=range(len(data)))
 
     if headers is None:
         headers = {k: k for k in df.columns}
@@ -193,19 +187,19 @@ def save_schemasheet(
 
 
 def make_container_schemasheet(
-    class_names: List[str],
-    output_file: Union[str, Path],
-    class_titles: Optional[Dict[str, str]] = None,
+    class_names: list[str],
+    output_file: str | Path,
+    class_titles: dict[str, str] | None = None,
 ) -> None:
     """Build and save the top-level Container class Schemasheet.
 
     Each class in class_names becomes a multivalued, inlined slot on the Container class.
 
     Args:
-        class_names: The names of the classes to include as slots.
-        output_file: The TSV file to save to.
-        class_titles: Optional mapping of class name to slot title. Missing or None entries
-            produce an empty title string.
+        class_names (list[str]): The names of the classes to include as slots.
+        output_file (str | Path): The TSV file to save to.
+        class_titles (dict[str, str] | None, optional): Mapping of class name to slot title.
+            Missing or None entries produce an empty title string. Defaults to None.
     """
     import pandas as pd
 

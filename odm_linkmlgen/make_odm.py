@@ -4,22 +4,22 @@ Make the ODM LinkML schema.
 
 from pathlib import Path
 from typing import Annotated
-import typer
 
+import typer
 from linkml_runtime.linkml_model.meta import SchemaDefinition
 
+from odm_linkmlgen.odm.make_odm_ss_classes import extract_all_classes
+from odm_linkmlgen.odm.make_odm_ss_container import extract_container_class
+from odm_linkmlgen.odm.make_odm_ss_enums_from_parts import extract_parts_enums
+from odm_linkmlgen.odm.make_odm_ss_enums_from_sets import extract_sets_enums
+from odm_linkmlgen.odm.make_odm_ss_prefixes import make_prefixes
+from odm_linkmlgen.odm.make_odm_ss_schema import make_schema
+from odm_linkmlgen.odm.odm_utils import add_missingness_set
 from odm_linkmlgen.utils.general_utils import clear_dirs, extract_sheets, get_logger
 from odm_linkmlgen.utils.schemasheets_utils import (
     make_linkml_schema_from_schemasheets,
     save_schema_definition,
 )
-from odm_linkmlgen.odm.make_odm_ss_classes import extract_all_classes
-from odm_linkmlgen.odm.make_odm_ss_enums_from_parts import extract_parts_enums
-from odm_linkmlgen.odm.make_odm_ss_enums_from_sets import extract_sets_enums
-from odm_linkmlgen.odm.make_odm_ss_prefixes import make_prefixes
-from odm_linkmlgen.odm.make_odm_ss_schema import make_schema
-from odm_linkmlgen.odm.make_odm_ss_container import extract_container_class
-from odm_linkmlgen.odm.odm_utils import add_missingness_set
 
 logger = get_logger(__name__)
 

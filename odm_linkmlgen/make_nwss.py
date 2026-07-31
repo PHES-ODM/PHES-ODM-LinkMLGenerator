@@ -21,18 +21,19 @@ and quality_flag do not have enumeration definition in "Value Sets" tab.
 IMPORTANT: In reporting: Changed ntc_amplify in "Value Sets" tab from vs_yne to vs_yn
 """
 
-from pathlib import Path
 import os
-import typer
+from pathlib import Path
 from typing import Annotated
 
-from odm_linkmlgen.utils.general_utils import extract_sheets, get_logger, clear_dirs
-from odm_linkmlgen.utils.schemasheets_utils import make_linkml_schema_from_schemasheets
-from odm_linkmlgen.nwss.make_nwss_ss_enums import extract_enums
-from odm_linkmlgen.nwss.make_nwss_ss_schema import make_schema
+import typer
+
 from odm_linkmlgen.nwss.make_nwss_ss_classes import extract_all_classes
 from odm_linkmlgen.nwss.make_nwss_ss_container import extract_container_class
+from odm_linkmlgen.nwss.make_nwss_ss_enums import extract_enums
 from odm_linkmlgen.nwss.make_nwss_ss_prefixes import make_prefixes
+from odm_linkmlgen.nwss.make_nwss_ss_schema import make_schema
+from odm_linkmlgen.utils.general_utils import clear_dirs, extract_sheets, get_logger
+from odm_linkmlgen.utils.schemasheets_utils import make_linkml_schema_from_schemasheets
 
 logger = get_logger(__name__)
 
@@ -64,19 +65,19 @@ RESTRICTED_ANALYTICS_HELP = """NWSS restricted analytics data dictionary (Excel
 def make_nwss(
     output_dir: Annotated[Path, typer.Option(show_default=False, help=OUTPUT_DIR_HELP)],
     reporting: Annotated[
-        Path, typer.Option(show_default=False, help=REPORTING_HELP)
+        Path | None, typer.Option(show_default=False, help=REPORTING_HELP)
     ] = None,
     public_concentration: Annotated[
-        Path, typer.Option(show_default=False, help=PUBLIC_CONCENTRATION_HELP)
+        Path | None, typer.Option(show_default=False, help=PUBLIC_CONCENTRATION_HELP)
     ] = None,
     public_metric: Annotated[
-        Path, typer.Option(show_default=False, help=PUBLIC_METRIC_HELP)
+        Path | None, typer.Option(show_default=False, help=PUBLIC_METRIC_HELP)
     ] = None,
     restricted_raw: Annotated[
-        Path, typer.Option(show_default=False, help=RESTRICTED_RAW_HELP)
+        Path | None, typer.Option(show_default=False, help=RESTRICTED_RAW_HELP)
     ] = None,
     restricted_analytics: Annotated[
-        Path, typer.Option(show_default=False, help=RESTRICTED_ANALYTICS_HELP)
+        Path | None, typer.Option(show_default=False, help=RESTRICTED_ANALYTICS_HELP)
     ] = None,
 ):
     """Make the NWSS LinkML Schemas for various NWSS data dictionaries. A separate schema is created for each
@@ -87,13 +88,13 @@ def make_nwss(
     The restricted ones are not publicly available.
 
     Args:
-        output_dir (Union[str, Path]): Location to save the outputs for each dictionary type to. A subdirectory for each
+        output_dir (Path): Location to save the outputs for each dictionary type to. A subdirectory for each
             dictionary type will be created. The final LinkML schemas will be located in these subdirectories.
-        reporting (Union[str, Path], optional): Path to reporting data dictionary Excel file. Defaults to None.
-        public_concentration (Union[str, Path], optional): Path to public concentration data dictionary Excel file. Defaults to None.
-        public_metric (Union[str, Path], optional): Path to public metric data dictionary Excel file. Defaults to None.
-        restricted_raw (Union[str, Path], optional): Path to restricted raw data dictionary Excel file. Defaults to None.
-        restricted_analytics (Union[str, Path], optional): Path to restricted analytics data dictionary Excel file. Defaults to None.
+        reporting (Path | None, optional): Path to reporting data dictionary Excel file. Defaults to None.
+        public_concentration (Path | None, optional): Path to public concentration data dictionary Excel file. Defaults to None.
+        public_metric (Path | None, optional): Path to public metric data dictionary Excel file. Defaults to None.
+        restricted_raw (Path | None, optional): Path to restricted raw data dictionary Excel file. Defaults to None.
+        restricted_analytics (Path | None, optional): Path to restricted analytics data dictionary Excel file. Defaults to None.
     """
     dictionary_types = []
     if reporting:
@@ -125,11 +126,8 @@ def make_nwss(
         source_value_sets_sheet_name = "Value Sets"
         single_table = True
 
-        if dictionary_type == "reporting":
-            pass
-        elif dictionary_type == "public_concentration":
-            pass
-        elif dictionary_type == "public_metric":
+        if dictionary_type in ("reporting", "public_concentration", "public_metric"):
+            # These dictionary types use the default sheet names set above
             pass
         elif dictionary_type == "restricted_raw":
             source_metadata_sheet_name = "Wastewater Metadata"

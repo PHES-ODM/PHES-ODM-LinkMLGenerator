@@ -12,8 +12,9 @@ make_prefixes("odm_v2/schemasheets/prefixes.tsv", dictionary_type="reporting")
 ```
 """
 
-from typing import Annotated
 from pathlib import Path
+from typing import Annotated
+
 import typer
 
 from odm_linkmlgen.utils.general_utils import get_logger

@@ -204,8 +204,16 @@ from odm_linkmlgen.utils.schemasheets_utils import make_linkml_schema_from_schem
 import os
 from pathlib import Path
 
-schemasheets_dir = Path(os.path.dirname(__file__)) / "odm_linkmlgen" / "data" / "odm_v1" / "schemasheets"
-schema = make_linkml_schema_from_schemasheets(schemasheets_dir, "gen/odm_v1/linkml/odm_v1.yaml")
+schemasheets_dir = (
+    Path(os.path.dirname(__file__))
+    / "odm_linkmlgen"
+    / "data"
+    / "odm_v1"
+    / "schemasheets"
+)
+schema = make_linkml_schema_from_schemasheets(
+    schemasheets_dir, "gen/odm_v1/linkml/odm_v1.yaml"
+)
 ```
 
 ### Individual processing steps (ODM)

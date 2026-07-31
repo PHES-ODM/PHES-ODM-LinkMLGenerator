@@ -1,7 +1,8 @@
-from typing import Dict, Tuple, List, Optional
+from itertools import pairwise
+
 import pandas as pd
 
-from odm_linkmlgen.utils.general_utils import get_logger, EMPTY_PERMISSIBLE_VALUE
+from odm_linkmlgen.utils.general_utils import EMPTY_PERMISSIBLE_VALUE, get_logger
 
 logger = get_logger(__name__)
 
@@ -30,7 +31,7 @@ class DictionaryColumns:
 
 def splitup_metadata_sheet(
     df: pd.DataFrame, single_table: bool = False
-) -> Dict[str, pd.DataFrame]:
+) -> dict[str, pd.DataFrame]:
     """Split the flat Metadata sheet of a NWSS data dictionary into one DataFrame per table.
 
     The Metadata sheet lists every table one after another. Once fully blank rows are dropped,
@@ -50,7 +51,7 @@ def splitup_metadata_sheet(
         ValueError: The same table name appears more than once in the Metadata sheet.
 
     Returns:
-        Dict[str, pd.DataFrame]: The tables, keyed by table name. Empty if df has no rows.
+        dict[str, pd.DataFrame]: The tables, keyed by table name. Empty if df has no rows.
     """
     df = df.dropna(axis=0, how="all").reset_index(drop=True)
 
@@ -75,7 +76,7 @@ def splitup_metadata_sheet(
 
     # Split up the DataFrame along the table boundaries. The table name is the value in
     # the DictionaryColumns.FIELD_NAME column at the top of each table boundary.
-    for cur_index, next_index in zip(table_boundaries[0:-1], table_boundaries[1:]):
+    for cur_index, next_index in pairwise(table_boundaries):
         # Get table name and extract the table
         cur_table_name = df.loc[cur_index, DictionaryColumns.FIELD_NAME]
         cur_table_df = df.loc[cur_index + 1 : next_index - 1]
@@ -98,7 +99,7 @@ def splitup_metadata_sheet(
     return all_tables
 
 
-def parse_enums_sheet(df: pd.DataFrame) -> Tuple[pd.DataFrame, Dict[str, pd.DataFrame]]:
+def parse_enums_sheet(df: pd.DataFrame) -> tuple[pd.DataFrame, dict[str, pd.DataFrame]]:
     """Parse the enums (Value Sets) sheet of a NWSS data dictionary Excel file, by extracting
     all enumerations, their names and permissible values, and returning each enum as a separate
     DataFrame that have the headers "enum", "permissible_value", and "description".
@@ -107,7 +108,7 @@ def parse_enums_sheet(df: pd.DataFrame) -> Tuple[pd.DataFrame, Dict[str, pd.Data
         df (pd.DataFrame): The Value Sets sheet extracted from a NWSS data dictionary file.
 
     Returns:
-        Tuple[pd.DataFrame, Dict[str, pd.DataFrame]]: The first pd.DataFrame of the tuple
+        tuple[pd.DataFrame, dict[str, pd.DataFrame]]: The first pd.DataFrame of the tuple
             has a SlotToEnumColumns.SLOT column listing a field in the NWSS data dictionary, and a
             SlotToEnumColumns.ENUM column listing the enumeration name assigned to the slot.
             The returned dictionary contains the enum names as a key, and the corresponding
@@ -165,8 +166,8 @@ def parse_enums_sheet(df: pd.DataFrame) -> Tuple[pd.DataFrame, Dict[str, pd.Data
 
 
 def get_detailed_enums(
-    metadata_df: pd.DataFrame, detailed_enum_names: Optional[List[str]] = None
-) -> Dict[str, List[str]]:
+    metadata_df: pd.DataFrame, detailed_enum_names: list[str] | None = None
+) -> dict[str, list[str]]:
     """Get a dictionary that maps all non-detailed enum names to all of the detailed versions of the enum
     names. eg:
 
@@ -177,11 +178,11 @@ def get_detailed_enums(
 
     Args:
         metadata_df (pd.DataFrame): The Metadata sheet extracted from a NWSS data dictionary.
-        detailed_enum_names (Optional[List[str]], optional): A list of all enums that should
+        detailed_enum_names (list[str] | None, optional): A list of all enums that should
             be converted to detailed enum names. Defaults to None.
 
     Returns:
-        Dict[str, List[str]]: A dictionary that maps non-detailed enum names to a list of all
+        dict[str, list[str]]: A dictionary that maps non-detailed enum names to a list of all
             detailed enum names used for that enum in the Metadata.
     """
     if DictionaryColumns.VALUE_SET not in metadata_df.columns:
@@ -198,8 +199,13 @@ def get_detailed_enums(
         lambda x: x.strip("[] ").split(":")[1].strip() if isinstance(x, str) else None
     )
 
-    def _get_detailed_enum(row: pd.Series, detailed_enum_names: List[str]) -> str:
-        """Get the enumeration name from the row, making the name detailed if required"""
+    def _get_detailed_enum(
+        row: pd.Series, detailed_enum_names: list[str] | None
+    ) -> str | None:
+        """Get the enumeration name from the row, making the name detailed if required.
+
+        Returns None if the row's enum should not be given a detailed name.
+        """
         if not detailed_enum_names:
             return None
         if row[DictionaryColumns.VALUE_SET] in detailed_enum_names:

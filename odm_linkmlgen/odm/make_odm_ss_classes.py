@@ -13,21 +13,22 @@ extract_all_classes("odm_v2/dictionary/parts.csv", "odm_v2/schemasheets")
 ```
 """
 
-from typing import Tuple, Optional, List, Annotated
-from pathlib import Path
-import pandas as pd
 import os
+from pathlib import Path
+from typing import Annotated
+
+import pandas as pd
 import typer
 
+from odm_linkmlgen.odm.odm_utils import (
+    odm_get_available_class_names,
+    odm_get_enum_name_from_part_id,
+    odm_get_fk_target_class,
+    odm_get_header_rows,
+    odm_keep_active_rows,
+)
 from odm_linkmlgen.utils.general_utils import get_logger, read_data_frame
 from odm_linkmlgen.utils.schemasheets_utils import save_schemasheet
-from odm_linkmlgen.odm.odm_utils import (
-    odm_keep_active_rows,
-    odm_get_enum_name_from_part_id,
-    odm_get_header_rows,
-    odm_get_available_class_names,
-    odm_get_fk_target_class,
-)
 
 logger = get_logger(__name__)
 
@@ -72,14 +73,14 @@ _data_types_map = {
 }
 
 
-def _extract_pattern(row: pd.Series) -> str:
+def _extract_pattern(row: pd.Series) -> str | None:
     """Extract the regex pattern to match for validation for the specified row.
 
     Args:
         row (pd.Series): The row to extract the pattern for.
 
     Returns:
-        str: The regex pattern for validation, or None if no pattern required.
+        str | None: The regex pattern for validation, or None if no pattern required.
     """
     min_length = row["minLength"]
     max_length = row["maxLength"]
@@ -89,13 +90,13 @@ def _extract_pattern(row: pd.Series) -> str:
     # Create a string of length min_length to max_length
     min_length = "0" if pd.isna(min_length) else str(int(min_length))
     max_length = "" if pd.isna(max_length) else str(int(max_length))
-    pattern = "^.{%s,%s}$" % (min_length, max_length)
+    pattern = f"^.{{{min_length},{max_length}}}$"
     return pattern
 
 
 def extract_class(
-    df: pd.DataFrame, class_name: str, output_dir: str, recognized_enums: List[str]
-) -> Tuple[str, pd.DataFrame]:
+    df: pd.DataFrame, class_name: str, output_dir: str, recognized_enums: list[str]
+) -> tuple[str, pd.DataFrame]:
     """Create a Schemasheet for the specified class name using the data in a
     DataFrame loaded from the parts sheet of the ODM data dictionary.
 
@@ -104,10 +105,10 @@ def extract_class(
         class_name (str): The name of the class (ie. table) to extract.
         output_dir (str): The location to save the Schemasheet. The actual
             Schemasheet will be named "class_{class_name}.tsv".
-        recognized_enums (List[str]): List of all recognized enumeration names.
+        recognized_enums (list[str]): List of all recognized enumeration names.
 
     Returns:
-        Tuple[str, pd.DataFrame]: The full path and file name to the saved Schemasheet as
+        tuple[str, pd.DataFrame]: The full path and file name to the saved Schemasheet as
             well as the DataFrame of the Schemasheet.
     """
 
@@ -141,7 +142,9 @@ def extract_class(
     optional_keep_cols = [
         "fKAliasID",
     ]
-    missing_cols = [c for c in set(keep_cols) - set(optional_keep_cols) if c not in table_df.columns]
+    missing_cols = [
+        c for c in set(keep_cols) - set(optional_keep_cols) if c not in table_df.columns
+    ]
     if len(missing_cols) > 0:
         raise RuntimeError(
             f"Missing columns in parts sheet for class {class_name}: {', '.join(missing_cols)}"
@@ -220,7 +223,7 @@ def extract_class(
     return output_file, table_output_df
 
 
-def extract_all_classes(parts_file: str, output_dir: str, recognized_enums: List[str]):
+def extract_all_classes(parts_file: str, output_dir: str, recognized_enums: list[str]):
     """Create a Schemasheet for all classes (tables) found in the parts sheet that was
     extracted from the ODM data dictionary.
 
@@ -229,7 +232,7 @@ def extract_all_classes(parts_file: str, output_dir: str, recognized_enums: List
             dictionary.
         output_dir (str): The location to save all the Schemasheets. One Schemasheet per
             class is created, with the name "class_{class_name}.tsv"
-        recognized_enums (List[str]): List of all recognized enumeration names.
+        recognized_enums (list[str]): List of all recognized enumeration names.
     """
     if not output_dir:
         output_dir = os.path.dirname(parts_file)
@@ -246,7 +249,7 @@ def main(
     parts_file: Annotated[Path, typer.Option(show_default=False, help=PARTS_FILE_HELP)],
     output_dir: Annotated[Path, typer.Option(show_default=False, help=OUTPUT_DIR_HELP)],
     recognized_enums: Annotated[
-        List[str], typer.Option(show_default=False, help=RECOGNIZED_ENUMS_HELP)
+        list[str] | None, typer.Option(show_default=False, help=RECOGNIZED_ENUMS_HELP)
     ] = None,
 ):
     """CLI entry point: create a Schemasheet for every class (table) found in the ODM
@@ -257,7 +260,7 @@ def main(
             dictionary.
         output_dir (Path): The location to save all the Schemasheets to. One Schemasheet
             is saved per class.
-        recognized_enums (List[str], optional): List of all recognized enumeration names.
+        recognized_enums (list[str] | None, optional): List of all recognized enumeration names.
             Defaults to None.
     """
     logger.info("Making ODM Classes...")

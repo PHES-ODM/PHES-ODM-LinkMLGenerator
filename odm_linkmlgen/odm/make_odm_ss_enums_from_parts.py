@@ -12,23 +12,24 @@ extract_parts_enums("odm_v2/dictionary/parts.csv", "odm_v2/schemasheets/enums_pa
 ```
 """
 
-import pandas as pd
-from typing import List, Annotated
-import typer
 from pathlib import Path
+from typing import Annotated
 
+import pandas as pd
+import typer
+
+from odm_linkmlgen.odm.odm_utils import (
+    odm_get_available_class_names,
+    odm_get_enum_name_from_part_id,
+    odm_get_header_rows,
+    odm_keep_active_rows,
+)
 from odm_linkmlgen.utils.general_utils import (
+    EMPTY_PERMISSIBLE_VALUE,
     get_logger,
     read_data_frame,
-    EMPTY_PERMISSIBLE_VALUE,
 )
 from odm_linkmlgen.utils.schemasheets_utils import save_schemasheet
-from odm_linkmlgen.odm.odm_utils import (
-    odm_keep_active_rows,
-    odm_get_available_class_names,
-    odm_get_header_rows,
-    odm_get_enum_name_from_part_id,
-)
 
 logger = get_logger(__name__)
 
@@ -54,7 +55,7 @@ headers = {
 }
 
 
-def extract_parts_enums(parts_file: str, output_file: str) -> List[str]:
+def extract_parts_enums(parts_file: str, output_file: str) -> list[str]:
     """Create a Schemasheet for all enumerations found in the parts sheet of the ODM
     data dictionary. This does not include any enums that are found in the sets sheet
     (see make_odm_ss_enums_from_sets.py for extracting enums from the sets sheet)/
@@ -65,7 +66,7 @@ def extract_parts_enums(parts_file: str, output_file: str) -> List[str]:
         output_file (str): The TSV file to save the Schemasheet to.
 
     Returns:
-        List[str]: List of all enum names extracted.
+        list[str]: List of all enum names extracted.
     """
     df = read_data_frame(parts_file, keep_default_na=False, na_values=[""])
 

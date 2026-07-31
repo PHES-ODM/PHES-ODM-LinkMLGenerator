@@ -14,18 +14,19 @@ extract_sets_enums("odm_v2/dictionary/sets.csv",
 ```
 """
 
-import pandas as pd
-from typing import List, Annotated
-import typer
 from pathlib import Path
+from typing import Annotated
 
+import pandas as pd
+import typer
+
+from odm_linkmlgen.odm.odm_utils import odm_keep_active_rows
 from odm_linkmlgen.utils.general_utils import (
+    EMPTY_PERMISSIBLE_VALUE,
     get_logger,
     read_data_frame,
-    EMPTY_PERMISSIBLE_VALUE,
 )
 from odm_linkmlgen.utils.schemasheets_utils import save_schemasheet
-from odm_linkmlgen.odm.odm_utils import odm_keep_active_rows
 
 logger = get_logger(__name__)
 
@@ -57,7 +58,7 @@ headers = {
 _headers_by_role = {v: k for k, v in headers.items()}
 
 
-def extract_sets_enums(sets_file: str, parts_file: str, output_file: str) -> List[str]:
+def extract_sets_enums(sets_file: str, parts_file: str, output_file: str) -> list[str]:
     """Create a Schemasheet for all the enumerations found in the ODM data dictionary
     sets sheet. Note that this does not consistute all of the enums found in ODM.
     Additional enumerations that are not found in the sets sheet are extracted from the
@@ -71,7 +72,7 @@ def extract_sets_enums(sets_file: str, parts_file: str, output_file: str) -> Lis
         output_file (str): The file to save the Schemasheet to. Should be a .tsv file.
 
     Returns:
-        List[str]: List of all enum names extracted.
+        list[str]: List of all enum names extracted.
     """
     df = read_data_frame(sets_file, keep_default_na=False, na_values=[""])
     parts_df = read_data_frame(parts_file, keep_default_na=False, na_values=[""])
@@ -85,7 +86,7 @@ def extract_sets_enums(sets_file: str, parts_file: str, output_file: str) -> Lis
     )
 
     # Replace NAs with ""
-    for k in headers.keys():
+    for k in headers:
         df.loc[pd.isna(df[k]), k] = ""
 
     # Drop duplicates, based on both "enum" and "permissible_value" columns

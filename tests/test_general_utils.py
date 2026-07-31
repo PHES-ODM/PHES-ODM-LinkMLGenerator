@@ -1,14 +1,13 @@
 import pandas as pd
 
 from odm_linkmlgen.utils.general_utils import (
-    order_columns,
-    strip_whitespace,
-    expand_multi_rows,
-    rename_items,
     choose_ignore_case_value,
+    expand_multi_rows,
     get_class_name_from_file_name,
+    order_columns,
+    rename_items,
+    strip_whitespace,
 )
-
 
 # --- order_columns ---
 

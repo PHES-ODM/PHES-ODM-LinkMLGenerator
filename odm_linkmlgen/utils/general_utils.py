@@ -2,16 +2,17 @@
 Utility functions for ODM and LinkML.
 """
 
-from pathlib import Path
-import pandas as pd
-from pandas._libs.parsers import STR_NA_VALUES
-import os
 import inspect
-from typing import Union, List, Optional, Any, Dict, Callable
 import logging
+import os
 import sys
+from collections.abc import Callable
+from pathlib import Path
+from typing import Any
 
+import pandas as pd
 from linkml_runtime import SchemaView
+from pandas._libs.parsers import STR_NA_VALUES
 
 EMPTY_PERMISSIBLE_VALUE = "<empty>"
 
@@ -23,14 +24,14 @@ logging.basicConfig(
 )
 
 
-def get_logger(name: str, level: Optional[int] = logging.INFO) -> logging.Logger:
+def get_logger(name: str, level: int | None = logging.INFO) -> logging.Logger:
     """Get the logger with the specified name. The name can be any arbitrary string, for example:
 
         logger = get_logger(__name__)
 
     Args:
         name (str): The name to give to the logger.
-        level (Optional[int], optional): The logging level of the logger. Defaults to logging.INFO.
+        level (int | None, optional): The logging level of the logger. Defaults to logging.INFO.
 
     Returns:
         logging.Logger: The logging object.
@@ -44,12 +45,12 @@ def get_logger(name: str, level: Optional[int] = logging.INFO) -> logging.Logger
 logger = get_logger(__name__)
 
 
-def order_columns(df: pd.DataFrame, column_order: List[str]) -> pd.DataFrame:
+def order_columns(df: pd.DataFrame, column_order: list[str]) -> pd.DataFrame:
     """Order the columns in a DataFrame.
 
     Args:
         df (pd.DataFrame): The DataFrame to order the columns of.
-        column_order (List[str]): The order of the columns. Any column in df not found in this
+        column_order (list[str]): The order of the columns. Any column in df not found in this
             list are put at the end.
 
     Returns:
@@ -60,14 +61,14 @@ def order_columns(df: pd.DataFrame, column_order: List[str]) -> pd.DataFrame:
 
 
 def save_data_frame(
-    df: pd.DataFrame, output_file: Union[str, Path], strip: bool = True, **kwargs
+    df: pd.DataFrame, output_file: str | Path, strip: bool = True, **kwargs
 ):
     """Save a Pandas DataFrame to disk as a TSV or CSV, using the correct separator for the
     file extension.
 
     Args:
         df (pd.DataFrame): The DataFrame to save.
-        output_file (Union[str, Path]): The output file to save to. If the extension is ".tsv" or ".txt" then tab
+        output_file (str | Path): The output file to save to. If the extension is ".tsv" or ".txt" then tab
             delimeters are used. Any other extension will have comma delimeters.
         strip (bool): If True then strip leading and trailing whitespace from all string values
             in the DataFrame. (Defaults to True)
@@ -110,14 +111,14 @@ def strip_whitespace(df: pd.DataFrame) -> pd.DataFrame:
 
 
 def clear_dirs(
-    dirs: Union[Union[str, Path], List[Union[str, Path]]],
-    extensions: Union[str, List[str]] = None,
+    dirs: str | Path | list[str | Path],
+    extensions: str | list[str] | None = None,
 ):
     """Remove all TSV, CSV, and YAML files in all the specified directories.
 
     Args:
-        dirs (Union[Union[str, Path], List[Union[str, Path]]]): One or more directories to clean.
-        extensions (Union[str, List[str]]): One or more extensions. All files with these
+        dirs (str | Path | list[str | Path]): One or more directories to clean.
+        extensions (str | list[str] | None, optional): One or more extensions. All files with these
             extensions found in the directories are deleted. These are case-insensitive and
             should be prefixed by a dot. If None then [".tsv", ".csv", ".yaml"] is used.
             (Defaults to None)
@@ -138,36 +139,37 @@ def clear_dirs(
 
 
 def extract_sheets(
-    file: Union[str, Path],
-    sheets: Union[str, List[str]],
-    output_dir: Optional[Union[str, Path]] = None,
-    output_names: Union[str, List[str]] = None,
-    na_values: Dict[str, Dict[str, Union[str, List[str]]]] = None,
-    default_na_values: List[str] = STR_NA_VALUES,
-    read_excel_kwargs: Dict[str, Any] = None,
+    file: str | Path,
+    sheets: str | list[str],
+    output_dir: str | Path | None = None,
+    output_names: str | list[str] | None = None,
+    na_values: dict[str, dict[str, str | list[str]]] | None = None,
+    default_na_values: list[str] = STR_NA_VALUES,
+    read_excel_kwargs: dict[str, Any] | None = None,
 ):
     """Extract the specified sheets from Excel file and save them as separate CSV files.
 
     Args:
-        file (Union[str, Path]): The Excel file to extract sheets from.
-        sheets (Union[str, List[str]]): The sheets to extract. If None or empty then all sheets are
+        file (str | Path): The Excel file to extract sheets from.
+        sheets (str | list[str]): The sheets to extract. If None or empty then all sheets are
             extracted.
-        output_dir (Optional[Union[str, Path]], optional): The output directory to save the extracted sheets to.
+        output_dir (str | Path | None, optional): The output directory to save the extracted sheets to.
             If empty then the sheets are saved to the same directory as the input file. The file names
             will be the sheet name (as specified in sheets) with a csv extension. Defaults to None.
-        output_names (Union[str, List[str]], optional): The names of the files to save, each index matching
+        output_names (str | list[str] | None, optional): The names of the files to save, each index matching
             the same index in sheets. Extensions are ignored, all files will be CSV files. If None then
             the names will be the same as the sheet names in the sheets parameter.
-        na_values (Dict[str, Dict[str, Union[str, List[str]]]], optional): If specified, then perform special
+        na_values (dict[str, dict[str, str | list[str]]] | None, optional): If specified, then perform special
             parsing for NA values. The keys specify the sheet names in the Excel file. The values are dictionaries
             where the key is a column name in the sheet and the values are a list of strings that should be mapped
             to NA (empty) values. If any column is missing from na_values then default_na_values is used for the
             column. These values will override the values in read_excel_kwargs.
-        default_na_values (List[str], optional): If na_values is specified, then use these string values to
+        default_na_values (list[str], optional): If na_values is specified, then use these string values to
             represent NA values when extracting the sheet for any columns that aren't specified in na_values.
             Defaults to pandas._libs.parsers.STR_NA_VALUES. These values will override the values in
             read_excel_kwargs.
-        read_excel_kwargs (Dict[str, Any]): Dictionary of kwargs values to pass to Pandas read_excel function.
+        read_excel_kwargs (dict[str, Any] | None, optional): Dictionary of kwargs values to pass to
+            Pandas read_excel function. Defaults to None.
     """
     # Create output directory
     if not output_dir:
@@ -198,7 +200,7 @@ def extract_sheets(
     # Load all sheets one at a time, using the specified na_values
     dfs = {}
     for sheet in sheets:
-        if sheet not in pre_dfs.keys():
+        if sheet not in pre_dfs:
             logger.error(f"Sheet '{sheet}' does not exist in Excel file: {file}")
             continue
         pre_df = pre_dfs[sheet]
@@ -228,28 +230,29 @@ def extract_sheets(
 
 def choose_ignore_case_value(
     val: str,
-    allowable_values: List[str],
-    lowercase_allowable_values: Optional[List[str]] = None,
-    return_same_if_missing: Optional[bool] = True,
-) -> str:
+    allowable_values: list[str],
+    lowercase_allowable_values: list[str] | None = None,
+    return_same_if_missing: bool | None = True,
+) -> str | None:
     """Convert a value to match the capitalization of the same value in allowable_values.
 
     Args:
         val (str): The value to change the capitalization of.
-        allowable_values (List[str]): A list of all allowable values that val may take on. If val matches
+        allowable_values (list[str]): A list of all allowable values that val may take on. If val matches
             any of these values (ignoring case), then we use the matching value in allowable_values.
-        lowercase_allowable_values (Optional[List[str]], optional): All values in allowable_values but in
+        lowercase_allowable_values (list[str] | None, optional): All values in allowable_values but in
             lowercase. This is optional, if not specified then we will calculate this ourselves. Specifying
             this is simply to improve performance, so if this function is called many times we can calculate
             lowercase_allowable_values once outside of this function then pass it in for each call.
             Defaults to None.
-        return_same_if_missing (Optional[bool], optional): If True and val is not found in
+        return_same_if_missing (bool | None, optional): If True and val is not found in
             allowable_values (ignoring case)/lowercase_allowable_values then val is returned unchanged. If
             False and val is not found the None is returned. Defaults to True.
 
     Returns:
-        str: The value with the correct capitalization. If a match is not found in allowable_values then
-            the value is returned unchanged.
+        str | None: The value with the correct capitalization. If a match is not found in
+            allowable_values then the value is returned unchanged, or None if
+            return_same_if_missing is False.
     """
     if not isinstance(val, str):
         return val
@@ -269,13 +272,13 @@ def choose_ignore_case_value(
 
 
 def get_class_name_from_file_name(
-    file_name: Union[str, Path], schema: Optional[SchemaView] = None
+    file_name: str | Path, schema: SchemaView | None = None
 ) -> str:
     """Get the LinkML class name based on a data file name. Data files are named as "class_name[...].ext".
 
     Args:
-        file_name (Union[str, Path]): The file name to extract the class name from.
-        schema (Optional[SchemaView], optional): If set, then we correct the capitalization of the class name
+        file_name (str | Path): The file name to extract the class name from.
+        schema (SchemaView | None, optional): If set, then we correct the capitalization of the class name
             based on the classes found in this schema. Defaults to None.
 
     Returns:
@@ -290,7 +293,7 @@ def get_class_name_from_file_name(
     return class_name
 
 
-def expand_multi_rows(df: pd.DataFrame, columns: Union[List[str], str]) -> pd.DataFrame:
+def expand_multi_rows(df: pd.DataFrame, columns: list[str] | str) -> pd.DataFrame:
     """For all specified columns in the DataFrame df, over all rows, make duplicate rows whenever
     a column value has a semi-colon (;) in it, with each new row having the different values when
     splitting the original values by semi-colons.
@@ -313,7 +316,7 @@ def expand_multi_rows(df: pd.DataFrame, columns: Union[List[str], str]) -> pd.Da
 
     Args:
         df (pd.DataFrame): The DataFrame to expand. A copy is made and the original left unchanged.
-        columns (Union[List[str], str]): The columns to expand. We will search for SEP_TAG in all of
+        columns (list[str] | str): The columns to expand. We will search for SEP_TAG in all of
             these columns (in all rows).
 
     Returns:
@@ -345,12 +348,12 @@ def expand_multi_rows(df: pd.DataFrame, columns: Union[List[str], str]) -> pd.Da
     # rows below and then readd the expanded rows to the DataFrame.
     df = df[~df.index.isin(multi_df.index)]
 
-    def _select_element(i: int, arr: List) -> str:
+    def _select_element(i: int, arr: list) -> str:
         """Select element number i in arr. If i is out of bounds then select the last element.
 
         Args:
             i (int): The index of the element to select.
-            arr (List): The list to select the element from. Must not be empty.
+            arr (list): The list to select the element from. Must not be empty.
 
         Returns:
             str: Element i of arr, or the last element if i is out of bounds.
@@ -365,10 +368,12 @@ def expand_multi_rows(df: pd.DataFrame, columns: Union[List[str], str]) -> pd.Da
     for i in range(max_multi):
         # Keep any row where at least one of the columns has i+1 or more values
         new_rows_df = multi_df[
-            multi_df[columns].map(lambda x: len(x) > i).sum(axis=1) > 0
+            multi_df[columns].map(lambda x, i=i: len(x) > i).sum(axis=1) > 0
         ].copy()
         # Select the ith element
-        new_rows_df[columns] = new_rows_df[columns].map(lambda x: _select_element(i, x))
+        new_rows_df[columns] = new_rows_df[columns].map(
+            lambda x, i=i: _select_element(i, x)
+        )
         split_rows_dfs.append(new_rows_df)
 
     df = pd.concat([df, *split_rows_dfs]).reset_index(drop=True)
@@ -376,18 +381,18 @@ def expand_multi_rows(df: pd.DataFrame, columns: Union[List[str], str]) -> pd.Da
     return df
 
 
-def rename_items(items: List[str], renames: Dict[str, str]) -> List[str]:
+def rename_items(items: list[str], renames: dict[str, str]) -> list[str]:
     """Rename the string items in the list according to the renames dictionary. The keys of the
     dictionary are the original names and the values are the new values to rename them to. A copy of
     items is made, the original is left unmodified.
 
     Args:
-        items (List[str]): The list of items that is the target of the renaming.
-        renames (Dict[str, str]): Dictionary specifying how to rename the values in items. The keys
+        items (list[str]): The list of items that is the target of the renaming.
+        renames (dict[str, str]): Dictionary specifying how to rename the values in items. The keys
             are the original item values, and the values are what to rename them to.
 
     Returns:
-        List[str]: The renamed items. The order of the items is maintained, and a copy is
+        list[str]: The renamed items. The order of the items is maintained, and a copy is
             made with the original left unchanged.
     """
     items = list(items).copy()
@@ -396,16 +401,16 @@ def rename_items(items: List[str], renames: Dict[str, str]) -> List[str]:
     return items
 
 
-def select_func_kwargs(func: Callable, kwargs: Dict[str, Any]) -> Dict[str, Any]:
+def select_func_kwargs(func: Callable, kwargs: dict[str, Any]) -> dict[str, Any]:
     """Only select the keyword arguments in the dictionary that are acceptable arguments
     for the function.
 
     Args:
         func (Callable): The function to get the keyword arguments for.
-        kwargs (Dict[str, Any]): The keyword arguments to select from.
+        kwargs (dict[str, Any]): The keyword arguments to select from.
 
     Returns:
-        Dict[str, Any]: A dictionary which is a copy of kwargs where only the keys that
+        dict[str, Any]: A dictionary which is a copy of kwargs where only the keys that
             exist as arguments to the function func are present.
     """
     args, _, _, _, kwonlyargs, *_ = inspect.getfullargspec(func)

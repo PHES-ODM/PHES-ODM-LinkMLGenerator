@@ -5,13 +5,14 @@ all the top-level tables (eg. measures, protocols, etc.)
 @TODO: We currently don't have any descriptions or titles for the classes. These should be added.
 """
 
-from typing import Union, Annotated
 from pathlib import Path
+from typing import Annotated
+
 import typer
 
+from odm_linkmlgen.odm.odm_utils import odm_get_available_class_names
 from odm_linkmlgen.utils.general_utils import get_logger, read_data_frame
 from odm_linkmlgen.utils.schemasheets_utils import make_container_schemasheet
-from odm_linkmlgen.odm.odm_utils import odm_get_available_class_names
 
 logger = get_logger(__name__)
 
@@ -27,15 +28,13 @@ dictionary."""
 OUTPUT_FILE_HELP = """The TSV file to save the Container class Schemasheet to."""
 
 
-def extract_container_class(
-    parts_file: Union[str, Path], output_file: Union[str, Path]
-):
+def extract_container_class(parts_file: str | Path, output_file: str | Path):
     """Extract and create the Schemasheets file for the top-level Container class. This class
     contains a multivalued slot for each table found in the ODM data dictionary.
 
     Args:
-        parts_file (Union[str, Path]): The ODM data dictionary parts file.
-        output_file (Union[str, Path]): The TSV file to save the Container class Schemasheet to.
+        parts_file (str | Path): The ODM data dictionary parts file.
+        output_file (str | Path): The TSV file to save the Container class Schemasheet to.
     """
     parts_df = read_data_frame(parts_file, keep_default_na=False, na_values=[""])
     class_names = odm_get_available_class_names(parts_df)

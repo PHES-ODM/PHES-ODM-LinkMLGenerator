@@ -1,16 +1,17 @@
 import os
-from typing import Union, Dict, Any, List, Optional, Annotated
-from pathlib import Path
-import pandas as pd
 import re
+from pathlib import Path
+from typing import Annotated, Any
+
+import pandas as pd
 import typer
 
 from odm_linkmlgen.nwss.nwss_utils import (
-    SlotToEnumColumns,
-    DictionaryColumns,
     TABLE_NAME_COL,
-    splitup_metadata_sheet,
+    DictionaryColumns,
+    SlotToEnumColumns,
     parse_enums_sheet,
+    splitup_metadata_sheet,
 )
 from odm_linkmlgen.utils.general_utils import get_logger, read_data_frame
 from odm_linkmlgen.utils.schemasheets_utils import save_schemasheet
@@ -99,7 +100,7 @@ _data_types_validation_info = {
 
 def _get_range_and_validation_info(
     row: pd.Series, enums_df: pd.DataFrame
-) -> Dict[str, Any]:
+) -> dict[str, Any]:
     """Get the range and validation info for a row in the NWSS data dictionary (metadata sheet).
     The returned dictionary can contain multiple keys that should be set for the slot usage
     to enable validation for the row. For example, it may contain "minimum_value", "maximum_value",
@@ -114,7 +115,7 @@ def _get_range_and_validation_info(
             enums_df, then we try to get the enum name from the DictionaryColumns.VALUE_SET column in the row.
 
     Returns:
-        Dict[str, Any]: Key-value pairs to set for the slot usage corresponding to the row.
+        dict[str, Any]: Key-value pairs to set for the slot usage corresponding to the row.
     """
     results = {}
 
@@ -166,8 +167,8 @@ def _get_range_and_validation_info(
 
 def parse_table_df(
     df: pd.DataFrame,
-    enums_df: Optional[pd.DataFrame] = None,
-    detailed_enum_names: Optional[List[str]] = None,
+    enums_df: pd.DataFrame | None = None,
+    detailed_enum_names: list[str] | None = None,
 ) -> pd.DataFrame:
     """Given the DataFrame extracted from a NWSS data dictionary metadata sheet, that
     represents a single table in NWSS, set all the columns used by Schemasheets and
@@ -176,13 +177,13 @@ def parse_table_df(
     Args:
         df (pd.DataFrame): The DataFrame representing a single table in NWSS. We will
             make a copy of this and modify it to be a proper Schemasheets table.
-        enums_df (Optional[pd.DataFrame]): An optional DataFrame with the columns
+        enums_df (pd.DataFrame | None): An optional DataFrame with the columns
             SlotToEnumColumns.SLOT and SlotToEnumColumns.ENUM, where the slot is a categorical
             column name in NWSS and the enum is the name of the enum assigned to the slot.
             the name of the enumeration to assign to the slot. If None then
             we assume that the enum name is found in the DictionaryColumns.VALUE_SET column of
             df.
-        detailed_enum_names (Optional[List[str]], optional): If specified, then a list of enum
+        detailed_enum_names (list[str] | None, optional): If specified, then a list of enum
             names where we want to use detailed enum names. Detailed enum names are in
             the format "enum_name[slot]" where "slot" is the name of the slot whose range
             is the enum (ie. each time the enum is used by a slot it uses a different
@@ -221,33 +222,33 @@ def parse_table_df(
         for enum_name in detailed_enum_names:
             filt = df["range"] == enum_name
             df.loc[filt, "range"] = df.loc[filt].apply(
-                lambda x: f"{enum_name}[{x['slot']}]", axis=1
+                lambda x, enum_name=enum_name: f"{enum_name}[{x['slot']}]", axis=1
             )
 
     return df
 
 
 def extract_all_classes(
-    metadata_file: Union[str, Path],
-    enums_file: Union[str, Path],
-    output_dir: Union[str, Path],
-    single_table: Optional[bool] = False,
-    detailed_enum_names: Optional[List[str]] = None,
+    metadata_file: str | Path,
+    enums_file: str | Path,
+    output_dir: str | Path,
+    single_table: bool | None = False,
+    detailed_enum_names: list[str] | None = None,
 ):
     """Extract all classes from the Metadata file extracted from a NWSS data dictionary
     Excel file, and save all the classes as Schemasheets to the output_dir. The
     saved Schemasheets files are named "classes_{table_name}.tsv".
 
     Args:
-        metadata_file (Union[str, Path]): The Metadata sheet extracted from a NWSS
+        metadata_file (str | Path): The Metadata sheet extracted from a NWSS
             data dictionary Excel file.
-        enums_file (Union[str, Path]): The enums (Value Sets) sheet extracted from a NWSS
+        enums_file (str | Path): The enums (Value Sets) sheet extracted from a NWSS
             data dictionary Excel file.
-        output_dir (Union[str, Path]): The directory to save all the class
+        output_dir (str | Path): The directory to save all the class
             Schemasheets files to. One file per NWSS class is saved.
-        single_table (Optional[bool]): If True then merge all classes into a single class called
+        single_table (bool | None): If True then merge all classes into a single class called
             nwss_utils.SINGLE_TABLE_NAME, otherwise keep all classes separate. Defaults to False.
-        detailed_enum_names (Optional[List[str]], optional): If specified, then a list of enum
+        detailed_enum_names (list[str] | None, optional): If specified, then a list of enum
             names where we want to use detailed enum names. Detailed enum names are in
             the format "enum_name[slot]" where "slot" is the name of the slot whose range
             is the enum (ie. each time the enum is used by a slot it uses a different
@@ -283,7 +284,8 @@ def main(
         bool, typer.Option(show_default=True, help=SINGLE_TABLE_HELP)
     ] = False,
     detailed_enum_names: Annotated[
-        List[str], typer.Option(show_default=False, help=DETAILED_ENUM_NAMES_HELP)
+        list[str] | None,
+        typer.Option(show_default=False, help=DETAILED_ENUM_NAMES_HELP),
     ] = None,
 ):
     """CLI entry point: extract all classes from the Metadata sheet of a NWSS data dictionary
@@ -296,7 +298,7 @@ def main(
             Schemasheet is saved per class.
         single_table (bool, optional): If set then merge all classes into a single class.
             Defaults to False.
-        detailed_enum_names (List[str], optional): List of enum names where we want to use the
+        detailed_enum_names (list[str] | None, optional): List of enum names where we want to use the
             per-field (detailed) version of the enumeration. Defaults to None.
     """
     logger.info("Making NWSS classes...")

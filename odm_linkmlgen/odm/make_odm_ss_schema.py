@@ -11,8 +11,9 @@ make_schema("odm_v2/schemasheets/schema.tsv")
 ```
 """
 
-from typing import Annotated
 from pathlib import Path
+from typing import Annotated
+
 import typer
 
 from odm_linkmlgen.utils.general_utils import get_logger

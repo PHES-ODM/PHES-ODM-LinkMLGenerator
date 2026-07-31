@@ -2,13 +2,13 @@
 Utility functions for ODM LinkML Schema Generator, specific to ODM dictionary.
 """
 
-from typing import Union, Any, List, Optional
-import pandas as pd
 from pathlib import Path
+from typing import Any
 
+import pandas as pd
 from linkml_runtime.linkml_model.meta import SchemaDefinition
 
-from odm_linkmlgen.utils.general_utils import read_data_frame, get_logger
+from odm_linkmlgen.utils.general_utils import get_logger, read_data_frame
 from odm_linkmlgen.utils.schema_utils import get_ranges_of_slot_defn
 
 logger = get_logger(__name__)
@@ -44,16 +44,16 @@ _odm_enum_name_exceptions = {
 ODM_PARTS_COLUMN_CLASS_TAG = "Order"
 
 
-def odm_get_available_class_names(headers: Union[pd.DataFrame, List[str]]) -> List[str]:
+def odm_get_available_class_names(headers: pd.DataFrame | list[str]) -> list[str]:
     """Get a list of all ODM class/table names that are defined in a ODM parts sheet that contains
     the specified headers.
 
     Args:
-        headers (Union[pd.DataFrame, List[str]]): Either a list of all headers in the ODM parts sheet, or the actual
+        headers (pd.DataFrame | list[str]): Either a list of all headers in the ODM parts sheet, or the actual
             DataFrame for the parts sheet.
 
     Returns:
-        List[str]: List of all class/table names that the parts sheet defines.
+        list[str]: List of all class/table names that the parts sheet defines.
     """
     if isinstance(headers, pd.DataFrame):
         headers = headers.columns
@@ -66,7 +66,7 @@ def odm_get_available_class_names(headers: Union[pd.DataFrame, List[str]]) -> Li
     return headers
 
 
-def odm_get_fk_target_class(df: pd.DataFrame, part_id: str) -> Optional[str]:
+def odm_get_fk_target_class(df: pd.DataFrame, part_id: str) -> str | None:
     """Get the name of the class that the foreign key, that has the part id part_id, is a primary
     key for.
 
@@ -81,7 +81,7 @@ def odm_get_fk_target_class(df: pd.DataFrame, part_id: str) -> Optional[str]:
             more than one class.
 
     Returns:
-        Optional[str]: The class that the part ID is a primary key for. Or None if it is not
+        str | None: The class that the part ID is a primary key for. Or None if it is not
             a primary key.
     """
     # Get the row in df that matches the part_id
@@ -90,7 +90,7 @@ def odm_get_fk_target_class(df: pd.DataFrame, part_id: str) -> Optional[str]:
         return None
     if part_id_filt.sum() > 1:
         raise ValueError(f"Matched multiple partID rows for partID '{part_id}'")
-    
+
     # Get a DataFrame with columns "variable" and "value", where each row has a class name from odm_get_available_class_names
     # in the "variable" column and the value "pk" in the "value" column if our part_id is a primary key in
     # the class
@@ -118,14 +118,14 @@ def odm_get_fk_target_class(df: pd.DataFrame, part_id: str) -> Optional[str]:
         fk_alias_id = df.loc[part_id_filt, "fKAliasID"].iloc[0]
         if not pd.isna(fk_alias_id):
             return odm_get_fk_target_class(df, fk_alias_id)
-    
+
     return None
 
 
 def odm_get_header_rows(
     df: pd.DataFrame,
-    tables: Union[str, List[str]],
-    header_tags: Optional[Union[str, List[str]]] = None,
+    tables: str | list[str],
+    header_tags: str | list[str] | None = None,
 ) -> pd.DataFrame:
     """Retrieve all rows in the DataFrame that correspond to a column in any of the specified
     ODM tables.
@@ -136,9 +136,9 @@ def odm_get_header_rows(
 
     Args:
         df (pd.DataFrame): The DataFrame to retrieve the rows from.
-        tables (Union[str, List[str]]): The table name(s) to retrieve the rows for. For each
+        tables (str | list[str]): The table name(s) to retrieve the rows for. For each
             table name a column with that name must be present in df.
-        header_tags (Optional[Union[str, List[str]]]): The header tags (ie. header types) to search for.
+        header_tags (str | list[str] | None): The header tags (ie. header types) to search for.
             This can be "fK" (for foreign key), "pK" (for primary key), and/or "header" (for a regular
             non-key header). These are case-insensitive. If None then all of these header types are
             retrieved. Defaults to None.
@@ -163,7 +163,7 @@ def odm_get_header_rows(
 def odm_keep_active_rows(
     df: pd.DataFrame,
     status_column: str = "status",
-    keep_status: Union[Any, List[Any]] = "active",
+    keep_status: Any | list[Any] = "active",
 ) -> pd.DataFrame:
     """Keep only rows that have an "active" status. Status is specified in a single column in the
     DataFrame.
@@ -171,7 +171,7 @@ def odm_keep_active_rows(
     Args:
         df (pd.DataFrame): The DataFrame to filter, retrieving only active rows.
         status_column (str, optional): The column name that contains each row's status. Defaults to "status".
-        keep_status (Union[Any, List[Any]], optional): The string(s) that indicate an active status. Defaults to "active".
+        keep_status (Any | list[Any], optional): The string(s) that indicate an active status. Defaults to "active".
 
     Returns:
         pd.DataFrame: df filtered to only have active status rows. A copy of the DataFrame is made before
@@ -185,24 +185,21 @@ def odm_keep_active_rows(
 
 
 def odm_get_enum_name_from_part_id(
-    part_id: str, recognized_enums: Optional[List[str]] = None
+    part_id: str, recognized_enums: list[str] | None = None
 ) -> str:
     """Get the enumeration name for the specified part ID.
 
     Args:
         part_id (str): The partID to get the enumeration name for. This is typically equal
             to the partID with a trailing "s", but there are some exceptions.
-        recognized_enums (Optional[List[str]]): If not None then a list of recognized enumeration
+        recognized_enums (list[str] | None): If not None then a list of recognized enumeration
             names. If the calculated enum name exists in this list then the enum name is returned,
             otherwise the value "string" is returned (ie. the data type is a string, rather than an enum).
 
     Returns:
         str: The enumeration name (for the partID)
     """
-    if part_id in _odm_enum_name_exceptions.keys():
-        name = _odm_enum_name_exceptions[part_id]
-    else:
-        name = f"{part_id}s"
+    name = _odm_enum_name_exceptions.get(part_id, f"{part_id}s")
     if recognized_enums is not None and name not in recognized_enums:
         return "string"
     return name
@@ -212,7 +209,7 @@ def set_range_of_slot(
     schema: SchemaDefinition,
     class_name: str,
     slot_name: str,
-    rng: Union[str, List[str]],
+    rng: str | list[str],
 ):
     """Set the range of a slot usage in the schema, in place.
 
@@ -220,7 +217,7 @@ def set_range_of_slot(
         schema (SchemaDefinition): The schema to modify in place.
         class_name (str): The name of the class that has the slot usage to modify.
         slot_name (str): The name of the slot usage to set the range of.
-        rng (Union[str, List[str]]): The range(s) to set. A single range is set as the slot's
+        rng (str | list[str]): The range(s) to set. A single range is set as the slot's
             range. Multiple ranges are set as any_of (and the slot's range is cleared), which is
             how LinkML represents a slot that accepts more than one range.
     """
@@ -235,13 +232,13 @@ def set_range_of_slot(
         slot_defn.range = rng[0]
 
 
-def add_missingness_set(schema: SchemaDefinition, parts_file: Union[str, Path]):
+def add_missingness_set(schema: SchemaDefinition, parts_file: str | Path):
     """Based on the parts sheet of the ODM data dictionary, add the missingness sets
     (ie. genMissingNessSet/nrNAMissingnessSet) to any slot that should have one of these missingness sets.
 
     Args:
         schema (SchemaDefinition): The schema to modify in place.
-        parts_file (Union[str, Path]): The ODM data dictionary parts file.
+        parts_file (str | Path): The ODM data dictionary parts file.
     """
     parts_df = read_data_frame(parts_file, keep_default_na=False, na_values=[""])
     for class_defn in schema.classes.values():
