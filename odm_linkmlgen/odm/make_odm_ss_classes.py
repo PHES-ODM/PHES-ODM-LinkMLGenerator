@@ -26,6 +26,7 @@ from odm_linkmlgen.odm.odm_utils import (
     odm_get_enum_name_from_part_id,
     odm_get_header_rows,
     odm_get_available_class_names,
+    odm_get_fk_target_class,
 )
 
 logger = get_logger(__name__)
@@ -92,55 +93,6 @@ def _extract_pattern(row: pd.Series) -> str:
     return pattern
 
 
-def get_fk_target_class(df: pd.DataFrame, part_id: str) -> Optional[str]:
-    """Get the name of the class that the foreign key, that has the part id part_id, is a primary
-    key for.
-
-    Args:
-        df (pd.DataFrame): The full parts DataFrame. It must contain a row where "partID" is equal
-            to part_id, and a column for each class name (ie. each odm_get_available_class_names) where the
-            value is "pK" (ignoring case) if part_id is a primary key in that class.
-        part_id (str): The part_id to get the class that it is a primary key for.
-
-    Raises:
-        ValueError: Either the part_id was not found in df["partID"] or it is a primary key in
-            more than one class.
-
-    Returns:
-        Optional[str]: The class that the part ID is a primary key for. Or None if it is not
-            a primary key.
-    """
-    # Get the row in df that matches the part_id
-    part_id_filt = df["partID"] == part_id
-    if part_id_filt.sum() == 0:
-        return None
-    if part_id_filt.sum() > 1:
-        raise ValueError(f"Matched multiple partID rows for partID '{part_id}'")
-
-    # Get a DataFrame with columns "variable" and "value", where each row has a class name from odm_get_available_class_names
-    # in the "variable" column and the value "pk" in the "value" column if our part_id is a primary key in
-    # the class
-    class_names = odm_get_available_class_names(df)
-    class_values = pd.melt(
-        df.loc[part_id_filt, class_names].map(
-            lambda x: "" if pd.isna(x) else str(x).lower()
-        )
-    )
-
-    # Get the row(s) where the value is "pk", we should get 0 or no rows.
-    fk_name_filt = class_values["value"] == "pk"
-    all_pks = class_values[fk_name_filt]["variable"].tolist()
-    if len(all_pks) == 0:
-        logger.warning(f"Foreign key '{part_id}' is not a primary key in any table")
-        return None
-    if len(all_pks) > 1:
-        raise ValueError(
-            f"Foreign key '{part_id}' is a primary key in multiple tables: {', '.join(all_pks)}"
-        )
-
-    return all_pks[0]
-
-
 def extract_class(
     df: pd.DataFrame, class_name: str, output_dir: str, recognized_enums: List[str]
 ) -> Tuple[str, pd.DataFrame]:
@@ -173,6 +125,7 @@ def extract_class(
         "partDesc",
         "partType",
         "partInstr",
+        "fKAliasID",
         "mmaSet",
         f"{class_name}",
         f"{class_name}Required",
@@ -183,12 +136,17 @@ def extract_class(
         "minLength",
         "maxLength",
     ]
-    missing_cols = [c for c in keep_cols if c not in table_df.columns]
+    # These columns are in keep_cols, but are optional (ie. we don't raise an exception if the
+    # column doesn't exist in table_df; should be a subset of keep_cols)
+    optional_keep_cols = [
+        "fKAliasID",
+    ]
+    missing_cols = [c for c in set(keep_cols) - set(optional_keep_cols) if c not in table_df.columns]
     if len(missing_cols) > 0:
         raise RuntimeError(
             f"Missing columns in parts sheet for class {class_name}: {', '.join(missing_cols)}"
         )
-    table_output_df = table_df[keep_cols].copy()
+    table_output_df = table_df[[c for c in keep_cols if c in table_df.columns]].copy()
     columns = list(table_output_df.columns)
     columns[columns.index(class_name)] = "headerType"
     columns[columns.index(f"{class_name}Required")] = "required"
@@ -233,7 +191,7 @@ def extract_class(
     fk_filt = table_output_df["headerType"].astype(str).str.lower() == "fk"
     for idx in table_output_df.loc[fk_filt, "partID"].index:
         fk_name = table_output_df.loc[idx, "partID"]
-        fk_target = get_fk_target_class(df, fk_name)
+        fk_target = odm_get_fk_target_class(df, fk_name)
         if fk_target is not None:
             table_output_df.loc[idx, "dataType"] = fk_target
 

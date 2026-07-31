@@ -66,6 +66,62 @@ def odm_get_available_class_names(headers: Union[pd.DataFrame, List[str]]) -> Li
     return headers
 
 
+def odm_get_fk_target_class(df: pd.DataFrame, part_id: str) -> Optional[str]:
+    """Get the name of the class that the foreign key, that has the part id part_id, is a primary
+    key for.
+
+    Args:
+        df (pd.DataFrame): The full parts DataFrame. It must contain a row where "partID" is equal
+            to part_id, and a column for each class name (ie. each odm_get_available_class_names) where the
+            value is "pK" (ignoring case) if part_id is a primary key in that class.
+        part_id (str): The part_id to get the class that it is a primary key for.
+
+    Raises:
+        ValueError: Either the part_id was not found in df["partID"] or it is a primary key in
+            more than one class.
+
+    Returns:
+        Optional[str]: The class that the part ID is a primary key for. Or None if it is not
+            a primary key.
+    """
+    # Get the row in df that matches the part_id
+    part_id_filt = df["partID"] == part_id
+    if part_id_filt.sum() == 0:
+        return None
+    if part_id_filt.sum() > 1:
+        raise ValueError(f"Matched multiple partID rows for partID '{part_id}'")
+    
+    # Get a DataFrame with columns "variable" and "value", where each row has a class name from odm_get_available_class_names
+    # in the "variable" column and the value "pk" in the "value" column if our part_id is a primary key in
+    # the class
+    class_names = odm_get_available_class_names(df)
+    class_values = pd.melt(
+        df.loc[part_id_filt, class_names].map(
+            lambda x: "" if pd.isna(x) else str(x).lower()
+        )
+    )
+
+    # Get the row(s) where the value is "pk", we should get 1 or no rows.
+    pk_filt = class_values["value"] == "pk"
+    all_pks = class_values[pk_filt]["variable"].tolist()
+    if len(all_pks) > 1:
+        raise ValueError(
+            f"Foreign key '{part_id}' is a primary key in multiple tables: {', '.join(all_pks)}"
+        )
+    if len(all_pks) == 1:
+        return all_pks[0]
+
+    # part_id is not a primary key. See if it is an alias for a primary key, and if
+    # so return the class that the primary key belongs to. Note that v2 data dictionary
+    # does not have an fKAliasID column
+    if "fKAliasID" in df.columns:
+        fk_alias_id = df.loc[part_id_filt, "fKAliasID"].iloc[0]
+        if not pd.isna(fk_alias_id):
+            return odm_get_fk_target_class(df, fk_alias_id)
+    
+    return None
+
+
 def odm_get_header_rows(
     df: pd.DataFrame,
     tables: Union[str, List[str]],
