@@ -1,16 +1,6 @@
 """
 Creates Schemasheets for all classes (ie. tables) based on the ODM data dictionary parts sheet.
 The outputs will be named "class_{table_name}.tsv".
-
-@TODO: We currently don't have any descriptions or titles for the classes. These should be added.
-
-## Example
-
-```python
-from odm_linkmlgen.odm.make_odm_ss_classes import extract_all_classes
-
-extract_all_classes("odm_v2/dictionary/parts.csv", "odm_v2/schemasheets")
-```
 """
 
 import os

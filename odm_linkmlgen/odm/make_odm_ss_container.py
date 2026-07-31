@@ -1,8 +1,6 @@
 """
 Create the Container class Schemasheet for ODM. This is the top-level (tree_root) class that contains
 all the top-level tables (eg. measures, protocols, etc.)
-
-@TODO: We currently don't have any descriptions or titles for the classes. These should be added.
 """
 
 from pathlib import Path
