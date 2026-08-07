@@ -55,6 +55,21 @@ headers = {
 }
 
 
+def get_enum_names_from_parts(df: pd.DataFrame) -> list[str]:
+    """Get a list of all enumeration names that are found in the specified parts
+    sheet. This does not include the enum names in the sets sheet. For enum
+    names from the sets sheet use
+    make_odm_ss_enums_from_sets.get_enum_names_from_sets.
+
+    Args:
+        df (pd.DataFrame): The parts sheet DataFrame.
+
+    Returns:
+        list[str]: A list of all enumeration names, sorted.
+    """
+    return sorted(df["partType"].unique())
+
+
 def extract_parts_enums(parts_file: str, output_file: str) -> list[str]:
     """Create a Schemasheet for all enumerations found in the parts sheet of the ODM
     data dictionary. This does not include any enums that are found in the sets sheet
@@ -73,16 +88,8 @@ def extract_parts_enums(parts_file: str, output_file: str) -> list[str]:
     # Use only active rows (indicated in the "status" column)
     df = odm_keep_active_rows(df)
 
-    # Get all enum names by getting the partID of categorical variables that are headers (pK, fK, or header)
-    # and do not have an mmaSet. Once we have all the header rows, we get the enumeration name based on the
-    # partID. We do not extract the ones with mmaSet set, since those are fully defined in the sets
-    # sheet, not the parts sheet (see make_odm_ss_enums_from_sets.py).
-    class_names = odm_get_available_class_names(df)
-    headers_df = odm_get_header_rows(df, class_names)
-    filt = headers_df["dataType"].isin(["categorical"])
-    filt = filt & pd.isna(headers_df["mmaSet"])
-    enum_source_names = sorted(headers_df[filt]["partID"].unique())
-    enum_names = [odm_get_enum_name_from_part_id(name) for name in enum_source_names]
+    # "partType" contains the enumeration names
+    enum_names = get_enum_names_from_parts(df)
 
     # Get all rows for all enums. We only keep the columns in keep_columns.
     # Each row (or enum value) should be an "input" for at least one class.

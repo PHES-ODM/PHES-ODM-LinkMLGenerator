@@ -58,6 +58,21 @@ headers = {
 _headers_by_role = {v: k for k, v in headers.items()}
 
 
+def get_enum_names_from_sets(df: pd.DataFrame) -> list[str]:
+    """Get a list of all enumeration names that are found in the specified sets
+    sheet. This does not include the enum names in the parts sheet. For enum
+    names from the sets sheet use
+    make_odm_ss_enums_from_parts.get_enum_names_from_parts.
+
+    Args:
+        df (pd.DataFrame): The sets sheet DataFrame.
+
+    Returns:
+        list[str]: A list of all enumeration names, sorted.
+    """
+    return sorted(df["setID"].unique())
+
+
 def extract_sets_enums(sets_file: str, parts_file: str, output_file: str) -> list[str]:
     """Create a Schemasheet for all the enumerations found in the ODM data dictionary
     sets sheet. Note that this does not consistute all of the enums found in ODM.
@@ -129,7 +144,7 @@ def extract_sets_enums(sets_file: str, parts_file: str, output_file: str) -> lis
     # for each enumeration where no permissible value is listed. These are the rows containing
     # top-level enumeration data, ie. the enumeration's title and description, rather than
     # a permissible value title and description.
-    enum_names_df = pd.DataFrame({"setID": list(df["setID"].unique())})
+    enum_names_df = pd.DataFrame({"setID": get_enum_names_from_sets(df)})
     enum_names_df = enum_names_df.merge(
         parts_df[["partID", "label", "partDesc"]],
         left_on="setID",

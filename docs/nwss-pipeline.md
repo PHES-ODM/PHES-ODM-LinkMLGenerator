@@ -49,10 +49,6 @@ correctly. These are defects in the published files, not in the generator:
   from the permissible values. Left as published, sample data fails validation
   against the generated schema.
 
-A modified copy of the restricted analytics dictionary is kept alongside the
-original in `odm_linkmlgen/data/nwss/` (suffixed `-MODIFIED`) as a record of
-these edits, if you have access to those files.
-
 An outstanding limitation, independent of the source files: validation
 information in the `Value Set` column of the metadata sheet is not yet used.
 
@@ -94,12 +90,18 @@ top-level generator does not use it.
 
 **Detailed enumeration names.** `make_nwss` passes
 `detailed_enum_names=["vs_yne", "vs_yn"]`. These two enumerations (yes/no and
-yes/no/either) are used by many different fields, and their permissible values
-need per-field descriptions. So instead of one shared `vs_yne` enumeration, a
-separate copy is generated for every field that uses it, named
-`vs_yne[<field_name>]` — for example `vs_yne[stormwater_input]` and
-`vs_yne[ext_blank]`. The original undifferentiated enumeration is dropped. See
-`nwss_utils.get_detailed_enums`.
+yes/no/empty) are used by many different fields, which is a problem downstream:
+LinkML-Map allows only one mapping per enumeration range, but the correct
+mapping differs from field to field even when the range is the same. Two columns
+that both have the `vs_yne` range may need their values mapped differently, and
+a single shared enumeration gives the mapper no way to express that.
+
+Giving each field its own enumeration name solves this. Instead of one shared
+`vs_yne` enumeration, a separate copy is generated for every field that uses it,
+named `vs_yne[<field_name>]` — for example `vs_yne[stormwater_input]` and
+`vs_yne[ext_blank]` — so each field can carry its own mapping (and its own
+per-field permissible value descriptions). The original undifferentiated
+enumeration is dropped. See `nwss_utils.get_detailed_enums`.
 
 ## The steps
 
