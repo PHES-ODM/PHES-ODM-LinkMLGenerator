@@ -61,7 +61,7 @@ def order_columns(df: pd.DataFrame, column_order: list[str]) -> pd.DataFrame:
 
 
 def save_data_frame(
-    df: pd.DataFrame, output_file: str | Path, strip: bool = True, **kwargs
+    df: pd.DataFrame, output_file: str | Path, strip: bool = True, **kwargs: Any
 ):
     """Save a Pandas DataFrame to disk as a TSV or CSV, using the correct separator for the
     file extension.
@@ -85,7 +85,7 @@ def save_data_frame(
     )
 
 
-def read_data_frame(file: str, **kwargs) -> pd.DataFrame:
+def read_data_frame(file: str, **kwargs: Any) -> pd.DataFrame:
     """Read a Pandas DataFrom from disk, using the correct separator based on the file extension.
 
     Args:
