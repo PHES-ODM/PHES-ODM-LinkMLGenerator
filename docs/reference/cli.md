@@ -6,7 +6,7 @@
 
     If `--help` crashes with `Parameter.make_metavar() missing 1 required
     positional argument: 'ctx'`, your `typer` is older than 0.16.0. See
-    [installation troubleshooting](../how-to/install.md#troubleshooting).
+    [Troubleshooting](../troubleshooting.md#installation-problems).
 
 ## `odm-linkmlgen-odm`
 
@@ -143,7 +143,6 @@ Repeatable options are passed once per value:
 
 ## Related
 
-- [Re-run a single pipeline step](../how-to/run-a-single-pipeline-step.md)
-- [ODM pipeline steps](odm-pipeline-steps.md) /
-  [NWSS pipeline steps](nwss-pipeline-steps.md)
-- [Python API](api/index.md)
+- [Re-run a single step](../python-api.md#re-run-a-single-step)
+- [Pipeline steps](pipeline-steps.md)
+- [Python API](api.md)

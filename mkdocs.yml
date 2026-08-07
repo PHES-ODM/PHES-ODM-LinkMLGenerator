@@ -20,7 +20,6 @@ theme:
     - navigation.sections
     - navigation.expand
     - navigation.top
-    - navigation.indexes
     - navigation.tracking
     - content.code.copy
     - content.action.edit
@@ -91,44 +90,20 @@ markdown_extensions:
 
 nav:
   - Home: index.md
-  - Tutorials:
-      - tutorials/index.md
-      - Generate your first schema: tutorials/generate-your-first-schema.md
-      - Generate an NWSS schema: tutorials/generate-an-nwss-schema.md
-  - How-to guides:
-      - how-to/index.md
-      - Install the package: how-to/install.md
-      - Prepare the ODM data dictionary: how-to/prepare-the-odm-dictionary.md
-      - Prepare the NWSS data dictionaries: how-to/prepare-the-nwss-dictionaries.md
-      - Generate an ODM schema: how-to/generate-an-odm-schema.md
-      - Generate NWSS schemas: how-to/generate-nwss-schemas.md
-      - Use the generator as a Python library: how-to/use-as-a-python-library.md
-      - Re-run a single pipeline step: how-to/run-a-single-pipeline-step.md
-      - Debug a generated schema: how-to/debug-a-generated-schema.md
-      - Add support for a new ODM version: how-to/add-an-odm-version.md
-      - Add support for a new NWSS dictionary type: how-to/add-an-nwss-dictionary-type.md
-      - Set up a development environment: how-to/set-up-a-development-environment.md
-      - Update the documentation: how-to/update-the-documentation.md
-  - Explanation:
-      - explanation/index.md
-      - LinkML and Schemasheets: explanation/linkml-and-schemasheets.md
-      - How the pipeline is designed: explanation/pipeline-design.md
-      - The ODM data dictionary: explanation/the-odm-data-dictionary.md
-      - The NWSS data dictionaries: explanation/the-nwss-data-dictionaries.md
-      - Post-processing workarounds: explanation/post-processing-workarounds.md
+  - Getting started: getting-started.md
+  - Generate ODM schemas: odm-schemas.md
+  - Generate NWSS schemas: nwss-schemas.md
+  - Use it from Python: python-api.md
+  - Troubleshooting: troubleshooting.md
+  - How it works: how-it-works.md
+  - The source data dictionaries: data-dictionaries.md
+  - Extending the generator: extending.md
+  - Contributing: contributing.md
   - Reference:
-      - reference/index.md
       - Command-line interface: reference/cli.md
-      - Output layout: reference/output-layout.md
-      - Repository layout: reference/repository-layout.md
-      - ODM pipeline steps: reference/odm-pipeline-steps.md
-      - NWSS pipeline steps: reference/nwss-pipeline-steps.md
-      - Python API:
-          - reference/api/index.md
-          - Top-level generators: reference/api/generators.md
-          - ODM modules: reference/api/odm.md
-          - NWSS modules: reference/api/nwss.md
-          - Shared utilities: reference/api/utils.md
+      - Pipeline steps: reference/pipeline-steps.md
+      - Output and repository layout: reference/layouts.md
+      - Python API: reference/api.md
 
 extra:
   social:

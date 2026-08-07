@@ -3,13 +3,12 @@
 Thanks for contributing to the PHES-ODM LinkML Schema Generator.
 
 The full development guide lives in the documentation site, so that it sits
-alongside the rest of the project's how-to guides rather than drifting apart from
-them:
+alongside the rest of the project's guides rather than drifting apart from them:
 
-**→ [Set up a development environment](https://phes-odm.github.io/PHES-ODM-LinkMLGenerator/how-to/set-up-a-development-environment/)**
+**→ [Contributing](https://phes-odm.github.io/PHES-ODM-LinkMLGenerator/contributing/)**
 
-It covers the dev install, running the tests, linting, and the code conventions
-new code is expected to match.
+It covers the dev install, running the tests, linting, the code conventions new
+code is expected to match, and how to work on the documentation itself.
 
 ## Quick start
 
@@ -38,12 +37,10 @@ standard-library features newer than that.
 
 | Task | Guide |
 | --- | --- |
-| Work out why a generated schema is wrong | [Debug a generated schema](docs/how-to/debug-a-generated-schema.md) |
-| Re-run one pipeline step while iterating | [Re-run a single pipeline step](docs/how-to/run-a-single-pipeline-step.md) |
-| Support a new ODM version | [Add support for a new ODM version](docs/how-to/add-an-odm-version.md) |
-| Support a new NWSS dictionary type | [Add support for a new NWSS dictionary type](docs/how-to/add-an-nwss-dictionary-type.md) |
-| Change the documentation | [Update the documentation](docs/how-to/update-the-documentation.md) |
-| Understand why the code is shaped this way | [How the pipeline is designed](docs/explanation/pipeline-design.md) |
+| Work out why a generated schema is wrong | [Troubleshooting](docs/troubleshooting.md) |
+| Re-run one pipeline step while iterating | [Use it from Python](docs/python-api.md#re-run-a-single-step) |
+| Support a new ODM version or NWSS dictionary type | [Extending the generator](docs/extending.md) |
+| Understand why the code is shaped this way | [How it works](docs/how-it-works.md) |
 
 ## A note on testing
 
@@ -54,17 +51,15 @@ dictionaries that cannot be committed (NWSS) or are large and awkward to fixture
 
 So if you change an extraction module, verify it by regenerating the schema and
 diffing the output against the previous version, and account for every line of
-the diff. See
-[Debug a generated schema](docs/how-to/debug-a-generated-schema.md).
+the diff. See [Troubleshooting](docs/troubleshooting.md).
 
 ## Documentation changes
 
-The documentation follows the
-[Divio system](https://docs.divio.com/documentation-system/): tutorials, how-to
-guides, explanation, and reference are four distinct kinds of writing. Before
-adding a page, check which one it belongs to — the
-[documentation guide](docs/how-to/update-the-documentation.md#where-things-go)
-has a table for this.
+The site is deliberately small: one page per topic, plus a `docs/reference/`
+directory for dry lookup material. Prefer adding a section to an existing page
+over adding a new page, and keep instructions and reasoning apart — a "why"
+paragraph usually belongs in `how-it-works.md` or `data-dictionaries.md` with a
+link to it. A new page must be added to `nav:` in `mkdocs.yml`.
 
 Markdown is wrapped at 80 columns, except inside tables, code blocks, and long
 URLs.
