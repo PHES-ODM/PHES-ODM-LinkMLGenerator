@@ -1,3 +1,8 @@
+"""
+Tests for odm_linkmlgen.nwss.nwss_utils.splitup_metadata_sheet, which splits a
+flat NWSS metadata sheet into one DataFrame per table.
+"""
+
 import pandas as pd
 import pytest
 

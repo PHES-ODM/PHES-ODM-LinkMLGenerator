@@ -50,7 +50,7 @@ OUTPUT_FILE_HELP = """The TSV file to save the Schemasheet to."""
 headers = {
     "setID": "enum",
     "partID": "permissible_value",
-    "partLabel": "title",  # Comes from the parts list (NOT the sets list) after joining
+    "label": "title",  # Comes from the parts list (NOT the sets list) after joining
     "partDesc": "description",
 }
 
@@ -74,16 +74,16 @@ def extract_sets_enums(sets_file: str, parts_file: str, output_file: str) -> lis
     Returns:
         list[str]: List of all enum names extracted.
     """
-    df = read_data_frame(sets_file, keep_default_na=False, na_values=[""])
+    sets_df = read_data_frame(sets_file, keep_default_na=False, na_values=[""])
     parts_df = read_data_frame(parts_file, keep_default_na=False, na_values=[""])
 
     # Keep only active status parts
-    df = odm_keep_active_rows(df)
+    sets_df = odm_keep_active_rows(sets_df)
 
-    # Get the description (partDesc) and title (partLabel) from the parts list, by joining on partID
-    df = df.merge(
-        parts_df[["partID", "partDesc", "partLabel"]], on="partID", how="left"
-    )
+    # Get the description (partDesc) and title (label) from the parts list, by joining on partID
+    merge_cols = ["partDesc", "label"]
+    sets_df = sets_df[[c for c in sets_df.columns if c not in merge_cols]]
+    df = sets_df.merge(parts_df[["partID"] + merge_cols], on="partID", how="left")
 
     # Replace NAs with ""
     for k in headers:
@@ -131,7 +131,7 @@ def extract_sets_enums(sets_file: str, parts_file: str, output_file: str) -> lis
     # a permissible value title and description.
     enum_names_df = pd.DataFrame({"setID": list(df["setID"].unique())})
     enum_names_df = enum_names_df.merge(
-        parts_df[["partID", "partLabel", "partDesc"]],
+        parts_df[["partID", "label", "partDesc"]],
         left_on="setID",
         right_on="partID",
         how="left",

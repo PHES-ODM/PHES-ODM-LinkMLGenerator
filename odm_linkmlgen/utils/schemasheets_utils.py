@@ -1,3 +1,16 @@
+"""
+Utility functions for creating LinkML Schemasheets files and turning them into a
+LinkML schema.
+
+Schemasheets TSV files have two header rows: an ordinary column header, and a row
+beginning with ">" that maps each column to an element of the LinkML metamodel.
+save_schemasheet and add_schemasheets_header write that format;
+make_linkml_schema_from_schemasheets consumes a directory of such files and
+returns a SchemaDefinition.
+
+Nothing in this module is specific to ODM or NWSS.
+"""
+
 import os
 from glob import glob
 from pathlib import Path

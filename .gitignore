@@ -1,20 +1,11 @@
 .DS_Store
 .vscode
 
-# NWSS input and output
+# Source data dictionaries (Excel). Not committed: the ODM dictionary is not
+# publicly available, and the NWSS dictionaries are downloaded from cdc.gov.
+# See the README for how to obtain them.
 /odm_linkmlgen/data/nwss/*.xlsx
-
-# NWSS restricted
-/gen/nwss_restricted_*/
-
-# ODM v2 input and output
-/data/odm_v*/*.xlsx
-/gen/odm_v*/dictionary/
-/gen/odm_v*/schemasheets/
-/gen/odm_v*/linkml/docs
-
-# ODM v1 input and output
-/gen/odm_v1/linkml/docs
+/odm_linkmlgen/data/odm_v*/*.xlsx
 
 # Mac Desktop Services Store
 .DS_Store

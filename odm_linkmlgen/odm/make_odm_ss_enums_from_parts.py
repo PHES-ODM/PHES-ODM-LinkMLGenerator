@@ -51,7 +51,7 @@ headers = {
     "partType": "enum",
     "partID": "permissible_value",
     "partDesc": "description",
-    "partLabel": "title",
+    "label": "title",
 }
 
 
@@ -91,7 +91,7 @@ def extract_parts_enums(parts_file: str, output_file: str) -> list[str]:
     keep_columns = [
         "partType",
         "partID",
-        "partLabel",
+        "label",
         # "shortName",
         "partDesc",
         "partInstr",

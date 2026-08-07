@@ -1,24 +1,22 @@
 """
-Make the NWSS LinkML schemas. There are three schemas:
+Make the NWSS LinkML schemas. One schema is generated per NWSS data dictionary
+type, for each type whose Excel data dictionary is supplied:
 
-- NWSS reporting data dictionary
-- NWSS public concentration data dictionary
-- NWSS public metric data dictionary
+- reporting: the main reporting data dictionary
+- public_concentration: the public concentration data dictionary
+- public_metric: the public metric data dictionary
+- restricted_raw: the restricted raw data dictionary (not publicly available)
+- restricted_analytics: the restricted analytics data dictionary (not publicly
+  available)
 
-@TODO:
-- Add validation from "Value Set" column of "Metadata" sheet
-- For public metric: vs_reporting_jurisdiction has some incorrect values that fails validation on sample data:
-    - "Chicago, IL" should be "Chicago"
-    - "Houston, TX" should be "Houston"
-    - Should also remove States from other permissible values
+IMPORTANT: Several of the published data dictionaries must be edited by hand in
+Excel before they can be processed correctly. For example, the restricted
+analytics dictionary has no "Value Sets" sheet at all, so it must be copied over
+from the restricted raw dictionary. The required fixes and the resulting
+limitations are documented in docs/nwss-pipeline.md, under "Preparing the NWSS
+data dictionaries".
 
-IMPORTANT: For restricted_analytics dictionary type: Must copy the "Value Sets" tab from the restricted raw data dictionary to
-the restricted analytics data dictionary, since restricted analytics does not have the "Value Sets" tab
-IMPORTANT: Even when copying "Value Sets" tab to restricted_analytics, we are missing value sets
-IMPROTANT: For restricted_raw: The value set other_norm_units should be other_norm_unit
-IMPORTANT: For restricted_analytics: categorical slots pcr_gene_target_agg, pcr_target_below_lod, pcr_target_units,
-and quality_flag do not have enumeration definition in "Value Sets" tab.
-IMPORTANT: In reporting: Changed ntc_amplify in "Value Sets" tab from vs_yne to vs_yn
+@TODO: Add validation from the "Value Set" column of the "Metadata" sheet.
 """
 
 import os

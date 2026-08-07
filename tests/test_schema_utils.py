@@ -1,3 +1,8 @@
+"""
+Tests for odm_linkmlgen.utils.schema_utils.get_ranges_of_slot_defn, which reads a
+slot's range(s) from either a "range" or an "any_of" definition.
+"""
+
 from odm_linkmlgen.utils.schema_utils import get_ranges_of_slot_defn
 
 

@@ -1,3 +1,20 @@
+"""
+Utility functions for parsing the sheets of a NWSS data dictionary Excel file.
+
+Two sheet layouts are handled:
+
+- The metadata sheet is a flat list of every field in every table, with no column
+  identifying the table. splitup_metadata_sheet splits it into one DataFrame per
+  table by using the table boundary convention described in that function.
+- The "Value Sets" sheet holds each enumeration in a pair of adjacent columns
+  rather than stacked. parse_enums_sheet extracts them, along with the mapping
+  from each field to the enumeration it uses.
+
+get_detailed_enums supports generating a per-field copy of an enumeration that is
+shared by many fields (eg. "vs_yne" becomes "vs_yne[stormwater_input]"), so that
+each field can carry its own permissible value descriptions.
+"""
+
 from itertools import pairwise
 
 import pandas as pd

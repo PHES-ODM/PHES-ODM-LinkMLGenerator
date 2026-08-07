@@ -1,3 +1,11 @@
+"""
+Tests for odm_linkmlgen.odm.odm_utils, the helpers that interpret the ODM parts
+sheet.
+
+odm_get_fk_target_class, set_range_of_slot, and add_missingness_set are not
+covered here, since they need a full parts sheet or SchemaDefinition.
+"""
+
 import pandas as pd
 
 from odm_linkmlgen.odm.odm_utils import (

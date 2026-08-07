@@ -2,4 +2,6 @@ pandas>=2.2.3
 linkml>=1.9.2,<2
 schemasheets
 openpyxl>=3.1.5
-typer>=0.12.3
+# 0.16.0 is the first release compatible with click >= 8.2, which changed the
+# signature of Parameter.make_metavar(). Older typer crashes on --help.
+typer>=0.16.0

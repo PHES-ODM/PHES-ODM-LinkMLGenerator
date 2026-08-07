@@ -1,3 +1,10 @@
+"""
+Tests for odm_linkmlgen.utils.general_utils, the shared DataFrame helpers.
+
+The I/O functions (extract_sheets, save_data_frame, read_data_frame, clear_dirs)
+are not covered here, since they touch the filesystem.
+"""
+
 import pandas as pd
 
 from odm_linkmlgen.utils.general_utils import (

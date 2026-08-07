@@ -1,3 +1,25 @@
+"""
+Creates Schemasheets for all classes (ie. tables) based on the metadata sheet of a
+NWSS data dictionary. The outputs will be named "classes_{table_name}.tsv", or a
+single "classes_nwss.tsv" when single_table is set.
+
+NWSS describes a field's type as free-text prose in its DictionaryColumns.DATA_TYPE
+column (eg. "date, [yyyy]-[mm]-[dd]") rather than with a controlled vocabulary. So
+converting a field to a LinkML range, plus a validation pattern where one applies,
+is a matter of pattern matching against the regular expressions in
+_data_types_validation_info. See _get_range_and_validation_info.
+
+## Example
+
+```python
+from odm_linkmlgen.nwss.make_nwss_ss_classes import extract_all_classes
+
+extract_all_classes("nwss/dictionary/metadata.csv",
+                    "nwss/dictionary/enums.csv",
+                    "nwss/schemasheets")
+```
+"""
+
 import os
 import re
 from pathlib import Path

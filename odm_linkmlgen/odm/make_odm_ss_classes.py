@@ -40,7 +40,7 @@ RECOGNIZED_ENUMS_HELP = """List of all recognized enumeration names."""
 headers = {
     "class": "class",
     "partID": "slot",
-    "partLabel": "title",
+    "label": "title",
     "identifier": "identifier",
     "required": "required",
     "dataType": "range",
@@ -112,7 +112,7 @@ def extract_class(
     # Select the columns of interest, and rename some of the columns
     keep_cols = [
         "partID",
-        "partLabel",
+        "label",
         "partDesc",
         "partType",
         "partInstr",
@@ -195,7 +195,7 @@ def extract_class(
     table_output_df = table_output_df.sort_values("order")
 
     # Add the description and title of the class
-    class_info = df[df["partID"] == class_name][["partLabel", "partDesc"]].to_dict(
+    class_info = df[df["partID"] == class_name][["label", "partDesc"]].to_dict(
         orient="records"
     )[0]
     class_info_df = pd.DataFrame(class_info, index=[max(table_output_df.index) + 1])
