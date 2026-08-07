@@ -15,8 +15,10 @@ theme:
   logo: img/ODM-logo.png
   favicon: img/ODM-logo.png
   features:
-    - navigation.tabs
+    # No navigation.tabs: keeping every section in the left sidebar gives a full
+    # table of contents for the whole site rather than one tab at a time.
     - navigation.sections
+    - navigation.expand
     - navigation.top
     - navigation.indexes
     - navigation.tracking
