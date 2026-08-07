@@ -1,0 +1,60 @@
+name: Documentation
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  # Allows the site to be rebuilt and redeployed from the Actions tab without
+  # pushing a commit.
+  workflow_dispatch:
+
+# Only the most recent run needs to reach production, but let an in-flight
+# deployment finish rather than leaving Pages half-updated.
+concurrency:
+  group: docs-${{ github.ref }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
+
+jobs:
+  # Always runs, including on pull requests, so a broken link or a docstring
+  # mkdocstrings cannot resolve fails the check before it reaches main.
+  build:
+    name: Build site
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+          cache: pip
+          cache-dependency-path: requirements-docs.txt
+      - name: Install documentation dependencies
+        run: pip install -r requirements-docs.txt
+      - name: Build documentation
+        # --strict turns warnings (broken internal links, pages missing from
+        # the nav, unresolved mkdocstrings references) into build failures.
+        run: mkdocs build --strict
+      - name: Upload site as a Pages artifact
+        if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+
+  # Publishes to GitHub Pages. Requires "Build and deployment > Source" to be
+  # set to "GitHub Actions" in the repository's Settings > Pages.
+  deploy:
+    name: Deploy to GitHub Pages
+    needs: build
+    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write       # to publish to GitHub Pages
+      id-token: write    # to verify the deployment originates from this workflow
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy
+        id: deployment
+        uses: actions/deploy-pages@v4

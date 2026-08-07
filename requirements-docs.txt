@@ -1,0 +1,12 @@
+# Documentation build dependencies.
+#
+# These are deliberately kept separate from requirements.txt: mkdocstrings uses
+# griffe, which reads the source statically, so building the documentation does
+# not need the runtime dependencies (linkml, pandas, ...) installed.
+#
+#   pip install -r requirements-docs.txt
+#   mkdocs serve
+
+mkdocs>=1.6
+mkdocs-material>=9.5
+mkdocstrings[python]>=0.26

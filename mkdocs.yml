@@ -1,0 +1,136 @@
+site_name: PHES-ODM LinkML Schema Generator
+site_description: >-
+  Generate LinkML schemas for the PHES-ODM and CDC NWSS wastewater surveillance
+  data models from their Excel data dictionaries.
+site_url: https://phes-odm.github.io/PHES-ODM-LinkMLGenerator/
+repo_url: https://github.com/PHES-ODM/PHES-ODM-LinkMLGenerator
+repo_name: PHES-ODM/PHES-ODM-LinkMLGenerator
+edit_uri: edit/main/docs/
+
+docs_dir: docs
+site_dir: site
+
+theme:
+  name: material
+  logo: img/ODM-logo.png
+  favicon: img/ODM-logo.png
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - navigation.top
+    - navigation.indexes
+    - navigation.tracking
+    - content.code.copy
+    - content.action.edit
+    - toc.follow
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: teal
+      accent: teal
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: teal
+      accent: teal
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+
+plugins:
+  - search
+  - mkdocstrings:
+      default_handler: python
+      handlers:
+        python:
+          # Griffe reads the source statically, so the heavy runtime
+          # dependencies (linkml, pandas, ...) do not need to be installed to
+          # build the documentation.
+          paths: [.]
+          options:
+            docstring_style: google
+            docstring_section_style: table
+            show_root_heading: true
+            show_root_full_path: true
+            show_source: true
+            show_signature_annotations: true
+            separate_signature: true
+            signature_crossrefs: true
+            members_order: source
+            filters: ["!^_"]
+            merge_init_into_class: true
+            show_symbol_type_heading: true
+            show_symbol_type_toc: true
+            heading_level: 3
+
+markdown_extensions:
+  - admonition
+  - attr_list
+  - def_list
+  - footnotes
+  - md_in_html
+  - tables
+  - toc:
+      permalink: true
+  - pymdownx.details
+  # Required for the :material-...: icons used in the card grid on the home page.
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.superfences
+  - pymdownx.tabbed:
+      alternate_style: true
+
+nav:
+  - Home: index.md
+  - Tutorials:
+      - tutorials/index.md
+      - Generate your first schema: tutorials/generate-your-first-schema.md
+      - Generate an NWSS schema: tutorials/generate-an-nwss-schema.md
+  - How-to guides:
+      - how-to/index.md
+      - Install the package: how-to/install.md
+      - Prepare the ODM data dictionary: how-to/prepare-the-odm-dictionary.md
+      - Prepare the NWSS data dictionaries: how-to/prepare-the-nwss-dictionaries.md
+      - Generate an ODM schema: how-to/generate-an-odm-schema.md
+      - Generate NWSS schemas: how-to/generate-nwss-schemas.md
+      - Use the generator as a Python library: how-to/use-as-a-python-library.md
+      - Re-run a single pipeline step: how-to/run-a-single-pipeline-step.md
+      - Debug a generated schema: how-to/debug-a-generated-schema.md
+      - Add support for a new ODM version: how-to/add-an-odm-version.md
+      - Add support for a new NWSS dictionary type: how-to/add-an-nwss-dictionary-type.md
+      - Set up a development environment: how-to/set-up-a-development-environment.md
+      - Update the documentation: how-to/update-the-documentation.md
+  - Explanation:
+      - explanation/index.md
+      - LinkML and Schemasheets: explanation/linkml-and-schemasheets.md
+      - How the pipeline is designed: explanation/pipeline-design.md
+      - The ODM data dictionary: explanation/the-odm-data-dictionary.md
+      - The NWSS data dictionaries: explanation/the-nwss-data-dictionaries.md
+      - Post-processing workarounds: explanation/post-processing-workarounds.md
+  - Reference:
+      - reference/index.md
+      - Command-line interface: reference/cli.md
+      - Output layout: reference/output-layout.md
+      - Repository layout: reference/repository-layout.md
+      - ODM pipeline steps: reference/odm-pipeline-steps.md
+      - NWSS pipeline steps: reference/nwss-pipeline-steps.md
+      - Python API:
+          - reference/api/index.md
+          - Top-level generators: reference/api/generators.md
+          - ODM modules: reference/api/odm.md
+          - NWSS modules: reference/api/nwss.md
+          - Shared utilities: reference/api/utils.md
+
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/PHES-ODM/PHES-ODM-LinkMLGenerator
+    - icon: fontawesome/solid/globe
+      link: https://phes-odm.org
