@@ -126,9 +126,6 @@ odm-linkmlgen-odm --version 3 --dictionary-file ... --output-dir ... 2>&1 \
 grep -E "ERROR|WARNING" gen/odm_v3/generate.log
 ```
 
-The symptom to look for in the schema itself is a slot whose range silently fell
-back to `string` — that means an enumeration name could not be resolved.
-
 ## Generate the NWSS schemas
 
 NWSS is published as five separate dictionaries, each an Excel workbook producing
