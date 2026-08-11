@@ -147,12 +147,7 @@ requested from the CDC directly.
 
 NWSS dictionary files are git-ignored (`/odm_linkmlgen/data/nwss/*.xlsx`), so
 nothing is bundled with the repository. Put your copies anywhere and point the
-CLI at them; by convention that is `odm_linkmlgen/data/nwss/`:
-
-```console
-mkdir -p odm_linkmlgen/data/nwss
-mv ~/Downloads/*.xlsx odm_linkmlgen/data/nwss/reporting.xlsx
-```
+CLI at them; by convention that is `odm_linkmlgen/data/nwss/`.
 
 **2. Apply the manual fixes.** Several published dictionaries contain defects
 that must be corrected in Excel before they will process correctly. **These are

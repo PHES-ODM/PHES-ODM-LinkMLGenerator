@@ -151,12 +151,7 @@ The two restricted dictionaries must be obtained from the CDC directly.
 
 NWSS dictionary files are git-ignored (`/odm_linkmlgen/data/nwss/*.xlsx`), so
 nothing is bundled with the repository. Put your copies anywhere and point the
-CLI at them; by convention that is `odm_linkmlgen/data/nwss/`:
-
-```console
-mkdir -p odm_linkmlgen/data/nwss
-mv ~/Downloads/*.xlsx odm_linkmlgen/data/nwss/reporting.xlsx
-```
+CLI at them; by convention that is `odm_linkmlgen/data/nwss/`.
 
 ### Apply the manual fixes
 
