@@ -157,8 +157,7 @@ CLI at them; by convention that is `odm_linkmlgen/data/nwss/`.
 
 Several published dictionaries contain defects that must be corrected in Excel
 before they will process correctly. **These are defects in the published files,
-not in the generator** — there is nothing to fix in this repository, and the
-list will change as the CDC republishes.
+not in the generator**, and the list will change as the CDC republishes.
 
 #### `restricted_analytics` — no `Value Sets` sheet
 
