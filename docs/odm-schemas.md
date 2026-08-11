@@ -39,9 +39,7 @@ column. Names that do not follow that convention have to be listed in
 
 When derivation fails, the run does not stop. The name simply does not resolve,
 the slot's range falls back to `string`, and an error goes to the log — which is
-why the [check step](index.md#check-the-odm-result) matters, and why a silent
-`string` range is the symptom to grep for. Diagnosing one is covered in
-[Troubleshooting](troubleshooting.md#2-check-schemasheetstsv).
+why the [check step](index.md#check-the-odm-result) matters.
 
 ## Related
 
