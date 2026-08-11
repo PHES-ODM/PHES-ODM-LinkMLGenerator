@@ -19,7 +19,7 @@ Both are deliberate; the reasoning is in
 
 ## Watch the three stages
 
-Unlike ODM v1, an NWSS run exercises the whole pipeline, and it leaves each
+Unlike ODM v1, a NWSS run exercises the whole pipeline, and it leaves each
 stage's output on disk. This is the fastest way to see how the generator
 actually works:
 
@@ -83,7 +83,7 @@ matches that prose against a table of regexes. That is
 less gen/nwss/nwss_reporting/linkml/nwss_reporting.yaml
 ```
 
-Schemasheets read *every* `.tsv` in the directory and merged them into this one
+Schemasheets reads *every* `.tsv` in the directory and merges them into this one
 file.
 
 ## Related
