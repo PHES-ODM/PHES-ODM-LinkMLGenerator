@@ -211,10 +211,11 @@ controlled vocabulary.
 So `_get_range_and_validation_info` in `make_nwss_ss_classes` works in three
 tiers:
 
-1. A `Data Type` of `category` means the range is an enumeration. The name comes
-   from the `Field` → `Value Set Name` mapping, falling back to the row's own
-   `Value Set` column. A categorical field with no enumeration anywhere logs an
-   error and leaves the range unresolved.
+1. A `Data Type` of `category` means the range is an enumeration, whose name is
+   resolved by `nwss_utils.resolve_slot_enums` — see
+   [which enumeration a field uses](#which-enumeration-a-field-uses) below. A
+   categorical field with no enumeration anywhere logs an error and leaves the
+   range unresolved.
 2. Otherwise the prose is matched against the regex table
    `_data_types_validation_info`, which maps each description onto a LinkML range
    plus a validation `pattern`. This is how `date`, `time`, `time zone`,
@@ -263,4 +264,32 @@ single shared enumeration gives the mapper no way to express that.
 Giving each field its own enumeration name solves it, and has a secondary
 benefit: each copy can carry its own per-field permissible value descriptions.
 
-See `nwss_utils.get_detailed_enums`.
+### Which enumeration a field uses
+
+A NWSS dictionary names the enumeration for a categorical field in **two places**,
+and they can disagree:
+
+| Source | Looks like |
+| --- | --- |
+| The `Metadata` sheet's `Value Set` column | `[See Value Sets: vs_yn]` |
+| The `Value Sets` sheet's `Field` → `Value Set Name` mapping | `vs_yne` |
+
+**The `Metadata` sheet wins.** It is the more complete of the two — fields missing
+from the `Value Sets` sheet mapping are common, the reverse is not — and in the one
+documented case of the two disagreeing, the `Metadata` sheet held the correct name.
+
+A disagreement is a defect in the published dictionary, so it is logged as an error
+naming both candidates and the one chosen. If you see it, report it upstream; you do
+not need to edit the workbook.
+
+`nwss_utils.resolve_slot_enums` makes this decision, and is the **only** place it is
+made. Both the enumeration Schemasheets (`make_nwss_ss_enums`) and the slot ranges
+that refer to them (`make_nwss_ss_classes`) are built from what it returns.
+
+That matters more than it sounds. When the two steps each resolved the name
+independently, a disagreement between the sheets produced a schema where the
+enumeration was generated under one name and the range pointed at the other — an
+orphan enumeration and a dangling range, in a schema that still loaded without
+complaint. `make_nwss` now also checks every range against the finished schema with
+`schema_utils.find_undefined_ranges`, and logs an error for any that does not
+resolve.

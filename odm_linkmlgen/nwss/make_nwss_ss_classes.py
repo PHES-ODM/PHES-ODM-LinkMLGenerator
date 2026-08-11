@@ -29,10 +29,13 @@ import pandas as pd
 import typer
 
 from odm_linkmlgen.nwss.nwss_utils import (
+    CATEGORY_DATA_TYPE,
     TABLE_NAME_COL,
     DictionaryColumns,
-    SlotToEnumColumns,
+    SlotEnum,
+    field_name_column,
     parse_enums_sheet,
+    resolve_slot_enums,
     splitup_metadata_sheet,
 )
 from odm_linkmlgen.utils.general_utils import get_logger, read_data_frame
@@ -121,7 +124,7 @@ _data_types_validation_info = {
 
 
 def _get_range_and_validation_info(
-    row: pd.Series, enums_df: pd.DataFrame
+    row: pd.Series, slot_enums: dict[str, SlotEnum]
 ) -> dict[str, Any]:
     """Get the range and validation info for a row in the NWSS data dictionary (metadata sheet).
     The returned dictionary can contain multiple keys that should be set for the slot usage
@@ -130,37 +133,23 @@ def _get_range_and_validation_info(
 
     Args:
         row (pd.Series): The row from the NWSS metadata sheet of the data dictionary.
-        enums_df (pd.DataFrame): A DataFrame containing the columns SlotToEnumColumns.SLOT (to
-            specify a categorical slot name in NWSS) and SlotToEnumColumns.ENUM (to specify the enum to
-            assign to the slot). This is to get an enumeration name for the current slot if
-            applicable. If enums_df is None, or if an enum for the current slot is not found in
-            enums_df, then we try to get the enum name from the DictionaryColumns.VALUE_SET column in the row.
+        slot_enums (dict[str, SlotEnum]): The enumeration each categorical slot uses, keyed
+            by slot name, as returned by nwss_utils.resolve_slot_enums. A categorical slot
+            missing from this mapping has no enumeration in the data dictionary, and is left
+            with an unresolved range.
 
     Returns:
         dict[str, Any]: Key-value pairs to set for the slot usage corresponding to the row.
     """
     results = {}
 
-    # For category data types, use the enum found in DictionaryColumns.VALUE_SET
-    if row[DictionaryColumns.DATA_TYPE] == "category":
-        val = None
-        slot_name = row["slot"]
-        # First try to get the enum name from enums_df
-        if enums_df is not None:
-            enums_row = enums_df[enums_df[SlotToEnumColumns.SLOT] == slot_name]
-            if len(enums_row) > 0:
-                val = enums_row[SlotToEnumColumns.ENUM].iloc[0].strip()
-        # If we did not get the enum name from enums_df then try to get it from the DictionaryColumns.VALUE_SET column
-        if val is None and DictionaryColumns.VALUE_SET in row.index:
-            val = row[DictionaryColumns.VALUE_SET]
-            if isinstance(val, (str)):
-                val = val.strip("[] ").split(":")[1].strip()
-            else:
-                val = None
-        if pd.isna(val):
-            logger.error(f"No enumeration for categorical slot {slot_name}")
-            # raise ValueError(f"No enumeration for categorical slot {slot_name}")
-        results["range"] = val
+    # For category data types the range is an enumeration, already resolved (and, where it
+    # applies, given its detailed per-slot name) by nwss_utils.resolve_slot_enums.
+    if row[DictionaryColumns.DATA_TYPE] == CATEGORY_DATA_TYPE:
+        # resolve_slot_enums keys on the stripped slot name, but the slot keeps whatever
+        # the dictionary spelled it as.
+        slot_enum = slot_enums.get(str(row["slot"]).strip())
+        results["range"] = slot_enum.name if slot_enum else None
         return results
 
     # See if any custom regex matches occur with _data_types_validation_info.
@@ -202,9 +191,9 @@ def parse_table_df(
         enums_df (pd.DataFrame | None): An optional DataFrame with the columns
             SlotToEnumColumns.SLOT and SlotToEnumColumns.ENUM, where the slot is a categorical
             column name in NWSS and the enum is the name of the enum assigned to the slot.
-            the name of the enumeration to assign to the slot. If None then
-            we assume that the enum name is found in the DictionaryColumns.VALUE_SET column of
-            df.
+            This is the mapping from the "Value Sets" sheet, and is consulted only where the
+            DictionaryColumns.VALUE_SET column of df does not name an enumeration. See
+            nwss_utils.resolve_slot_enums.
         detailed_enum_names (list[str] | None, optional): If specified, then a list of enum
             names where we want to use detailed enum names. Detailed enum names are in
             the format "enum_name[slot]" where "slot" is the name of the slot whose range
@@ -217,8 +206,9 @@ def parse_table_df(
     """
     df = df.copy()
 
+    slot_column = field_name_column(df)
     df["class"] = df[TABLE_NAME_COL]
-    df["slot"] = df["Field Name"] if "Field Name" in df.columns else df["variable name"]
+    df["slot"] = df[slot_column]
     df["pattern"] = ""
 
     # Parse required column
@@ -232,20 +222,21 @@ def parse_table_df(
     # Add description
     df["description"] = df[DictionaryColumns.DESCRIPTION]
 
+    # Work out which enumeration each categorical slot uses, including its detailed
+    # per-slot name where that applies. This is the same call that make_nwss_ss_enums
+    # makes when it generates the enumerations, which is what keeps the ranges set below
+    # and the enumerations they refer to in agreement.
+    slot_enums = resolve_slot_enums(
+        df, enums_df, detailed_enum_names=detailed_enum_names
+    )
+
     # Add validation and range info
     results = [
-        _get_range_and_validation_info(row, enums_df) for _, row in df.iterrows()
+        _get_range_and_validation_info(row, slot_enums) for _, row in df.iterrows()
     ]
     all_keys = {k for vals in results for k in vals}
     for k in all_keys:
         df[k] = [vals.get(k) for vals in results]
-
-    if detailed_enum_names is not None and len(detailed_enum_names) > 0:
-        for enum_name in detailed_enum_names:
-            filt = df["range"] == enum_name
-            df.loc[filt, "range"] = df.loc[filt].apply(
-                lambda x, enum_name=enum_name: f"{enum_name}[{x['slot']}]", axis=1
-            )
 
     return df
 

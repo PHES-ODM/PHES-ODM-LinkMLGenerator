@@ -169,8 +169,11 @@ in this repository, and the list will change as the CDC republishes.
   each logs an error and produces a slot with an unresolved range.
 - **`restricted_raw` — misnamed value set.** In the `Value Sets` sheet, rename
   `other_norm_units` to `other_norm_unit`, to match the field that uses it.
-- **`reporting` — misnamed value set.** In the `Value Sets` sheet, change
-  `ntc_amplify` from `vs_yne` to `vs_yn`.
+- **`reporting` — misnamed value set.** No longer needs fixing by hand. Where the
+  `Value Sets` sheet and the `Metadata` sheet name different value sets for the
+  same field — `ntc_amplify` and `pretreatment` have both done this — the
+  generator takes the `Metadata` sheet's name and logs an error identifying the
+  field and both candidates. Report it upstream rather than editing the workbook.
 - **`public_metric` — invalid permissible values.** In the
   `vs_reporting_jurisdiction` value set, change `Chicago, IL` to `Chicago`,
   change `Houston, TX` to `Houston`, and remove the individual states. Left as

@@ -9,6 +9,7 @@ from typing import Annotated
 import typer
 
 from odm_linkmlgen.utils.general_utils import get_logger
+from odm_linkmlgen.utils.schema_utils import find_undefined_ranges
 from odm_linkmlgen.utils.schemasheets_utils import make_linkml_schema_from_schemasheets
 
 logger = get_logger(__name__)
@@ -38,7 +39,25 @@ def main(
     """
     # Make the schema
     linkml_schema = output_dir / "linkml" / "odm_v1.yaml"
-    make_linkml_schema_from_schemasheets(SCHEMASHEETS_DIR, linkml_schema)
+    schema = make_linkml_schema_from_schemasheets(SCHEMASHEETS_DIR, linkml_schema)
+
+    # Report any slot left pointing at an element the schema does not define. The
+    # schema is still written, matching how make_odm and make_nwss report the same
+    # problem. Here the source is the bundled Schemasheets rather than a data
+    # dictionary, so this catches an editing mistake in them rather than an upstream
+    # defect.
+    undefined_ranges = find_undefined_ranges(schema)
+    for slot_name, ranges in undefined_ranges.items():
+        logger.error(
+            f"Slot {slot_name} has a range the schema does not define: "
+            f"{', '.join(ranges)}. This usually means an enumeration named by the "
+            "bundled Schemasheets was never generated."
+        )
+    if undefined_ranges:
+        logger.error(
+            f"ODM v1: {len(undefined_ranges)} slot(s) have an undefined range, so the "
+            "generated schema is not usable as it stands."
+        )
 
     logger.info("Finished!")
 

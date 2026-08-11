@@ -6,6 +6,7 @@ from dataclasses import asdict
 
 from linkml_runtime import SchemaView
 from linkml_runtime.linkml_model import SlotDefinition
+from linkml_runtime.linkml_model.meta import SchemaDefinition
 
 
 def get_slot_definition(
@@ -97,8 +98,13 @@ def get_ranges_of_slot_defn(
         range_defn = cur_defn.get("range", None)
         if range_defn is not None:
             # range_defn is of type linkml_runtime.linkml_model.meta.ElementName
-            # We need to convert it to either type str or type list[str]
-            cur_ranges = [str(range_defn)]
+            # We need to convert it to either type str or type list[str]. A slot with
+            # several ranges holds them as a list (see
+            # schemasheets_utils.fix_schemasheets_generated_schema).
+            if isinstance(range_defn, (list, tuple)):
+                cur_ranges = [str(r) for r in range_defn]
+            else:
+                cur_ranges = [str(range_defn)]
 
         # Try getting any_of
         any_of_defn = cur_defn.get("any_of", None)
@@ -116,3 +122,42 @@ def get_ranges_of_slot_defn(
     # Remove duplicates (but retain order)
     ranges = list(dict.fromkeys(ranges))
     return ranges
+
+
+def find_undefined_ranges(
+    schema: SchemaDefinition | SchemaView,
+) -> dict[str, list[str]]:
+    """Find every slot whose range names something the schema does not define.
+
+    A generated schema can be well-formed YAML, and can load, while still being unusable:
+    LinkML does not resolve ranges when a schema is loaded, so a slot whose range names an
+    enumeration that was never generated passes unnoticed until whatever consumes the
+    schema tries to use it. The generators log and skip a bad data dictionary row rather
+    than raising, so this is the check that turns a skipped row into a reported problem.
+
+    Args:
+        schema (SchemaDefinition | SchemaView): The schema to check.
+
+    Returns:
+        dict[str, list[str]]: The undefined ranges of each offending slot, keyed by
+            "{class_name}.{slot_name}". Empty if every range resolves.
+    """
+    view = schema if isinstance(schema, SchemaView) else SchemaView(schema)
+
+    # Everything a range is allowed to name. all_types() includes the imported
+    # linkml:types, so string, integer, date and the rest are covered as long as the
+    # import resolved.
+    defined = set(view.all_classes()) | set(view.all_enums()) | set(view.all_types())
+
+    undefined = {}
+    for class_name in view.all_classes():
+        for slot_defn in view.class_induced_slots(class_name):
+            missing = [
+                range_name
+                for range_name in get_ranges_of_slot_defn(slot_defn)
+                if range_name not in defined
+            ]
+            if missing:
+                undefined[f"{class_name}.{slot_defn.name}"] = missing
+
+    return undefined

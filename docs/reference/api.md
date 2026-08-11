@@ -242,11 +242,16 @@ to update when a dictionary renames a column.
       members:
         - TABLE_NAME_COL
         - SINGLE_TABLE_NAME
+        - CATEGORY_DATA_TYPE
         - DictionaryColumns
         - SlotToEnumColumns
+        - SlotEnum
         - splitup_metadata_sheet
         - parse_enums_sheet
-        - get_detailed_enums
+        - field_name_column
+        - parse_value_set_reference
+        - resolve_slot_enums
+        - group_detailed_enums
 
 ## Shared utilities
 
@@ -309,13 +314,21 @@ be silently included.
 Read-only helpers for inspecting a generated schema. Useful when writing tools that
 consume the output.
 
-These take a `SchemaView` as their **third** argument, not the `SchemaDefinition`
-that `make_odm` returns — wrap it first. See
+The per-slot lookups take a `SchemaView` as their **third** argument, not the
+`SchemaDefinition` that `make_odm` returns — wrap it first. See
 [Use it from Python](../python-api.md#inspecting-a-generated-schema).
+`find_undefined_ranges` is the exception and accepts either, as its only argument.
 
 Prefer `get_ranges_of_slot` over reading `.range` directly: a slot that accepts a
 missingness enumeration alongside its normal range is written as `any_of` and has
 no `range` at all.
+
+`find_undefined_ranges` answers a question LinkML will not: whether every range in
+the schema names something the schema actually defines. Loading a schema does not
+resolve its ranges, so a slot pointing at an enumeration that was never generated
+loads without complaint and fails only in whatever consumes it. Both `make_odm`
+and `make_nwss` run this after generating a schema and log an error per offending
+slot.
 
 ::: odm_linkmlgen.utils.schema_utils
     options:
@@ -324,3 +337,4 @@ no `range` at all.
         - get_slot_definition
         - get_ranges_of_slot
         - get_ranges_of_slot_defn
+        - find_undefined_ranges

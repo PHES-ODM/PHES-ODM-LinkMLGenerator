@@ -31,6 +31,7 @@ from odm_linkmlgen.nwss.make_nwss_ss_enums import extract_enums
 from odm_linkmlgen.nwss.make_nwss_ss_prefixes import make_prefixes
 from odm_linkmlgen.nwss.make_nwss_ss_schema import make_schema
 from odm_linkmlgen.utils.general_utils import clear_dirs, extract_sheets, get_logger
+from odm_linkmlgen.utils.schema_utils import find_undefined_ranges
 from odm_linkmlgen.utils.schemasheets_utils import make_linkml_schema_from_schemasheets
 
 logger = get_logger(__name__)
@@ -211,9 +212,25 @@ def make_nwss(
         make_schema(schemasheets_dir / "schema.tsv", data_values=default_schema_values)
 
         # Run Schemasheets to make the final LinkML schema
-        make_linkml_schema_from_schemasheets(
+        schema = make_linkml_schema_from_schemasheets(
             schemasheets_dir, linkml_dir / f"nwss_{dictionary_type}.yaml"
         )
+
+        # Report any slot left pointing at an element the schema does not define. The
+        # schema is still written: this is reported the same way as every other data
+        # dictionary defect, so that one bad field does not cost you the whole run.
+        undefined_ranges = find_undefined_ranges(schema)
+        for slot_name, ranges in undefined_ranges.items():
+            logger.error(
+                f"Slot {slot_name} has a range the schema does not define: "
+                f"{', '.join(ranges)}. For a categorical field this usually means its "
+                "enumeration is missing from the Value Sets sheet of the data dictionary."
+            )
+        if undefined_ranges:
+            logger.error(
+                f"{dictionary_type}: {len(undefined_ranges)} slot(s) have an undefined "
+                "range, so the generated schema is not usable as it stands."
+            )
 
     logger.info("Finished!")
 

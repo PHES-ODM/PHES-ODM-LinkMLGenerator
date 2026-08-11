@@ -18,7 +18,9 @@ order, to turn an ODM v2+ Excel data dictionary into a LinkML schema.
 
     Its Schemasheets TSVs are hand-written and bundled at
     `odm_linkmlgen/data/odm_v1/schemasheets/`, so `odm-linkmlgen-odmv1` runs only
-    step 9's equivalent over them.
+    step 9's equivalent over them, followed by the same undefined-range check as
+    step 11. There is no data dictionary behind it, so that check is guarding the
+    bundled TSVs against an editing mistake rather than an upstream defect.
 
 | # | Module / function | Output |
 | --- | --- | --- |
@@ -186,6 +188,16 @@ LinkML `any_of` rather than a single `range` — see `odm_utils.set_range_of_slo
 Serialises the `SchemaDefinition` to YAML. `make_odm` also returns the
 `SchemaDefinition` to its caller.
 
+`make_odm` then checks the finished schema with
+`schema_utils.find_undefined_ranges` and logs an error for every slot whose range
+names something the schema does not define — usually an enumeration named by the
+parts or sets sheet that was never generated. This is a check rather than a step:
+the schema is written either way. It runs after step 10 so that the ranges it
+sees are the final ones, including the `any_of` pairings that step introduces.
+The NWSS pipeline runs the same check, for the same reason — LinkML does not
+resolve ranges when a schema is loaded, so without it a schema that no tool can
+actually use still looks like a clean run.
+
 ## NWSS pipeline steps
 
 The eight steps `odm-linkmlgen-nwss` (`odm_linkmlgen.make_nwss.make_nwss`) runs
@@ -261,6 +273,12 @@ Parses the `Value Sets` sheet into one Schemasheet per enumeration, expanding th
 — so `vs_yne` becomes `enum_vs_yne[stormwater_input].tsv` and one file per other
 field that uses it, and the undifferentiated original is dropped.
 
+Which fields those are comes from `nwss_utils.resolve_slot_enums`, the same
+function step 4 uses to set the ranges, so the enumerations written here and the
+ranges that name them cannot disagree. This step passes `log_problems=False`: an
+unresolved enumeration is reported by step 4, whose output is the one left broken
+by it.
+
 This step is **skipped when the dictionary has no `Value Sets` sheet**, in which
 case the schema is generated without any enumerations at all.
 
@@ -279,10 +297,15 @@ the Schemasheets columns:
   works in three tiers:
 
     1. A `Data Type` of `category` means the range is an enumeration. The
-       enumeration name comes from the `Field` → `Value Set Name` mapping in the
-       `Value Sets` sheet, falling back to the row's own `Value Set` column. A
-       categorical field with no enumeration anywhere logs an error and leaves the
-       range unresolved.
+       enumeration name — including its detailed per-slot form where that applies
+       — is resolved by `nwss_utils.resolve_slot_enums`, which prefers the row's
+       own `Value Set` column and falls back to the `Field` → `Value Set Name`
+       mapping in the `Value Sets` sheet. The enumeration step calls the same
+       function, which is what keeps a range and the enumeration it names in
+       agreement. See
+       [which enumeration a field uses](../data-dictionaries.md#which-enumeration-a-field-uses).
+       A categorical field with no enumeration anywhere logs an error and leaves
+       the range unresolved.
     2. Otherwise the `Data Type` is matched against the regex table
        `_data_types_validation_info`, which maps NWSS's free-text data type
        descriptions onto a LinkML range plus a validation `pattern`. This is how
@@ -334,3 +357,10 @@ Runs Schemasheets over every `.tsv` in `schemasheets/`, applies
 `fix_schemasheets_generated_schema` (see
 [post-processing workarounds](../how-it-works.md#post-processing-workarounds)), and
 writes the YAML.
+
+`make_nwss` then checks the finished schema with
+`schema_utils.find_undefined_ranges` and logs an error for every slot whose range
+names something the schema does not define. This is a check rather than a step: the
+schema is written either way. It exists because LinkML does not resolve ranges when
+a schema is loaded, so without it a schema that no tool can actually use still looks
+like a clean run.

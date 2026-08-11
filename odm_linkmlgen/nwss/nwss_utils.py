@@ -10,12 +10,17 @@ Two sheet layouts are handled:
   rather than stacked. parse_enums_sheet extracts them, along with the mapping
   from each field to the enumeration it uses.
 
-get_detailed_enums supports generating a per-field copy of an enumeration that is
-shared by many fields (eg. "vs_yne" becomes "vs_yne[stormwater_input]"), so that
-each field can carry its own permissible value descriptions.
+resolve_slot_enums decides which enumeration each categorical field uses. It is the
+single source of truth for that decision: both the enumeration Schemasheets and the
+class Schemasheets are built from what it returns, so a field's range can never name
+an enumeration that was generated under a different name. It also applies the
+per-field naming of an enumeration shared by many fields (eg. "vs_yne" becomes
+"vs_yne[stormwater_input]"), so that each field can carry its own permissible value
+descriptions.
 """
 
 from itertools import pairwise
+from typing import Any, NamedTuple
 
 import pandas as pd
 
@@ -38,12 +43,36 @@ class DictionaryColumns:
     """Column headers used by the sheets of a NWSS data dictionary Excel file."""
 
     FIELD_NAME: str = "Field Name"
+    # Some dictionary versions name the field column "variable name" instead of
+    # DictionaryColumns.FIELD_NAME. See field_name_column.
+    VARIABLE_NAME: str = "variable name"
     DATA_TYPE: str = "Data Type"
     VALUE_SET: str = "Value Set"
     FIELD: str = "Field"
     VALUE_SET_NAME: str = "Value Set Name"
     DESCRIPTION: str = "Description"
     SUBMISSION_REQUIREMENT: str = "Submission Requirement"
+
+
+# The DictionaryColumns.DATA_TYPE value that marks a field as categorical, ie. as
+# having an enumeration for its range.
+CATEGORY_DATA_TYPE = "category"
+
+
+class SlotEnum(NamedTuple):
+    """The enumeration that one categorical slot uses.
+
+    Attributes:
+        base (str): The enumeration name as it appears in the data dictionary, and
+            so the name of the enumeration to copy the permissible values from
+            (eg. "vs_yn").
+        name (str): The name to use in the generated schema. This is the detailed,
+            per-slot form (eg. "vs_yn[pretreatment]") when base is one of the
+            detailed enum names, and identical to base otherwise.
+    """
+
+    base: str
+    name: str
 
 
 def splitup_metadata_sheet(
@@ -182,11 +211,167 @@ def parse_enums_sheet(df: pd.DataFrame) -> tuple[pd.DataFrame, dict[str, pd.Data
     return fields_df, all_enums
 
 
-def get_detailed_enums(
-    metadata_df: pd.DataFrame, detailed_enum_names: list[str] | None = None
-) -> dict[str, list[str]]:
-    """Get a dictionary that maps all non-detailed enum names to all of the detailed versions of the enum
-    names. eg:
+def field_name_column(df: pd.DataFrame) -> str | None:
+    """Get the name of the column holding the field names in a Metadata sheet.
+
+    Dictionary versions disagree on what to call it: most use
+    DictionaryColumns.FIELD_NAME, some use DictionaryColumns.VARIABLE_NAME.
+
+    Args:
+        df (pd.DataFrame): The Metadata sheet to inspect.
+
+    Returns:
+        str | None: The column name, or None if the sheet has neither column.
+    """
+    for column in (DictionaryColumns.FIELD_NAME, DictionaryColumns.VARIABLE_NAME):
+        if column in df.columns:
+            return column
+    return None
+
+
+def parse_value_set_reference(value: Any) -> str | None:
+    """Get the enumeration name out of a Metadata sheet DictionaryColumns.VALUE_SET cell.
+
+    The cell references the enumeration in prose rather than naming it directly, as
+    in "[See Value Sets: vs_yn]", which yields "vs_yn".
+
+    Args:
+        value (Any): The cell value. Anything that is not a string (eg. a NaN for a
+            non-categorical field) yields None.
+
+    Returns:
+        str | None: The referenced enumeration name, or None if the cell does not
+            contain one.
+    """
+    if not isinstance(value, str):
+        return None
+    # Everything after the colon is the enum name. A cell without a colon is not a
+    # value set reference at all.
+    text = value.strip("[] ")
+    if ":" not in text:
+        return None
+    return text.split(":")[1].strip() or None
+
+
+def resolve_slot_enums(
+    metadata_df: pd.DataFrame,
+    slot_to_enum_df: pd.DataFrame | None = None,
+    detailed_enum_names: list[str] | None = None,
+    log_problems: bool = True,
+) -> dict[str, SlotEnum]:
+    """Decide which enumeration each categorical slot uses, for every categorical slot
+    in a Metadata sheet. eg:
+
+        {
+            "pretreatment": SlotEnum(base="vs_yn", name="vs_yn[pretreatment]"),
+            "sample_matrix": SlotEnum(base="vs_sample_matrix", name="vs_sample_matrix"),
+            ...
+        }
+
+    A NWSS data dictionary names the enumeration for a field in two places, and they
+    can disagree:
+
+    - the Metadata sheet's DictionaryColumns.VALUE_SET column, as a reference such as
+      "[See Value Sets: vs_yn]"
+    - the "Value Sets" sheet's DictionaryColumns.FIELD to DictionaryColumns.VALUE_SET_NAME
+      mapping, supplied here as slot_to_enum_df
+
+    **The Metadata sheet wins.** It is the more complete of the two — fields missing
+    from the "Value Sets" sheet mapping are common, the reverse is not — and in the one
+    documented instance of the two disagreeing (the ntc_amplify defect, see the NWSS
+    manual fixes in the documentation) the Metadata sheet held the correct name. A
+    disagreement is a defect in the published dictionary, so it is logged.
+
+    This is the only place the decision is made. Generating the enumerations and
+    generating the slot ranges that refer to them both go through here, so a range
+    cannot end up naming an enumeration that was generated under the other sheet's name.
+
+    Args:
+        metadata_df (pd.DataFrame): The Metadata sheet extracted from a NWSS data
+            dictionary. May be one table's worth of rows rather than the whole sheet.
+        slot_to_enum_df (pd.DataFrame | None, optional): The DictionaryColumns.FIELD to
+            DictionaryColumns.VALUE_SET_NAME mapping from the "Value Sets" sheet, as
+            returned by parse_enums_sheet, with the columns SlotToEnumColumns.SLOT and
+            SlotToEnumColumns.ENUM. Used only where the Metadata sheet does not name an
+            enumeration. Defaults to None.
+        detailed_enum_names (list[str] | None, optional): Enumerations that should be
+            given a detailed, per-slot name (eg. "vs_yne[stormwater_input]") rather than
+            being shared between every slot that uses them. Defaults to None.
+        log_problems (bool, optional): If True then log an error for a categorical slot
+            with no enumeration, and for a slot whose two sources disagree. Set False
+            when calling from a step that is not the one responsible for reporting them,
+            so that a problem is not logged twice per run. Defaults to True.
+
+    Returns:
+        dict[str, SlotEnum]: The enumeration for each categorical slot, keyed by slot
+            name. A categorical slot with no enumeration in either source is absent.
+    """
+    resolved: dict[str, SlotEnum] = {}
+
+    slot_column = field_name_column(metadata_df)
+    if slot_column is None or DictionaryColumns.DATA_TYPE not in metadata_df.columns:
+        return resolved
+
+    # The "Value Sets" sheet mapping, as a plain lookup.
+    sheet_enums: dict[str, str] = {}
+    if slot_to_enum_df is not None and not slot_to_enum_df.empty:
+        for slot, enum in zip(
+            slot_to_enum_df[SlotToEnumColumns.SLOT],
+            slot_to_enum_df[SlotToEnumColumns.ENUM],
+        ):
+            if isinstance(slot, str) and isinstance(enum, str) and enum.strip():
+                sheet_enums[slot.strip()] = enum.strip()
+
+    has_value_set_column = DictionaryColumns.VALUE_SET in metadata_df.columns
+    categories = metadata_df[
+        metadata_df[DictionaryColumns.DATA_TYPE] == CATEGORY_DATA_TYPE
+    ]
+
+    for _, row in categories.iterrows():
+        slot_name = row[slot_column]
+        if not isinstance(slot_name, str) or not slot_name.strip():
+            continue
+        slot_name = slot_name.strip()
+
+        metadata_enum = (
+            parse_value_set_reference(row[DictionaryColumns.VALUE_SET])
+            if has_value_set_column
+            else None
+        )
+        sheet_enum = sheet_enums.get(slot_name)
+
+        if (
+            log_problems
+            and metadata_enum is not None
+            and sheet_enum is not None
+            and metadata_enum != sheet_enum
+        ):
+            logger.error(
+                f"Categorical slot {slot_name} is assigned two different enumerations by "
+                f"the data dictionary: the Metadata sheet says '{metadata_enum}' and the "
+                f"Value Sets sheet says '{sheet_enum}'. Using '{metadata_enum}'. This is a "
+                "defect in the data dictionary and should be corrected at the source."
+            )
+
+        base = metadata_enum or sheet_enum
+        if base is None:
+            if log_problems:
+                logger.error(f"No enumeration for categorical slot {slot_name}")
+            continue
+
+        name = (
+            f"{base}[{slot_name}]"
+            if detailed_enum_names and base in detailed_enum_names
+            else base
+        )
+        resolved[slot_name] = SlotEnum(base=base, name=name)
+
+    return resolved
+
+
+def group_detailed_enums(slot_enums: dict[str, SlotEnum]) -> dict[str, list[str]]:
+    """Group resolved slot enumerations by the enumeration they are copied from, for
+    those that were given a detailed, per-slot name. eg:
 
         {
             "vs_yne" : [ "vs_yne[stormwater_input]", "vs_yne[influent_equilibrated]" ],
@@ -194,53 +379,19 @@ def get_detailed_enums(
         }
 
     Args:
-        metadata_df (pd.DataFrame): The Metadata sheet extracted from a NWSS data dictionary.
-        detailed_enum_names (list[str] | None, optional): A list of all enums that should
-            be converted to detailed enum names. Defaults to None.
+        slot_enums (dict[str, SlotEnum]): The resolved enumerations, as returned by
+            resolve_slot_enums.
 
     Returns:
-        dict[str, list[str]]: A dictionary that maps non-detailed enum names to a list of all
-            detailed enum names used for that enum in the Metadata.
+        dict[str, list[str]]: The detailed enumeration names to generate, keyed by the
+            name of the enumeration to copy the permissible values from. Enumerations
+            that were not given a detailed name are not included.
     """
-    if DictionaryColumns.VALUE_SET not in metadata_df.columns:
-        return {}
-
-    # Get all categorical rows
-    categories = metadata_df[
-        metadata_df[DictionaryColumns.DATA_TYPE] == "category"
-    ].copy()
-    # Extract the (non-detailed) enum names used for each row
-    categories[DictionaryColumns.VALUE_SET] = categories[
-        DictionaryColumns.VALUE_SET
-    ].map(
-        lambda x: x.strip("[] ").split(":")[1].strip() if isinstance(x, str) else None
-    )
-
-    def _get_detailed_enum(
-        row: pd.Series, detailed_enum_names: list[str] | None
-    ) -> str | None:
-        """Get the enumeration name from the row, making the name detailed if required.
-
-        Returns None if the row's enum should not be given a detailed name.
-        """
-        if not detailed_enum_names:
-            return None
-        if row[DictionaryColumns.VALUE_SET] in detailed_enum_names:
-            return f"{row[DictionaryColumns.VALUE_SET]}[{row[DictionaryColumns.FIELD_NAME]}]"
-        return None
-
-    enum_map = {}
-    for _, row in categories.iterrows():
-        # Get the enum name for the current row and its detailed name
-        # eg. enum name is vs_yne and detailed name is vs_yne[stormwater_input]
-        enum_name = row[DictionaryColumns.VALUE_SET]
-        detailed_enum_name = _get_detailed_enum(row, detailed_enum_names)
-
-        # If there is a detailed name, then add it to the enum_map that maps regular enum name
-        # to detailed enum names.
-        if detailed_enum_name:
-            if enum_name not in enum_map:
-                enum_map[enum_name] = []
-            if detailed_enum_name not in enum_map[enum_name]:
-                enum_map[enum_name].append(detailed_enum_name)
-    return enum_map
+    grouped: dict[str, list[str]] = {}
+    for slot_enum in slot_enums.values():
+        if slot_enum.name == slot_enum.base:
+            continue
+        names = grouped.setdefault(slot_enum.base, [])
+        if slot_enum.name not in names:
+            names.append(slot_enum.name)
+    return grouped

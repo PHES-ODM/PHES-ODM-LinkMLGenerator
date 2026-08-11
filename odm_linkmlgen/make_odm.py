@@ -16,6 +16,7 @@ from odm_linkmlgen.odm.make_odm_ss_prefixes import make_prefixes
 from odm_linkmlgen.odm.make_odm_ss_schema import make_schema
 from odm_linkmlgen.odm.odm_utils import add_missingness_set
 from odm_linkmlgen.utils.general_utils import clear_dirs, extract_sheets, get_logger
+from odm_linkmlgen.utils.schema_utils import find_undefined_ranges
 from odm_linkmlgen.utils.schemasheets_utils import (
     make_linkml_schema_from_schemasheets,
     save_schema_definition,
@@ -107,6 +108,24 @@ def make_odm(
 
     # Save the schema to disk
     save_schema_definition(schema, linkml_dir / f"odm_v{version}.yaml")
+
+    # Report any slot left pointing at an element the schema does not define. The
+    # schema is still written: this is reported the same way as every other data
+    # dictionary defect, so that one bad part does not cost you the whole run. This
+    # runs after add_missingness_set, so the ranges it checks are the final ones,
+    # including the any_of pairings that step introduces.
+    undefined_ranges = find_undefined_ranges(schema)
+    for slot_name, ranges in undefined_ranges.items():
+        logger.error(
+            f"Slot {slot_name} has a range the schema does not define: "
+            f"{', '.join(ranges)}. This usually means an enumeration named by the "
+            "parts or sets sheet was never generated."
+        )
+    if undefined_ranges:
+        logger.error(
+            f"ODM v{version}: {len(undefined_ranges)} slot(s) have an undefined range, "
+            "so the generated schema is not usable as it stands."
+        )
 
     return schema
 

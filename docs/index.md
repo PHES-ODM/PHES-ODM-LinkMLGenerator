@@ -187,7 +187,12 @@ matches the name of the field that uses it.
 
 #### `reporting` — misnamed value set
 
-In the `Value Sets` sheet, change `ntc_amplify` from `vs_yne` to `vs_yn`.
+No longer needs fixing by hand. Where the `Value Sets` sheet and the `Metadata`
+sheet name different value sets for the same field — `ntc_amplify` and
+`pretreatment` have both done this — the generator takes the `Metadata` sheet's
+name and logs an error identifying the field and both candidates. See
+[which enumeration a field uses](data-dictionaries.md#which-enumeration-a-field-uses).
+Report it upstream rather than editing the workbook.
 
 #### `public_metric` — invalid permissible values
 

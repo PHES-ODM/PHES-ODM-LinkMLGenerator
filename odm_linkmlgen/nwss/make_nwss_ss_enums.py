@@ -20,7 +20,11 @@ from typing import Annotated
 
 import typer
 
-from odm_linkmlgen.nwss.nwss_utils import get_detailed_enums, parse_enums_sheet
+from odm_linkmlgen.nwss.nwss_utils import (
+    group_detailed_enums,
+    parse_enums_sheet,
+    resolve_slot_enums,
+)
 from odm_linkmlgen.utils.general_utils import get_logger, read_data_frame
 from odm_linkmlgen.utils.schemasheets_utils import save_schemasheet
 
@@ -81,24 +85,38 @@ def extract_enums(
     valuesets_df = read_data_frame(valuesets_file)
     metadata_df = read_data_frame(metadata_file)
 
-    # If "variable name" is a column in metadata_df then rename it to "Field Name"
-    if "variable name" in metadata_df.columns:
-        columns = list(metadata_df.columns)
-        columns[columns.index("variable name")] = "Field Name"
-        metadata_df.columns = columns
-
     # Parse the enums sheet, by breaking it up into multiple DataFrames. Each DataFrame
     # has the headers permissible_value, description, and enum (the enum name)
-    _, all_enums = parse_enums_sheet(valuesets_df)
+    slot_to_enum_df, all_enums = parse_enums_sheet(valuesets_df)
+
+    # Work out which enumeration each categorical slot uses. This is the same call that
+    # make_nwss_ss_classes makes when it assigns the slot ranges, which is what keeps the
+    # enumerations generated here and the ranges that refer to them in agreement.
+    # log_problems is off because the class extraction step reports them: it is the step
+    # whose output is left broken by an unresolved enumeration.
+    slot_enums = resolve_slot_enums(
+        metadata_df,
+        slot_to_enum_df,
+        detailed_enum_names=detailed_enum_names,
+        log_problems=False,
+    )
+
     # Any enum that appears in the list detailed_enum_names will be duplicated and renamed
     # to include both the enum name and the name of the slot that uses the enum (in square brackets)
     # For example, if detailed_enum_names = ["vs_yne"], then the enum name "vs_yne" will be duplicated
     # and renamed "vs_yne[stormwater_input]", "vs_yne[ext_blank]", etc. The original enum (eg. vs_yne)
     # will be deleted, so only the detailed names exist.
-    detailed_enums = get_detailed_enums(
-        metadata_df, detailed_enum_names=detailed_enum_names
-    )
+    detailed_enums = group_detailed_enums(slot_enums)
     for enum_name, target_names in detailed_enums.items():
+        if enum_name not in all_enums:
+            # Nothing to copy the permissible values from. The slots using it keep the
+            # detailed range, which make_nwss reports as an undefined range once the
+            # schema has been generated.
+            logger.error(
+                f"Enumeration {enum_name} is used by {len(target_names)} slot(s) but is "
+                "not defined in the Value Sets sheet"
+            )
+            continue
         enum_df = all_enums[enum_name]
         for target_name in target_names:
             cur_enum_df = enum_df.copy()
