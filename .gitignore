@@ -7,6 +7,11 @@
 /odm_linkmlgen/data/nwss/*.xlsx
 /odm_linkmlgen/data/odm_v*/*.xlsx
 
+# Generator output. "gen" is the output directory used throughout the
+# documentation, and holds the generated schemas along with the intermediate
+# dictionary/ and schemasheets/ stages. None of it is committed.
+/gen/
+
 # Mac Desktop Services Store
 .DS_Store
 
