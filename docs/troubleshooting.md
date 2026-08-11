@@ -5,11 +5,6 @@
 **`command not found`** — the virtual environment is not active. Run
 `source .env/bin/activate`.
 
-**`--help` crashes with `Parameter.make_metavar() missing 1 required positional
-argument: 'ctx'`** — your `typer` is older than 0.16.0, which is the first
-release compatible with `click` 8.2+. `requirements.txt` pins this, so
-re-running `pip install -r requirements.txt` in the active environment fixes it.
-
 ## A generated schema is wrong
 
 A run that "succeeded" can still have produced a degraded schema: errors in the

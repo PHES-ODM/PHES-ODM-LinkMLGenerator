@@ -2,12 +2,6 @@
 
 `pip install -e .` registers three commands. Every command also accepts `--help`.
 
-!!! note
-
-    If `--help` crashes with `Parameter.make_metavar() missing 1 required
-    positional argument: 'ctx'`, your `typer` is older than 0.16.0. See
-    [Troubleshooting](../troubleshooting.md#installation-problems).
-
 ## `odm-linkmlgen-odm`
 
 Generates an ODM v2+ schema. Wraps `odm_linkmlgen.make_odm.make_odm`.

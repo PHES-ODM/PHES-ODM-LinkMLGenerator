@@ -40,8 +40,7 @@ This registers three commands:
 | `odm-linkmlgen-nwss` | One schema per NWSS dictionary type supplied |
 
 Every command accepts `--help`; the full option lists are in the
-[CLI reference](reference/cli.md). If `--help` itself crashes, see
-[Troubleshooting](troubleshooting.md#installation-problems).
+[CLI reference](reference/cli.md).
 
 ## Generate the ODM schemas
 
