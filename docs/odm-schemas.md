@@ -30,6 +30,111 @@ The full v2+ output layout, including the asymmetry in how enumeration TSVs are
 grouped, is in the
 [output layout reference](reference/layouts.md#odm-v2).
 
+## Watch the three stages
+
+A v2+ run exercises the whole pipeline, and it leaves each stage's output on
+disk. This is the fastest way to see how the generator actually works — v1 is no
+use for it, since it starts at stage 3. Take v3 as the example:
+
+```console
+find gen/odm_v3 -type d
+```
+
+```text
+gen/odm_v3/dictionary/     # Stage 1 output
+gen/odm_v3/schemasheets/   # Stage 2 output
+gen/odm_v3/linkml/         # Stage 3 output
+```
+
+Those three directories *are* the pipeline. Take them in order.
+
+### Stage 1 — Excel becomes CSV
+
+```console
+ls gen/odm_v3/dictionary/
+```
+
+```text
+parts.csv    sets.csv
+```
+
+Two sheets, saved verbatim as CSV. Nothing has been interpreted yet; this stage
+exists so that no later step ever has to open an Excel file, and so that you can
+[re-run a later step](python-api.md#re-run-a-single-step) in a second instead of
+re-parsing the workbook each time.
+
+`parts.csv` is the data model. One row per part, and — after the descriptive
+columns — a group of three columns per ODM table: `samples`, `samplesRequired`,
+`samplesOrder`, then the same triple for every other table. A part belongs to a
+table when its cell in that table's first column is filled in, and the value
+there (`pK`, `fK`, `header`) says what role it plays. That is how one flat sheet
+encodes twenty-six tables.
+
+`sets.csv` is the enumerations: one row per membership, with `setID` naming the
+enumeration and `partID` the permissible value in it.
+
+Search `parts.csv` for a `partID` of `NA` or `null`. Both are there, as literal
+text — they are real ODM parts, and reading them as missing values is exactly
+what [step 2's `na_values`](reference/pipeline-steps.md#odm-2-extract-the-excel-sheets-to-csv)
+prevents.
+
+### Stage 2 — CSV becomes Schemasheets TSV
+
+```console
+ls gen/odm_v3/schemasheets/
+```
+
+You will see one `class_*.tsv` per ODM table — `class_samples.tsv`,
+`class_sites.tsv`, and so on — plus `enums_sets.tsv`, `enums_parts.tsv`,
+`container.tsv`, `prefixes.tsv`, and `schema.tsv`. Note the asymmetry: one file
+per class, but only one file per enumeration *source sheet*, each holding every
+enumeration from it.
+
+This is where all the ODM-specific knowledge lives. Look at a class file:
+
+```console
+head -3 gen/odm_v3/schemasheets/class_samples.tsv
+```
+
+The `>` row maps the columns onto LinkML: `class`, `slot`, `title`,
+`identifier`, `required`, `range`, `description`, `pattern`. Several trailing
+columns map to `ignore` — `partType`, `mmaSet`, `headerType`, `order`,
+`minLength`, `maxLength` are carried along for readability, having already done
+their work in [step 5](reference/pipeline-steps.md#odm-5-extract-one-schemasheet-per-class).
+Four things in that file are worth finding:
+
+- `protocolID` has a `range` of `protocols` — a foreign key resolved to the
+  class it points at, not to a data type.
+- `purpose` has a `range` of `purposeSet` — a categorical resolved to an
+  enumeration name. That name is *derived*, which is what the next section is
+  about.
+- `sampleID` has a `pattern` of `^.{0,30}$`, built from the part's `minLength`
+  and `maxLength`, because LinkML has no string-length constraint.
+- The final row has an empty `slot` cell. It carries the table's own title and
+  description rather than a slot's.
+
+### Stage 3 — TSV becomes LinkML
+
+```console
+less gen/odm_v3/linkml/odm_v3.yaml
+```
+
+Schemasheets reads *every* `.tsv` in the directory and merges them into this one
+file — roughly twenty thousand lines for v3.
+
+One thing in it came from no TSV at all:
+
+```console
+grep -A3 "any_of" gen/odm_v3/linkml/odm_v3.yaml | head -8
+```
+
+A slot written as `any_of: [string, genMissingnessSet]` had a plain `string`
+range in stage 2 (just `string`). The second range (`genMissingnessSet`) was
+added afterwards, straight onto the `SchemaDefinition`, by [step
+10](reference/pipeline-steps.md#odm-10-add-the-missingness-sets) — the parts
+sheet records it in a `missingnessSet` column that no Schemasheets column can
+express.
+
 ## Enumeration names are derived, not looked up
 
 The ODM-specific thing to know before your first v2+ run: a slot's enumeration
