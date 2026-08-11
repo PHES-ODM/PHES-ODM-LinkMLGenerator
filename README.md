@@ -133,17 +133,17 @@ its own independent schema. You need only the ones you intend to generate from.
 
 **1. Get the dictionaries.** Three of the five are public — download them from
 the CDC's
-[Wastewater Surveillance Data Reporting and Analytics](https://www.cdc.gov/nwss/reporting.html)
+[Wastewater Surveillance Data Reporting and Analytics](https://archive.cdc.gov/www_cdc_gov/nwss/reporting.html)
 page, from the **Data Dictionaries** box. The two restricted dictionaries must be
 requested from the CDC directly.
 
 | Dictionary type | CLI option | Publicly available |
 | --- | --- | --- |
-| Main reporting | `--reporting` | Yes |
-| Public concentration | `--public-concentration` | Yes |
-| Public metric | `--public-metric` | Yes |
-| Restricted raw | `--restricted-raw` | No |
-| Restricted analytics | `--restricted-analytics` | No |
+| NWSS Reporting | `--reporting` | Yes |
+| Public Concentration | `--public-concentration` | Yes |
+| Public Metric | `--public-metric` | Yes |
+| Restricted Raw | `--restricted-raw` | No |
+| Restricted Analytics | `--restricted-analytics` | No |
 
 NWSS dictionary files are git-ignored (`/odm_linkmlgen/data/nwss/*.xlsx`), so
 nothing is bundled with the repository. Put your copies anywhere and point the
