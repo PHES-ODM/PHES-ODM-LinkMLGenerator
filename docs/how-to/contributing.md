@@ -94,8 +94,7 @@ drift from the code.
 **Logging, not printing.** Every module starts with
 `logger = get_logger(__name__)` and logs the files it reads and writes at
 `INFO`. Errors in the source dictionary are usually logged and skipped rather
-than raised, so that a single bad row does not abort a whole generation run —
-see `_get_range_and_validation_info` for the pattern.
+than raised, so that a single bad row does not abort a whole generation run.
 
 **Constants over literals for source-dictionary column names.** NWSS column
 names live in `nwss_utils.DictionaryColumns`; ODM tags live in module-level
@@ -104,7 +103,35 @@ constant gives you one place to update.
 
 **One Schemasheets concern per module.** A module named `make_*_ss_<thing>`
 produces the `<thing>` Schemasheets file and nothing else. Its column-to-LinkML
-mapping goes in a module-level `headers` dict.
+mapping goes in a module-level `headers` dict, keyed by the column name in the
+DataFrame the module builds, with the Schemasheets descriptor as the value. From
+[odm_linkmlgen/odm/make_odm_ss_classes.py](https://github.com/PHES-ODM/PHES-ODM-LinkMLGenerator/blob/main/odm_linkmlgen/odm/make_odm_ss_classes.py):
+
+```python
+# For mapping the columns in our final DataFrame to columns recognized by Schemasheets
+headers = {
+    "class": "class",
+    "partID": "slot",
+    "label": "title",
+    "identifier": "identifier",
+    "required": "required",
+    "dataType": "range",
+    "partDesc": "description",
+    ...
+}
+```
+
+`save_schemasheet` uses the dict to order the columns and to write the `>`
+descriptor row that Schemasheets reads, so the first two rows of
+`class_{class_name}.tsv` come out as:
+
+| `class` | `partID` | `label` | `identifier` | `dataType` | `partDesc` |
+| ------- | -------- | ------- | ------------ | ---------- | ---------- |
+| `> class` | `slot` | `title` | `identifier` | `range` | `description` |
+
+Columns present in the DataFrame but absent from `headers` are mapped to
+`ignore`, so dropping a key is how you exclude a column from the generated
+schema.
 
 **Every step is both a function and a CLI.** Each extraction module exposes a
 `typer` app with a `main` command that just forwards to the real function.
@@ -156,25 +183,8 @@ them**, decided by what the reader is doing when they open it:
 | `reference/` | *Looking up.* Dry, complete, no narrative | CLI options, pipeline steps, the output and repository layouts, the source dictionaries, the generated API |
 | `explanation/` | *Understanding.* Background and design reasoning | `how-it-works.md`, `odm-runs.md`, `nwss-runs.md`, `data-dictionaries.md` |
 
-Two pages are named `data-dictionaries.md`, one in `reference/` and one in
-`explanation/`. That is the split working as intended: what the source Excel
-files contain is reference, and what their irregularities cost is explanation.
-
 `index.md` is the site's front door and belongs to no section: it says what the
 project is, and links into the four.
-
-The two rules that keep the split honest:
-
-- **Commands live in `how-to/` only.** `how-to/generate-odm-schemas.md` and
-  `how-to/generate-nwss-schemas.md` hold every generation command, and are kept
-  deliberately in sync with the same sections of the repository `README.md` —
-  change both together. `explanation/odm-runs.md` and
-  `explanation/nwss-runs.md` describe what those runs produce and why, and must
-  not duplicate the commands.
-- **Reasoning lives in `explanation/` only.** A "why" paragraph in a how-to page
-  usually belongs in `explanation/how-it-works.md` or
-  `explanation/data-dictionaries.md`, with a link to it. Reference pages stay
-  dry.
 
 The site is otherwise deliberately small. Prefer adding a section to an existing
 page over adding a new page — a page that would be shorter than a screen belongs
@@ -187,10 +197,10 @@ that exists but is not in the nav.
 
 Three things to check when you change the code:
 
-- **Adding or removing a public function.** The
-  [API reference](../reference/api.md) is generated from the source by
-  mkdocstrings, so the signature and docstring update themselves. But the page
-  lists modules explicitly — a new *module* needs adding there.
+- **Adding or removing a public function.** The [API
+  reference](../reference/api.md) is generated from the source by mkdocstrings,
+  so the signature and docstring update themselves. But the API document lists
+  modules explicitly — a new *module* needs adding there.
 - **Adding, removing, or reordering a pipeline step.** Update
   [Pipeline steps](../reference/pipeline-steps.md), including the step count in
   its introduction.
@@ -212,15 +222,6 @@ long URLs.
 - **build** — runs on every push and pull request, with `mkdocs build --strict`.
   A pull request that breaks a link fails the check.
 - **deploy** — runs only on `main`, publishing to GitHub Pages.
-
-The site is at <https://phes-odm.github.io/PHES-ODM-LinkMLGenerator/>.
-
-!!! note "One-time repository setting"
-
-    The deploy job uses the GitHub Actions Pages deployment flow, which requires
-    **Settings → Pages → Build and deployment → Source** to be set to
-    **GitHub Actions**. Until that is done the build job passes and the deploy
-    job fails.
 
 You can also trigger a rebuild by hand from the Actions tab — the workflow
 declares `workflow_dispatch`.
