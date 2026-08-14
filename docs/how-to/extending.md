@@ -54,7 +54,7 @@ back to `string`.
 `{table}Required`, and `{table}Order` column trio — the generator discovers
 tables by scanning for column headers ending in `Order`, and hardcodes no list
 of tables. See
-[The ODM data dictionary](../explanation/data-dictionaries.md#discovering-the-tables).
+[The ODM data dictionary](../reference/data-dictionaries.md#discovering-the-tables).
 
 ## Add support for a new NWSS dictionary type
 
@@ -117,4 +117,5 @@ own. Misnamed and missing value sets have been the recurring problem.
 - [Troubleshooting](troubleshooting.md) — when the result is not what you
   expected
 - [Pipeline steps](../reference/pipeline-steps.md)
-- [The source data dictionaries](../explanation/data-dictionaries.md)
+- [The source data dictionaries](../reference/data-dictionaries.md) — and
+  [why they are hard to read](../explanation/data-dictionaries.md)

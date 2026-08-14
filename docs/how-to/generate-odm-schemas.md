@@ -89,7 +89,7 @@ If you are generating a version that has not been generated before, work through
 
 - [Inside an ODM run](../explanation/odm-runs.md) — what the run left on disk,
   and how v1 and v2+ differ
-- [The ODM data dictionary](../explanation/data-dictionaries.md#the-odm-data-dictionary)
+- [The ODM data dictionary](../reference/data-dictionaries.md#the-odm-data-dictionary)
   — how the parts sheet encodes the data model
 - [Use it from Python](python-api.md) — the same thing from Python, returning a
   `SchemaDefinition`

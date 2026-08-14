@@ -305,7 +305,7 @@ the Schemasheets columns:
        mapping in the `Value Sets` sheet. The enumeration step calls the same
        function, which is what keeps a range and the enumeration it names in
        agreement. See
-       [which enumeration a field uses](../explanation/data-dictionaries.md#which-enumeration-a-field-uses).
+       [which enumeration a field uses](data-dictionaries.md#which-enumeration-a-field-uses).
        A categorical field with no enumeration anywhere logs an error and leaves
        the range unresolved.
     2. Otherwise the `Data Type` is matched against the regex table

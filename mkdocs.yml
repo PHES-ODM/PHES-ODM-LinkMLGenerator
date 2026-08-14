@@ -88,7 +88,7 @@ markdown_extensions:
   - pymdownx.tabbed:
       alternate_style: true
 
-# The four sections below are the Divio documentation framework: tutorial
+# The four sections below are the Diátaxis documentation framework: tutorial
 # (learning), how-to guides (doing), reference (looking up), and explanation
 # (understanding). A new page belongs to exactly one of them.
 nav:
@@ -108,12 +108,13 @@ nav:
       - Pipeline steps: reference/pipeline-steps.md
       - Output layout: reference/output-layout.md
       - Repository layout: reference/repository-layout.md
+      - The source data dictionaries: reference/data-dictionaries.md
       - Python API: reference/api.md
   - Explanation:
       - How it works: explanation/how-it-works.md
       - Inside an ODM run: explanation/odm-runs.md
       - Inside an NWSS run: explanation/nwss-runs.md
-      - The source data dictionaries: explanation/data-dictionaries.md
+      - Why the dictionaries are hard to read: explanation/data-dictionaries.md
 
 extra:
   social:

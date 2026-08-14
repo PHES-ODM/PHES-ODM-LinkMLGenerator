@@ -25,7 +25,7 @@ at all.
 
 For v2 and above, the parts sheet of the Excel dictionary drives everything; how
 it encodes the data model is described in
-[The source data dictionaries](data-dictionaries.md#the-odm-data-dictionary).
+[The source data dictionaries](../reference/data-dictionaries.md#the-odm-data-dictionary).
 The full v2+ output layout, including the asymmetry in how enumeration TSVs are
 grouped, is in the
 [output layout reference](../reference/output-layout.md#odm-v2).
@@ -157,5 +157,5 @@ matters.
   returning a `SchemaDefinition`
 - [ODM pipeline steps](../reference/pipeline-steps.md#odm-pipeline-steps) — what
   each of the eleven steps does
-- [The ODM data dictionary](data-dictionaries.md#the-odm-data-dictionary) — how
-  the parts sheet encodes the data model
+- [The ODM data dictionary](../reference/data-dictionaries.md#the-odm-data-dictionary)
+  — how the parts sheet encodes the data model

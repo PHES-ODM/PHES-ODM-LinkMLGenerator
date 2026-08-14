@@ -145,16 +145,20 @@ which reads the source statically rather than importing it. That is why
 ### Where things go
 
 The site follows the
-[Divio documentation framework](https://docs.divio.com/documentation-system/),
-which is what the four directories under `docs/` are. **A new page belongs to
-exactly one of them**, decided by what the reader is doing when they open it:
+[Diátaxis documentation framework](https://diataxis.fr/), which is what the
+four directories under `docs/` are. **A new page belongs to exactly one of
+them**, decided by what the reader is doing when they open it:
 
 | Directory | Is for | Holds |
 | --- | --- | --- |
 | `tutorials/` | *Learning.* One guided run, read once, in order | `getting-started.md` — install, and the ODM v1 walkthrough |
 | `how-to/` | *Doing.* Steps for one task, for a reader who already knows roughly what they want | Installing, generating the ODM and NWSS schemas, the Python API, troubleshooting, extending, contributing |
-| `reference/` | *Looking up.* Dry, complete, no narrative | CLI options, pipeline steps, the output and repository layouts, the generated API |
+| `reference/` | *Looking up.* Dry, complete, no narrative | CLI options, pipeline steps, the output and repository layouts, the source dictionaries, the generated API |
 | `explanation/` | *Understanding.* Background and design reasoning | `how-it-works.md`, `odm-runs.md`, `nwss-runs.md`, `data-dictionaries.md` |
+
+Two pages are named `data-dictionaries.md`, one in `reference/` and one in
+`explanation/`. That is the split working as intended: what the source Excel
+files contain is reference, and what their irregularities cost is explanation.
 
 `index.md` is the site's front door and belongs to no section: it says what the
 project is, and links into the four.

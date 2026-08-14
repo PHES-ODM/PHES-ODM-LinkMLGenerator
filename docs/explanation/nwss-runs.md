@@ -15,7 +15,7 @@ Two NWSS-specific behaviours will surprise you if you are not expecting them:
   enumeration per field that uses them — `vs_yne[stormwater_input]`, and so on.
 
 Both are deliberate; the reasoning is in
-[The source data dictionaries](data-dictionaries.md#two-nwss-behaviours-that-will-surprise-you).
+[Why the dictionaries are hard to read](data-dictionaries.md#two-nwss-behaviours-that-will-surprise-you).
 
 ## Watch the three stages
 
@@ -91,5 +91,5 @@ file.
 - [Generate the NWSS schemas](../how-to/generate-nwss-schemas.md) — the
   dictionaries, the manual fixes, and the commands
 - [NWSS pipeline steps](../reference/pipeline-steps.md#nwss-pipeline-steps)
-- [The NWSS data dictionaries](data-dictionaries.md#the-nwss-data-dictionaries)
+- [The NWSS data dictionaries](../reference/data-dictionaries.md#the-nwss-data-dictionaries)
 - [Extending the generator](../how-to/extending.md#add-support-for-a-new-nwss-dictionary-type)

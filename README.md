@@ -25,9 +25,9 @@ DDL, or Python classes.
 **<https://phes-odm.github.io/PHES-ODM-LinkMLGenerator/>**
 
 The site follows the
-[Divio documentation framework](https://docs.divio.com/documentation-system/) —
-a tutorial to learn from, how-to guides to work from, reference to look things
-up in, and explanation to understand the design.
+[Diátaxis documentation framework](https://diataxis.fr/) — a tutorial to learn
+from, how-to guides to work from, reference to look things up in, and
+explanation to understand the design.
 
 | Section | Start here if you want to |
 | --- | --- |

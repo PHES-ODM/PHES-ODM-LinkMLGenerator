@@ -51,7 +51,7 @@ No longer needs fixing by hand. Where the `Value Sets` sheet and the `Metadata`
 sheet name different value sets for the same field — `ntc_amplify` and
 `pretreatment` have both done this — the generator takes the `Metadata` sheet's
 name and logs an error identifying the field and both candidates. See
-[which enumeration a field uses](../explanation/data-dictionaries.md#which-enumeration-a-field-uses).
+[which enumeration a field uses](../reference/data-dictionaries.md#which-enumeration-a-field-uses).
 Report it upstream rather than editing the workbook.
 
 ### `public_metric` — invalid permissible values
@@ -115,7 +115,7 @@ are the usual culprit.
 
 - [Inside an NWSS run](../explanation/nwss-runs.md) — what the run left on disk,
   and why the output looks the way it does
-- [The NWSS data dictionaries](../explanation/data-dictionaries.md#the-nwss-data-dictionaries)
+- [The NWSS data dictionaries](../reference/data-dictionaries.md#the-nwss-data-dictionaries)
 - [Use it from Python](python-api.md) — the same thing from Python, returning a
   `SchemaDefinition` per dictionary type
 - [Troubleshooting](troubleshooting.md) — when the result is not what you

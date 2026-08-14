@@ -56,11 +56,10 @@ the diff. See [Troubleshooting](docs/how-to/troubleshooting.md).
 ## Documentation changes
 
 The site follows the
-[Divio documentation framework](https://docs.divio.com/documentation-system/),
-which is what the four directories under `docs/` are — `tutorials/` (learning),
-`how-to/` (doing), `reference/` (looking up), and `explanation/`
-(understanding). A new page belongs to exactly one of them, and must be added to
-`nav:` in `mkdocs.yml`.
+[Diátaxis documentation framework](https://diataxis.fr/), which is what the four
+directories under `docs/` are — `tutorials/` (learning), `how-to/` (doing),
+`reference/` (looking up), and `explanation/` (understanding). A new page
+belongs to exactly one of them, and must be added to `nav:` in `mkdocs.yml`.
 
 The site is otherwise deliberately small, so prefer adding a section to an
 existing page over adding a new page. Keep instructions and reasoning apart: the

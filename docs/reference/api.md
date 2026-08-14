@@ -71,7 +71,7 @@ single schema.
 
 The ODM-specific extraction modules (stage 2 of the pipeline) and their shared
 helpers. See
-[The ODM data dictionary](../explanation/data-dictionaries.md#the-odm-data-dictionary)
+[The ODM data dictionary](data-dictionaries.md#the-odm-data-dictionary)
 for the source conventions they decode.
 
 ### `odm_linkmlgen.odm.make_odm_ss_classes`
@@ -166,7 +166,7 @@ is a slot whose range fell back to `string`.
 
 The NWSS-specific extraction modules (stage 2 of the pipeline) and their shared
 helpers. See
-[The NWSS data dictionaries](../explanation/data-dictionaries.md#the-nwss-data-dictionaries)
+[The NWSS data dictionaries](data-dictionaries.md#the-nwss-data-dictionaries)
 for the source layouts they decode.
 
 ### `odm_linkmlgen.nwss.make_nwss_ss_classes`

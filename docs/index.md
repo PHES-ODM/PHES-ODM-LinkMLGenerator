@@ -19,9 +19,9 @@ To install it and generate a schema right now, go to
 
 ## How this documentation is organized
 
-It follows the [Divio documentation framework](https://docs.divio.com/documentation-system/),
-which splits documentation into four kinds. Each answers a different question,
-so start with the one that matches what you need.
+It follows the [Diátaxis documentation framework](https://diataxis.fr/), which
+splits documentation into four kinds. Each answers a different question, so
+start with the one that matches what you need.
 
 ### [Tutorial](tutorials/getting-started.md) — *learning*
 
@@ -54,6 +54,7 @@ Dry, complete descriptions of what is there.
 | [Pipeline steps](reference/pipeline-steps.md) | What each step of both pipelines reads and writes |
 | [Output layout](reference/output-layout.md) | Where a generation run writes every file |
 | [Repository layout](reference/repository-layout.md) | Where the source files live, and which one to change |
+| [The source data dictionaries](reference/data-dictionaries.md) | Which sheets and columns the generator reads |
 | [Python API](reference/api.md) | Signatures and docstrings, generated from the source |
 
 ### [Explanation](explanation/how-it-works.md) — *understanding*
@@ -66,4 +67,4 @@ makes the rest of the project make sense.
 | [How it works](explanation/how-it-works.md) | LinkML, Schemasheets, the three-stage pipeline, and the post-processing workarounds |
 | [Inside an ODM run](explanation/odm-runs.md) | What an ODM run leaves on disk, and how v1 and v2+ differ |
 | [Inside an NWSS run](explanation/nwss-runs.md) | What an NWSS run leaves on disk, and why the output looks the way it does |
-| [The source data dictionaries](explanation/data-dictionaries.md) | How the two Excel files encode their data models |
+| [Why the dictionaries are hard to read](explanation/data-dictionaries.md) | What the two Excel files' irregularities cost, and what they silently break |
