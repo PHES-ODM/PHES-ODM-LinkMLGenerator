@@ -7,6 +7,7 @@ from pathlib import Path
 from typing import Annotated
 
 import typer
+from linkml_runtime.linkml_model.meta import SchemaDefinition
 
 from odm_linkmlgen.utils.general_utils import get_logger
 from odm_linkmlgen.utils.schema_utils import find_undefined_ranges
@@ -27,18 +28,20 @@ SCHEMASHEETS_DIR = Path(os.path.dirname(__file__)) / "data" / "odm_v1" / "schema
 
 
 @app.command(help=MAIN_HELP)
-def main(
+def make_odm_v1(
     output_dir: Annotated[Path, typer.Option(show_default=False, help=OUTPUT_DIR_HELP)],
-):
-    """CLI entry point: generate the ODM v1 LinkML schema from the bundled Schemasheets
-    files in SCHEMASHEETS_DIR.
+) -> SchemaDefinition:
+    """Generate the ODM v1 LinkML schema from the bundled Schemasheets files.
 
     Args:
         output_dir (Path): Directory to save the ODM v1 schema to. The schema is saved to
             "{output_dir}/linkml/odm_v1.yaml".
+
+    Returns:
+        SchemaDefinition: The generated ODM v1 LinkML schema definition.
     """
     # Make the schema
-    linkml_schema = output_dir / "linkml" / "odm_v1.yaml"
+    linkml_schema = Path(output_dir) / "linkml" / "odm_v1.yaml"
     schema = make_linkml_schema_from_schemasheets(SCHEMASHEETS_DIR, linkml_schema)
 
     # Report any slot left pointing at an element the schema does not define. The
@@ -60,6 +63,8 @@ def main(
         )
 
     logger.info("Finished!")
+
+    return schema
 
 
 if __name__ == "__main__":

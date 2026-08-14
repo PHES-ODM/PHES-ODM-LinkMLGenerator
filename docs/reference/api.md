@@ -29,8 +29,8 @@ pipeline in sequence — see [Pipeline steps](pipeline-steps.md).
 | Module | Installed command | Function form |
 | --- | --- | --- |
 | `make_odm` | `odm-linkmlgen-odm` | Yes — returns a `SchemaDefinition` |
-| `make_odm_v1` | `odm-linkmlgen-odmv1` | No — CLI only |
-| `make_nwss` | `odm-linkmlgen-nwss` | Yes |
+| `make_odm_v1` | `odm-linkmlgen-odmv1` | Yes — returns a `SchemaDefinition` |
+| `make_nwss` | `odm-linkmlgen-nwss` | Yes — returns a `dict` of schemas |
 
 ### `odm_linkmlgen.make_odm`
 
@@ -48,22 +48,18 @@ Generates the ODM v1 schema from the Schemasheets bundled at
 `odm_linkmlgen/data/odm_v1/schemasheets/`. No source Excel file is involved, so
 this is only the final Schemasheets step.
 
-There is no `make_odm_v1` function — the module is a CLI only. To do the
-equivalent from Python, call
-[`make_linkml_schema_from_schemasheets`](#odm_linkmlgen.utils.schemasheets_utils.make_linkml_schema_from_schemasheets)
-over the bundled directory; see
-[Use it from Python](../python-api.md#odm-v1).
-
 ::: odm_linkmlgen.make_odm_v1
     options:
       heading_level: 4
-      members: []
-      show_source: false
+      members:
+        - make_odm_v1
 
 ### `odm_linkmlgen.make_nwss`
 
-Runs the full pipeline once per dictionary type supplied. Because it may generate
-several schemas in one call, it writes files rather than returning a schema.
+Runs the full pipeline once per dictionary type supplied. Because it may
+generate several schemas in one call, it returns them as a `dict` keyed by
+dictionary type (`"reporting"`, `"public_concentration"`, …) rather than as a
+single schema.
 
 ::: odm_linkmlgen.make_nwss
     options:

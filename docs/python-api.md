@@ -26,40 +26,44 @@ path.
 
 ## ODM v1
 
-There is no `make_odm_v1` function, only the CLI. To do the equivalent from
-Python, run the final Schemasheets step over the bundled TSVs yourself:
-
 ```python
-from pathlib import Path
+from odm_linkmlgen.make_odm_v1 import make_odm_v1
 
-import odm_linkmlgen
-from odm_linkmlgen.utils.schemasheets_utils import (
-    make_linkml_schema_from_schemasheets,
-)
-
-schemasheets_dir = (
-    Path(odm_linkmlgen.__file__).parent / "data" / "odm_v1" / "schemasheets"
-)
-schema = make_linkml_schema_from_schemasheets(
-    schemasheets_dir, "gen/odm_v1/linkml/odm_v1.yaml"
-)
+schema = make_odm_v1(output_dir="gen/odm_v1")
 ```
+
+Returns a `SchemaDefinition`, *in addition to* writing
+`gen/odm_v1/linkml/odm_v1.yaml`. There is no source Excel file — the
+Schemasheets TSVs are bundled at
+`odm_linkmlgen/data/odm_v1/schemasheets/` and are read in place, so no
+`dictionary/` or `schemasheets/` files are written to `output_dir`.
 
 ## NWSS
 
 ```python
 from odm_linkmlgen.make_nwss import make_nwss
 
-make_nwss(
+schemas = make_nwss(
     output_dir="gen/nwss",
     reporting="path/to/reporting.xlsx",
+    public_metric="path/to/public_metric.xlsx",
 )
+
+reporting_schema = schemas["reporting"]
 ```
 
 Pass one keyword argument per dictionary type you have (`reporting`,
 `public_concentration`, `public_metric`, `restricted_raw`,
 `restricted_analytics`). Because it may generate several schemas in one call, it
-writes files rather than returning a single schema.
+returns a `dict` of them keyed by dictionary type rather than a single schema —
+alongside writing `gen/nwss/nwss_{type}/linkml/nwss_{type}.yaml` for each. Only
+the types you supplied are keys, so iterate the result rather than assuming a
+particular one is there:
+
+```python
+for dictionary_type, schema in schemas.items():
+    print(dictionary_type, len(schema.classes))
+```
 
 ## Inspecting a generated schema
 

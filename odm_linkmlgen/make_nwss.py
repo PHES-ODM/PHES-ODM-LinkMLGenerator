@@ -1,6 +1,7 @@
 """
 Make the NWSS LinkML schemas. One schema is generated per NWSS data dictionary
-type, for each type whose Excel data dictionary is supplied:
+type, for each type whose Excel data dictionary is supplied, and make_nwss
+returns them in a dictionary keyed by the type names below:
 
 - reporting: the main reporting data dictionary
 - public_concentration: the public concentration data dictionary
@@ -24,6 +25,7 @@ from pathlib import Path
 from typing import Annotated
 
 import typer
+from linkml_runtime.linkml_model.meta import SchemaDefinition
 
 from odm_linkmlgen.nwss.make_nwss_ss_classes import extract_all_classes
 from odm_linkmlgen.nwss.make_nwss_ss_container import extract_container_class
@@ -78,13 +80,16 @@ def make_nwss(
     restricted_analytics: Annotated[
         Path | None, typer.Option(show_default=False, help=RESTRICTED_ANALYTICS_HELP)
     ] = None,
-):
+) -> dict[str, SchemaDefinition]:
     """Make the NWSS LinkML Schemas for various NWSS data dictionaries. A separate schema is created for each
     of the dictionary types whose Excel data dictionaries are specified by the supplied parameters. Any parameter
     of None will skip that dictionary type.
 
-    All data dictionaries except for the restricted ones are available at https://www.cdc.gov/nwss/reporting.html.
-    The restricted ones are not publicly available.
+    All data dictionaries except for the restricted ones are available at
+    https://archive.cdc.gov/www_cdc_gov/nwss/reporting.html. The restricted ones are not publicly available.
+    
+    See the documentation for details on preparing the NWSS data dictionaries, there are special steps
+    required to process them before running this function.
 
     Args:
         output_dir (Path): Location to save the outputs for each dictionary type to. A subdirectory for each
@@ -94,6 +99,12 @@ def make_nwss(
         public_metric (Path | None, optional): Path to public metric data dictionary Excel file. Defaults to None.
         restricted_raw (Path | None, optional): Path to restricted raw data dictionary Excel file. Defaults to None.
         restricted_analytics (Path | None, optional): Path to restricted analytics data dictionary Excel file. Defaults to None.
+
+    Returns:
+        dict[str, SchemaDefinition]: The generated LinkML schema definitions, keyed by
+            dictionary type (eg. "reporting", "public_concentration"). Only the
+            dictionary types whose Excel data dictionaries were supplied are present, so
+            the dictionary is empty if no data dictionary was passed at all.
     """
     dictionary_types = []
     if reporting:
@@ -106,6 +117,8 @@ def make_nwss(
         dictionary_types.append(("restricted_raw", restricted_raw))
     if restricted_analytics:
         dictionary_types.append(("restricted_analytics", restricted_analytics))
+
+    schemas: dict[str, SchemaDefinition] = {}
 
     for dictionary_type, metadata_excel_file in dictionary_types:
         if not dictionary_type or not metadata_excel_file:
@@ -215,6 +228,7 @@ def make_nwss(
         schema = make_linkml_schema_from_schemasheets(
             schemasheets_dir, linkml_dir / f"nwss_{dictionary_type}.yaml"
         )
+        schemas[dictionary_type] = schema
 
         # Report any slot left pointing at an element the schema does not define. The
         # schema is still written: this is reported the same way as every other data
@@ -233,6 +247,8 @@ def make_nwss(
             )
 
     logger.info("Finished!")
+
+    return schemas
 
 
 if __name__ == "__main__":

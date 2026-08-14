@@ -17,7 +17,8 @@ order, to turn an ODM v2+ Excel data dictionary into a LinkML schema.
 !!! note "ODM v1 does not use this pipeline"
 
     Its Schemasheets TSVs are hand-written and bundled at
-    `odm_linkmlgen/data/odm_v1/schemasheets/`, so `odm-linkmlgen-odmv1` runs only
+    `odm_linkmlgen/data/odm_v1/schemasheets/`, so
+    `odm-linkmlgen-odmv1` (`odm_linkmlgen.make_odm_v1.make_odm_v1`) runs only
     step 9's equivalent over them, followed by the same undefined-range check as
     step 11. There is no data dictionary behind it, so that check is guarding the
     bundled TSVs against an editing mistake rather than an upstream defect.

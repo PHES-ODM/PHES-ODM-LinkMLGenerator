@@ -64,7 +64,7 @@ matter are the last two:
 
 ```text
 INFO ... schemasheets_utils.py:84: LinkML schema saved to '.../gen/odm_v1/linkml/odm_v1.yaml'
-INFO ... make_odm_v1.py:43: Finished!
+INFO ... make_odm_v1.py:66: Finished!
 ```
 
 Every module in this project logs the files it reads and writes at `INFO`, which
