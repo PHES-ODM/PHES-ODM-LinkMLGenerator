@@ -1,10 +1,10 @@
-# Generate ODM schemas
+# Inside an ODM run
 
 The instructions for actually producing the schemas — obtaining the dictionary,
-where to put it, and the commands for v1, v2, and v3 — are on the
-[home page](index.md#generate-the-odm-schemas). This page covers how an ODM run
-differs by version, and the one ODM-specific failure mode worth knowing about in
-advance.
+where to put it, and the commands for v1, v2, and v3 — are in
+[Generate the ODM schemas](../how-to/generate-odm-schemas.md). This page covers
+how an ODM run differs by version, and the one ODM-specific failure mode worth
+knowing about in advance.
 
 ## v1 and v2+ are different pipelines
 
@@ -28,7 +28,7 @@ it encodes the data model is described in
 [The source data dictionaries](data-dictionaries.md#the-odm-data-dictionary).
 The full v2+ output layout, including the asymmetry in how enumeration TSVs are
 grouped, is in the
-[output layout reference](reference/layouts.md#odm-v2).
+[output layout reference](../reference/output-layout.md#odm-v2).
 
 ## Watch the three stages
 
@@ -60,8 +60,8 @@ parts.csv    sets.csv
 
 Two sheets, saved verbatim as CSV. Nothing has been interpreted yet; this stage
 exists so that no later step ever has to open an Excel file, and so that you can
-[re-run a later step](python-api.md#re-run-a-single-step) in a second instead of
-re-parsing the workbook each time.
+[re-run a later step](../how-to/python-api.md#re-run-a-single-step) in a second
+instead of re-parsing the workbook each time.
 
 `parts.csv` is the data model. One row per part, and — after the descriptive
 columns — a group of three columns per ODM table: `samples`, `samplesRequired`,
@@ -75,7 +75,7 @@ enumeration and `partID` the permissible value in it.
 
 Search `parts.csv` for a `partID` of `NA` or `null`. Both are there, as literal
 text — they are real ODM parts, and reading them as missing values is exactly
-what [step 2's `na_values`](reference/pipeline-steps.md#odm-2-extract-the-excel-sheets-to-csv)
+what [step 2's `na_values`](../reference/pipeline-steps.md#odm-2-extract-the-excel-sheets-to-csv)
 prevents.
 
 ### Stage 2 — CSV becomes Schemasheets TSV
@@ -100,7 +100,8 @@ The `>` row maps the columns onto LinkML: `class`, `slot`, `title`,
 `identifier`, `required`, `range`, `description`, `pattern`. Several trailing
 columns map to `ignore` — `partType`, `mmaSet`, `headerType`, `order`,
 `minLength`, `maxLength` are carried along for readability, having already done
-their work in [step 5](reference/pipeline-steps.md#odm-5-extract-one-schemasheet-per-class).
+their work in
+[step 5](../reference/pipeline-steps.md#odm-5-extract-one-schemasheet-per-class).
 Four things in that file are worth finding:
 
 - `protocolID` has a `range` of `protocols` — a foreign key resolved to the
@@ -131,7 +132,7 @@ grep -A3 "any_of" gen/odm_v3/linkml/odm_v3.yaml | head -8
 A slot written as `any_of: [string, genMissingnessSet]` had a plain `string`
 range in stage 2 (just `string`). The second range (`genMissingnessSet`) was
 added afterwards, straight onto the `SchemaDefinition`, by [step
-10](reference/pipeline-steps.md#odm-10-add-the-missingness-sets) — the parts
+10](../reference/pipeline-steps.md#odm-10-add-the-missingness-sets) — the parts
 sheet records it in a `missingnessSet` column that no Schemasheets column can
 express.
 
@@ -144,16 +145,17 @@ column. Names that do not follow that convention have to be listed in
 
 When derivation fails, the run does not stop. The name simply does not resolve,
 the slot's range falls back to `string`, and an error goes to the log — which is
-why the [check step](index.md#check-the-odm-result) matters.
+why the [check step](../how-to/generate-odm-schemas.md#check-the-odm-result)
+matters.
 
 ## Related
 
-- [Generate the ODM schemas](index.md#generate-the-odm-schemas) — the dictionary
+- [Generate the ODM schemas](../how-to/generate-odm-schemas.md) — the dictionary
   and the commands
-- [Add support for a new ODM version](extending.md#add-support-for-a-new-odm-version)
-- [Use it from Python](python-api.md) — the same thing from Python, returning a
-  `SchemaDefinition`
-- [ODM pipeline steps](reference/pipeline-steps.md#odm-pipeline-steps) — what
+- [Add support for a new ODM version](../how-to/extending.md#add-support-for-a-new-odm-version)
+- [Use it from Python](../how-to/python-api.md) — the same thing from Python,
+  returning a `SchemaDefinition`
+- [ODM pipeline steps](../reference/pipeline-steps.md#odm-pipeline-steps) — what
   each of the eleven steps does
 - [The ODM data dictionary](data-dictionaries.md#the-odm-data-dictionary) — how
   the parts sheet encodes the data model

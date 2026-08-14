@@ -2,12 +2,12 @@
 
 Signatures and docstrings for every public function in `odm_linkmlgen`,
 **generated from the source** — so they cannot drift from the code. For worked
-examples, see [Use it from Python](../python-api.md).
+examples, see [Use it from Python](../how-to/python-api.md).
 
 Private names (those beginning with `_`) are excluded. Several are nonetheless
 worth knowing about, because they are the tables you edit when adapting the
 generator to a new dictionary; they are listed in
-[where to look for what](layouts.md#where-to-look-for-what).
+[where to look for what](repository-layout.md#where-to-look-for-what).
 
 **Every module under `odm/` and `nwss/` is both an importable module and a
 standalone CLI:**
@@ -71,8 +71,8 @@ single schema.
 
 The ODM-specific extraction modules (stage 2 of the pipeline) and their shared
 helpers. See
-[The ODM data dictionary](../data-dictionaries.md#the-odm-data-dictionary) for
-the source conventions they decode.
+[The ODM data dictionary](../explanation/data-dictionaries.md#the-odm-data-dictionary)
+for the source conventions they decode.
 
 ### `odm_linkmlgen.odm.make_odm_ss_classes`
 
@@ -166,7 +166,7 @@ is a slot whose range fell back to `string`.
 
 The NWSS-specific extraction modules (stage 2 of the pipeline) and their shared
 helpers. See
-[The NWSS data dictionaries](../data-dictionaries.md#the-nwss-data-dictionaries)
+[The NWSS data dictionaries](../explanation/data-dictionaries.md#the-nwss-data-dictionaries)
 for the source layouts they decode.
 
 ### `odm_linkmlgen.nwss.make_nwss_ss_classes`
@@ -190,7 +190,7 @@ comments mark patterns known to be too permissive.
 
 Extracts every enumeration from a NWSS `Value Sets` sheet, one Schemasheet per
 enumeration, expanding
-[detailed enumeration names](../data-dictionaries.md#detailed-enumeration-names).
+[detailed enumeration names](../explanation/data-dictionaries.md#detailed-enumeration-names).
 
 ::: odm_linkmlgen.nwss.make_nwss_ss_enums
     options:
@@ -253,7 +253,7 @@ to update when a dictionary renames a column.
 
 Dataset-agnostic helpers under `odm_linkmlgen/utils/`. This is everything the ODM
 and NWSS pipelines genuinely have in common — see
-[why the two pipelines are not shared](../how-it-works.md#why-the-two-pipelines-are-not-shared).
+[why the two pipelines are not shared](../explanation/how-it-works.md#why-the-two-pipelines-are-not-shared).
 
 ### `odm_linkmlgen.utils.general_utils`
 
@@ -265,7 +265,7 @@ data — a real problem for ODM part IDs.
 
 `EMPTY_PERMISSIBLE_VALUE` is the `<empty>` sentinel written where a permissible
 value of `""` is meant, and replaced by `fix_schemasheets_generated_schema`. See
-[post-processing workarounds](../how-it-works.md#post-processing-workarounds).
+[post-processing workarounds](../explanation/how-it-works.md#post-processing-workarounds).
 
 ::: odm_linkmlgen.utils.general_utils
     options:
@@ -312,7 +312,7 @@ consume the output.
 
 The per-slot lookups take a `SchemaView` as their **third** argument, not the
 `SchemaDefinition` that `make_odm` returns — wrap it first. See
-[Use it from Python](../python-api.md#inspecting-a-generated-schema).
+[Use it from Python](../how-to/python-api.md#inspecting-a-generated-schema).
 `find_undefined_ranges` is the exception and accepts either, as its only argument.
 
 Prefer `get_ranges_of_slot` over reading `.range` directly: a slot that accepts a

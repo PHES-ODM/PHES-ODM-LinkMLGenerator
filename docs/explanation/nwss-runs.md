@@ -1,9 +1,9 @@
-# Generate NWSS schemas
+# Inside an NWSS run
 
-The instructions for actually producing the schemas — obtaining the dictionaries,
-the manual fixes the published files need, and the commands — are on the
-[home page](index.md#generate-the-nwss-schemas). This page covers what a run
-leaves behind and why the output looks the way it does.
+The instructions for actually producing the schemas — obtaining the
+dictionaries, the manual fixes the published files need, and the commands — are
+in [Generate the NWSS schemas](../how-to/generate-nwss-schemas.md). This page
+covers what a run leaves behind and why the output looks the way it does.
 
 ## What the output looks like
 
@@ -75,7 +75,7 @@ beginning `vs_`, and one whose `pattern` is a regular expression. Both were
 derived from the prose in the dictionary's `Data Type` column — NWSS describes
 types in English rather than with a controlled vocabulary, so the generator
 matches that prose against a table of regexes. That is
-[step 4 of the NWSS pipeline](reference/pipeline-steps.md#nwss-4-extract-the-classes).
+[step 4 of the NWSS pipeline](../reference/pipeline-steps.md#nwss-4-extract-the-classes).
 
 ### Stage 3 — TSV becomes LinkML
 
@@ -88,8 +88,8 @@ file.
 
 ## Related
 
-- [Generate the NWSS schemas](index.md#generate-the-nwss-schemas) — the
+- [Generate the NWSS schemas](../how-to/generate-nwss-schemas.md) — the
   dictionaries, the manual fixes, and the commands
-- [NWSS pipeline steps](reference/pipeline-steps.md#nwss-pipeline-steps)
+- [NWSS pipeline steps](../reference/pipeline-steps.md#nwss-pipeline-steps)
 - [The NWSS data dictionaries](data-dictionaries.md#the-nwss-data-dictionaries)
-- [Extending the generator](extending.md#add-support-for-a-new-nwss-dictionary-type)
+- [Extending the generator](../how-to/extending.md#add-support-for-a-new-nwss-dictionary-type)

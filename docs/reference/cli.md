@@ -137,6 +137,6 @@ Repeatable options are passed once per value:
 
 ## Related
 
-- [Re-run a single step](../python-api.md#re-run-a-single-step)
+- [Re-run a single step](../how-to/python-api.md#re-run-a-single-step)
 - [Pipeline steps](pipeline-steps.md)
 - [Python API](api.md)

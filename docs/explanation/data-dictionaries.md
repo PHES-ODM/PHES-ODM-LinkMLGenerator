@@ -66,7 +66,7 @@ column headers for any name ending in `Order` — the value of
 The payoff is that a new table in a new dictionary version is picked up
 automatically, with no code change, as long as it has the full
 `{table}` / `{table}Required` / `{table}Order` trio. See
-[Extending the generator](extending.md#add-support-for-a-new-odm-version).
+[Extending the generator](../how-to/extending.md#add-support-for-a-new-odm-version).
 
 ### Enumerations
 
@@ -154,7 +154,7 @@ Each workbook has two sheets of interest:
 
 NWSS dictionaries are **less regular than the ODM one**, and some require manual
 repair before they can be processed at all — see
-[the manual fixes](index.md#apply-the-manual-fixes).
+[the manual fixes](../how-to/generate-nwss-schemas.md#apply-the-manual-fixes).
 
 ### The metadata sheet has implicit table boundaries
 

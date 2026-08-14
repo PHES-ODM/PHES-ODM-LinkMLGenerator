@@ -121,7 +121,7 @@ Both the ODM and NWSS generators have the same three stages:
 ```
 
 For what each individual step does, see the
-[pipeline steps reference](reference/pipeline-steps.md).
+[pipeline steps reference](../reference/pipeline-steps.md).
 
 ### Stage 1 — extract
 
@@ -150,8 +150,8 @@ prefixes, and schema metadata.
 
 **This is where all the dataset-specific knowledge lives**, and consequently
 where nearly every bug lives. The
-[troubleshooting guide](troubleshooting.md#a-generated-schema-is-wrong) is
-mostly about this stage for that reason.
+[troubleshooting guide](../how-to/troubleshooting.md#a-generated-schema-is-wrong)
+is mostly about this stage for that reason.
 
 Two conventions hold here:
 

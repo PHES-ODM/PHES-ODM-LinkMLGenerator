@@ -18,7 +18,7 @@ usually needs **no code changes at all**:
 1. **Obtain the dictionary** and save it as `v{n} ODM dictionary.xlsx` under
    `odm_linkmlgen/data/odm_v{n}/`. Excel dictionaries are git-ignored, so it
    stays local to your checkout. Read
-   [Prepare the dictionary](index.md#prepare-the-dictionary-for-v2-and-above)
+   [Prepare the dictionary](generate-odm-schemas.md#prepare-the-dictionary-for-v2-and-above)
    first — the file must only ever be opened with a recent version of Excel.
 
 2. **Generate:**
@@ -54,7 +54,7 @@ back to `string`.
 `{table}Required`, and `{table}Order` column trio — the generator discovers
 tables by scanning for column headers ending in `Order`, and hardcodes no list
 of tables. See
-[The ODM data dictionary](data-dictionaries.md#discovering-the-tables).
+[The ODM data dictionary](../explanation/data-dictionaries.md#discovering-the-tables).
 
 ## Add support for a new NWSS dictionary type
 
@@ -108,14 +108,13 @@ where a new type falls determines what you need to add:
 
 ### Check the source file for defects
 
-Read the
-[manual fixes](index.md#apply-the-manual-fixes) the currently published
-files need, and check whether the new dictionary needs its own. Misnamed and
-missing value sets have been the recurring problem.
+Read the [manual fixes](generate-nwss-schemas.md#apply-the-manual-fixes) the
+currently published files need, and check whether the new dictionary needs its
+own. Misnamed and missing value sets have been the recurring problem.
 
 ## Related
 
 - [Troubleshooting](troubleshooting.md) — when the result is not what you
   expected
-- [Pipeline steps](reference/pipeline-steps.md)
-- [The source data dictionaries](data-dictionaries.md)
+- [Pipeline steps](../reference/pipeline-steps.md)
+- [The source data dictionaries](../explanation/data-dictionaries.md)

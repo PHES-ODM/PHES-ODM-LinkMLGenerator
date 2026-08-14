@@ -2,12 +2,13 @@
 
 Every step of both pipelines in order, with its module, its inputs, and its
 outputs. For why the pipeline is shaped this way, see
-[How it works](../how-it-works.md#the-three-stage-pipeline).
+[How it works](../explanation/how-it-works.md#the-three-stage-pipeline).
 
 Every step is also its own CLI, so any one can be re-run against the CSVs already
 in `dictionary/` — see
-[Re-run a single step](../python-api.md#re-run-a-single-step), which shows how
-to work from the source of `make_odm` to experiment with an individual step.
+[Re-run a single step](../how-to/python-api.md#re-run-a-single-step), which
+shows how to work from the source of `make_odm` to experiment with an individual
+step.
 
 ## ODM pipeline steps
 
@@ -80,7 +81,7 @@ Two details:
   row with no permissible value as metadata for the enumeration itself — which is
   also why an intentionally empty permissible value must be written as the
   `<empty>` sentinel. See
-  [post-processing workarounds](../how-it-works.md#post-processing-workarounds).
+  [post-processing workarounds](../explanation/how-it-works.md#post-processing-workarounds).
 
 Returns the list of enumeration names it extracted.
 `make_odm_ss_enums_from_sets.get_enum_names_from_sets` retrieves the same names
@@ -166,7 +167,7 @@ modules, which is why a new ODM version usually needs no code change.
 Runs Schemasheets over **every** `.tsv` in `schemasheets/` and returns a
 `SchemaDefinition`, then applies `fix_schemasheets_generated_schema` to correct
 the known Schemasheets shortcomings described in
-[post-processing workarounds](../how-it-works.md#post-processing-workarounds).
+[post-processing workarounds](../explanation/how-it-works.md#post-processing-workarounds).
 
 ### ODM 10. Add the missingness sets
 
@@ -270,7 +271,7 @@ column (`default_na_values=[""]`).
 `nwss.make_nwss_ss_enums.extract_enums` → `schemasheets/enum_{enum_name}.tsv`
 
 Parses the `Value Sets` sheet into one Schemasheet per enumeration, expanding the
-[detailed enumeration names](../data-dictionaries.md#detailed-enumeration-names)
+[detailed enumeration names](../explanation/data-dictionaries.md#detailed-enumeration-names)
 — so `vs_yne` becomes `enum_vs_yne[stormwater_input].tsv` and one file per other
 field that uses it, and the undifferentiated original is dropped.
 
@@ -304,7 +305,7 @@ the Schemasheets columns:
        mapping in the `Value Sets` sheet. The enumeration step calls the same
        function, which is what keeps a range and the enumeration it names in
        agreement. See
-       [which enumeration a field uses](../data-dictionaries.md#which-enumeration-a-field-uses).
+       [which enumeration a field uses](../explanation/data-dictionaries.md#which-enumeration-a-field-uses).
        A categorical field with no enumeration anywhere logs an error and leaves
        the range unresolved.
     2. Otherwise the `Data Type` is matched against the regex table
@@ -356,8 +357,8 @@ takes a `data_values` dict that overrides its own defaults.
 
 Runs Schemasheets over every `.tsv` in `schemasheets/`, applies
 `fix_schemasheets_generated_schema` (see
-[post-processing workarounds](../how-it-works.md#post-processing-workarounds)), and
-writes the YAML.
+[post-processing workarounds](../explanation/how-it-works.md#post-processing-workarounds)),
+and writes the YAML.
 
 `make_nwss` then checks the finished schema with
 `schema_utils.find_undefined_ranges` and logs an error for every slot whose range

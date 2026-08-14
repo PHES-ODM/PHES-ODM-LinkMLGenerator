@@ -23,7 +23,7 @@ The usual problem here is **NA handling**: a value such as `NA`, `None`, or
 `null` was read as an empty cell. These are real permissible values in the ODM,
 not missing data. `extract_sheets` takes per-column `na_values` for exactly this
 reason — see
-[step 2 of the ODM pipeline](reference/pipeline-steps.md#odm-2-extract-the-excel-sheets-to-csv).
+[step 2 of the ODM pipeline](../reference/pipeline-steps.md#odm-2-extract-the-excel-sheets-to-csv).
 
 ### 2. Check `schemasheets/*.tsv`
 
@@ -41,7 +41,7 @@ resolved. For ODM that is usually an enumeration name that does not follow the
 
 For NWSS, an error naming a categorical field almost always means its
 enumeration is missing from the `Value Sets` sheet — check the
-[manual fixes the published dictionaries need](index.md#apply-the-manual-fixes).
+[manual fixes the published dictionaries need](generate-nwss-schemas.md#apply-the-manual-fixes).
 
 ### 3. Re-run only the step you are working on
 
@@ -74,7 +74,7 @@ Three symptoms and their causes:
 | A missing `any_of` where a missingness set was expected | `odm_utils.add_missingness_set` |
 
 All three are explained in
-[How it works](how-it-works.md#post-processing-workarounds).
+[How it works](../explanation/how-it-works.md#post-processing-workarounds).
 
 ## Diffing against a known-good schema
 

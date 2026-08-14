@@ -5,7 +5,7 @@ individual pipeline step. Use the function form when you want the
 `SchemaDefinition` object back rather than just a file on disk, or when you are
 iterating on one step of the pipeline.
 
-For the full signatures see the [Python API reference](reference/api.md).
+For the full signatures see the [Python API reference](../reference/api.md).
 
 ## ODM v2+
 
@@ -119,8 +119,8 @@ python -m odm_linkmlgen.odm.make_odm_ss_classes \
 ```
 
 Then re-run the final Schemasheets stage over the result. The
-[pipeline steps reference](reference/pipeline-steps.md) lists every module, its
-inputs, and its outputs.
+[pipeline steps reference](../reference/pipeline-steps.md) lists every module,
+its inputs, and its outputs.
 
 !!! warning "A step's CLI defaults are not what the top-level generator passes"
 
@@ -149,7 +149,7 @@ of `make_odm` itself:
 [odm_linkmlgen/make_odm.py](https://github.com/PHES-ODM/PHES-ODM-LinkMLGenerator/blob/main/odm_linkmlgen/make_odm.py)
 
 Read it step-by-step alongside the
-[pipeline steps reference](reference/pipeline-steps.md), which describes what
+[pipeline steps reference](../reference/pipeline-steps.md), which describes what
 each step reads and writes. Then, rather than calling `make_odm`, copy its body
 into a script of your own and work in that: comment out the steps you are not
 interested in, change the arguments a step is given, or drop your own code in

@@ -44,10 +44,10 @@ odm-linkmlgen-odmv1 --help
 You should see a usage message listing `--output-dir`. If instead you get
 `command not found`, the virtual environment is probably not active — re-run
 `source .env/bin/activate`. For other installation problems, see
-[Troubleshooting](troubleshooting.md#installation-problems).
+[Troubleshooting](../how-to/troubleshooting.md#installation-problems).
 
 To also get `pytest`, `pytest-cov`, and `ruff`, install `requirements-dev.txt`
-instead — see [Contributing](contributing.md).
+instead — see [Contributing](../how-to/contributing.md).
 
 ## 2. Generate the schema
 
@@ -90,7 +90,7 @@ That is all ODM v1 produces. The generator read its Schemasheets TSVs straight
 out of the installed package — they are never copied into `--output-dir`. A full
 ODM v2+ or NWSS run writes two more directories alongside `linkml/`, holding the
 intermediate files of the earlier stages; the
-[output layout reference](reference/layouts.md) describes them.
+[output layout reference](../reference/output-layout.md) describes them.
 
 ### The input side
 
@@ -105,7 +105,8 @@ data dictionary called things. The rows beginning with `>` are what make the
 file a Schemasheet: they map each column onto an element of the LinkML
 metamodel. Here `tableName` becomes a LinkML `class`, `variableName` becomes a
 `slot`, and `variableType` becomes its `range`. Columns mapped to `ignore` are
-dropped. See [How it works](how-it-works.md#schemasheets) for the full story.
+dropped. See [How it works](../explanation/how-it-works.md#schemasheets) for the
+full story.
 
 These particular TSVs are written and maintained by hand, which is why ODM v1
 needs no Excel file. For every other dataset the generator *builds* files like
@@ -170,10 +171,10 @@ itself. It produces one schema, and the LinkML ecosystem does the rest.
 Everything other than ODM v1 needs a source Excel dictionary, which you must
 obtain yourself:
 
-- [Generate the ODM schemas](index.md#prepare-the-dictionary-for-v2-and-above) —
-  v2 and above, from the official PHES-ODM dictionary. How the two ODM pipelines
-  differ is in [Generate ODM schemas](odm-schemas.md).
-- [Generate the NWSS schemas](index.md#generate-the-nwss-schemas) — from a CDC
+- [Generate the ODM schemas](../how-to/generate-odm-schemas.md) — v2 and above,
+  from the official PHES-ODM dictionary. How the two ODM pipelines differ is in
+  [Inside an ODM run](../explanation/odm-runs.md).
+- [Generate the NWSS schemas](../how-to/generate-nwss-schemas.md) — from a CDC
   dictionary you can download right now. This is the one to try if you want to
   watch the full three-stage pipeline run, which
-  [Generate NWSS schemas](nwss-schemas.md) walks through stage by stage.
+  [Inside an NWSS run](../explanation/nwss-runs.md) walks through stage by stage.
