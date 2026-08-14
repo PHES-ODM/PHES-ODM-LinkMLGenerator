@@ -6,8 +6,8 @@ outputs. For why the pipeline is shaped this way, see
 
 Every step is also its own CLI, so any one can be re-run against the CSVs already
 in `dictionary/` — see
-[Re-run a single step](../python-api.md#re-run-a-single-step), which includes a
-Python example reproducing the whole ODM pipeline.
+[Re-run a single step](../python-api.md#re-run-a-single-step), which shows how
+to work from the source of `make_odm` to experiment with an individual step.
 
 ## ODM pipeline steps
 

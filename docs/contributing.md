@@ -177,8 +177,8 @@ Three things to check when you change the code:
   mkdocstrings, so the signature and docstring update themselves. But the page
   lists modules explicitly — a new *module* needs adding there.
 - **Adding, removing, or reordering a pipeline step.** Update
-  [Pipeline steps](reference/pipeline-steps.md), and the worked example in
-  [Use it from Python](python-api.md#re-run-a-single-step) if it applies.
+  [Pipeline steps](reference/pipeline-steps.md), including the step count in its
+  introduction.
 - **Adding or renaming a CLI option.** Update the
   [CLI reference](reference/cli.md).
 

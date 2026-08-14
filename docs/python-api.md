@@ -144,69 +144,23 @@ inputs, and its outputs.
 
 ### From Python
 
-The following reproduces `make_odm` exactly, and is the starting point for
-experimenting with an individual step:
+The best starting point for experimenting with an individual step is the source
+of `make_odm` itself:
 
-```python
-from odm_linkmlgen.odm.make_odm_ss_classes import extract_all_classes
-from odm_linkmlgen.odm.make_odm_ss_container import extract_container_class
-from odm_linkmlgen.odm.make_odm_ss_enums_from_parts import extract_parts_enums
-from odm_linkmlgen.odm.make_odm_ss_enums_from_sets import extract_sets_enums
-from odm_linkmlgen.odm.make_odm_ss_prefixes import make_prefixes
-from odm_linkmlgen.odm.make_odm_ss_schema import make_schema
-from odm_linkmlgen.odm.odm_utils import add_missingness_set
-from odm_linkmlgen.utils.general_utils import clear_dirs, extract_sheets
-from odm_linkmlgen.utils.schemasheets_utils import (
-    make_linkml_schema_from_schemasheets,
-    save_schema_definition,
-)
+[odm_linkmlgen/make_odm.py on GitHub](https://github.com/PHES-ODM/PHES-ODM-LinkMLGenerator/blob/main/odm_linkmlgen/make_odm.py)
 
-version = "3"
-dictionary_file = f"odm_linkmlgen/data/odm_v{version}/v{version} ODM dictionary.xlsx"
-output_dir = f"gen/odm_v{version}"
-dictionary_dir = f"{output_dir}/dictionary"
-schemasheets_dir = f"{output_dir}/schemasheets"
-linkml_dir = f"{output_dir}/linkml"
-parts_file = f"{dictionary_dir}/parts.csv"
-sets_file = f"{dictionary_dir}/sets.csv"
+Read it step-by-step alongside the
+[pipeline steps reference](reference/pipeline-steps.md), which describes what
+each step reads and writes. Then, rather than calling `make_odm`, copy its body
+into a script of your own and work in that: comment out the steps you are not
+interested in, change the arguments a step is given, or drop your own code in
+between two of them.
 
-# 1. Remove any stale csv/tsv/yaml files from a previous run
-clear_dirs([dictionary_dir, schemasheets_dir, linkml_dir])
+Because every step reads and writes files, the ones you comment out are already
+accounted for by the outputs left on disk from your last full run — so
+commenting out everything before the step you are working on is the fastest way
+to iterate on it.
 
-# 2. Extract the sheets from Excel to CSV. The na_values argument keeps partID
-#    values such as "NA" and "None" as literal strings rather than NA values.
-extract_sheets(
-    dictionary_file,
-    ["parts", "sets"],
-    dictionary_dir,
-    na_values={"parts": {"partID": ""}, "sets": {"partID": ""}},
-)
-
-# 3 & 4. Extract the enumerations, first from the sets sheet (the mmaSet enums),
-#        then the remaining ones from the parts sheet
-all_enums = extract_sets_enums(
-    sets_file, parts_file, f"{schemasheets_dir}/enums_sets.tsv"
-)
-all_enums += extract_parts_enums(parts_file, f"{schemasheets_dir}/enums_parts.tsv")
-all_enums = list(dict.fromkeys(all_enums))
-
-# 5. Extract the classes (one Schemasheet per ODM table)
-extract_all_classes(parts_file, schemasheets_dir, recognized_enums=all_enums)
-
-# 6, 7, 8. Container class, prefixes, and schema metadata
-extract_container_class(parts_file, f"{schemasheets_dir}/container.tsv")
-make_prefixes(f"{schemasheets_dir}/prefixes.tsv", version)
-make_schema(f"{schemasheets_dir}/schema.tsv", version)
-
-# 9. Run Schemasheets over all the generated TSV files
-schema = make_linkml_schema_from_schemasheets(schemasheets_dir)
-
-# 10. Add the missingness enumerations
-add_missingness_set(schema, parts_file)
-
-# 11. Save the final LinkML schema
-save_schema_definition(schema, f"{linkml_dir}/odm_v{version}.yaml")
-```
-
-To experiment with one step, comment out the ones before it — their outputs are
-already on disk from the last full run.
+The equivalent for NWSS is
+[odm_linkmlgen/make_nwss.py](https://github.com/PHES-ODM/PHES-ODM-LinkMLGenerator/blob/main/odm_linkmlgen/make_nwss.py),
+whose body is the same idea wrapped in a loop over the dictionary types.
