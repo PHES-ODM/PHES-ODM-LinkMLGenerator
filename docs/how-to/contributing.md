@@ -151,7 +151,7 @@ them**, decided by what the reader is doing when they open it:
 
 | Directory | Is for | Holds |
 | --- | --- | --- |
-| `tutorials/` | *Learning.* One guided run, read once, in order | `getting-started.md` — install, and the ODM v1 walkthrough |
+| `tutorials/` | *Learning.* One guided run, read once, in order | `getting-started.md` — install, and the ODM v3 walkthrough |
 | `how-to/` | *Doing.* Steps for one task, for a reader who already knows roughly what they want | Installing, generating the ODM and NWSS schemas, the Python API, troubleshooting, extending, contributing |
 | `reference/` | *Looking up.* Dry, complete, no narrative | CLI options, pipeline steps, the output and repository layouts, the source dictionaries, the generated API |
 | `explanation/` | *Understanding.* Background and design reasoning | `how-it-works.md`, `odm-runs.md`, `nwss-runs.md`, `data-dictionaries.md` |

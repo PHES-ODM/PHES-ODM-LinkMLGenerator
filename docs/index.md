@@ -28,7 +28,7 @@ start with the one that matches what you need.
 A guided first run, start to finish. Read it once, in order.
 
 - [Getting started](tutorials/getting-started.md) — install the generator,
-  produce the ODM v1 schema, and look at what it contains
+  produce the ODM v3 schema, and look at what it contains
 
 ### [How-to guides](how-to/install.md) — *doing*
 
