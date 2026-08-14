@@ -346,9 +346,12 @@ Defines one CURIE prefix: `nwss_{dictionary_type}` →
 Defines the schema-level metadata for this dictionary type: name, id, description,
 and default prefix.
 
-Unlike the ODM equivalent, **the values are passed in by `make_nwss`** (as
-`default_schema_values`) rather than being built inside the module. `make_schema`
-takes a `data_values` dict that overrides its own defaults.
+Unlike the ODM equivalent, **the values are passed in by `make_nwss`** rather
+than being built inside the module. They come from the module-level
+`SCHEMA_VALUES_TEMPLATE` dict in `make_nwss`, whose values are
+`{dictionary_type}` format templates interpolated per type into the
+`schema_values` dict handed to this step. `make_schema` takes a
+`data_values` dict that overrides its own defaults.
 
 ### NWSS 8. Run Schemasheets
 

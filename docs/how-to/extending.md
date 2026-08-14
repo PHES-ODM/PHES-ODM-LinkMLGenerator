@@ -76,9 +76,14 @@ type name, so there is nothing else to configure:
 | CURIE prefix | `nwss_foo` → `https://onto.phes-odm.org/nwss/foo/` |
 
 Note the capitalisation: the schema *name* is `NWSS_foo`, while the prefix,
-directory, and file name are lower-case `nwss_foo`. These are built in
-`make_nwss` as `default_schema_values` and passed down, unlike the ODM
-equivalents which are templated inside their own modules.
+directory, and file name are lower-case `nwss_foo`. The schema name, id,
+description, and prefix come from the module-level
+`SCHEMA_VALUES_TEMPLATE` dict in `make_nwss`, whose values are
+`{dictionary_type}` format templates. `make_nwss` interpolates them per type
+into a local `schema_values` dict and passes that down, unlike the ODM
+equivalents which are templated inside their own modules. A new type needs no
+change to the template — but if you do need a different metadata value, edit
+the template rather than the loop.
 
 The enumerations always come from a sheet named `Value Sets`; only the metadata
 sheet name varies between types.

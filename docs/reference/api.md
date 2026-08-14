@@ -217,7 +217,8 @@ enumeration, expanding
 ### `odm_linkmlgen.nwss.make_nwss_ss_schema`
 
 Unlike the ODM equivalent, the metadata values are supplied by the caller
-(`make_nwss`) rather than templated inside the module.
+(`make_nwss`, from its module-level `SCHEMA_VALUES_TEMPLATE` dict)
+rather than templated inside the module.
 
 ::: odm_linkmlgen.nwss.make_nwss_ss_schema
     options:

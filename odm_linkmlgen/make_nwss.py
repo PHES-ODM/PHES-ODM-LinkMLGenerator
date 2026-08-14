@@ -43,6 +43,16 @@ app = typer.Typer(
     rich_markup_mode="rich",
 )
 
+# These are the top-level values of the LinkML schema.
+# The values are string-interpolated for the dictionary_type (eg. "reporting",
+# "public_concentration", "public_metric")
+SCHEMA_VALUES_TEMPLATE = {
+    "schema": "NWSS_{dictionary_type}",
+    "id": "https://onto.phes-odm.org/nwss/{dictionary_type}",
+    "description": "National Wastewater Surveillance System (NWSS-{dictionary_type})",
+    "default_prefix": "nwss_{dictionary_type}",
+}
+
 MAIN_HELP = """Generate the NWSS LinkML schema."""
 
 OUTPUT_DIR_HELP = """Directory to save all the output, including the generating
@@ -125,12 +135,9 @@ def make_nwss(
             continue
         cur_output_dir = Path(output_dir) / f"nwss_{dictionary_type}"
 
-        default_schema_values = {
-            "schema": f"NWSS_{dictionary_type}",
-            "id": f"https://onto.phes-odm.org/nwss/{dictionary_type}",
-            "description": f"National Wastewater Surveillance System (NWSS-{dictionary_type})",
-            "default_prefix": f"nwss_{dictionary_type}",
-        }
+        schema_values = {}
+        for key, value in SCHEMA_VALUES_TEMPLATE.items():
+            schema_values[key] = value.format(dictionary_type=dictionary_type)
 
         enums_excel_file = metadata_excel_file
         detailed_enum_names = ["vs_yne", "vs_yn"]
@@ -222,7 +229,7 @@ def make_nwss(
         )
 
         # Make the schema Schemasheet
-        make_schema(schemasheets_dir / "schema.tsv", data_values=default_schema_values)
+        make_schema(schemasheets_dir / "schema.tsv", data_values=schema_values)
 
         # Run Schemasheets to make the final LinkML schema
         schema = make_linkml_schema_from_schemasheets(

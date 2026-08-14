@@ -71,7 +71,7 @@ dataset-specific code — see
 | NWSS data type prose → range + pattern | `_data_types_validation_info` in `make_nwss_ss_classes` |
 | An ODM enumeration name that won't resolve | `_odm_enum_name_exceptions` in `odm_utils` |
 | A NWSS source column name | `DictionaryColumns` in `nwss_utils` |
-| Schema name / id / prefix templates | `_data` in `make_odm_ss_schema` and `make_odm_ss_prefixes`; `default_schema_values` in `make_nwss` |
+| Schema name / id / prefix templates | `_data` in `make_odm_ss_schema` and `make_odm_ss_prefixes`; `SCHEMA_VALUES_TEMPLATE` in `make_nwss` |
 | Excel or CSV reading | `general_utils` |
 | Post-generation schema fixes | `schemasheets_utils.fix_schemasheets_generated_schema`, `odm_utils.add_missingness_set` |
 
