@@ -88,22 +88,33 @@ markdown_extensions:
   - pymdownx.tabbed:
       alternate_style: true
 
+# The four sections below are the Diátaxis documentation framework: tutorial
+# (learning), how-to guides (doing), reference (looking up), and explanation
+# (understanding). A new page belongs to exactly one of them.
 nav:
   - Home: index.md
-  - Getting started: getting-started.md
-  - Generate ODM schemas: odm-schemas.md
-  - Generate NWSS schemas: nwss-schemas.md
-  - Use it from Python: python-api.md
-  - Troubleshooting: troubleshooting.md
-  - How it works: how-it-works.md
-  - The source data dictionaries: data-dictionaries.md
-  - Extending the generator: extending.md
-  - Contributing: contributing.md
+  - Tutorial:
+      - Getting started: tutorials/getting-started.md
+  - How-to guides:
+      - Install the generator: how-to/install.md
+      - Generate the ODM schemas: how-to/generate-odm-schemas.md
+      - Generate the NWSS schemas: how-to/generate-nwss-schemas.md
+      - Use it from Python: how-to/python-api.md
+      - Troubleshooting: how-to/troubleshooting.md
+      - Extending the generator: how-to/extending.md
+      - Contributing: how-to/contributing.md
   - Reference:
       - Command-line interface: reference/cli.md
       - Pipeline steps: reference/pipeline-steps.md
-      - Output and repository layout: reference/layouts.md
+      - Output layout: reference/output-layout.md
+      - Repository layout: reference/repository-layout.md
+      - The source data dictionaries: reference/data-dictionaries.md
       - Python API: reference/api.md
+  - Explanation:
+      - How it works: explanation/how-it-works.md
+      - Inside an ODM run: explanation/odm-runs.md
+      - Inside an NWSS run: explanation/nwss-runs.md
+      - Why the dictionaries are hard to read: explanation/data-dictionaries.md
 
 extra:
   social:

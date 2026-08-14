@@ -1,96 +1,6 @@
-# Output and repository layout
+# Repository layout
 
-## Output layout
-
-Every generator writes up to three subdirectories inside the `--output-dir` you
-give it, one per pipeline stage:
-
-```text
-<output_dir>/
-├── dictionary/     # Stage 1: intermediate CSVs extracted from the source Excel file
-├── schemasheets/   # Stage 2: intermediate TSVs (the input to Schemasheets)
-└── linkml/         # Stage 3: the final LinkML YAML schema
-```
-
-The `dictionary/` and `schemasheets/` files are intermediate build artefacts.
-They are kept on disk deliberately — see
-[why the intermediate files are kept](../how-it-works.md#why-the-intermediate-files-are-kept)
-and [Troubleshooting](../troubleshooting.md#a-generated-schema-is-wrong).
-
-All three directories are cleared of `.csv`, `.tsv`, and `.yaml` files by
-`clear_dirs` at the start of a full run. A
-[partial re-run](../python-api.md#re-run-a-single-step) does not clear anything.
-
-### ODM v2+
-
-For `--output-dir gen/odm_v3 --version 3`:
-
-```text
-gen/odm_v3/
-├── dictionary/
-│   ├── parts.csv
-│   └── sets.csv
-├── schemasheets/
-│   ├── class_{class_name}.tsv    # One per ODM table
-│   ├── enums_sets.tsv            # All enums defined in the sets sheet
-│   ├── enums_parts.tsv           # All enums defined in the parts sheet
-│   ├── container.tsv
-│   ├── prefixes.tsv
-│   └── schema.tsv
-└── linkml/
-    └── odm_v3.yaml
-```
-
-Note the asymmetry in how enumerations are grouped: **one TSV per class**, but
-**one TSV per enumeration source sheet**, holding every enumeration from it.
-
-### ODM v1
-
-ODM v1 produces only the schema. Its Schemasheets are read in place from
-`odm_linkmlgen/data/odm_v1/schemasheets/` and are not copied:
-
-```text
-gen/odm_v1/
-└── linkml/
-    └── odm_v1.yaml
-```
-
-### NWSS
-
-`make_nwss` creates **a subdirectory per dictionary type**, each with its own
-full set of three stage directories. For
-`--output-dir gen/nwss --reporting ...`:
-
-```text
-gen/nwss/
-└── nwss_reporting/
-    ├── dictionary/
-    │   ├── metadata.csv          # The metadata sheet, whatever it was named
-    │   └── enums.csv             # The "Value Sets" sheet
-    ├── schemasheets/
-    │   ├── classes_nwss.tsv      # Single merged class (single_table=True)
-    │   ├── enum_{enum_name}.tsv  # One per enumeration
-    │   ├── container.tsv
-    │   ├── prefixes.tsv
-    │   └── schema.tsv
-    └── linkml/
-        └── nwss_reporting.yaml
-```
-
-Two things to note:
-
-- The `dictionary/` CSV names are **fixed** at `metadata.csv` and `enums.csv`,
-  even though the source sheet names vary by dictionary type. This is what keeps
-  the later steps dictionary-type agnostic.
-- There is normally **one** `classes_*.tsv`, named `classes_nwss.tsv`, because
-  `make_nwss` always merges every table into a single class. Running the step by
-  hand without `--single-table` produces one per table instead.
-
-Enumeration file names include the per-field expansion where it applies, so you
-will see `enum_vs_yne[stormwater_input].tsv` and similar rather than a single
-`enum_vs_yne.tsv`.
-
-## Repository layout
+Where the source files live in a checkout.
 
 ```text
 odm_linkmlgen/          # The Python package
@@ -138,10 +48,10 @@ mkdocs.yml              # Documentation site configuration
     Every `.xlsx` under `data/` is git-ignored — the ODM dictionary is not
     publicly available, and the NWSS ones are downloaded from cdc.gov. You must
     obtain them yourself; see
-    [Prepare the ODM dictionary](../index.md#prepare-the-dictionary-for-v2-and-above)
-    and [Get the NWSS dictionaries](../index.md#get-the-dictionaries).
+    [Prepare the ODM dictionary](../how-to/generate-odm-schemas.md#prepare-the-dictionary-for-v2-and-above)
+    and [Get the NWSS dictionaries](../how-to/generate-nwss-schemas.md#get-the-dictionaries).
 
-### The naming convention
+## The naming convention
 
 Modules under `odm/` and `nwss/` follow the pattern `make_<dataset>_ss_<thing>`,
 where **`ss` stands for Schemasheets**. Each such module produces one kind of
@@ -150,9 +60,9 @@ a module-level `headers` dict.
 
 The two pipelines are deliberate near-mirrors of each other. They share no
 dataset-specific code — see
-[why the two pipelines are not shared](../how-it-works.md#why-the-two-pipelines-are-not-shared).
+[why the two pipelines are not shared](../explanation/how-it-works.md#why-the-two-pipelines-are-not-shared).
 
-### Where to look for what
+## Where to look for what
 
 | If you are changing… | Look in |
 | --- | --- |
@@ -165,7 +75,7 @@ dataset-specific code — see
 | Excel or CSV reading | `general_utils` |
 | Post-generation schema fixes | `schemasheets_utils.fix_schemasheets_generated_schema`, `odm_utils.add_missingness_set` |
 
-### Requirements files
+## Requirements files
 
 | File | Contents |
 | --- | --- |
@@ -176,3 +86,10 @@ dataset-specific code — see
 `requirements-docs.txt` is deliberately independent of the runtime
 dependencies: mkdocstrings reads the source statically, so the documentation
 builds without `linkml` or `pandas` installed.
+
+## Related
+
+- [Output layout](output-layout.md) — what a generation run writes to
+  `--output-dir`
+- [Contributing](../how-to/contributing.md) — the dev install, the tests, and
+  the code conventions new code is expected to match

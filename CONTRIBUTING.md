@@ -5,7 +5,7 @@ Thanks for contributing to the PHES-ODM LinkML Schema Generator.
 The full development guide lives in the documentation site, so that it sits
 alongside the rest of the project's guides rather than drifting apart from them:
 
-**→ [Contributing](https://phes-odm.github.io/PHES-ODM-LinkMLGenerator/contributing/)**
+**→ [Contributing](https://phes-odm.github.io/PHES-ODM-LinkMLGenerator/how-to/contributing/)**
 
 It covers the dev install, running the tests, linting, the code conventions new
 code is expected to match, and how to work on the documentation itself.
@@ -37,10 +37,10 @@ standard-library features newer than that.
 
 | Task | Guide |
 | --- | --- |
-| Work out why a generated schema is wrong | [Troubleshooting](docs/troubleshooting.md) |
-| Re-run one pipeline step while iterating | [Use it from Python](docs/python-api.md#re-run-a-single-step) |
-| Support a new ODM version or NWSS dictionary type | [Extending the generator](docs/extending.md) |
-| Understand why the code is shaped this way | [How it works](docs/how-it-works.md) |
+| Work out why a generated schema is wrong | [Troubleshooting](docs/how-to/troubleshooting.md) |
+| Re-run one pipeline step while iterating | [Use it from Python](docs/how-to/python-api.md#re-run-a-single-step) |
+| Support a new ODM version or NWSS dictionary type | [Extending the generator](docs/how-to/extending.md) |
+| Understand why the code is shaped this way | [How it works](docs/explanation/how-it-works.md) |
 
 ## A note on testing
 
@@ -51,15 +51,21 @@ dictionaries that cannot be committed (NWSS) or are large and awkward to fixture
 
 So if you change an extraction module, verify it by regenerating the schema and
 diffing the output against the previous version, and account for every line of
-the diff. See [Troubleshooting](docs/troubleshooting.md).
+the diff. See [Troubleshooting](docs/how-to/troubleshooting.md).
 
 ## Documentation changes
 
-The site is deliberately small: one page per topic, plus a `docs/reference/`
-directory for dry lookup material. Prefer adding a section to an existing page
-over adding a new page, and keep instructions and reasoning apart — a "why"
-paragraph usually belongs in `how-it-works.md` or `data-dictionaries.md` with a
-link to it. A new page must be added to `nav:` in `mkdocs.yml`.
+The site follows the
+[Diátaxis documentation framework](https://diataxis.fr/), which is what the four
+directories under `docs/` are — `tutorials/` (learning), `how-to/` (doing),
+`reference/` (looking up), and `explanation/` (understanding). A new page
+belongs to exactly one of them, and must be added to `nav:` in `mkdocs.yml`.
+
+The site is otherwise deliberately small, so prefer adding a section to an
+existing page over adding a new page. Keep instructions and reasoning apart: the
+generation commands live only in `docs/how-to/`, and a "why" paragraph usually
+belongs in `docs/explanation/how-it-works.md` or
+`docs/explanation/data-dictionaries.md` with a link to it.
 
 Markdown is wrapped at 80 columns, except inside tables, code blocks, and long
 URLs.

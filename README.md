@@ -24,13 +24,17 @@ DDL, or Python classes.
 
 **<https://phes-odm.github.io/PHES-ODM-LinkMLGenerator/>**
 
-| Page | Start here if you want to |
+The site follows the
+[Diátaxis documentation framework](https://diataxis.fr/) — a tutorial to learn
+from, how-to guides to work from, reference to look things up in, and
+explanation to understand the design.
+
+| Section | Start here if you want to |
 | --- | --- |
-| [Getting started](https://phes-odm.github.io/PHES-ODM-LinkMLGenerator/getting-started/) | Install it and generate your first schema, step by step |
-| [Generate ODM schemas](https://phes-odm.github.io/PHES-ODM-LinkMLGenerator/odm-schemas/) | Understand how the v1 and v2+ ODM runs differ |
-| [Generate NWSS schemas](https://phes-odm.github.io/PHES-ODM-LinkMLGenerator/nwss-schemas/) | Watch the whole pipeline run, stage by stage |
-| [How it works](https://phes-odm.github.io/PHES-ODM-LinkMLGenerator/how-it-works/) | Understand the design |
+| [Getting started](https://phes-odm.github.io/PHES-ODM-LinkMLGenerator/tutorials/getting-started/) | Install it and generate your first schema, step by step |
+| [How-to guides](https://phes-odm.github.io/PHES-ODM-LinkMLGenerator/how-to/install/) | Generate the ODM or NWSS schemas, call it from Python, or fix a bad schema |
 | [Reference](https://phes-odm.github.io/PHES-ODM-LinkMLGenerator/reference/cli/) | Look up a CLI option, a pipeline step, or the Python API |
+| [Explanation](https://phes-odm.github.io/PHES-ODM-LinkMLGenerator/explanation/how-it-works/) | Understand the design, the pipeline, and the source dictionaries |
 
 The Markdown sources are in [docs/](docs/), and the site can be built locally
 with `mkdocs serve` — see [Contributing](CONTRIBUTING.md).
@@ -202,8 +206,8 @@ missing from the `Value Sets` sheet — check the manual fixes above first, sinc
 the published dictionaries are the usual culprit.
 
 What each run leaves on disk, and why the output looks the way it does, is
-covered in [Generate ODM schemas](https://phes-odm.github.io/PHES-ODM-LinkMLGenerator/odm-schemas/)
-and [Generate NWSS schemas](https://phes-odm.github.io/PHES-ODM-LinkMLGenerator/nwss-schemas/).
+covered in [Inside an ODM run](https://phes-odm.github.io/PHES-ODM-LinkMLGenerator/explanation/odm-runs/)
+and [Inside an NWSS run](https://phes-odm.github.io/PHES-ODM-LinkMLGenerator/explanation/nwss-runs/).
 
 ## Contributing
 

@@ -87,7 +87,7 @@ def make_nwss(
 
     All data dictionaries except for the restricted ones are available at
     https://archive.cdc.gov/www_cdc_gov/nwss/reporting.html. The restricted ones are not publicly available.
-    
+
     See the documentation for details on preparing the NWSS data dictionaries, there are special steps
     required to process them before running this function.
 

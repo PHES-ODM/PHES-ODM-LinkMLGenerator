@@ -1,9 +1,12 @@
 # The source data dictionaries
 
-The two source dictionaries are irregular in different ways, and **most of the
-project's complexity is a response to that**. This page describes what the
-generator is reading; [How it works](how-it-works.md) describes what it does
-with it.
+What the generator reads out of the two source Excel workbooks: which sheets,
+which columns, and how each encodes its data model.
+
+Why they are shaped this way, and what that shape costs, is in
+[Why the dictionaries are hard to read](../explanation/data-dictionaries.md).
+[How it works](../explanation/how-it-works.md) describes what the generator does
+with what it reads.
 
 ## The ODM data dictionary
 
@@ -15,11 +18,6 @@ its sheets:
   enumeration, or a permissible value of an enumeration. This sheet defines all
   classes and slots, along with their data types and constraints.
 - **sets** — the permissible values for many (not all) of the enumerations.
-
-Almost everything the generator needs is in the parts sheet, and it is the harder
-of the two to read. **A row's meaning is determined by its relationships to other
-columns rather than by a single "kind" column.** That one fact accounts for most
-of the ODM pipeline's complexity.
 
 ### The columns that carry meaning
 
@@ -49,11 +47,9 @@ So every column of the `measures` table has `pK`, `fK`, or `header` in the parts
 sheet column named `measures`, and its position in the table comes from
 `measuresOrder`.
 
-This is a wide, sparse encoding: adding a table adds three columns to the sheet
-rather than rows. It is also why the same part can belong to several tables with
-different constraints in each, which in turn is why the generated schemas lean so
-heavily on LinkML's
-[`slot_usage`](how-it-works.md#two-linkml-details-that-show-up-everywhere).
+The same part can belong to several tables with different constraints in each —
+see
+[a row's meaning comes from its neighbours](../explanation/data-dictionaries.md#a-rows-meaning-comes-from-its-neighbours).
 
 #### Discovering the tables
 
@@ -63,10 +59,10 @@ column headers for any name ending in `Order` — the value of
 `odm_utils.ODM_PARTS_COLUMN_CLASS_TAG` — and stripping that suffix. So
 `measuresOrder` implies a table named `measures`.
 
-The payoff is that a new table in a new dictionary version is picked up
-automatically, with no code change, as long as it has the full
+A new table in a new dictionary version is therefore picked up automatically,
+with no code change, as long as it has the full
 `{table}` / `{table}Required` / `{table}Order` trio. See
-[Extending the generator](extending.md#add-support-for-a-new-odm-version).
+[Extending the generator](../how-to/extending.md#add-support-for-a-new-odm-version).
 
 ### Enumerations
 
@@ -92,27 +88,9 @@ Here the name must be **derived from the part ID**, usually by appending an `s`
 and are listed in `odm_utils._odm_enum_name_exceptions` — `class` → `classes`,
 `qualityFlag` → `qualityIndicators`, `aggragationScale` → `aggregationScales`
 (the source has a typo), and several that need no change at all. The derivation
-is done by `odm_utils.odm_get_enum_name_from_part_id`.
-
-#### Why derivation needs a safety net
-
-Deriving a name by string manipulation can obviously produce a name that nothing
-defines. `odm_get_enum_name_from_part_id` therefore takes an optional
-`recognized_enums` list, and **returns `"string"` when the derived name is not in
-it**. So an enumeration that could not be extracted degrades to an unconstrained
-string rather than a dangling reference to a non-existent enumeration.
-
-That is a deliberate trade, and it has a cost you need to know about: the failure
-is silent. `make_odm` collects the names actually extracted from both sheets — via
-`get_enum_names_from_sets` and `get_enum_names_from_parts`, which read `setID` and
-`partType` respectively — de-duplicates them, and passes the result as
-`recognized_enums`. **A slot whose range unexpectedly reads `string` is the
-symptom of a missing exception entry**, and it is the first thing to look for when
-a new dictionary version produces a surprising schema.
-
-Note that this check is only as good as the list it is given. Running the class
-extraction step by hand without `--recognized-enums` disables it entirely, and
-every derived name is then used as-is.
+is done by `odm_utils.odm_get_enum_name_from_part_id`, which returns `string`
+when the derived name is not one it recognizes — see
+[why derivation needs a safety net](../explanation/data-dictionaries.md#why-enumeration-name-derivation-needs-a-safety-net).
 
 ### Missingness sets
 
@@ -124,7 +102,7 @@ absent.
 The parts sheet records this in the `missingnessSet` column. No Schemasheets
 column expresses "add this range as well", so it is applied afterwards, directly
 on the `SchemaDefinition`, by `odm_utils.add_missingness_set` — see
-[post-processing workarounds](how-it-works.md#missingness-sets-odm-only).
+[post-processing workarounds](../explanation/how-it-works.md#missingness-sets-odm-only).
 
 ## The NWSS data dictionaries
 
@@ -152,9 +130,9 @@ Each workbook has two sheets of interest:
 - a **`Value Sets`** sheet — the enumerations and their permissible values, plus a
   mapping from each field to the value set it uses
 
-NWSS dictionaries are **less regular than the ODM one**, and some require manual
-repair before they can be processed at all — see
-[the manual fixes](index.md#apply-the-manual-fixes).
+Some of the published files require manual repair before they can be processed
+at all — see
+[the manual fixes](../how-to/generate-nwss-schemas.md#apply-the-manual-fixes).
 
 ### The metadata sheet has implicit table boundaries
 
@@ -170,11 +148,6 @@ All rows up to the next such boundary row belong to that table.
 (`nwss_utils.TABLE_NAME_COL`) to each table it returns. A sheet with no boundary
 row at all is treated as one table named `nwss`
 (`nwss_utils.SINGLE_TABLE_NAME`).
-
-This is a formatting convention rather than data, which makes it fragile: a stray
-value in a `Data Type` cell, or a missing one, silently changes the table
-structure. It is worth checking `dictionary/metadata.csv` when a table looks
-wrong.
 
 The columns the generator reads are listed in `nwss_utils.DictionaryColumns`:
 `Field Name`, `Data Type`, `Value Set`, `Field`, `Value Set Name`, `Description`,
@@ -199,14 +172,13 @@ tells the generator which enumeration each categorical field uses.
 
 A permissible value written as `[empty]` in the source is a genuinely empty value,
 and is converted to the `<empty>` sentinel described in
-[post-processing workarounds](how-it-works.md#empty-permissible-values).
+[post-processing workarounds](../explanation/how-it-works.md#empty-permissible-values).
 
 ### Data types are prose, not a vocabulary
 
-This is the single most consequential difference from ODM. NWSS describes a
-field's type in **free-text English** — "date", "time zone", "NPDES permit
-number", "EPA Registry ID", strings of `#` characters — rather than with a
-controlled vocabulary.
+NWSS describes a field's type in **free-text English** — "date", "time zone",
+"NPDES permit number", "EPA Registry ID", strings of `#` characters — rather than
+with a controlled vocabulary.
 
 So `_get_range_and_validation_info` in `make_nwss_ss_classes` works in three
 tiers:
@@ -225,44 +197,8 @@ tiers:
    replacing each `#` with `[0-9]`. Anything else is copied through as the range
    unchanged.
 
-Tier 3's last clause is the silent-failure case: an unmatched data type becomes a
-dangling range rather than an error.
-
-Because the source is prose, **this is the most likely place to need attention
-when a new dictionary version is published** — a new file may describe a familiar
-type in unfamiliar words. The `@TODO` comments in `_data_types_validation_info`
-mark patterns that are known to be too permissive.
-
-### Two NWSS behaviours that will surprise you
-
-#### Everything is one class
-
-`make_nwss` always sets `single_table=True`, which concatenates every table in the
-metadata sheet into **one class named `nwss`** rather than generating a class per
-table.
-
-The per-table path exists and is reachable through the individual step functions
-and their CLIs (`--no-single-table`), but the top-level generator does not use it.
-If you re-run the class extraction step by hand and get several classes, this is
-why — the CLI default is off.
-
-#### Detailed enumeration names
-
-`make_nwss` passes `detailed_enum_names=["vs_yne", "vs_yn"]`, and the effect is
-visible all over the generated schema: instead of one shared `vs_yne`
-enumeration, there is a separate copy per field that uses it —
-`vs_yne[stormwater_input]`, `vs_yne[ext_blank]`, and so on. The original
-undifferentiated enumeration is dropped.
-
-The reason is a downstream constraint rather than anything about NWSS itself.
-`vs_yne` (yes/no/empty) and `vs_yn` (yes/no) are used by many different fields,
-and **LinkML-Map allows only one mapping per enumeration range** — but the correct
-mapping differs from field to field even when the range is identical. Two columns
-that both have the `vs_yne` range may need their values mapped differently, and a
-single shared enumeration gives the mapper no way to express that.
-
-Giving each field its own enumeration name solves it, and has a secondary
-benefit: each copy can carry its own per-field permissible value descriptions.
+What that costs, and why tier 3 is the one to watch, is in
+[Data types are prose, not a vocabulary](../explanation/data-dictionaries.md#data-types-are-prose-not-a-vocabulary).
 
 ### Which enumeration a field uses
 
@@ -274,22 +210,15 @@ and they can disagree:
 | The `Metadata` sheet's `Value Set` column | `[See Value Sets: vs_yn]` |
 | The `Value Sets` sheet's `Field` → `Value Set Name` mapping | `vs_yne` |
 
-**The `Metadata` sheet wins.** It is the more complete of the two — fields missing
-from the `Value Sets` sheet mapping are common, the reverse is not — and in the one
-documented case of the two disagreeing, the `Metadata` sheet held the correct name.
+**The `Metadata` sheet wins.** A disagreement is a defect in the published
+dictionary, so it is logged as an error naming both candidates and the one
+chosen. If you see it, report it upstream; you do not need to edit the workbook.
 
-A disagreement is a defect in the published dictionary, so it is logged as an error
-naming both candidates and the one chosen. If you see it, report it upstream; you do
-not need to edit the workbook.
+`nwss_utils.resolve_slot_enums` makes this decision, and is the **only** place it
+is made. Both the enumeration Schemasheets (`make_nwss_ss_enums`) and the slot
+ranges that refer to them (`make_nwss_ss_classes`) are built from what it
+returns.
 
-`nwss_utils.resolve_slot_enums` makes this decision, and is the **only** place it is
-made. Both the enumeration Schemasheets (`make_nwss_ss_enums`) and the slot ranges
-that refer to them (`make_nwss_ss_classes`) are built from what it returns.
-
-That matters more than it sounds. When the two steps each resolved the name
-independently, a disagreement between the sheets produced a schema where the
-enumeration was generated under one name and the range pointed at the other — an
-orphan enumeration and a dangling range, in a schema that still loaded without
-complaint. `make_nwss` now also checks every range against the finished schema with
-`schema_utils.find_undefined_ranges`, and logs an error for any that does not
-resolve.
+Why the `Metadata` sheet is the one trusted, and what went wrong when the two
+steps resolved the name independently, is in
+[Why the `Metadata` sheet wins](../explanation/data-dictionaries.md#why-the-metadata-sheet-wins).
