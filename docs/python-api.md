@@ -146,7 +146,6 @@ inputs, and its outputs.
 
 The best starting point for experimenting with an individual step is the source
 of `make_odm` itself:
-
 [odm_linkmlgen/make_odm.py on GitHub](https://github.com/PHES-ODM/PHES-ODM-LinkMLGenerator/blob/main/odm_linkmlgen/make_odm.py)
 
 Read it step-by-step alongside the
