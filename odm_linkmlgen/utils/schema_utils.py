@@ -106,7 +106,10 @@ def get_ranges_of_slot_defn(
             else:
                 cur_ranges = [str(range_defn)]
 
-        # Try getting any_of
+        # Try getting any_of. This overrides what we retrieved from "range".
+        # For example, sometimes we might have "range: Any" and "any_of: ...",
+        # which in LinkML means to use the "any_of" field, but having "range: Any"
+        # is not required.
         any_of_defn = cur_defn.get("any_of", None)
         if any_of_defn is not None:
             any_of_ranges = []
