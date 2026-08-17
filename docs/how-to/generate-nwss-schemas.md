@@ -93,6 +93,16 @@ gen/nwss/nwss_reporting/linkml/nwss_reporting.yaml
 There is no separate command per type — to generate just one, pass just one
 option.
 
+By default every table in the metadata sheet is merged into a single class named
+`nwss`. Add `--no-single-table` to get one class per table instead:
+
+```console
+odm-linkmlgen-nwss \
+    --output-dir "gen/nwss" \
+    --reporting "odm_linkmlgen/data/nwss/reporting.xlsx" \
+    --no-single-table
+```
+
 ## Check the NWSS result
 
 `ERROR` lines in the log are expected and are not failures: a bad row is logged

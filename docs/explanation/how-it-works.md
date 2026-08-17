@@ -167,9 +167,9 @@ step independently runnable is what makes the pipeline debuggable, and it should
 be preserved when adding a step.
 
 Note that a step's CLI *defaults* are not necessarily what the top-level
-generator passes it — `--single-table` is off by default, but `make_nwss` always
-passes it. The CLIs exist for debugging, not as the pipeline's configuration
-surface.
+generator passes it — `--detailed-enum-names` is empty by default, but
+`make_nwss` always passes `vs_yne` and `vs_yn`. The CLIs exist for debugging, not
+as the pipeline's configuration surface.
 
 ### Stage 3 — generate
 
@@ -245,7 +245,7 @@ Where they diverge in output as well as input:
 
 | | ODM | NWSS |
 | --- | --- | --- |
-| Classes | One per table | All tables merged into one `nwss` class |
+| Classes | One per table | All tables merged into one `nwss` class by default |
 | Extra post-processing | `add_missingness_set` | None |
 | Schemas per run | One | One per dictionary type supplied |
 

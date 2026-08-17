@@ -295,7 +295,7 @@ def main(
     output_dir: Annotated[Path, typer.Option(show_default=False, help=OUTPUT_DIR_HELP)],
     single_table: Annotated[
         bool, typer.Option(show_default=True, help=SINGLE_TABLE_HELP)
-    ] = False,
+    ] = True,
     detailed_enum_names: Annotated[
         list[str] | None,
         typer.Option(show_default=False, help=DETAILED_ENUM_NAMES_HELP),
@@ -310,7 +310,7 @@ def main(
         output_dir (Path): The directory to save all the class Schemasheets files to. One
             Schemasheet is saved per class.
         single_table (bool, optional): If set then merge all classes into a single class.
-            Defaults to False.
+            Defaults to True.
         detailed_enum_names (list[str] | None, optional): List of enum names where we want to use the
             per-field (detailed) version of the enumeration. Defaults to None.
     """

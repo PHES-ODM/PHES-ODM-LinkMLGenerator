@@ -56,20 +56,23 @@ SCHEMA_VALUES_TEMPLATE = {
 MAIN_HELP = """Generate the NWSS LinkML schema."""
 
 OUTPUT_DIR_HELP = """Directory to save all the output, including the generating
-                  LinkML schemas, to. A separate subdirectory is created for
-                  each dictionary type."""
+LinkML schemas, to. A separate subdirectory is created for
+each dictionary type."""
 
 REPORTING_HELP = """NWSS main data dictionary for reporting (Excel file)"""
 
 PUBLIC_CONCENTRATION_HELP = """NWSS public concentration data dictionary (Excel
-                            file)"""
+file)"""
 
 PUBLIC_METRIC_HELP = """NWSS public metric data dictionary (Excel file)"""
 
 RESTRICTED_RAW_HELP = """NWSS restricted raw data dictionary (Excel file)"""
 
 RESTRICTED_ANALYTICS_HELP = """NWSS restricted analytics data dictionary (Excel
-                            file)"""
+file)"""
+
+SINGLE_TABLE_HELP = """If set then merge all classes into a single class called
+nwss_utils.SINGLE_TABLE_NAME, otherwise keep all classes separate."""
 
 
 @app.command(help=MAIN_HELP)
@@ -90,6 +93,9 @@ def make_nwss(
     restricted_analytics: Annotated[
         Path | None, typer.Option(show_default=False, help=RESTRICTED_ANALYTICS_HELP)
     ] = None,
+    single_table: Annotated[
+        bool, typer.Option(show_default=True, help=SINGLE_TABLE_HELP)
+    ] = True,
 ) -> dict[str, SchemaDefinition]:
     """Make the NWSS LinkML Schemas for various NWSS data dictionaries. A separate schema is created for each
     of the dictionary types whose Excel data dictionaries are specified by the supplied parameters. Any parameter
@@ -109,6 +115,8 @@ def make_nwss(
         public_metric (Path | None, optional): Path to public metric data dictionary Excel file. Defaults to None.
         restricted_raw (Path | None, optional): Path to restricted raw data dictionary Excel file. Defaults to None.
         restricted_analytics (Path | None, optional): Path to restricted analytics data dictionary Excel file. Defaults to None.
+        single_table (bool, optional): If set then merge all classes into a single class.
+            Defaults to True.
 
     Returns:
         dict[str, SchemaDefinition]: The generated LinkML schema definitions, keyed by
@@ -143,7 +151,6 @@ def make_nwss(
         detailed_enum_names = ["vs_yne", "vs_yn"]
         source_metadata_sheet_name = "Metadata"
         source_value_sets_sheet_name = "Value Sets"
-        single_table = True
 
         if dictionary_type in ("reporting", "public_concentration", "public_metric"):
             # These dictionary types use the default sheet names set above

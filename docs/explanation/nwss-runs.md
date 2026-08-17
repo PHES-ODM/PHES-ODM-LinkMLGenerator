@@ -9,8 +9,9 @@ covers what a run leaves behind and why the output looks the way it does.
 
 Two NWSS-specific behaviours will surprise you if you are not expecting them:
 
-- **One class, not one per table.** `make_nwss` always merges every table in the
-  metadata sheet into a single class named `nwss`.
+- **One class, not one per table.** By default `make_nwss` merges every table in
+  the metadata sheet into a single class named `nwss`; pass
+  `--no-single-table` for a class per table.
 - **Per-field enumerations.** `vs_yne` and `vs_yn` are expanded into one
   enumeration per field that uses them — `vs_yne[stormwater_input]`, and so on.
 

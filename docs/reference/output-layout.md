@@ -67,7 +67,7 @@ gen/nwss/
     │   ├── metadata.csv          # The metadata sheet, whatever it was named
     │   └── enums.csv             # The "Value Sets" sheet
     ├── schemasheets/
-    │   ├── classes_nwss.tsv      # Single merged class (single_table=True)
+    │   ├── classes_nwss.tsv      # Merged class (default single_table=True)
     │   ├── enum_{enum_name}.tsv  # One per enumeration
     │   ├── container.tsv
     │   ├── prefixes.tsv
@@ -82,8 +82,9 @@ Two things to note:
   even though the source sheet names vary by dictionary type. This is what keeps
   the later steps dictionary-type agnostic.
 - There is normally **one** `classes_*.tsv`, named `classes_nwss.tsv`, because
-  `make_nwss` always merges every table into a single class. Running the step by
-  hand without `--single-table` produces one per table instead.
+  `single_table` defaults to `True`, merging every table into a single class.
+  Passing `--no-single-table` produces one `classes_{table_name}.tsv` per table
+  instead.
 
 Enumeration file names include the per-field expansion where it applies, so you
 will see `enum_vs_yne[stormwater_input].tsv` and similar rather than a single

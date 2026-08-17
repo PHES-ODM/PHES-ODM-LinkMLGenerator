@@ -213,12 +213,14 @@ the pipeline is eight steps rather than eleven.
 
 ### What `make_nwss` passes down
 
-These values are fixed by `make_nwss` rather than being configurable, and they
-differ from the step CLIs' defaults:
+`single_table` is passed straight through from `make_nwss`'s own
+`single_table` parameter (`--single-table` / `--no-single-table`), which defaults
+to `True`. The remaining values are fixed by `make_nwss` rather than being
+configurable, and `detailed_enum_names` differs from the step CLIs' default:
 
 | Value | Set to |
 | --- | --- |
-| `single_table` | `True` — always merges every table into one class named `nwss` |
+| `single_table` | Caller's value — `True` by default, merging every table into one class named `nwss` |
 | `detailed_enum_names` | `["vs_yne", "vs_yn"]` |
 | Value Sets sheet name | `Value Sets`, for every dictionary type |
 | Metadata sheet name | Varies by type (see below) |
@@ -319,8 +321,9 @@ the Schemasheets columns:
        regex by replacing each `#` with `[0-9]`. Anything else is copied through as
        the range unchanged.
 
-With `single_table=True` — which `make_nwss` always sets — every table is
-concatenated into a single class named `nwss`, producing one `classes_nwss.tsv`.
+With `single_table=True` — the default — every table is concatenated into a
+single class named `nwss`, producing one `classes_nwss.tsv`. With
+`single_table=False` each table gets its own `classes_{table_name}.tsv`.
 
 Because NWSS data types are prose rather than a controlled vocabulary, **this step
 is the most likely place to need attention when a new dictionary version is
@@ -332,7 +335,8 @@ that are known to be too permissive.
 `nwss.make_nwss_ss_container.extract_container_class` → `schemasheets/container.tsv`
 
 Builds the top-level `Container` class, marked `tree_root`, with one multivalued
-inlined slot per table. With `single_table=True` that is a single `nwss` slot.
+inlined slot per table. With `single_table=True` — the default — that is a single
+`nwss` slot.
 
 ### NWSS 6. Write the prefixes Schemasheet
 

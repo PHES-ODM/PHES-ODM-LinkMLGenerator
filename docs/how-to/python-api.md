@@ -65,6 +65,10 @@ for dictionary_type, schema in schemas.items():
     print(dictionary_type, len(schema.classes))
 ```
 
+`single_table` is the one other parameter. It defaults to `True`, merging every
+table in the metadata sheet into a single class named `nwss`; pass
+`single_table=False` for one class per table.
+
 ## Inspecting a generated schema
 
 `odm_linkmlgen.utils.schema_utils` has read-only helpers for working with the
@@ -127,9 +131,9 @@ its inputs, and its outputs.
     Running a step by hand does not reproduce what `make_odm` or `make_nwss` did
     unless you pass the same arguments. The one that catches people out:
 
-    - **`--single-table`** (NWSS classes) defaults to *off*, but `make_nwss`
-        always passes it. Without it you get one class per table instead of the
-        merged `nwss` class.
+    - **`--detailed-enum-names`** (NWSS classes) defaults to *empty*, but
+        `make_nwss` always passes `vs_yne` and `vs_yn`. Without them the shared
+        enumerations are used instead of the per-field (detailed) copies.
 
     The ODM class step needs no such care: `extract_all_classes` resolves
     enumeration names from the parts sheet, so re-running it by hand against

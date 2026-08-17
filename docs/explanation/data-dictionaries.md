@@ -99,16 +99,14 @@ mark patterns that are known to be too permissive.
 
 ### Two NWSS behaviours that will surprise you
 
-#### Everything is one class
+#### Everything is one class by default
 
-`make_nwss` always sets `single_table=True`, which concatenates every table in the
-metadata sheet into **one class named `nwss`** rather than generating a class per
-table.
+`single_table` defaults to `True`, which concatenates every table in the metadata
+sheet into **one class named `nwss`** rather than generating a class per table.
 
-The per-table path exists and is reachable through the individual step functions
-and their CLIs (`--no-single-table`), but the top-level generator does not use it.
-If you re-run the class extraction step by hand and get several classes, this is
-why — the CLI default is off.
+The per-table path is reachable by passing `--no-single-table` to
+`odm-linkmlgen-nwss`, or by passing `single_table=False` to `make_nwss` or to the
+individual step functions and their CLIs.
 
 #### Detailed enumeration names
 

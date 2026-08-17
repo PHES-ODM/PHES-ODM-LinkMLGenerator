@@ -62,9 +62,14 @@ Generates one schema per dictionary type supplied. Wraps
 | `--public-metric` | Path | No | `Metadata` |
 | `--restricted-raw` | Path | No | `Wastewater Metadata` |
 | `--restricted-analytics` | Path | No | `Analytics Data Dictionary` |
+| `--single-table` / `--no-single-table` | bool | No (default on) | — |
 
 Every dictionary option is optional. Each one you pass generates one independent
 schema under its own subdirectory; passing none generates nothing.
+
+`--single-table`, on by default, merges every table in the metadata sheet into a
+single class named `nwss`. Pass `--no-single-table` to get one class per table
+instead.
 
 ```console
 odm-linkmlgen-nwss \
@@ -98,9 +103,10 @@ python -m odm_linkmlgen.nwss.<module> --help
 !!! warning "One default is not what the top-level generator passes"
 
     The step CLIs exist for debugging, not as the pipeline's configuration
-    surface. `--single-table` defaults to *off*, but `make_nwss` always passes
-    it, which changes the output: without it you get one class per table instead
-    of the merged `nwss` class.
+    surface. `--detailed-enum-names` defaults to *empty* on
+    `make_nwss_ss_classes`, but `make_nwss` always passes `vs_yne` and `vs_yn`,
+    which changes the output: without them the shared enumerations are used
+    rather than the per-field (detailed) copies.
 
 ### ODM steps
 
