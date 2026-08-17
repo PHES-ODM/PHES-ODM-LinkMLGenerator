@@ -79,9 +79,10 @@ for the source conventions they decode.
 Creates one Schemasheet per ODM class (table) from the parts sheet, named
 `class_{table_name}.tsv`.
 
-Two private module-level tables are worth knowing about: `headers`, the
-column-to-LinkML mapping, and `_data_types_map`, the ODM data type to LinkML range
-mapping — a new `dataType` in a new dictionary version needs adding to the latter.
+One module-level table is worth knowing about: `headers`, the column-to-LinkML
+mapping. The ODM data type to LinkML range mapping lives in `odm_utils`, in
+`_data_types_map` — a new `dataType` in a new dictionary version needs adding
+there.
 
 ::: odm_linkmlgen.odm.make_odm_ss_classes
     options:
@@ -145,9 +146,13 @@ not handled by `extract_sets_enums`.
 Helpers for working with the ODM parts sheet, plus the missingness post-processing
 step.
 
-`_odm_enum_name_exceptions` — private, but the table you edit when an enumeration
-name does not follow the `partID` + `s` convention. The symptom of a missing entry
-is a slot whose range fell back to `string`.
+`odm_get_data_type_of_row` resolves a parts row's LinkML range. The part's
+`mmaSet` wins — that is a categorical part's enumeration name — and otherwise
+the part's `dataType` is mapped through the private `_data_types_map`, which is
+where a new dictionary version's new data type needs adding. Anything unmapped —
+an unrecognized `dataType` and a `categorical` part with an empty `mmaSet` alike
+— falls back to `string`, so a slot whose range reads `string` unexpectedly is
+the symptom of one of those two.
 
 ::: odm_linkmlgen.odm.odm_utils
     options:
@@ -158,7 +163,7 @@ is a slot whose range fell back to `string`.
         - odm_get_fk_target_class
         - odm_get_header_rows
         - odm_keep_active_rows
-        - odm_get_enum_name_from_part_id
+        - odm_get_data_type_of_row
         - set_range_of_slot
         - add_missingness_set
 

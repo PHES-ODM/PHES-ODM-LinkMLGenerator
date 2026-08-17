@@ -125,15 +125,15 @@ its inputs, and its outputs.
 !!! warning "A step's CLI defaults are not what the top-level generator passes"
 
     Running a step by hand does not reproduce what `make_odm` or `make_nwss` did
-    unless you pass the same arguments. Two that catch people out:
+    unless you pass the same arguments. The one that catches people out:
 
-    - **`--recognized-enums`** (ODM classes) is omitted by default, which
-        disables the check that a derived enumeration name actually exists. Every
-        derived name is then used as-is, so the TSVs can reference enumerations
-        that no other Schemasheet defines.
     - **`--single-table`** (NWSS classes) defaults to *off*, but `make_nwss`
         always passes it. Without it you get one class per table instead of the
         merged `nwss` class.
+
+    The ODM class step needs no such care: `extract_all_classes` resolves
+    enumeration names from the parts sheet, so re-running it by hand against
+    `dictionary/parts.csv` reproduces exactly what `make_odm` produced.
 
 !!! warning "`clear_dirs` only runs at the start of a full pipeline"
 

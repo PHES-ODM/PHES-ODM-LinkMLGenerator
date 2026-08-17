@@ -35,28 +35,32 @@ scanning for column headers ending in `Order` rather than from a hardcoded list,
 a new table in a new dictionary version is picked up automatically, with no code
 change.
 
-### Why enumeration-name derivation needs a safety net
+### Why a categorical range can read `string`
 
-An enumeration defined in the parts sheet has no column naming it: the name is
-[derived from the part ID](../reference/data-dictionaries.md#defined-in-the-parts-sheet),
-usually by appending an `s`. Deriving a name by string manipulation can obviously
-produce a name that nothing defines. `odm_get_enum_name_from_part_id` therefore
-takes an optional `recognized_enums` list, and **returns `"string"` when the
-derived name is not in it**. So an enumeration that could not be extracted
-degrades to an unconstrained string rather than a dangling reference to a
+A categorical part's enumeration is
+[named by its `mmaSet`](../reference/data-dictionaries.md#enumerations), and
+`odm_get_data_type_of_row` reads that column straight off the part's own row in
+the parts sheet. The dictionary is the authority on the name, so there is no way
+for the generator to invent one that nothing defines.
+
+What it cannot do is supply a name the dictionary omits. When a part is marked
+`categorical` but its `mmaSet` is empty, the function **returns `"string"`** and
+the slot gets an unconstrained string range rather than a dangling reference to a
 non-existent enumeration.
 
 That is a deliberate trade, and it has a cost you need to know about: the failure
-is silent. `make_odm` collects the names actually extracted from both sheets — via
-`get_enum_names_from_sets` and `get_enum_names_from_parts`, which read `setID` and
-`partType` respectively — de-duplicates them, and passes the result as
-`recognized_enums`. **A slot whose range unexpectedly reads `string` is the
-symptom of a missing exception entry**, and it is the first thing to look for when
-a new dictionary version produces a surprising schema.
+is silent. **A slot whose range unexpectedly reads `string` is the symptom of a
+part with no `mmaSet`**, and it is the first thing to look for when a new
+dictionary version produces a surprising schema. The fix belongs in the
+dictionary rather than in the generator — there is no longer a table of
+exceptions in the code to edit.
 
-Note that this check is only as good as the list it is given. Running the class
-extraction step by hand without `--recognized-enums` disables it entirely, and
-every derived name is then used as-is.
+A `dataType` the generator does not recognize degrades the same silent way,
+since
+[the mapping to LinkML ranges](../reference/pipeline-steps.md#odm-5-extract-one-schemasheet-per-class)
+falls back to `string` for anything it has no entry for. That fix *does* belong
+in the code — see
+[where a new version will break](../how-to/extending.md#where-a-new-version-will-break).
 
 ## The NWSS dictionaries
 

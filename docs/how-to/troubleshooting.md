@@ -34,10 +34,16 @@ enumeration in question and look at the row:
 - Is the `range` the enumeration name you expected, or did it silently fall back
   to `string`?
 
-A range that fell back to `string` means the enumeration name could not be
-resolved. For ODM that is usually an enumeration name that does not follow the
-`partID` + `s` convention and is missing from
-`odm_utils._odm_enum_name_exceptions`.
+A range that fell back to `string` means the range could not be resolved. For
+ODM that is usually a part marked `categorical` in the parts sheet whose
+`mmaSet` cell — the only place the enumeration name comes from — is empty. Check
+the part's row in `dictionary/parts.csv`; the `mmaSet` column is carried through
+to the class TSV as well, so you can confirm it there.
+
+The other cause is a `dataType` that `odm_utils._data_types_map` has no entry
+for, which a new dictionary version can introduce. If the part's `dataType` is
+something the map does not list, that is the one to fix in the code — see
+[where a new version will break](extending.md#where-a-new-version-will-break).
 
 For NWSS, an error naming a categorical field almost always means its
 enumeration is missing from the `Value Sets` sheet — check the

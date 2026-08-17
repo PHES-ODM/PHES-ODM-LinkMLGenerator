@@ -12,7 +12,7 @@ import typer
 
 from odm_linkmlgen.odm.odm_utils import (
     odm_get_available_class_names,
-    odm_get_enum_name_from_part_id,
+    odm_get_data_type_of_row,
     odm_get_fk_target_class,
     odm_get_header_rows,
     odm_keep_active_rows,
@@ -33,8 +33,6 @@ dictionary."""
 OUTPUT_DIR_HELP = """The location to save all the Schemasheets. One Schemasheet
 per class is created, with the name \"class_{class_name}.tsv\""""
 
-RECOGNIZED_ENUMS_HELP = """List of all recognized enumeration names."""
-
 
 # For mapping the columns in our final DataFrame to columns recognized by Schemasheets
 headers = {
@@ -49,17 +47,6 @@ headers = {
     "maxValue": "maximum_value",
     "pattern": "pattern",
     "partInstr": "notes",
-}
-
-# For mapping the ODM data types to LinkML datatypes
-_data_types_map = {
-    "varchar": "string",
-    "dateTime": "datetime",
-    "datetime": "datetime",
-    "integer": "integer",
-    "float": "float",
-    "boolean": "booleanSet",
-    "blob": "blob",  # @TODO: How should we deal with blobs? I'm not sure if LinkML has this data type
 }
 
 
@@ -85,7 +72,7 @@ def _extract_pattern(row: pd.Series) -> str | None:
 
 
 def extract_class(
-    df: pd.DataFrame, class_name: str, output_dir: str, recognized_enums: list[str]
+    df: pd.DataFrame, class_name: str, output_dir: str
 ) -> tuple[str, pd.DataFrame]:
     """Create a Schemasheet for the specified class name using the data in a
     DataFrame loaded from the parts sheet of the ODM data dictionary.
@@ -95,7 +82,6 @@ def extract_class(
         class_name (str): The name of the class (ie. table) to extract.
         output_dir (str): The location to save the Schemasheet. The actual
             Schemasheet will be named "class_{class_name}.tsv".
-        recognized_enums (list[str]): List of all recognized enumeration names.
 
     Returns:
         tuple[str, pd.DataFrame]: The full path and file name to the saved Schemasheet as
@@ -152,27 +138,12 @@ def extract_class(
     # Set "required" field (ie. row has the value "mandatory" in the "required" column)
     table_output_df["required"] = table_output_df["required"].isin(["mandatory"])
 
-    # Set the dataType (range) by mapping the values in the "dataType" column to
-    # the data types recognized by LinkML (eg. map varchar to string)
-    for k, v in _data_types_map.items():
-        table_output_df.loc[table_output_df["dataType"] == k, "dataType"] = v
-
-    # Set the dataType for enumerations that have an mmaSet (the data type/enumeration is the value in "mmaSet")
-    mmaset_filt = ~pd.isna(table_output_df["mmaSet"])
-    table_output_df.loc[mmaset_filt, "dataType"] = table_output_df.loc[
-        mmaset_filt, "mmaSet"
-    ]
-
-    # Set the dataType for remaining enumerations that are categorical (ie. the ones that do not have an mmaSet that was set previously)
-    # The enumeration names are a variant of the value found in the partID column (eg. we often just need to add an "s" to
-    # the end of the partID column, see utils.odm_get_enum_name_from_part_id)
-    categorical_filt = (~mmaset_filt) & (table_output_df["dataType"] == "categorical")
-    table_output_df.loc[categorical_filt, "dataType"] = table_output_df.loc[
-        categorical_filt, "partID"
-    ].apply(
-        lambda part_id: odm_get_enum_name_from_part_id(
-            part_id, recognized_enums=recognized_enums
-        )
+    # Set the dataType (range) of each row: an enumeration name for rows that name one in
+    # their "mmaSet" column, otherwise the LinkML data type that the ODM "dataType" maps to
+    # (eg. varchar becomes string). Rows that name no enumeration and have no LinkML
+    # equivalent for their data type fall back to "string".
+    table_output_df["dataType"] = table_output_df.apply(
+        odm_get_data_type_of_row, axis=1
     )
 
     # Set identifiers (primary keys)
@@ -213,7 +184,7 @@ def extract_class(
     return output_file, table_output_df
 
 
-def extract_all_classes(parts_file: str, output_dir: str, recognized_enums: list[str]):
+def extract_all_classes(parts_file: str, output_dir: str):
     """Create a Schemasheet for all classes (tables) found in the parts sheet that was
     extracted from the ODM data dictionary.
 
@@ -222,7 +193,6 @@ def extract_all_classes(parts_file: str, output_dir: str, recognized_enums: list
             dictionary.
         output_dir (str): The location to save all the Schemasheets. One Schemasheet per
             class is created, with the name "class_{class_name}.tsv"
-        recognized_enums (list[str]): List of all recognized enumeration names.
     """
     if not output_dir:
         output_dir = os.path.dirname(parts_file)
@@ -231,16 +201,13 @@ def extract_all_classes(parts_file: str, output_dir: str, recognized_enums: list
 
     for class_name in odm_get_available_class_names(df):
         logger.info(f"Processing table {class_name}...")
-        extract_class(df, class_name, output_dir, recognized_enums=recognized_enums)
+        extract_class(df, class_name, output_dir)
 
 
 @app.command(help=MAIN_HELP)
 def main(
     parts_file: Annotated[Path, typer.Option(show_default=False, help=PARTS_FILE_HELP)],
     output_dir: Annotated[Path, typer.Option(show_default=False, help=OUTPUT_DIR_HELP)],
-    recognized_enums: Annotated[
-        list[str] | None, typer.Option(show_default=False, help=RECOGNIZED_ENUMS_HELP)
-    ] = None,
 ):
     """CLI entry point: create a Schemasheet for every class (table) found in the ODM
     parts sheet.
@@ -250,13 +217,9 @@ def main(
             dictionary.
         output_dir (Path): The location to save all the Schemasheets to. One Schemasheet
             is saved per class.
-        recognized_enums (list[str] | None, optional): List of all recognized enumeration names.
-            Defaults to None.
     """
     logger.info("Making ODM Classes...")
-    extract_all_classes(
-        parts_file=parts_file, output_dir=output_dir, recognized_enums=recognized_enums
-    )
+    extract_all_classes(parts_file=parts_file, output_dir=output_dir)
     logger.info("Finished!")
 
 

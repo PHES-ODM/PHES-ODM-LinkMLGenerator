@@ -101,8 +101,10 @@ names are the distinct values of the parts sheet's `partType` column, retrieved 
 
 Also returns the list of enumeration names it extracted.
 
-**`make_odm` combines the names from steps 3 and 4, de-duplicated, and passes the
-result to step 5 as `recognized_enums`.**
+Steps 3 and 4 both return their names for the caller's convenience, but `make_odm`
+does not need them: step 5 resolves a slot's enumeration from the part's own row
+in the parts sheet, so the two enumeration steps and the class step are
+independent.
 
 ### ODM 5. Extract one Schemasheet per class
 
@@ -118,21 +120,21 @@ Schemasheet. **This is the largest step.** Per table it:
    raises a `RuntimeError`, except for `fKAliasID`, which is optional because v2
    dictionaries do not have it.
 3. Sets `required` to true where the original value was `mandatory`.
-4. Maps `dataType` to a LinkML range via `_data_types_map` — for example
-   `varchar` → `string`, `boolean` → `booleanSet`.
-5. Resolves categorical ranges to an enumeration name: from `mmaSet` when it is
-   set, otherwise derived from the part ID. **A derived name that is not in
-   `recognized_enums` falls back to `string`**, so an enumeration that could not
-   be extracted degrades to an unconstrained string rather than a dangling
-   reference.
-6. Marks primary keys as LinkML `identifier`s.
-7. Resolves each foreign key's range to the class it points at, using
+4. Resolves each row's LinkML range with `odm_utils.odm_get_data_type_of_row`.
+   The part's `mmaSet` wins, so a categorical range becomes the enumeration name
+   the dictionary gives it; otherwise `dataType` is mapped through
+   `odm_utils._data_types_map` — for example `varchar` → `string`, `boolean` →
+   `booleanSet`. **Anything unmapped falls back to `string`**: both a
+   `categorical` part with no `mmaSet` and a `dataType` missing from the map
+   degrade to an unconstrained string rather than a dangling reference.
+5. Marks primary keys as LinkML `identifier`s.
+6. Resolves each foreign key's range to the class it points at, using
    `odm_utils.odm_get_fk_target_class`. That function looks for the class in which
    the part ID is the primary key, and if the part ID is not itself a primary key
    it follows `fKAliasID` and tries again.
-8. Converts `minLength`/`maxLength` into a LinkML `pattern` regex of the form
+7. Converts `minLength`/`maxLength` into a LinkML `pattern` regex of the form
    `^.{min,max}$`, since LinkML has no direct string-length constraint.
-9. Sorts the rows by `order`, and appends a final row carrying the table's own
+8. Sorts the rows by `order`, and appends a final row carrying the table's own
    title and description.
 
 ### ODM 6. Extract the Container class

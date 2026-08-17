@@ -67,9 +67,9 @@ dataset-specific code — see
 | If you are changing… | Look in |
 | --- | --- |
 | How a source column maps to LinkML | The `headers` dict in the relevant `make_*_ss_*` module |
-| ODM data type → LinkML range | `_data_types_map` in `make_odm_ss_classes` |
+| ODM data type → LinkML range | `_data_types_map` in `odm_utils` |
 | NWSS data type prose → range + pattern | `_data_types_validation_info` in `make_nwss_ss_classes` |
-| An ODM enumeration name that won't resolve | `_odm_enum_name_exceptions` in `odm_utils` |
+| How an ODM slot's range is resolved | `odm_get_data_type_of_row` in `odm_utils` (the part's `mmaSet`, else its mapped `dataType`) |
 | A NWSS source column name | `DictionaryColumns` in `nwss_utils` |
 | Schema name / id / prefix templates | `_data` in `make_odm_ss_schema` and `make_odm_ss_prefixes`; `SCHEMA_VALUES_TEMPLATE` in `make_nwss` |
 | Excel or CSV reading | `general_utils` |

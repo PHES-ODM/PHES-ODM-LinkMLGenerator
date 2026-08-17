@@ -43,12 +43,16 @@ A column that became *optional* needs adding to `optional_keep_cols`, as
 `fKAliasID` was — v2 dictionaries have no `fKAliasID` column, v3 does.
 
 **New `dataType` values.** *This one fails silently.* An unrecognized data type
-passes straight through to the range unchanged, producing a dangling range
-rather than an error. Add it to `_data_types_map` in `make_odm_ss_classes`.
+resolves to `string` rather than raising an error, so the slot loses its real
+range instead of announcing the problem. Add it to `_data_types_map` in
+`odm_utils`.
 
-**Enumeration names that break the `partID` + `s` convention.** Add them to
-`odm_utils._odm_enum_name_exceptions`. The symptom is a slot whose range fell
-back to `string`.
+**Categorical parts with no `mmaSet`.** *This one also fails silently.* The
+enumeration name for a categorical slot is read from the part's `mmaSet` column,
+so a part the new dictionary marks `categorical` without filling that column
+resolves to `string`. The symptom is a slot whose range fell back to `string`,
+and the fix belongs in the dictionary — there is no table of name exceptions in
+the code.
 
 **A new table.** Picked up automatically, as long as it has the `{table}`,
 `{table}Required`, and `{table}Order` column trio — the generator discovers

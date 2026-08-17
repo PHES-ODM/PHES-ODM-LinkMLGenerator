@@ -95,21 +95,18 @@ python -m odm_linkmlgen.odm.<module> --help
 python -m odm_linkmlgen.nwss.<module> --help
 ```
 
-!!! warning "These defaults are not what the top-level generators pass"
+!!! warning "One default is not what the top-level generator passes"
 
     The step CLIs exist for debugging, not as the pipeline's configuration
-    surface. Two defaults differ from what `make_odm` and `make_nwss` use, and
-    both change the output:
-
-    - `--recognized-enums` is omitted by default, disabling the check that a
-      derived ODM enumeration name actually exists.
-    - `--single-table` defaults to *off*, but `make_nwss` always passes it.
+    surface. `--single-table` defaults to *off*, but `make_nwss` always passes
+    it, which changes the output: without it you get one class per table instead
+    of the merged `nwss` class.
 
 ### ODM steps
 
 | Module | Options |
 | --- | --- |
-| `make_odm_ss_classes` | `--parts-file`, `--output-dir`, `--recognized-enums` (repeatable) |
+| `make_odm_ss_classes` | `--parts-file`, `--output-dir` |
 | `make_odm_ss_enums_from_sets` | `--sets-file`, `--parts-file`, `--output-file` |
 | `make_odm_ss_enums_from_parts` | `--parts-file`, `--output-file` |
 | `make_odm_ss_container` | `--parts-file`, `--output-file` |

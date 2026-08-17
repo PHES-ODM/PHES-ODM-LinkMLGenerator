@@ -27,7 +27,7 @@ its sheets:
 | `partType` | For a permissible value, the name of the enumeration it belongs to. |
 | `status` | Only rows with `active` are used; everything else is deprecated and skipped. |
 | `dataType` | The part's type. `categorical` means its range is an enumeration. |
-| `mmaSet` | For a categorical part, the name of its enumeration when that enumeration is defined in the **sets** sheet. Empty when the enumeration is instead defined in the parts sheet. |
+| `mmaSet` | For a categorical part, the name of its enumeration. It takes precedence over `dataType` when resolving the slot's range; an empty `mmaSet` names no enumeration, and a `categorical` part's range then falls back to `string`. |
 | `missingnessSet` | A missingness enumeration that must be accepted alongside the part's normal range. |
 | `label`, `partDesc` | The part's title and description. |
 | `minValue`, `maxValue`, `minLength`, `maxLength` | Numeric and string-length bounds. |
@@ -66,31 +66,35 @@ with no code change, as long as it has the full
 
 ### Enumerations
 
-A part whose `dataType` is `categorical` has an enumeration as its range. That
-enumeration is defined in one of two places, and which one determines how the
-generator finds its name and values.
+A part whose `dataType` is `categorical` has an enumeration as its range, and
+**the `mmaSet` column names it**. `odm_utils.odm_get_data_type_of_row` resolves
+a part's range from its own row: the `mmaSet` if the row has one, otherwise the
+LinkML data type its `dataType` maps to. The enumeration name is therefore *read
+from the dictionary*, never derived from the part ID.
 
-#### Defined in the sets sheet
+#### Where the permissible values live
 
-If `mmaSet` is set, the permissible values are in the **sets** sheet and `mmaSet`
-holds the enumeration's name directly. Nothing needs deriving. In the sets sheet,
-`setID` is the enumeration name and `partID` is a permissible value.
+Naming the enumeration and defining its values are two different jobs, done by
+two different sheets.
 
-#### Defined in the parts sheet
+If the enumeration is defined in the **sets** sheet, `setID` is the enumeration
+name and `partID` is a permissible value. This is the common case, and the one
+[step 3](pipeline-steps.md#odm-3-extract-the-enumerations-defined-in-the-sets-sheet)
+reads.
 
-If `mmaSet` is empty, the enumeration is defined in the parts sheet itself: its
+Some enumerations are instead defined in the parts sheet itself: their
 permissible values are the rows whose `partType` equals the enumeration's name.
 This is `partType`'s only job — it is how a permissible-value row says which
-enumeration it belongs to.
+enumeration it belongs to — and it is what
+[step 4](pipeline-steps.md#odm-4-extract-the-enumerations-defined-in-the-parts-sheet)
+reads.
 
-Here the name must be **derived from the part ID**, usually by appending an `s`
-(`sampleType` → `sampleTypes`). A handful of part IDs do not follow that pattern
-and are listed in `odm_utils._odm_enum_name_exceptions` — `class` → `classes`,
-`qualityFlag` → `qualityIndicators`, `aggragationScale` → `aggregationScales`
-(the source has a typo), and several that need no change at all. The derivation
-is done by `odm_utils.odm_get_enum_name_from_part_id`, which returns `string`
-when the derived name is not one it recognizes — see
-[why derivation needs a safety net](../explanation/data-dictionaries.md#why-enumeration-name-derivation-needs-a-safety-net).
+#### When no enumeration is named
+
+A categorical part with an empty `mmaSet` names no enumeration, so
+`odm_get_data_type_of_row` returns **`string`** and the slot's range
+degrades to an unconstrained string rather than a dangling reference — see
+[why a categorical range can read `string`](../explanation/data-dictionaries.md#why-a-categorical-range-can-read-string).
 
 ### Missingness sets
 

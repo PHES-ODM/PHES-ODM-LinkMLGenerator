@@ -10,7 +10,7 @@ import pandas as pd
 
 from odm_linkmlgen.odm.odm_utils import (
     odm_get_available_class_names,
-    odm_get_enum_name_from_part_id,
+    odm_get_data_type_of_row,
     odm_get_header_rows,
     odm_keep_active_rows,
 )
@@ -37,32 +37,37 @@ def test_get_class_names_empty():
     assert odm_get_available_class_names([]) == []
 
 
-# --- odm_get_enum_name_from_part_id ---
+# --- odm_get_data_type_of_row ---
 
 
-def test_enum_name_default_adds_s():
-    assert odm_get_enum_name_from_part_id("sample") == "samples"
+def _parts_row(data_type: str, mma_set=None) -> pd.Series:
+    return pd.Series({"dataType": data_type, "mmaSet": mma_set})
 
 
-def test_enum_name_exception_class():
-    assert odm_get_enum_name_from_part_id("class") == "classes"
-
-
-def test_enum_name_exception_measure():
-    assert odm_get_enum_name_from_part_id("measure") == "measurements"
-
-
-def test_enum_name_not_in_recognized_returns_string():
-    assert (
-        odm_get_enum_name_from_part_id("sample", recognized_enums=["other"]) == "string"
+def test_data_type_is_the_mma_set_when_the_row_names_one():
+    assert odm_get_data_type_of_row(_parts_row("categorical", "purposeSet")) == (
+        "purposeSet"
     )
 
 
-def test_enum_name_in_recognized_returns_name():
-    assert (
-        odm_get_enum_name_from_part_id("sample", recognized_enums=["samples"])
-        == "samples"
-    )
+def test_data_type_mma_set_takes_precedence_over_data_type():
+    assert odm_get_data_type_of_row(_parts_row("varchar", "purposeSet")) == "purposeSet"
+
+
+def test_data_type_maps_odm_types_to_linkml_types():
+    assert odm_get_data_type_of_row(_parts_row("varchar")) == "string"
+    assert odm_get_data_type_of_row(_parts_row("dateTime")) == "datetime"
+    assert odm_get_data_type_of_row(_parts_row("boolean")) == "booleanSet"
+    assert odm_get_data_type_of_row(_parts_row("integer")) == "integer"
+
+
+def test_data_type_categorical_without_mma_set_returns_string():
+    assert odm_get_data_type_of_row(_parts_row("categorical")) == "string"
+    assert odm_get_data_type_of_row(_parts_row("categorical", pd.NA)) == "string"
+
+
+def test_data_type_unrecognized_returns_string():
+    assert odm_get_data_type_of_row(_parts_row("someNewOdmType")) == "string"
 
 
 # --- odm_keep_active_rows ---

@@ -107,8 +107,8 @@ Four things in that file are worth finding:
 - `protocolID` has a `range` of `protocols` — a foreign key resolved to the
   class it points at, not to a data type.
 - `purpose` has a `range` of `purposeSet` — a categorical resolved to an
-  enumeration name. That name is *derived*, which is what the next section is
-  about.
+  enumeration name, read from the part's `mmaSet` column. The `mmaSet` column is
+  carried through to the TSV as well, so you can see where the range came from.
 - `sampleID` has a `pattern` of `^.{0,30}$`, built from the part's `minLength`
   and `maxLength`, because LinkML has no string-length constraint.
 - The final row has an empty `slot` cell. It carries the table's own title and
@@ -136,17 +136,18 @@ added afterwards, straight onto the `SchemaDefinition`, by [step
 sheet records it in a `missingnessSet` column that no Schemasheets column can
 express.
 
-## Enumeration names are derived, not looked up
+## Enumeration names come from the dictionary
 
-The ODM-specific thing to know before your first v2+ run: a slot's enumeration
-name is *derived* from its `partID` by appending `s`, rather than read from a
-column. Names that do not follow that convention have to be listed in
-`odm_utils._odm_enum_name_exceptions`.
+The ODM-specific thing to know before your first v2+ run: a categorical slot's
+enumeration name is read from the part's `mmaSet` column in the parts sheet, and
+the dictionary is the only authority on it. The generator does not derive, guess,
+or patch names.
 
-When derivation fails, the run does not stop. The name simply does not resolve,
-the slot's range falls back to `string`, and an error goes to the log — which is
-why the [check step](../how-to/generate-odm-schemas.md#check-the-odm-result)
-matters.
+The consequence is that a part the dictionary marks `categorical` but leaves
+without an `mmaSet` cannot be resolved, and the run does not stop for it. The
+slot's range falls back to `string`, so the schema still loads — which is why the
+[check step](../how-to/generate-odm-schemas.md#check-the-odm-result) matters, and
+why an unexpected `string` range is worth chasing back to the dictionary.
 
 ## Related
 

@@ -22,20 +22,17 @@ _odm_header_tags = [
     "pK",  # Primary key
 ]
 
-# Enumerations specified in the parts list (that are NOT in the sets list) are identified by rows that
-# have "categorical" as the "dataType" and that have an empty "mmaSet" column. The names for
-# the enumerations for these rows are created by adding an "s" to the end of the "partID". However, some
-# enumeration names do not follow this pattern. The exceptions are listed below, with the "partID" as the
-# key and the corresponding enumeration name as the value.
-_odm_enum_name_exceptions = {
-    "aggragationScale": "aggregationScales",  # TYPO! Should be aggregationScale / Only in parts table
-    "class": "classes",  # Add "es" instead of "s"
-    "dataTypes": "dataTypes",  # No change
-    "measure": "measurements",  # Not sure?
-    "missingnessSets": "missingnessSets",  # No change
-    "partType": "partType",  # Not sure?
-    "qualityFlag": "qualityIndicators",
-    "specimenSets": "specimenSets",  # No change
+# For mapping the ODM data types (in dataType column) to LinkML datatypes
+_data_types_map = {
+    "varchar": "string",
+    "dateTime": "datetime",
+    "datetime": "datetime",
+    "date": "date",
+    "integer": "integer",
+    "float": "float",
+    "boolean": "booleanSet",
+    "categorical": "string",
+    "blob": "blob",  # @TODO: How should we deal with blobs? I'm not sure if LinkML has this data type
 }
 
 # In the ODM data dictionary parts sheet, any column that ends with the string ODM_PARTS_COLUMN_CLASS_TAG begins
@@ -184,25 +181,27 @@ def odm_keep_active_rows(
     return df.copy()
 
 
-def odm_get_enum_name_from_part_id(
-    part_id: str, recognized_enums: list[str] | None = None
-) -> str:
-    """Get the enumeration name for the specified part ID.
+def odm_get_data_type_of_row(row: pd.Series) -> str:
+    """Get the LinkML range (data type) for a single row of the ODM parts sheet.
+
+    The "mmaSet" column takes precedence: if the row names an enumeration then that
+    enumeration is the row's range. Otherwise the row's ODM "dataType" is mapped to
+    the equivalent LinkML data type (eg. "varchar" becomes "string").
 
     Args:
-        part_id (str): The partID to get the enumeration name for. This is typically equal
-            to the partID with a trailing "s", but there are some exceptions.
-        recognized_enums (list[str] | None): If not None then a list of recognized enumeration
-            names. If the calculated enum name exists in this list then the enum name is returned,
-            otherwise the value "string" is returned (ie. the data type is a string, rather than an enum).
+        row (pd.Series): A row of the ODM parts sheet. It must have an "mmaSet" and a
+            "dataType" column.
 
     Returns:
-        str: The enumeration name (for the partID)
+        str: The LinkML range for the row. This is the row's enumeration name if it has
+            one, otherwise the LinkML data type that the row's ODM "dataType" maps to.
+            An ODM data type with no LinkML equivalent (including "categorical", which is
+            only meaningful together with an "mmaSet") falls back to "string".
     """
-    name = _odm_enum_name_exceptions.get(part_id, f"{part_id}s")
-    if recognized_enums is not None and name not in recognized_enums:
-        return "string"
-    return name
+    if pd.isna(row["mmaSet"]):
+        return _data_types_map.get(row["dataType"], "string")
+    else:
+        return row["mmaSet"]
 
 
 def set_range_of_slot(

@@ -167,8 +167,9 @@ step independently runnable is what makes the pipeline debuggable, and it should
 be preserved when adding a step.
 
 Note that a step's CLI *defaults* are not necessarily what the top-level
-generator passes it — `--single-table` and `--recognized-enums` both differ. The
-CLIs exist for debugging, not as the pipeline's configuration surface.
+generator passes it — `--single-table` is off by default, but `make_nwss` always
+passes it. The CLIs exist for debugging, not as the pipeline's configuration
+surface.
 
 ### Stage 3 — generate
 
