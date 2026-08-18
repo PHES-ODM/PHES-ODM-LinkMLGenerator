@@ -22,7 +22,15 @@ DDL, or Python classes.
 
 ## 📖 Documentation
 
-**<https://phes-odm.github.io/PHES-ODM-LinkMLGenerator/>**
+The full documentation for this project is published as a website at
+**<https://phes-odm.github.io/PHES-ODM-LinkMLGenerator/>**. It goes well beyond
+this README: everything below is a quick start, while the site covers the whole
+tool. Start there if you are new to the generator, or if you need a detail this
+page does not answer. It is also the place to begin if you are onboarding onto
+the project or intend to contribute to the codebase — it explains how the
+pipeline is put together, why the source dictionaries are shaped the way they
+are, and what each stage of a run produces, which is the background you need
+before changing any of it.
 
 The site follows the
 [Diátaxis documentation framework](https://diataxis.fr/) — a tutorial to learn
