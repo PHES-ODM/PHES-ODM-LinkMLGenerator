@@ -59,10 +59,6 @@ siteID      Site ID     The site ID     string
 That is the whole idea. The `>` row is the adapter between "whatever this
 spreadsheet happens to call things" and "what LinkML calls things".
 
-Schemasheets can do rather more than the above — a `vmap:` in a further header
-row remaps cell values, for instance, which is how the bundled ODM v1 sheets
-turn `Primary Key` into a LinkML `identifier`.
-
 ## Where this project fits
 
 This project **never writes those TSVs by hand**.
@@ -203,24 +199,35 @@ useful thing to look at when a generated schema is not what you expected:
 That three-way split turns "the schema is wrong" into a specific question in
 about a minute, which is the entire return on keeping the files.
 
-### Why errors are logged and skipped, not raised
+### Errors are logged and skipped, not raised
 
-Errors in the source dictionary are usually logged and skipped rather than
-raised, so a single bad row does not abort a whole generation run.
-`_get_range_and_validation_info` in the NWSS pipeline is the reference example.
+Errors in the source dictionary are logged and skipped rather than raised, so a
+single bad row does not abort a whole generation run. The run continues, the
+affected row gets whatever fallback the step can manage, and the problem is
+reported to the log.
 
-The reasoning is that the source dictionaries are not fully under this project's
-control. The published NWSS files contain outright defects, and the ODM
-dictionary changes between versions in ways the generator has not seen. A
-pipeline that halted on the first surprise would be unusable against real inputs;
-one that produces a mostly-correct schema plus a log of what it could not
-understand is workable.
+The practical consequence is that **a run that "succeeded" can still have
+produced a degraded schema.** A clean exit code is not the same as a clean run,
+so read the log after every generation. Messages go to standard output at `INFO`
+level and above, tagged with the module and line that produced them; see
+[checking the NWSS result](../how-to/generate-nwss-schemas.md#check-the-nwss-result)
+for capturing them to a file and scanning for `ERROR` lines.
 
-The cost is real, and you should know it: **a run that "succeeded" can still have
-produced a degraded schema.** The characteristic symptom is a slot whose range
-silently fell back to `string`, or an unrecognized data type passed through
-unchanged as a dangling range. Always read the log — a clean exit code is not the
-same as a clean run.
+Errors and warnings worth looking for:
+
+- A slot whose range silently fell back to `string` because its data type was not
+  recognized, or an unrecognized data type passed through unchanged as a
+  dangling range.
+- `No enumeration for categorical slot ...` — the slot was dropped from the
+  generated enumerations entirely.
+- A categorical slot assigned two conflicting enumerations by the dictionary; the
+  log says which one was used.
+- A missing sheet or column in the source workbook, which usually means the
+  dictionary layout has changed since the generator last saw it.
+
+Anything reported at `ERROR` level is a defect in the source dictionary or a gap
+in the generator's handling of it, not a cosmetic complaint — check the generated
+schema against the log before treating the output as final.
 
 ### Why the two pipelines are not shared
 
