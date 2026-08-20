@@ -52,8 +52,7 @@ That is a deliberate trade, and it has a cost you need to know about: the failur
 is silent. **A slot whose range unexpectedly reads `string` is the symptom of a
 part with no `mmaSet`**, and it is the first thing to look for when a new
 dictionary version produces a surprising schema. The fix belongs in the
-dictionary rather than in the generator — there is no longer a table of
-exceptions in the code to edit.
+dictionary rather than in the generator.
 
 A `dataType` the generator does not recognize degrades the same silent way,
 since
