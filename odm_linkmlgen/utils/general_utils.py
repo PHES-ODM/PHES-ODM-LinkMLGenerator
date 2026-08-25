@@ -12,7 +12,18 @@ from typing import Any
 
 import pandas as pd
 from linkml_runtime import SchemaView
-from pandas._libs.parsers import STR_NA_VALUES
+
+# When reading from Excel or CSV files, these are the values we typically convert to NA/NULL
+# values (ie. None, float("NaN"), etc). They are used in the function get_na_values as the
+# default NA values to use.
+#
+# This is a hardcoded copy of Pandas' own default set (pandas._libs.parsers.STR_NA_VALUES).
+# We don't import it from there because it is a private Pandas API that can change or move
+# between releases; hardcoding it keeps the defaults stable and explicit.
+STR_NA_VALUES = {
+    '', 'NA', '#NA', '-1.#QNAN', 'n/a', 'NULL', '-1.#IND', '1.#IND', '<NA>',
+    '-NaN', 'None', '1.#QNAN', 'null', 'nan', '-nan', 'NaN', 'N/A', '#N/A', '#N/A N/A'
+}
 
 EMPTY_PERMISSIBLE_VALUE = "<empty>"
 
@@ -169,8 +180,8 @@ def get_na_values(
             strings, to interpret as NA (empty). Any column not named here is given
             default_na_values. Defaults to None, which is the same as an empty dictionary.
         default_na_values (list[str], optional): The NA values to use for every column not named
-            in na_values. Defaults to pandas._libs.parsers.STR_NA_VALUES, which is Pandas' own
-            default set.
+            in na_values. Defaults to STR_NA_VALUES, this module's hardcoded copy of Pandas'
+            own default set.
 
     Returns:
         dict[str, dict[str, list[str]]] | dict[str, list[str]]: For an Excel file, a dictionary
@@ -250,8 +261,8 @@ def extract_sheets(
             column. This is passed to get_na_values, which expands it to cover every column of every extracted
             sheet. These values will override the values in read_excel_kwargs.
         default_na_values (list[str], optional): The string values that represent NA values for any column that
-            isn't specified in na_values. Defaults to pandas._libs.parsers.STR_NA_VALUES. These values will
-            override the values in read_excel_kwargs.
+            isn't specified in na_values. Defaults to STR_NA_VALUES, this module's hardcoded copy of Pandas'
+            own default set. These values will override the values in read_excel_kwargs.
         read_excel_kwargs (dict[str, Any] | None, optional): Dictionary of kwargs values to pass to
             Pandas read_excel function. Defaults to None.
     """
