@@ -5,7 +5,7 @@ give it, one per pipeline stage:
 
 ```text
 <output_dir>/
-├── dictionary/     # Stage 1: intermediate CSVs extracted from the source Excel file
+├── dictionary/     # Stage 1: intermediate CSVs, one per source sheet
 ├── schemasheets/   # Stage 2: intermediate TSVs (the input to Schemasheets)
 └── linkml/         # Stage 3: the final LinkML YAML schema
 ```

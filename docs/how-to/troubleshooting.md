@@ -23,7 +23,7 @@ The usual problem here is **NA handling**: a value such as `NA`, `None`, or
 `null` was read as an empty cell. These are real permissible values in the ODM,
 not missing data. `extract_sheets` takes per-column `na_values` for exactly this
 reason — see
-[step 2 of the ODM pipeline](../reference/pipeline-steps.md#odm-2-extract-the-excel-sheets-to-csv).
+[step 2 of the ODM pipeline](../reference/pipeline-steps.md#odm-2-extract-or-copy-the-dictionary-sheets-to-csv).
 
 ### 2. Check `schemasheets/*.tsv`
 

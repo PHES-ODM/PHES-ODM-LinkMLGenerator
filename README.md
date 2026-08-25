@@ -128,6 +128,11 @@ The schemas are written to `gen/odm_v2/linkml/odm_v2.yaml` and
 generated schema's name (`ODMv3`), id (`https://onto.phes-odm.org/odm/v3`), and
 CURIE prefix (`odmv3`), so it must match the dictionary you passed.
 
+If you have the parts and sets sheets as CSV files rather than the workbook, pass
+`--parts-file` and `--sets-file` in place of `--dictionary-file` — one form or the
+other, never both. See
+[Generate the ODM schemas](https://phes-odm.github.io/PHES-ODM-LinkMLGenerator/how-to/generate-odm-schemas/).
+
 **4. Check the result.** Errors in the source dictionary are logged and skipped
 rather than raised, so a run that "succeeded" can still have produced a degraded
 schema. Scan the log:

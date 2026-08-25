@@ -126,8 +126,9 @@ does nothing else. No interpretation happens here.
 
 Two reasons for a stage that appears to do nothing:
 
-- **It keeps the rest of the pipeline free of Excel-specific concerns.** Only one
-  function in the project knows that `openpyxl` exists.
+- **It keeps the rest of the pipeline free of Excel-specific concerns.** Only
+  `extract_sheets` and the `get_na_values` helper it reads headers with know that
+  `openpyxl` exists.
 - **It makes every later step re-runnable in a second against a fixed input.**
   Parsing a large workbook is slow. Iterating on a transformation while
   re-parsing the source each time is the difference between a fast feedback loop
@@ -136,7 +137,16 @@ Two reasons for a stage that appears to do nothing:
 This stage also handles NA parsing per column, which cannot be deferred. It
 matters because ODM part IDs include literal values such as `NA` and `None` —
 real permissible values in the data model — that pandas would otherwise read as
-missing.
+missing. `general_utils.get_na_values` builds that per-column mapping from a
+file's header row, covering every column so that the file can be read with
+pandas' blanket defaults switched off.
+
+The ODM generator can also be given the parts and sets sheets as CSV files
+instead of a workbook (`--parts-file` and `--sets-file`). That skips the Excel
+extraction, but not the stage: the files are still read with the same NA
+handling and still written to `dictionary/`, because the point of stage 1 is to
+give every later step one fixed, already-parsed input — not merely to open a
+workbook.
 
 ### Stage 2 — transform
 

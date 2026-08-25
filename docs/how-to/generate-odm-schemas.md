@@ -71,6 +71,29 @@ determines the generated schema's name (`ODMv3`), id
 (`https://onto.phes-odm.org/odm/v3`), and CURIE prefix (`odmv3`), so it must
 match the dictionary you passed.
 
+## Generate from CSV instead of the workbook
+
+If you have the parts and sets sheets as CSV files — because the dictionary is
+maintained that way, or because you kept the `dictionary/` files an earlier run
+produced — pass them instead of `--dictionary-file`:
+
+```console
+odm-linkmlgen-odm \
+    --version 3 \
+    --parts-file "gen/odm_v3/dictionary/parts.csv" \
+    --sets-file "gen/odm_v3/dictionary/sets.csv" \
+    --output-dir "gen/odm_v3_from_csv"
+```
+
+Pass one form or the other, never both, and never only one half of the CSV pair
+— anything else logs an error and generates nothing.
+
+The two files are read with the same NA handling the Excel path uses and copied
+into `{output_dir}/dictionary/`, so the run is identical from there on. That
+copy is also the catch: the first step clears `dictionary/`, so `--output-dir`
+must not be the directory the CSVs are being read from, or they are deleted
+before they can be read.
+
 ## Check the ODM result
 
 Errors in the source dictionary are logged and skipped rather than raised, so a

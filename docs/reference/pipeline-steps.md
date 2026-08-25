@@ -13,7 +13,9 @@ step.
 ## ODM pipeline steps
 
 The eleven steps `odm-linkmlgen-odm` (`odm_linkmlgen.make_odm.make_odm`) runs, in
-order, to turn an ODM v2+ Excel data dictionary into a LinkML schema.
+order, to turn an ODM v2+ data dictionary into a LinkML schema. The dictionary is
+either an Excel workbook or its parts and sets sheets already saved as CSV, which
+changes step 2 only.
 
 !!! note "ODM v1 does not use this pipeline"
 
@@ -27,7 +29,7 @@ order, to turn an ODM v2+ Excel data dictionary into a LinkML schema.
 | # | Module / function | Output |
 | --- | --- | --- |
 | 1 | `utils.general_utils.clear_dirs` | — |
-| 2 | `utils.general_utils.extract_sheets` | `dictionary/parts.csv`, `dictionary/sets.csv` |
+| 2 | `utils.general_utils.extract_sheets`, or a copy through `utils.general_utils.get_na_values` | `dictionary/parts.csv`, `dictionary/sets.csv` |
 | 3 | `odm.make_odm_ss_enums_from_sets.extract_sets_enums` | `schemasheets/enums_sets.tsv` |
 | 4 | `odm.make_odm_ss_enums_from_parts.extract_parts_enums` | `schemasheets/enums_parts.tsv` |
 | 5 | `odm.make_odm_ss_classes.extract_all_classes` | `schemasheets/class_{class_name}.tsv` |
@@ -49,17 +51,35 @@ leak into the new schema.
 This matters because step 9 consumes **every** `.tsv` in `schemasheets/` rather
 than a known list of files.
 
-### ODM 2. Extract the Excel sheets to CSV
+### ODM 2. Extract or copy the dictionary sheets to CSV
 
-`utils.general_utils.extract_sheets`
+`utils.general_utils.extract_sheets`, or `utils.general_utils.get_na_values`
 
 Saves the **parts** and **sets** sheets as `dictionary/parts.csv` and
-`dictionary/sets.csv`.
+`dictionary/sets.csv`. Which of the two paths runs depends on how the dictionary
+was given:
+
+| Given | What runs |
+| --- | --- |
+| `--dictionary-file` (Excel) | `extract_sheets` extracts the two sheets |
+| `--parts-file` and `--sets-file` (CSV) | The two files are read and re-saved under `dictionary/` |
+
+Either way the rest of the pipeline reads the same two paths, so the input form
+is invisible from step 3 onwards. See the
+[CLI reference](cli.md#odm-linkmlgen-odm) for which form to pass.
 
 The `na_values` argument is set so that **only a truly empty cell counts as
 missing** in the `partID` column. Without it, pandas would read part IDs such as
 `NA`, `None`, and `null` — which are real permissible values in the ODM — as
 missing values.
+
+Both paths get that from `general_utils.get_na_values`, which reads only the
+header row of the file and returns the NA values for **every** column: the
+`partID` override for `partID`, and pandas' own defaults for the rest. That
+completeness is what lets both paths read with `keep_default_na=False` — which
+switches pandas' defaults off wholesale — without losing NA parsing everywhere
+else. `extract_sheets` calls it per sheet of the workbook; the CSV path calls it
+per file.
 
 ### ODM 3. Extract the enumerations defined in the sets sheet
 

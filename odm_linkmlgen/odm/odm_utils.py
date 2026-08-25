@@ -243,6 +243,11 @@ def add_missingness_set(schema: SchemaDefinition, parts_file: str | Path):
     for class_defn in schema.classes.values():
         # Go through all slot usages
         for slot_defn in class_defn.slot_usage.values():
+            # Primary keys identify the row, so they cannot take on the missingness set. Every
+            # other slot can, including a required one: "required" says a value must be given,
+            # not that the value cannot be a documented missingness reason.
+            if slot_defn.identifier:
+                continue
             rows = parts_df[parts_df["partID"] == slot_defn.name]
             if rows.empty:
                 continue

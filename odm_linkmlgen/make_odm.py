@@ -4,6 +4,7 @@ Make the ODM LinkML schema.
 
 from pathlib import Path
 from typing import Annotated
+import pandas as pd
 
 import typer
 from linkml_runtime.linkml_model.meta import SchemaDefinition
@@ -15,7 +16,12 @@ from odm_linkmlgen.odm.make_odm_ss_enums_from_sets import extract_sets_enums
 from odm_linkmlgen.odm.make_odm_ss_prefixes import make_prefixes
 from odm_linkmlgen.odm.make_odm_ss_schema import make_schema
 from odm_linkmlgen.odm.odm_utils import add_missingness_set
-from odm_linkmlgen.utils.general_utils import clear_dirs, extract_sheets, get_logger
+from odm_linkmlgen.utils.general_utils import (
+    clear_dirs,
+    extract_sheets,
+    get_logger,
+    get_na_values,
+)
 from odm_linkmlgen.utils.schema_utils import find_undefined_ranges
 from odm_linkmlgen.utils.schemasheets_utils import (
     make_linkml_schema_from_schemasheets,
@@ -29,52 +35,121 @@ app = typer.Typer(
     rich_markup_mode="rich",
 )
 
-MAIN_HELP = """Make ODM v2 and above LinkML schema, using an ODM data dictionary file (Excel file)."""
+MAIN_HELP = """Make ODM v2 and above LinkML schema, using an ODM data dictionary. The dictionary
+is either a single Excel file (--dictionary-file), or its parts and sets sheets already saved
+as CSV files (--parts-file and --sets-file)."""
 
 VERSION_HELP = """Version string of ODM to generate the schema for. eg. '2', '3'."""
 
-DICTIONARY_FILE_HELP = """Location of the Excel data dictionary (parts file) for ODM."""
+DICTIONARY_FILE_HELP = """Location of the Excel data dictionary (parts/sets file) for ODM. If
+set then the parts file and sets file must NOT be specified."""
 
 OUTPUT_DIR_HELP = """Directory to save the LinkML schema to."""
+
+PARTS_FILE_HELP = """Location of the dictionary parts file in CSV format. If set then the
+sets file must also be specified, and the dictionary file must NOT be
+specified."""
+
+SETS_FILE_HELP = """Location of the dictionary sets file in CSV format. If set then the
+parts file must also be specified, and the dictionary file must NOT be
+specified."""
 
 
 @app.command(help=MAIN_HELP)
 def make_odm(
     version: Annotated[str, typer.Option(show_default=False, help=VERSION_HELP)],
+    output_dir: Annotated[Path, typer.Option(show_default=False, help=OUTPUT_DIR_HELP)],
     dictionary_file: Annotated[
         Path, typer.Option(show_default=False, help=DICTIONARY_FILE_HELP)
-    ],
-    output_dir: Annotated[Path, typer.Option(show_default=False, help=OUTPUT_DIR_HELP)],
-) -> SchemaDefinition:
+    ] = None,
+    parts_file: Annotated[
+        Path, typer.Option(show_default=False, help=PARTS_FILE_HELP)
+    ] = None,
+    sets_file: Annotated[
+        Path, typer.Option(show_default=False, help=SETS_FILE_HELP)
+    ] = None,
+) -> SchemaDefinition | None:
     """Generate the LinkML schema for ODM.
+
+    The data dictionary is supplied either as a single Excel file (dictionary_file), or as its
+    parts and sets sheets already saved as CSV files (parts_file and sets_file). Exactly one of
+    those two forms must be given: the CSV form is for regenerating a schema from the
+    "{output_dir}/dictionary" files of a previous run, or from a dictionary that is maintained
+    as CSV rather than as a workbook. Either way, the parts and sets are (re)written to
+    "{output_dir}/dictionary" and every later step reads them from there.
 
     Args:
         version (str): The ODM version number we are making (eg. "2", "3")
-        dictionary_file (Path): Location of the Excel data dictionary (parts file) for ODM.
         output_dir (Path): Location to save all output. The LinkML schema output is
             saved to "{output_dir}/linkml/odm_v{version}.yaml"
+        dictionary_file (Path, optional): Location of the Excel data dictionary (parts/sets file)
+            for ODM. If set then parts_file and sets_file must not be. Defaults to None.
+        parts_file (Path, optional): Location of the dictionary parts file in CSV format. If set
+            then sets_file must be set too, and dictionary_file must not be. Defaults to None.
+        sets_file (Path, optional): Location of the dictionary sets file in CSV format. If set
+            then parts_file must be set too, and dictionary_file must not be. Defaults to None.
 
     Returns:
-        SchemaDefinition: The generated ODM LinkML schema definition.
+        SchemaDefinition: The generated ODM LinkML schema definition, or None if the data
+            dictionary files were not specified correctly (an error is logged in that case).
     """
     # Some paths
     output_dir = Path(output_dir)
     dictionary_dir = output_dir / "dictionary"
     schemasheets_dir = output_dir / "schemasheets"
     linkml_dir = output_dir / "linkml"
-    parts_file = dictionary_dir / "parts.csv"
-    sets_file = dictionary_dir / "sets.csv"
 
     # Clean up the output directories (ie. delete old csv, tsv, and yaml files)
     clear_dirs([dictionary_dir, schemasheets_dir, linkml_dir])
 
-    # Extract the parts and sets sheets from the Excel ODM data dictionary file
-    extract_sheets(
-        dictionary_file,
-        ["parts", "sets"],
-        dictionary_dir,
-        na_values={"parts": {"partID": ""}, "sets": {"partID": ""}},
-    )
+    # The dictionary is either one Excel file or the two CSV files, never both and never
+    # neither. This is logged and returned on rather than raised, the same as every other
+    # input problem the pipeline reports.
+    if dictionary_file is not None and (
+        parts_file is not None or sets_file is not None
+    ):
+        logger.error(
+            "Only one of dictionary_file or parts_file/sets_file must be specified"
+        )
+        return None
+    elif dictionary_file is None and (parts_file is None or sets_file is None):
+        logger.error("Both of parts_file and sets_file must be set")
+        return None
+
+    # Extract or copy the parts and sets tabs. Either way they end up at the same two paths
+    # under dictionary_dir, so every step after this one has a single input to read.
+    target_parts_file = dictionary_dir / "parts.csv"
+    target_sets_file = dictionary_dir / "sets.csv"
+    # Only a truly empty partID cell counts as missing: part IDs such as "NA", "None", and
+    # "null" are real ODM parts that Pandas would otherwise read as missing values.
+    na_values = {"parts": {"partID": ""}, "sets": {"partID": ""}}
+    if dictionary_file is not None:
+        # Extract the parts and sets sheets from the Excel ODM data dictionary file
+        extract_sheets(
+            dictionary_file,
+            ["parts", "sets"],
+            dictionary_dir,
+            na_values=na_values,
+        )
+    else:
+        # The CSV files are already the sheets, so there is nothing to extract. Load and
+        # re-save them with the same na_values the Excel path uses, so that the copies under
+        # dictionary_dir are parsed identically to an extracted sheet.
+        parts_df = pd.read_csv(
+            parts_file,
+            na_values=get_na_values(parts_file, na_values=na_values["parts"]),
+            keep_default_na=False,
+        )
+        sets_df = pd.read_csv(
+            sets_file,
+            na_values=get_na_values(sets_file, na_values=na_values["sets"]),
+            keep_default_na=False,
+        )
+        dictionary_dir.mkdir(parents=True, exist_ok=True)
+        parts_df.to_csv(target_parts_file, index=False)
+        sets_df.to_csv(target_sets_file, index=False)
+    parts_file = target_parts_file
+    sets_file = target_sets_file
 
     # Extract all enums from the sets sheet (and save as a schemasheet)
     extract_sets_enums(sets_file, parts_file, schemasheets_dir / "enums_sets.tsv")

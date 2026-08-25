@@ -269,6 +269,12 @@ DataFrame, file I/O, and logging helpers.
 to reach for when a literal value such as `NA` or `None` is being read as missing
 data — a real problem for ODM part IDs.
 
+`get_na_values` is what builds those per-column NA values, from the header row of
+an Excel or CSV file. `extract_sheets` uses it internally, and `make_odm` calls it
+directly when the dictionary is given as CSV rather than as a workbook — reach for
+it whenever you read one of these files yourself and want the same NA handling the
+pipeline gets.
+
 `EMPTY_PERMISSIBLE_VALUE` is the `<empty>` sentinel written where a permissible
 value of `""` is meant, and replaced by `fix_schemasheets_generated_schema`. See
 [post-processing workarounds](../explanation/how-it-works.md#post-processing-workarounds).
@@ -279,6 +285,7 @@ value of `""` is meant, and replaced by `fix_schemasheets_generated_schema`. See
       members:
         - EMPTY_PERMISSIBLE_VALUE
         - get_logger
+        - get_na_values
         - extract_sheets
         - clear_dirs
         - save_data_frame

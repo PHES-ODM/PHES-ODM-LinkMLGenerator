@@ -9,8 +9,14 @@ Generates an ODM v2+ schema. Wraps `odm_linkmlgen.make_odm.make_odm`.
 | Option | Type | Required | Description |
 | --- | --- | --- | --- |
 | `--version` | str | Yes | The ODM version number, e.g. `2`, `3` |
-| `--dictionary-file` | Path | Yes | The Excel data dictionary |
 | `--output-dir` | Path | Yes | Where to write all output |
+| `--dictionary-file` | Path | See below | The Excel data dictionary |
+| `--parts-file` | Path | See below | The parts sheet, already saved as CSV |
+| `--sets-file` | Path | See below | The sets sheet, already saved as CSV |
+
+The dictionary is given in **exactly one** of two forms: `--dictionary-file`, or
+both `--parts-file` and `--sets-file`. Giving both forms, or neither, or only
+one half of the CSV pair, logs an error and generates nothing.
 
 ```console
 odm-linkmlgen-odm \
@@ -19,8 +25,30 @@ odm-linkmlgen-odm \
     --output-dir "gen/odm_v3"
 ```
 
+The CSV form takes the two sheets directly, which is what you want when the
+dictionary is maintained as CSV rather than as a workbook, or when you are
+re-running against the `dictionary/` CSVs of a previous run:
+
+```console
+odm-linkmlgen-odm \
+    --version 3 \
+    --parts-file "gen/odm_v3/dictionary/parts.csv" \
+    --sets-file "gen/odm_v3/dictionary/sets.csv" \
+    --output-dir "gen/odm_v3_again"
+```
+
+!!! warning "Do not point the CSV form at the run's own output directory"
+
+    Step 1 clears `dictionary/` before the files are read, so
+    `--parts-file gen/odm_v3/dictionary/parts.csv` with
+    `--output-dir gen/odm_v3` deletes its own input. Write to a different
+    `--output-dir`, as above.
+
 Writes `{output_dir}/linkml/odm_v{version}.yaml`, plus the intermediate
-`dictionary/` and `schemasheets/` directories.
+`dictionary/` and `schemasheets/` directories. Both forms write
+`dictionary/parts.csv` and `dictionary/sets.csv` — the CSV form copies them
+rather than extracting them — so every later step has the same input either
+way.
 
 `--version` is not merely a label. It determines:
 

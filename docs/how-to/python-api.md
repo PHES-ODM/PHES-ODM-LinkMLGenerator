@@ -24,6 +24,24 @@ writing `gen/odm_v3/linkml/odm_v3.yaml`. The intermediate `dictionary/` and
 `schemasheets/` files are written too — the function is not a pure in-memory
 path.
 
+If the dictionary is kept as CSV rather than as a workbook, pass its two sheets
+instead of `dictionary_file`:
+
+```python
+schema = make_odm(
+    version="3",
+    parts_file="path/to/parts.csv",
+    sets_file="path/to/sets.csv",
+    output_dir="gen/odm_v3_from_csv",
+)
+```
+
+Give one form or the other, never both: `dictionary_file`, or `parts_file` *and*
+`sets_file` together. Anything else logs an error and returns `None` rather than
+raising, so check the result before using it. Note that `output_dir` must not be
+the directory those CSVs live in — the first step clears `dictionary/`, which
+would delete the files before they are read.
+
 ## ODM v1
 
 ```python

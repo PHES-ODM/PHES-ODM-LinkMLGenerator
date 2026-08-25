@@ -138,6 +138,90 @@ def clear_dirs(
                     os.remove(file)
 
 
+def get_na_values(
+    file: str | Path,
+    sheets: str | list[str] | None = None,
+    na_values: dict[str, dict[str, str | list[str]]]
+    | dict[str, str | list[str]]
+    | None = None,
+    default_na_values: list[str] = STR_NA_VALUES,
+) -> dict[str, dict[str, list[str]]] | dict[str, list[str]]:
+    """Build the per-column NA values to pass to Pandas when reading an Excel or CSV file.
+
+    Pandas applies its default NA strings to every column, which is wrong for the ODM data
+    dictionaries: part IDs such as "NA", "None", and "null" are real permissible values rather
+    than missing data. This builds a mapping that covers *every* column in the file, so the
+    file can be read with keep_default_na=False (which switches Pandas' defaults off) without
+    losing NA parsing on the columns that do want it.
+
+    Only the header row of the file is read, so this is cheap to call before the real read.
+
+    Args:
+        file (str | Path): The Excel (".xlsx") or CSV (".csv") file to build the NA values for.
+        sheets (str | list[str] | None, optional): For an Excel file, the sheets to build the NA
+            values for. If None or empty then all sheets in the file are used, and any sheet
+            that does not exist in the file is logged and skipped. Ignored for a CSV file.
+            Defaults to None.
+        na_values (dict[str, dict[str, str | list[str]]] | dict[str, str | list[str]] | None, optional):
+            The NA values for specific columns. For an Excel file the keys are sheet names and
+            the values are dictionaries keyed by column name; for a CSV file the keys are the
+            column names themselves. In both cases a column's value is the string, or list of
+            strings, to interpret as NA (empty). Any column not named here is given
+            default_na_values. Defaults to None, which is the same as an empty dictionary.
+        default_na_values (list[str], optional): The NA values to use for every column not named
+            in na_values. Defaults to pandas._libs.parsers.STR_NA_VALUES, which is Pandas' own
+            default set.
+
+    Returns:
+        dict[str, dict[str, list[str]]] | dict[str, list[str]]: For an Excel file, a dictionary
+            keyed by sheet name whose values are that sheet's column-to-NA-values dictionary.
+            For a CSV file, the column-to-NA-values dictionary itself. Either can be passed
+            straight to Pandas as its na_values argument, together with keep_default_na=False.
+
+    Raises:
+        ValueError: The file has an extension other than ".xlsx" or ".csv".
+    """
+    ext = os.path.splitext(file)[1].lower()
+    if isinstance(sheets, str):
+        sheets = [sheets]
+    if na_values is None:
+        na_values = {}
+    res_na_values = {}
+    if ext == ".xlsx":
+        # For an Excel file, res_na_values is keyed by the sheet name. The values are
+        # dictionaries keyed by column name (of the sheet), and the values of these
+        # sub-dictionaries are a list of strings that should be interpreted as NA/NULL.
+        headers_dfs = pd.read_excel(file, sheet_name=None, nrows=0)
+        if sheets is None or len(sheets) == 0:
+            sheets = list(headers_dfs.keys())
+        for sheet in sheets:
+            if sheet not in headers_dfs:
+                # Log and skip, so that one bad sheet name does not abort the whole run
+                logger.error(f"Sheet '{sheet}' does not exist in Excel file: {file}")
+                continue
+            headers_df = headers_dfs[sheet]
+            sheet_na_values = na_values.get(sheet, {})
+            # sheet_na_values are the NA values in each column of the current sheet.
+            # For any column that doesn't exist in sheet_na_values, we set its value
+            # to default_na_values
+            sheet_na_values = {
+                c: sheet_na_values.get(c, default_na_values) for c in headers_df.columns
+            }
+
+            res_na_values[sheet] = sheet_na_values
+    elif ext == ".csv":
+        headers_df = pd.read_csv(file, nrows=0)
+        # A CSV file has no sheets, so res_na_values is the column-to-NA-values dictionary
+        # itself. The keys are the columns and the values are the NA values for that column.
+        res_na_values = {
+            c: na_values.get(c, default_na_values) for c in headers_df.columns
+        }
+    else:
+        raise ValueError(f"Unrecognized extension in get_na_values: {ext}")
+
+    return res_na_values
+
+
 def extract_sheets(
     file: str | Path,
     sheets: str | list[str],
@@ -163,11 +247,11 @@ def extract_sheets(
             parsing for NA values. The keys specify the sheet names in the Excel file. The values are dictionaries
             where the key is a column name in the sheet and the values are a list of strings that should be mapped
             to NA (empty) values. If any column is missing from na_values then default_na_values is used for the
-            column. These values will override the values in read_excel_kwargs.
-        default_na_values (list[str], optional): If na_values is specified, then use these string values to
-            represent NA values when extracting the sheet for any columns that aren't specified in na_values.
-            Defaults to pandas._libs.parsers.STR_NA_VALUES. These values will override the values in
-            read_excel_kwargs.
+            column. This is passed to get_na_values, which expands it to cover every column of every extracted
+            sheet. These values will override the values in read_excel_kwargs.
+        default_na_values (list[str], optional): The string values that represent NA values for any column that
+            isn't specified in na_values. Defaults to pandas._libs.parsers.STR_NA_VALUES. These values will
+            override the values in read_excel_kwargs.
         read_excel_kwargs (dict[str, Any] | None, optional): Dictionary of kwargs values to pass to
             Pandas read_excel function. Defaults to None.
     """
@@ -187,32 +271,31 @@ def extract_sheets(
         sheets = [sheets]
     if isinstance(output_names, str):
         output_names = [output_names]
-    if na_values is None:
-        na_values = {}
 
-    # Load all the sheet names and columns from the file. We load 0 rows for each sheet,
-    # since we only need to get the sheet names and the column names. This allows us to
-    # load the sheets one at a time while specifying the sheet-specific na_values.
-    pre_dfs = pd.read_excel(file, sheet_name=None, nrows=0, **read_excel_kwargs)
+    # Get the NA values of every column of every sheet we are extracting. Doing this up front
+    # is what lets us load the sheets one at a time below, each with its own na_values. Any
+    # sheet that does not exist in the file is logged by get_na_values and left out of the
+    # result, so it is skipped below.
+    na_values = get_na_values(
+        file,
+        sheets=sheets,
+        na_values=na_values,
+        default_na_values=default_na_values,
+    )
+
     if sheets is None or len(sheets) == 0:
-        sheets = list(pre_dfs.keys())
+        sheets = list(na_values.keys())
 
     # Load all sheets one at a time, using the specified na_values
     dfs = {}
     for sheet in sheets:
-        if sheet not in pre_dfs:
-            logger.error(f"Sheet '{sheet}' does not exist in Excel file: {file}")
+        if sheet not in na_values:
             continue
-        pre_df = pre_dfs[sheet]
 
         # Prepare the kwargs for pd.read_excel
-        cur_na_values = na_values.get(sheet, {})
-        cur_na_values = {
-            c: cur_na_values.get(c, default_na_values) for c in pre_df.columns
-        }
         cur_kwargs = read_excel_kwargs.copy()
         cur_kwargs["keep_default_na"] = False
-        cur_kwargs["na_values"] = cur_na_values
+        cur_kwargs["na_values"] = na_values[sheet]
 
         df = pd.read_excel(file, sheet_name=sheet, **cur_kwargs)
         dfs[sheet] = df

@@ -41,8 +41,9 @@ Confirm the first one is on your path:
 odm-linkmlgen-odm --help
 ```
 
-You should see a usage message listing `--version`, `--dictionary-file`, and
-`--output-dir`. If instead you get `command not found`, the virtual environment
+You should see a usage message listing `--version`, `--output-dir`,
+`--dictionary-file`, and the `--parts-file` / `--sets-file` pair that replaces
+it when the dictionary is CSV rather than Excel. If instead you get `command not found`, the virtual environment
 is probably not active — re-run `source .env/bin/activate`. For other
 installation problems, see
 [Troubleshooting](../how-to/troubleshooting.md#installation-problems).

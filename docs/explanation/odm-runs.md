@@ -75,7 +75,7 @@ enumeration and `partID` the permissible value in it.
 
 Search `parts.csv` for a `partID` of `NA` or `null`. Both are there, as literal
 text — they are real ODM parts, and reading them as missing values is exactly
-what [step 2's `na_values`](../reference/pipeline-steps.md#odm-2-extract-the-excel-sheets-to-csv)
+what [step 2's `na_values`](../reference/pipeline-steps.md#odm-2-extract-or-copy-the-dictionary-sheets-to-csv)
 prevents.
 
 ### Stage 2 — CSV becomes Schemasheets TSV
