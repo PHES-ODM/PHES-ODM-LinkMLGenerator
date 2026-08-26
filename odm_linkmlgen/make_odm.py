@@ -2,10 +2,10 @@
 Make the ODM LinkML schema.
 """
 
-import pandas as pd
 from pathlib import Path
 from typing import Annotated
 
+import pandas as pd
 import typer
 from linkml_runtime.linkml_model.meta import SchemaDefinition
 
