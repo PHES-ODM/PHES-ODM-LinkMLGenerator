@@ -2,9 +2,9 @@
 Make the ODM LinkML schema.
 """
 
+import pandas as pd
 from pathlib import Path
 from typing import Annotated
-import pandas as pd
 
 import typer
 from linkml_runtime.linkml_model.meta import SchemaDefinition
@@ -60,13 +60,13 @@ def make_odm(
     version: Annotated[str, typer.Option(show_default=False, help=VERSION_HELP)],
     output_dir: Annotated[Path, typer.Option(show_default=False, help=OUTPUT_DIR_HELP)],
     dictionary_file: Annotated[
-        Path, typer.Option(show_default=False, help=DICTIONARY_FILE_HELP)
+        Path | None, typer.Option(show_default=False, help=DICTIONARY_FILE_HELP)
     ] = None,
     parts_file: Annotated[
-        Path, typer.Option(show_default=False, help=PARTS_FILE_HELP)
+        Path | None, typer.Option(show_default=False, help=PARTS_FILE_HELP)
     ] = None,
     sets_file: Annotated[
-        Path, typer.Option(show_default=False, help=SETS_FILE_HELP)
+        Path | None, typer.Option(show_default=False, help=SETS_FILE_HELP)
     ] = None,
 ) -> SchemaDefinition | None:
     """Generate the LinkML schema for ODM.

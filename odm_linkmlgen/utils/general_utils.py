@@ -21,8 +21,25 @@ from linkml_runtime import SchemaView
 # We don't import it from there because it is a private Pandas API that can change or move
 # between releases; hardcoding it keeps the defaults stable and explicit.
 STR_NA_VALUES = {
-    '', 'NA', '#NA', '-1.#QNAN', 'n/a', 'NULL', '-1.#IND', '1.#IND', '<NA>',
-    '-NaN', 'None', '1.#QNAN', 'null', 'nan', '-nan', 'NaN', 'N/A', '#N/A', '#N/A N/A'
+    "",
+    "NA",
+    "#NA",
+    "-1.#QNAN",
+    "n/a",
+    "NULL",
+    "-1.#IND",
+    "1.#IND",
+    "<NA>",
+    "-NaN",
+    "None",
+    "1.#QNAN",
+    "null",
+    "nan",
+    "-nan",
+    "NaN",
+    "N/A",
+    "#N/A",
+    "#N/A N/A",
 }
 
 EMPTY_PERMISSIBLE_VALUE = "<empty>"
