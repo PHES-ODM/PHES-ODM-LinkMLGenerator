@@ -105,6 +105,32 @@ is what makes a failed run diagnosable.
 its id (`https://onto.phes-odm.org/odm/v3`), its CURIE prefix (`odmv3`), and the
 output file name, so it has to match the dictionary you passed.
 
+### If your dictionary is CSV rather than Excel
+
+The workbook is only the usual way in. If you have its parts and sets sheets as
+CSV files instead — including the `parts.csv` and `sets.csv` a previous run
+wrote, which [step 4](#stage-1-the-dictionary-as-csv) describes — pass them as
+the pair `--parts-file` and `--sets-file` in place of `--dictionary-file`:
+
+```console
+odm-linkmlgen-odm \
+    --version 3 \
+    --parts-file "gen/odm_v3/dictionary/parts.csv" \
+    --sets-file "gen/odm_v3/dictionary/sets.csv" \
+    --output-dir "gen/odm_v3_from_csv"
+```
+
+Give one form or the other, never both and never half the pair. The two files
+are copied into `{output-dir}/dictionary/`, so the run is identical from there
+on — but that directory is cleared first, which is why the `--output-dir` above
+is *not* the `gen/odm_v3` the CSVs came from. Point it at the run's own output
+directory and the inputs are deleted before they can be read.
+
+The rest of this tutorial assumes the Excel run above; everything it says about
+the output holds for either form. See
+[Generate the ODM schemas](../how-to/generate-odm-schemas.md#generate-from-csv-instead-of-the-workbook)
+for this on its own.
+
 ### Check the run before trusting the result
 
 A defect in the source dictionary is logged and skipped rather than raised, so a
