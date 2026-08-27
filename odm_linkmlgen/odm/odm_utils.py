@@ -120,7 +120,9 @@ def odm_get_fk_target_class(df: pd.DataFrame, part_id: str) -> str | None:
     if "fKAliasID" in df.columns:
         fk_alias_id = df.loc[part_id_filt, "fKAliasID"].iloc[0]
         if fk_alias_id == part_id:
-            raise ValueError(f"Value under fkAliasID for part ID '{part_id}' must be different than the partID")
+            raise ValueError(
+                f"Value under fkAliasID for part ID '{part_id}' must be different than the partID"
+            )
         elif not pd.isna(fk_alias_id):
             return odm_get_fk_target_class(df, fk_alias_id)
 
