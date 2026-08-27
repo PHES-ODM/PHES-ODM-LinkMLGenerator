@@ -130,7 +130,19 @@ CURIE prefix (`odmv3`), so it must match the dictionary you passed.
 
 If you have the parts and sets sheets as CSV files rather than the workbook, pass
 `--parts-file` and `--sets-file` in place of `--dictionary-file` — one form or the
-other, never both. See
+other, never both:
+
+```console
+odm-linkmlgen-odm \
+    --version 3 \
+    --parts-file "gen/odm_v3/dictionary/parts.csv" \
+    --sets-file "gen/odm_v3/dictionary/sets.csv" \
+    --output-dir "gen/odm_v3_from_csv"
+```
+
+The CSVs are copied into `{output-dir}/dictionary/`, and that directory is
+cleared before they are read — so `--output-dir` must not be the directory the
+CSVs are read from, or they are deleted before the run can use them. See
 [Generate the ODM schemas](https://phes-odm.github.io/PHES-ODM-LinkMLGenerator/how-to/generate-odm-schemas/).
 
 **4. Check the result.** Errors in the source dictionary are logged and skipped
