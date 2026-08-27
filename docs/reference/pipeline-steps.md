@@ -29,7 +29,7 @@ changes step 2 only.
 | # | Module / function | Output |
 | --- | --- | --- |
 | 1 | `utils.general_utils.clear_dirs` | — |
-| 2 | `utils.general_utils.extract_sheets`, or a copy through `utils.general_utils.get_na_values` | `dictionary/parts.csv`, `dictionary/sets.csv` |
+| 2 | `utils.general_utils.extract_sheets`, or a straight file copy | `dictionary/parts.csv`, `dictionary/sets.csv` |
 | 3 | `odm.make_odm_ss_enums_from_sets.extract_sets_enums` | `schemasheets/enums_sets.tsv` |
 | 4 | `odm.make_odm_ss_enums_from_parts.extract_parts_enums` | `schemasheets/enums_parts.tsv` |
 | 5 | `odm.make_odm_ss_classes.extract_all_classes` | `schemasheets/class_{class_name}.tsv` |
@@ -53,7 +53,7 @@ than a known list of files.
 
 ### ODM 2. Extract or copy the dictionary sheets to CSV
 
-`utils.general_utils.extract_sheets`, or `utils.general_utils.get_na_values`
+`utils.general_utils.extract_sheets`, or `shutil.copyfile`
 
 Saves the **parts** and **sets** sheets as `dictionary/parts.csv` and
 `dictionary/sets.csv`. Which of the two paths runs depends on how the dictionary
@@ -62,24 +62,36 @@ was given:
 | Given | What runs |
 | --- | --- |
 | `--dictionary-file` (Excel) | `extract_sheets` extracts the two sheets |
-| `--parts-file` and `--sets-file` (CSV) | The two files are read and re-saved under `dictionary/` |
+| `--parts-file` and `--sets-file` (CSV) | The two files are copied as-is under `dictionary/` |
 
 Either way the rest of the pipeline reads the same two paths, so the input form
 is invisible from step 3 onwards. See the
 [CLI reference](cli.md#odm-linkmlgen-odm) for which form to pass.
 
-The `na_values` argument is set so that **only a truly empty cell counts as
-missing** in the `partID` column. Without it, pandas would read part IDs such as
-`NA`, `None`, and `null` — which are real permissible values in the ODM — as
-missing values.
+Reading a dictionary file needs **only a truly empty cell to count as missing**
+in the `partID` and `label` columns, and needs both of those columns read as
+strings. Without that, pandas would read part IDs such as `NA`, `None`, and
+`null` — which are real permissible values in the ODM — as missing values, and
+would type a column of `TRUE`/`FALSE` part IDs as booleans.
 
-Both paths get that from `general_utils.get_na_values`, which reads only the
-header row of the file and returns the NA values for **every** column: the
-`partID` override for `partID`, and pandas' own defaults for the rest. That
-completeness is what lets both paths read with `keep_default_na=False` — which
-switches pandas' defaults off wholesale — without losing NA parsing everywhere
-else. `extract_sheets` calls it per sheet of the workbook; the CSV path calls it
-per file.
+`odm_utils.get_dictionary_read_kwargs` builds those read arguments, and is used
+at **every** read of a dictionary file, not only this step — the Excel extraction
+here, and each of steps 3 to 5 and 10 reading the extracted CSVs. It gets the NA
+values from `general_utils.get_na_values`, which reads only the header row of the
+file and returns the NA values for **every** column: the override for `partID`
+and `label`, and pandas' own defaults for the rest. That completeness is what
+lets the file be read with `keep_default_na=False` — which switches pandas'
+defaults off wholesale — without losing NA parsing everywhere else.
+
+For a workbook those NA values come back keyed by **sheet name**, which is a
+shape pandas itself does not take. That is why `make_odm` passes them to
+`extract_sheets`' own `na_values` argument — `extract_sheets` reads one sheet at
+a time and applies that sheet's NA values — and passes only the remaining read
+arguments through as its `read_excel_kwargs`.
+
+The CSV path needs no re-parse at all: because every later step applies the same
+read arguments itself, the two files can be copied to `dictionary/` byte for
+byte.
 
 ### ODM 3. Extract the enumerations defined in the sets sheet
 

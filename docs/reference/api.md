@@ -154,6 +154,13 @@ an unrecognized `dataType` and a `categorical` part with an empty `mmaSet` alike
 — falls back to `string`, so a slot whose range reads `string` unexpectedly is
 the symptom of one of those two.
 
+`get_dictionary_read_kwargs` builds the Pandas kwargs that every read of an ODM
+dictionary file uses — the Excel workbook and the parts/sets CSVs alike. It is
+what keeps part IDs such as `NA` and `None` from being read as missing data, and
+what keeps a `partID` or `label` a string rather than a boolean or a number. Use
+it instead of hand-written `na_values` whenever you read one of these files
+yourself.
+
 ::: odm_linkmlgen.odm.odm_utils
     options:
       heading_level: 4
@@ -166,6 +173,7 @@ the symptom of one of those two.
         - odm_get_data_type_of_row
         - set_range_of_slot
         - add_missingness_set
+        - get_dictionary_read_kwargs
 
 ## NWSS modules
 
@@ -270,9 +278,9 @@ to reach for when a literal value such as `NA` or `None` is being read as missin
 data — a real problem for ODM part IDs.
 
 `get_na_values` is what builds those per-column NA values, from the header row of
-an Excel or CSV file. `extract_sheets` uses it internally, and `make_odm` calls it
-directly when the dictionary is given as CSV rather than as a workbook — reach for
-it whenever you read one of these files yourself and want the same NA handling the
+an Excel or CSV file. `extract_sheets` uses it internally, and the ODM pipeline
+reaches it through `odm_utils.get_dictionary_read_kwargs`, which is the helper to
+use when you read a dictionary file yourself and want the same NA handling the
 pipeline gets.
 
 `EMPTY_PERMISSIBLE_VALUE` is the `<empty>` sentinel written where a permissible

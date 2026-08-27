@@ -167,7 +167,8 @@ def clear_dirs(
 
 
 def get_na_values(
-    file: str | Path,
+    file: str | Path | None,
+    *,
     sheets: str | list[str] | None = None,
     na_values: dict[str, dict[str, str | list[str]]]
     | dict[str, str | list[str]]
@@ -322,8 +323,10 @@ def extract_sheets(
 
         # Prepare the kwargs for pd.read_excel
         cur_kwargs = read_excel_kwargs.copy()
-        cur_kwargs["keep_default_na"] = False
-        cur_kwargs["na_values"] = na_values[sheet]
+        if "keep_default_na" not in cur_kwargs:
+            cur_kwargs["keep_default_na"] = False
+        if "na_values" not in cur_kwargs:
+            cur_kwargs["na_values"] = na_values[sheet]
 
         df = pd.read_excel(file, sheet_name=sheet, **cur_kwargs)
         dfs[sheet] = df

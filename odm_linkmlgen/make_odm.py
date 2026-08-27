@@ -2,10 +2,10 @@
 Make the ODM LinkML schema.
 """
 
+import shutil
 from pathlib import Path
 from typing import Annotated
 
-import pandas as pd
 import typer
 from linkml_runtime.linkml_model.meta import SchemaDefinition
 
@@ -15,12 +15,11 @@ from odm_linkmlgen.odm.make_odm_ss_enums_from_parts import extract_parts_enums
 from odm_linkmlgen.odm.make_odm_ss_enums_from_sets import extract_sets_enums
 from odm_linkmlgen.odm.make_odm_ss_prefixes import make_prefixes
 from odm_linkmlgen.odm.make_odm_ss_schema import make_schema
-from odm_linkmlgen.odm.odm_utils import add_missingness_set
+from odm_linkmlgen.odm.odm_utils import add_missingness_set, get_dictionary_read_kwargs
 from odm_linkmlgen.utils.general_utils import (
     clear_dirs,
     extract_sheets,
     get_logger,
-    get_na_values,
 )
 from odm_linkmlgen.utils.schema_utils import find_undefined_ranges
 from odm_linkmlgen.utils.schemasheets_utils import (
@@ -120,34 +119,31 @@ def make_odm(
     # under dictionary_dir, so every step after this one has a single input to read.
     target_parts_file = dictionary_dir / "parts.csv"
     target_sets_file = dictionary_dir / "sets.csv"
-    # Only a truly empty partID cell counts as missing: part IDs such as "NA", "None", and
-    # "null" are real ODM parts that Pandas would otherwise read as missing values.
-    na_values = {"parts": {"partID": ""}, "sets": {"partID": ""}}
+
     if dictionary_file is not None:
+        # Only a truly empty partID or label cell counts as missing: values such as "NA",
+        # "None", and "null" are real ODM parts that Pandas would otherwise read as missing
+        # values. get_dictionary_read_kwargs builds the read arguments that handle this.
+        kwargs = get_dictionary_read_kwargs(dictionary_file)
+
+        # For a workbook the NA values are keyed by sheet name, which Pandas itself does not
+        # take: extract_sheets reads one sheet at a time and applies that sheet's NA values,
+        # so they go to its own argument, and everything else through to pd.read_excel.
+        na_values = kwargs.pop("na_values")
+
         # Extract the parts and sets sheets from the Excel ODM data dictionary file
         extract_sheets(
             dictionary_file,
             ["parts", "sets"],
             dictionary_dir,
             na_values=na_values,
+            read_excel_kwargs=kwargs,
         )
     else:
-        # The CSV files are already the sheets, so there is nothing to extract. Load and
-        # re-save them with the same na_values the Excel path uses, so that the copies under
-        # dictionary_dir are parsed identically to an extracted sheet.
-        parts_df = pd.read_csv(
-            parts_file,
-            na_values=get_na_values(parts_file, na_values=na_values["parts"]),
-            keep_default_na=False,
-        )
-        sets_df = pd.read_csv(
-            sets_file,
-            na_values=get_na_values(sets_file, na_values=na_values["sets"]),
-            keep_default_na=False,
-        )
+        # The CSV files are already the sheets, so there is nothing to extract, just copy them over
         dictionary_dir.mkdir(parents=True, exist_ok=True)
-        parts_df.to_csv(target_parts_file, index=False)
-        sets_df.to_csv(target_sets_file, index=False)
+        shutil.copyfile(parts_file, target_parts_file)
+        shutil.copyfile(sets_file, target_sets_file)
     parts_file = target_parts_file
     sets_file = target_sets_file
 

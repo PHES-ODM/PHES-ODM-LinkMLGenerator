@@ -8,7 +8,7 @@ from typing import Any
 import pandas as pd
 from linkml_runtime.linkml_model.meta import SchemaDefinition
 
-from odm_linkmlgen.utils.general_utils import get_logger, read_data_frame
+from odm_linkmlgen.utils.general_utils import get_logger, get_na_values, read_data_frame
 from odm_linkmlgen.utils.schema_utils import get_ranges_of_slot_defn
 
 logger = get_logger(__name__)
@@ -34,6 +34,12 @@ _data_types_map = {
     "categorical": "string",
     "blob": "blob",  # @TODO: How should we deal with blobs? I'm not sure if LinkML has this data type
 }
+
+# The ODM data dictionary columns that need NA values of their own, and the NA values to use
+# for them (see get_dictionary_read_kwargs). Only a truly empty cell counts as missing in these
+# columns, because values such as "NA", "None", and "null" are real ODM parts. Every other
+# column keeps Pandas' default NA strings.
+_dictionary_na_values = {"partID": "", "label": ""}
 
 # In the ODM data dictionary parts sheet, any column that ends with the string ODM_PARTS_COLUMN_CLASS_TAG begins
 # with the name of an ODM class (eg. measuresOrder, protocolStepsOrder, etc). This is used by
@@ -113,7 +119,9 @@ def odm_get_fk_target_class(df: pd.DataFrame, part_id: str) -> str | None:
     # does not have an fKAliasID column
     if "fKAliasID" in df.columns:
         fk_alias_id = df.loc[part_id_filt, "fKAliasID"].iloc[0]
-        if not pd.isna(fk_alias_id):
+        if fk_alias_id == part_id:
+            raise ValueError(f"Value under fkAliasID for part ID '{part_id}' must be different than the partID")
+        elif not pd.isna(fk_alias_id):
             return odm_get_fk_target_class(df, fk_alias_id)
 
     return None
@@ -239,7 +247,7 @@ def add_missingness_set(schema: SchemaDefinition, parts_file: str | Path):
         schema (SchemaDefinition): The schema to modify in place.
         parts_file (str | Path): The ODM data dictionary parts file.
     """
-    parts_df = read_data_frame(parts_file, keep_default_na=False, na_values=[""])
+    parts_df = read_data_frame(parts_file, **get_dictionary_read_kwargs(parts_file))
     for class_defn in schema.classes.values():
         # Go through all slot usages
         for slot_defn in class_defn.slot_usage.values():
@@ -258,3 +266,77 @@ def add_missingness_set(schema: SchemaDefinition, parts_file: str | Path):
                 if missingness_set not in ranges:
                     ranges.append(missingness_set)
                     set_range_of_slot(schema, class_defn.name, slot_defn.name, ranges)
+
+
+def get_dictionary_read_kwargs(file: str | Path) -> dict:
+    """Build the Pandas kwargs to read an ODM data dictionary file with.
+
+    Every read of a dictionary file needs the same two corrections, so they are built in
+    one place here rather than repeated at each read:
+
+    - Only a truly empty partID or label cell counts as missing. Values such as "NA",
+      "None", and "null" are real ODM parts that Pandas would otherwise read as missing
+      data. Every other column keeps Pandas' default NA strings — get_na_values is what
+      expands that into the per-column mapping, which is why keep_default_na is False.
+    - A partID and a label are always wanted as strings. Pandas would otherwise type a
+      column of "TRUE"/"FALSE" values as boolean, and a column of digits as a number,
+      neither of which matches the part ID written in the dictionary. The converters
+      coerce both columns back to strings, writing a boolean as "TRUE"/"FALSE" so that a
+      part read from the Excel workbook matches the same part read from a CSV sheet.
+
+    The two overlap in the partID and label columns, and which one wins is Pandas' choice,
+    not ours: pd.read_excel applies the NA values first, so an empty cell arrives as NA,
+    while pd.read_csv hands the raw text to the converter and skips NA parsing for a
+    converted column, so an empty cell arrives as "". Code that tests one of these two
+    columns for emptiness has to allow for both.
+
+    Args:
+        file (str | Path): The dictionary file the kwargs are for, either the Excel
+            (".xlsx") data dictionary or one of the ".csv" sheets extracted from it. Only
+            the file's sheet names and header rows are read, so this is cheap to call
+            before the real read.
+
+    Returns:
+        dict: The keep_default_na, na_values, and converters kwargs for reading the file.
+            na_values follows get_na_values: for a CSV file it is keyed by column name and
+            the whole dictionary can be passed straight to read_data_frame (or pd.read_csv).
+            For an Excel file it is keyed by sheet name instead, which is a shape no single
+            Pandas call takes, so it goes to extract_sheets' own na_values argument —
+            extract_sheets reads one sheet at a time — and only the remaining kwargs are
+            passed on as its read_excel_kwargs.
+
+    Raises:
+        ValueError: The file has an extension other than ".xlsx" or ".csv" (raised by
+            get_na_values).
+    """
+
+    def _to_string_converter(v: Any) -> str:
+        """Convert one cell value read from the dictionary to a string.
+
+        Args:
+            v (Any): The value Pandas parsed the cell as.
+
+        Returns:
+            str: The value as a string. A boolean becomes "TRUE"/"FALSE", which is how the
+                dictionary itself writes it, rather than Python's "True"/"False".
+        """
+        if isinstance(v, bool):
+            return str(v).upper()
+        return str(v)
+
+    na_values = _dictionary_na_values
+    if Path(file).suffix.lower() == ".xlsx":
+        # get_na_values keys its overrides by sheet name for an Excel file, so give the same
+        # column overrides to every sheet of the workbook. A sheet that has no partID or
+        # label column simply ignores them, which is why the sheet names do not need to be
+        # known here.
+        with pd.ExcelFile(file) as excel_file:
+            na_values = {
+                sheet: _dictionary_na_values for sheet in excel_file.sheet_names
+            }
+
+    return {
+        "keep_default_na": False,
+        "na_values": get_na_values(file, na_values=na_values),
+        "converters": {"partID": _to_string_converter, "label": _to_string_converter},
+    }

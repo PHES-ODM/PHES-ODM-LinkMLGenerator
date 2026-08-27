@@ -20,7 +20,7 @@ from typing import Annotated
 import pandas as pd
 import typer
 
-from odm_linkmlgen.odm.odm_utils import odm_keep_active_rows
+from odm_linkmlgen.odm.odm_utils import get_dictionary_read_kwargs, odm_keep_active_rows
 from odm_linkmlgen.utils.general_utils import (
     EMPTY_PERMISSIBLE_VALUE,
     get_logger,
@@ -89,8 +89,8 @@ def extract_sets_enums(sets_file: str, parts_file: str, output_file: str) -> lis
     Returns:
         list[str]: List of all enum names extracted.
     """
-    sets_df = read_data_frame(sets_file, keep_default_na=False, na_values=[""])
-    parts_df = read_data_frame(parts_file, keep_default_na=False, na_values=[""])
+    sets_df = read_data_frame(sets_file, **get_dictionary_read_kwargs(sets_file))
+    parts_df = read_data_frame(parts_file, **get_dictionary_read_kwargs(parts_file))
 
     # Keep only active status parts
     sets_df = odm_keep_active_rows(sets_df)

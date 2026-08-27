@@ -19,6 +19,7 @@ import pandas as pd
 import typer
 
 from odm_linkmlgen.odm.odm_utils import (
+    get_dictionary_read_kwargs,
     odm_keep_active_rows,
 )
 from odm_linkmlgen.utils.general_utils import (
@@ -80,7 +81,7 @@ def extract_parts_enums(parts_file: str, output_file: str) -> list[str]:
     Returns:
         list[str]: List of all enum names extracted.
     """
-    df = read_data_frame(parts_file, keep_default_na=False, na_values=[""])
+    df = read_data_frame(parts_file, **get_dictionary_read_kwargs(parts_file))
 
     # Use only active rows (indicated in the "status" column)
     df = odm_keep_active_rows(df)

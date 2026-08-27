@@ -134,19 +134,23 @@ Two reasons for a stage that appears to do nothing:
   re-parsing the source each time is the difference between a fast feedback loop
   and a slow one, and this stage is what buys the fast one.
 
-This stage also handles NA parsing per column, which cannot be deferred. It
-matters because ODM part IDs include literal values such as `NA` and `None` —
-real permissible values in the data model — that pandas would otherwise read as
-missing. `general_utils.get_na_values` builds that per-column mapping from a
-file's header row, covering every column so that the file can be read with
-pandas' blanket defaults switched off.
+This stage also handles NA parsing per column, which cannot be deferred for the
+workbook. It matters because ODM part IDs include literal values such as `NA` and
+`None` — real permissible values in the data model — that pandas would otherwise
+read as missing. `general_utils.get_na_values` builds that per-column mapping from
+a file's header row, covering every column so that the file can be read with
+pandas' blanket defaults switched off. For the ODM dictionary, the read arguments
+that use it — the NA values, plus the converters that keep a `partID` or `label` a
+string — are built in one place, `odm_utils.get_dictionary_read_kwargs`, and
+applied again at every later read of the extracted CSVs.
 
 The ODM generator can also be given the parts and sets sheets as CSV files
 instead of a workbook (`--parts-file` and `--sets-file`). That skips the Excel
-extraction, but not the stage: the files are still read with the same NA
-handling and still written to `dictionary/`, because the point of stage 1 is to
-give every later step one fixed, already-parsed input — not merely to open a
-workbook.
+extraction, but not the stage: the files are still written to `dictionary/`,
+because the point of stage 1 is to give every later step one fixed input at one
+fixed path — not merely to open a workbook. Nothing needs re-parsing on that
+path, since each later step reads with `get_dictionary_read_kwargs` itself, so
+the files are copied across unchanged.
 
 ### Stage 2 — transform
 

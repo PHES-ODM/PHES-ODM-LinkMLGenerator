@@ -11,6 +11,7 @@ import pandas as pd
 import typer
 
 from odm_linkmlgen.odm.odm_utils import (
+    get_dictionary_read_kwargs,
     odm_get_available_class_names,
     odm_get_data_type_of_row,
     odm_get_fk_target_class,
@@ -197,7 +198,7 @@ def extract_all_classes(parts_file: str, output_dir: str):
     if not output_dir:
         output_dir = os.path.dirname(parts_file)
 
-    df = read_data_frame(parts_file, keep_default_na=False, na_values=[""])
+    df = read_data_frame(parts_file, **get_dictionary_read_kwargs(parts_file))
 
     for class_name in odm_get_available_class_names(df):
         logger.info(f"Processing table {class_name}...")

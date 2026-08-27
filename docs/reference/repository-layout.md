@@ -73,6 +73,7 @@ dataset-specific code — see
 | A NWSS source column name | `DictionaryColumns` in `nwss_utils` |
 | Schema name / id / prefix templates | `_data` in `make_odm_ss_schema` and `make_odm_ss_prefixes`; `SCHEMA_VALUES_TEMPLATE` in `make_nwss` |
 | Excel or CSV reading | `general_utils` |
+| How an ODM dictionary file is read (NA values, `partID`/`label` as strings) | `get_dictionary_read_kwargs` in `odm_utils` |
 | Post-generation schema fixes | `schemasheets_utils.fix_schemasheets_generated_schema`, `odm_utils.add_missingness_set` |
 
 ## Requirements files

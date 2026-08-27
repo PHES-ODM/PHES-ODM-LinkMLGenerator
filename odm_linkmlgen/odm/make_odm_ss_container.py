@@ -8,7 +8,10 @@ from typing import Annotated
 
 import typer
 
-from odm_linkmlgen.odm.odm_utils import odm_get_available_class_names
+from odm_linkmlgen.odm.odm_utils import (
+    get_dictionary_read_kwargs,
+    odm_get_available_class_names,
+)
 from odm_linkmlgen.utils.general_utils import get_logger, read_data_frame
 from odm_linkmlgen.utils.schemasheets_utils import make_container_schemasheet
 
@@ -34,7 +37,7 @@ def extract_container_class(parts_file: str | Path, output_file: str | Path):
         parts_file (str | Path): The ODM data dictionary parts file.
         output_file (str | Path): The TSV file to save the Container class Schemasheet to.
     """
-    parts_df = read_data_frame(parts_file, keep_default_na=False, na_values=[""])
+    parts_df = read_data_frame(parts_file, **get_dictionary_read_kwargs(parts_file))
     class_names = odm_get_available_class_names(parts_df)
     logger.info(f"Saving Schemasheets container to {output_file}")
     make_container_schemasheet(class_names, output_file)
