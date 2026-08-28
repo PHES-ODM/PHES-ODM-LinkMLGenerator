@@ -39,6 +39,7 @@ Steps for one task, assuming you already know roughly what you are doing.
 | [Install the generator](how-to/install.md) | Getting the commands onto your path |
 | [Generate the ODM schemas](how-to/generate-odm-schemas.md) | v1, v2, and v3, and the dictionary they need |
 | [Generate the NWSS schemas](how-to/generate-nwss-schemas.md) | The five CDC dictionaries, and the manual fixes they need |
+| [Roll out a dictionary update](how-to/dictionary-workflow.md) | Regenerating and redistributing the schemas after the ODM dictionary changes |
 | [Use it from Python](how-to/python-api.md) | Calling the generators, and re-running a single step |
 | [Troubleshooting](how-to/troubleshooting.md) | Working out why a generated schema is wrong |
 | [Extending the generator](how-to/extending.md) | Supporting a new ODM version or NWSS dictionary type |

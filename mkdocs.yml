@@ -99,6 +99,7 @@ nav:
       - Install the generator: how-to/install.md
       - Generate the ODM schemas: how-to/generate-odm-schemas.md
       - Generate the NWSS schemas: how-to/generate-nwss-schemas.md
+      - Roll out a dictionary update: how-to/dictionary-workflow.md
       - Use it from Python: how-to/python-api.md
       - Troubleshooting: how-to/troubleshooting.md
       - Extending the generator: how-to/extending.md
