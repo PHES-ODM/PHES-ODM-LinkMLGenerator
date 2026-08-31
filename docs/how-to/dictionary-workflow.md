@@ -18,11 +18,27 @@ validation repository, which does not use the LinkML schema but does use the
     Once the dictionary change has been merged into the PHES-ODM repository,
     take the schema from there rather than generating it yourself — see
     [Let the GitHub Action generate it](#let-the-github-action-generate-it)
-    below. Steps 2 to 5 are still manual.
+    below.
 
     The action can also be fired by the PHES-ODM repository itself, so that a
     dictionary change regenerates the schema without anyone asking — see
     [Trigger generation from another repository](trigger-from-another-repository.md).
+
+!!! tip "So are steps 2 to 5 — but they publish somewhere else for now"
+
+    [Roll Out Dictionary Update](https://github.com/PHES-ODM/PHES-ODM-LinkMLGenerator/actions/workflows/rollout-dictionary-update.yaml)
+    runs every generation step on this page in one go: the schema, the
+    LinkML-Map schemas, and the validation assets.
+
+    It does not write to the repositories named below, because the dictionary
+    tables published on the `label` branch are behind the current dictionary —
+    a schema generated from them is older than the `odm_v3.yaml` files already
+    committed to those repositories. Everything goes to a staging repository
+    instead, filed under the repository and path it was meant for, so a run can
+    be reviewed without overwriting anything. Until the published tables catch
+    up, the copying steps below are still done by hand.
+
+    See [Automate a dictionary rollout](automate-dictionary-rollout.md).
 
 ## 1. Generate the LinkML schema
 
@@ -134,6 +150,8 @@ new `parts.csv` and `sets.csv` files.
 
 ## Related
 
+- [Automate a dictionary rollout](automate-dictionary-rollout.md) — the GitHub
+  Action that runs every generation step on this page, and where it publishes to
 - [Generate the ODM schemas](generate-odm-schemas.md) — the generation step in
   full, including where the published dictionary tables live
 - [Continuous integration](../reference/continuous-integration.md) — the

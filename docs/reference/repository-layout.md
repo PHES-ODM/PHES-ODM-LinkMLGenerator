@@ -45,8 +45,17 @@ schemas/                # The one generated schema that IS committed:
 │
 docs/                   # This documentation
 tests/                  # pytest unit tests
-.github/workflows/      # CI: lint.yaml, pytest.yaml, docs.yaml, and
-│                       # generate-odm-schema.yaml
+.github/
+├── workflows/          # CI: lint.yaml, pytest.yaml, docs.yaml,
+│                       # generate-odm-schema.yaml and
+│                       # rollout-dictionary-update.yaml
+├── actions/            # Steps more than one workflow needs: odm-config loads
+│                       # the shared settings, generate-odm-schema downloads
+│                       # the tables and runs the generator
+├── scripts/            # publish_rollout.py, which the rollout workflow uses
+│                       # to write its output to other repositories
+├── odm-config.env      # Which dictionary is read, which version is generated
+└── odm-rollout.yaml    # Where a rollout publishes to
 mkdocs.yml              # Documentation site configuration
 ```
 

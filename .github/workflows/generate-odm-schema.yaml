@@ -59,15 +59,12 @@ concurrency:
   group: generate-odm-schema-${{ github.ref }}
   cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
-# Which dictionary is read, which ODM version is generated, and where the schema
-# is committed are not decided here: every workflow that touches the dictionary
-# needs the same answers, so they live in .github/odm-config.env and are loaded
-# into the environment by the first step of the job. What is left below is this
-# workflow's own scratch space.
-env:
-  # Where the downloaded tables are staged. Under gen/, which is git-ignored,
-  # and not the --output-dir, which the generator clears before reading them.
-  DOWNLOAD_DIR: gen/dictionary-download
+# There is no env block: which dictionary is read, which ODM version is
+# generated, and where the schema is committed are the same questions for every
+# workflow that touches the dictionary, so they are answered once in
+# .github/odm-config.env and loaded into the environment by the first step of
+# the job. The paths a run works in are inputs of
+# .github/actions/generate-odm-schema, at their defaults here.
 
 jobs:
   generate:
@@ -86,54 +83,38 @@ jobs:
         # first step in the job.
         uses: ./.github/actions/odm-config
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.10'
-          cache: pip
-          cache-dependency-path: requirements.txt
-
-      - name: Install the generator
-        run: pip install -r requirements.txt && pip install -e . --no-deps
-
-      - name: Resolve the dictionary ref and whether to commit
-        id: dictionary
-        # Both choices a caller can make — which dictionary ref to read, and
-        # whether to commit — arrive from either a workflow_dispatch input or a
-        # repository_dispatch client_payload, and are resolved here so that
-        # every later step has a single answer to read.
+      - name: Generate the schema
+        id: schema
+        # Downloading the tables, running the generator, and failing on a
+        # logged ERROR live in the action because the rollout workflow needs
+        # exactly the same three things — see
+        # .github/actions/generate-odm-schema/action.yaml.
         #
-        # They are resolved in shell rather than in a GitHub expression because
-        # an absent value arrives as the empty string, and a GitHub expression
+        # `||` is safe for the ref because both sides are strings and an absent
+        # one arrives as the empty string, which the action treats as "not
+        # given" too. It is not safe for the boolean below, which is why the
+        # commit decision is made in shell.
+        uses: ./.github/actions/generate-odm-schema
+        with:
+          dictionary-ref: ${{ inputs.dictionary_ref || github.event.client_payload.dictionary_ref }}
+
+      - name: Decide whether to commit
+        id: decide
+        # Whether to commit arrives from either a workflow_dispatch input or a
+        # repository_dispatch client_payload, and is resolved here so that the
+        # commit step has a single answer to read.
+        #
+        # It is resolved in shell rather than in a GitHub expression because an
+        # absent value arrives as the empty string, and a GitHub expression
         # compares the empty string equal to false: `inputs.commit != false` is
         # false on a schedule, and `inputs.commit || payload.commit` throws away
         # an explicit `false`. Shell has no such ambiguity.
-        #
-        # The resolved SHA goes into the commit message, so a committed schema
-        # can always be traced back to the exact tables it came from.
         env:
-          GH_TOKEN: ${{ github.token }}
-          INPUT_REF: ${{ inputs.dictionary_ref }}
           INPUT_COMMIT: ${{ inputs.commit }}
-          PAYLOAD_REF: ${{ github.event.client_payload.dictionary_ref }}
           PAYLOAD_COMMIT: ${{ github.event.client_payload.commit }}
+          DICTIONARY_REF: ${{ steps.schema.outputs.ref }}
         run: |
           set -euo pipefail
-
-          # An explicit input wins, then the dispatch payload, then the default.
-          ref="${INPUT_REF:-}"
-          [ -n "${ref}" ] || ref="${PAYLOAD_REF:-}"
-          [ -n "${ref}" ] || ref="${DICTIONARY_REF_DEFAULT}"
-
-          # The ref reaches a URL, and on a dispatch it comes from outside this
-          # repository, so it is held to what a branch, tag, or SHA can look
-          # like rather than trusted.
-          case "${ref}" in
-            *[!A-Za-z0-9._/-]* | *..* | /* | */ | -*)
-              echo "::error::Refusing the dictionary ref '${ref}': expected a plain branch, tag, or SHA."
-              exit 1
-              ;;
-          esac
 
           # Commit unless a caller explicitly asked not to.
           commit="${INPUT_COMMIT:-}"
@@ -144,9 +125,9 @@ jobs:
           # against any other ref is for inspection only and never commits. This
           # is what makes it safe for another repository to dispatch a ref: the
           # worst it can do is spend a run and upload an artifact.
-          if [ "${ref}" != "${DICTIONARY_REF_DEFAULT}" ] && [ "${commit}" = true ]; then
+          if [ "${DICTIONARY_REF}" != "${DICTIONARY_REF_DEFAULT}" ] && [ "${commit}" = true ]; then
             commit=false
-            echo "::notice::${ref} is not the default ${DICTIONARY_REF_DEFAULT} branch, so the schema will be generated but not committed."
+            echo "::notice::${DICTIONARY_REF} is not the default ${DICTIONARY_REF_DEFAULT} branch, so the schema will be generated but not committed."
           fi
 
           # A pull request only ever proves the generator still works.
@@ -154,70 +135,15 @@ jobs:
             commit=false
           fi
 
-          sha=$(gh api "repos/${DICTIONARY_REPO}/commits/${ref}" --jq '.sha')
-
-          {
-            echo "ref=${ref}"
-            echo "sha=${sha}"
-            echo "commit=${commit}"
-          } >> "$GITHUB_OUTPUT"
-          echo "Using ${DICTIONARY_REPO}@${ref} (${sha}); commit=${commit}"
-
-      - name: Download the dictionary tables
-        # Pinned to the resolved SHA rather than the branch, so the two tables
-        # cannot come from different commits if the branch moves mid-run. They
-        # go under gen/, which is git-ignored, so the only thing this run adds
-        # to the working tree is the schema itself.
-        env:
-          DICTIONARY_SHA: ${{ steps.dictionary.outputs.sha }}
-        run: |
-          set -euo pipefail
-          base="https://raw.githubusercontent.com/${DICTIONARY_REPO}/${DICTIONARY_SHA}/${DICTIONARY_DIR}"
-          mkdir -p "${DOWNLOAD_DIR}"
-          curl -sSfL -o "${DOWNLOAD_DIR}/${PARTS_CSV}" "${base}/${PARTS_CSV}"
-          curl -sSfL -o "${DOWNLOAD_DIR}/${SETS_CSV}" "${base}/${SETS_CSV}"
-          wc -l "${DOWNLOAD_DIR}"/*.csv
-
-      - name: Generate the schema
-        # --output-dir must not be the directory the CSVs were downloaded to:
-        # the generator clears it before reading them. Errors in the source
-        # dictionary are logged and skipped rather than raised, so the exit
-        # status alone does not tell us whether the run produced a usable
-        # schema — hence the log, which the next step checks. The generator
-        # logs to stdout, so the redirect is only for anything underneath it
-        # that writes to stderr.
-        run: |
-          set -euo pipefail
-          odm-linkmlgen-odm \
-            --version "${ODM_VERSION}" \
-            --parts-file "${DOWNLOAD_DIR}/${PARTS_CSV}" \
-            --sets-file "${DOWNLOAD_DIR}/${SETS_CSV}" \
-            --output-dir "gen/odm_v${ODM_VERSION}" \
-            2>&1 | tee gen/generate.log
-
-      - name: Check the log for errors
-        # A run that exits 0 can still have produced a degraded schema: the
-        # generator logs a defect in the source dictionary and carries on
-        # rather than raising, so one bad part does not cost the whole run.
-        # An ERROR therefore fails the job and stops the commit. A WARNING is
-        # surfaced as an annotation but is not fatal — warnings are expected in
-        # a normal run of a dictionary this size.
-        run: |
-          set -uo pipefail
-          # The log format puts the level first on the line, so anchoring the
-          # pattern avoids matching the word inside a message body.
-          if grep -n '^WARNING' gen/generate.log; then
-            echo "::warning::The generator logged warnings; see the run log and the uploaded artifact."
-          fi
-          if grep -n '^ERROR' gen/generate.log; then
-            echo "::error::The generator logged errors, so the schema is not trustworthy and was not committed."
-            exit 1
-          fi
-          echo "No errors logged."
+          echo "commit=${commit}" >> "$GITHUB_OUTPUT"
+          echo "commit=${commit}"
 
       - name: Upload the schema and the intermediate stages
         # Kept for every run, including pull requests and failed runs, so a bad
         # schema can be diffed against the committed one without a local run.
+        # The paths are the generate action's defaults spelled out rather than
+        # read from its outputs, so that a run that failed before setting them
+        # still uploads whatever it did produce.
         if: always()
         uses: actions/upload-artifact@v4
         with:
@@ -228,21 +154,23 @@ jobs:
           if-no-files-found: warn
 
       - name: Copy the schema to its committed location
+        env:
+          SCHEMA_FILE: ${{ steps.schema.outputs.schema-file }}
         run: |
           set -euo pipefail
           mkdir -p "$(dirname "${SCHEMA_PATH}")"
-          cp "gen/odm_v${ODM_VERSION}/linkml/odm_v${ODM_VERSION}.yaml" "${SCHEMA_PATH}"
+          cp "${SCHEMA_FILE}" "${SCHEMA_PATH}"
 
       - name: Commit the schema
-        # Whether to commit was settled by the resolve step, which is why this
-        # is a plain string comparison and not a stack of event checks.
+        # Whether to commit was settled by the step above, which is why this is
+        # a plain string comparison and not a stack of event checks.
         # The generator's output is deterministic — no timestamps — so an
         # unchanged dictionary and an unchanged generator produce no diff, and
         # the scheduled run is a no-op.
-        if: steps.dictionary.outputs.commit == 'true'
+        if: steps.decide.outputs.commit == 'true'
         env:
-          DICTIONARY_REF: ${{ steps.dictionary.outputs.ref }}
-          DICTIONARY_SHA: ${{ steps.dictionary.outputs.sha }}
+          DICTIONARY_REF: ${{ steps.schema.outputs.ref }}
+          DICTIONARY_SHA: ${{ steps.schema.outputs.sha }}
         run: |
           set -euo pipefail
           # --porcelain covers both a modified schema and a brand new one,

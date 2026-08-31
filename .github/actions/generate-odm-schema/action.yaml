@@ -1,0 +1,189 @@
+name: Generate the ODM schema
+description: >-
+  Downloads the published dictionary tables at one commit and runs the
+  generator over them, failing if the generator logged an error. Used by every
+  workflow that needs a freshly generated schema, so that they all generate it
+  the same way.
+
+# .github/actions/odm-config has to have run first: ODM_VERSION,
+# DICTIONARY_REPO, DICTIONARY_DIR, PARTS_CSV, SETS_CSV and
+# DICTIONARY_REF_DEFAULT all come from the environment it sets up.
+
+inputs:
+  dictionary-ref:
+    description: 'Branch, tag, or SHA of DICTIONARY_REPO to read the tables from. Defaults to DICTIONARY_REF_DEFAULT.'
+    required: false
+    default: ''
+  output-dir:
+    description: 'Where the generator writes its three stages. Defaults to gen/odm_v<ODM_VERSION>.'
+    required: false
+    default: ''
+  download-dir:
+    description: 'Where the downloaded tables are staged. Must not be the output directory, which the generator clears before reading them.'
+    required: false
+    default: gen/dictionary-download
+  log-file:
+    description: 'Where the generator log is written. It is read back to decide whether the run produced a usable schema.'
+    required: false
+    default: gen/generate.log
+  python-version:
+    description: 'The Python the generator runs on.'
+    required: false
+    default: '3.10'
+  github-token:
+    description: 'Token used to resolve the dictionary ref to a commit SHA. Only needs public read.'
+    required: false
+    default: ${{ github.token }}
+
+outputs:
+  ref:
+    description: 'The dictionary ref that was read.'
+    value: ${{ steps.resolve.outputs.ref }}
+  sha:
+    description: 'The commit of DICTIONARY_REPO the tables were read from.'
+    value: ${{ steps.resolve.outputs.sha }}
+  output-dir:
+    description: 'The directory the three stages were written to.'
+    value: ${{ steps.resolve.outputs.output-dir }}
+  schema-file:
+    description: 'The generated LinkML schema.'
+    value: ${{ steps.resolve.outputs.schema-file }}
+  dictionary-dir:
+    description: 'The stage 1 directory, holding parts.csv and sets.csv as every consumer of the tables wants them named.'
+    value: ${{ steps.resolve.outputs.dictionary-dir }}
+  log-file:
+    description: 'The generator log.'
+    value: ${{ steps.resolve.outputs.log-file }}
+
+runs:
+  using: composite
+  steps:
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: ${{ inputs.python-version }}
+        cache: pip
+        cache-dependency-path: requirements.txt
+
+    - name: Install the generator
+      shell: bash
+      run: pip install -r requirements.txt && pip install -e . --no-deps
+
+    - name: Resolve the dictionary ref and the output paths
+      id: resolve
+      # The ref a run reads can arrive from a workflow input or a dispatch
+      # payload and may be absent altogether, so it is settled once here and
+      # every later step reads the answer rather than working it out again.
+      #
+      # The resolved SHA is what the tables are actually downloaded from, so
+      # that the two of them cannot come from different commits if the branch
+      # moves mid-run, and so that anything committed from this run can be
+      # traced back to the exact tables it came from.
+      shell: bash
+      env:
+        GH_TOKEN: ${{ inputs.github-token }}
+        INPUT_REF: ${{ inputs.dictionary-ref }}
+        INPUT_OUTPUT_DIR: ${{ inputs.output-dir }}
+        INPUT_LOG_FILE: ${{ inputs.log-file }}
+      run: |
+        set -euo pipefail
+
+        # A missing setting means .github/actions/odm-config has not run, which
+        # is worth saying plainly: the alternative is a download from an
+        # unhelpful URL made of empty strings.
+        for name in ODM_VERSION DICTIONARY_REPO DICTIONARY_DIR PARTS_CSV \
+                    SETS_CSV DICTIONARY_REF_DEFAULT; do
+          if [ -z "${!name:-}" ]; then
+            echo "::error::${name} is not set. Run .github/actions/odm-config before this action."
+            exit 1
+          fi
+        done
+
+        ref="${INPUT_REF:-}"
+        [ -n "${ref}" ] || ref="${DICTIONARY_REF_DEFAULT}"
+
+        # The ref reaches a URL, and on a dispatch it comes from outside this
+        # repository, so it is held to what a branch, tag, or SHA can look like
+        # rather than trusted.
+        case "${ref}" in
+          *[!A-Za-z0-9._/-]* | *..* | /* | */ | -*)
+            echo "::error::Refusing the dictionary ref '${ref}': expected a plain branch, tag, or SHA."
+            exit 1
+            ;;
+        esac
+
+        output_dir="${INPUT_OUTPUT_DIR:-}"
+        [ -n "${output_dir}" ] || output_dir="gen/odm_v${ODM_VERSION}"
+
+        sha=$(gh api "repos/${DICTIONARY_REPO}/commits/${ref}" --jq '.sha')
+
+        {
+          echo "ref=${ref}"
+          echo "sha=${sha}"
+          echo "output-dir=${output_dir}"
+          echo "schema-file=${output_dir}/linkml/odm_v${ODM_VERSION}.yaml"
+          echo "dictionary-dir=${output_dir}/dictionary"
+          echo "log-file=${INPUT_LOG_FILE}"
+        } >> "$GITHUB_OUTPUT"
+        echo "Reading ${DICTIONARY_REPO}@${ref} (${sha}) into ${output_dir}"
+
+    - name: Download the dictionary tables
+      # Pinned to the resolved SHA rather than the branch. The tables go under
+      # gen/, which is git-ignored, so a run adds nothing to the working tree
+      # but what it was asked to generate.
+      shell: bash
+      env:
+        DICTIONARY_SHA: ${{ steps.resolve.outputs.sha }}
+        DOWNLOAD_DIR: ${{ inputs.download-dir }}
+      run: |
+        set -euo pipefail
+        base="https://raw.githubusercontent.com/${DICTIONARY_REPO}/${DICTIONARY_SHA}/${DICTIONARY_DIR}"
+        mkdir -p "${DOWNLOAD_DIR}"
+        curl -sSfL -o "${DOWNLOAD_DIR}/${PARTS_CSV}" "${base}/${PARTS_CSV}"
+        curl -sSfL -o "${DOWNLOAD_DIR}/${SETS_CSV}" "${base}/${SETS_CSV}"
+        wc -l "${DOWNLOAD_DIR}"/*.csv
+
+    - name: Generate the schema
+      # --output-dir must not be the directory the CSVs were downloaded to: the
+      # generator clears it before reading them. Errors in the source
+      # dictionary are logged and skipped rather than raised, so the exit status
+      # alone does not tell us whether the run produced a usable schema — hence
+      # the log, which the next step checks. The generator logs to stdout, so
+      # the redirect is only for anything underneath it that writes to stderr.
+      shell: bash
+      env:
+        DOWNLOAD_DIR: ${{ inputs.download-dir }}
+        OUTPUT_DIR: ${{ steps.resolve.outputs.output-dir }}
+        LOG_FILE: ${{ steps.resolve.outputs.log-file }}
+      run: |
+        set -euo pipefail
+        mkdir -p "$(dirname "${LOG_FILE}")"
+        odm-linkmlgen-odm \
+          --version "${ODM_VERSION}" \
+          --parts-file "${DOWNLOAD_DIR}/${PARTS_CSV}" \
+          --sets-file "${DOWNLOAD_DIR}/${SETS_CSV}" \
+          --output-dir "${OUTPUT_DIR}" \
+          2>&1 | tee "${LOG_FILE}"
+
+    - name: Check the log for errors
+      # A run that exits 0 can still have produced a degraded schema: the
+      # generator logs a defect in the source dictionary and carries on rather
+      # than raising, so one bad part does not cost the whole run. An ERROR
+      # therefore fails the job, and the caller never gets as far as publishing
+      # anything. A WARNING is surfaced as an annotation but is not fatal —
+      # warnings are expected in a normal run of a dictionary this size.
+      shell: bash
+      env:
+        LOG_FILE: ${{ steps.resolve.outputs.log-file }}
+      run: |
+        set -uo pipefail
+        # The log format puts the level first on the line, so anchoring the
+        # pattern avoids matching the word inside a message body.
+        if grep -n '^WARNING' "${LOG_FILE}"; then
+          echo "::warning::The generator logged warnings; see the run log and the uploaded artifact."
+        fi
+        if grep -n '^ERROR' "${LOG_FILE}"; then
+          echo "::error::The generator logged errors, so the schema is not trustworthy."
+          exit 1
+        fi
+        echo "No errors logged."

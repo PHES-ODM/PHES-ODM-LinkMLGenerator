@@ -1,9 +1,9 @@
 # Continuous integration
 
-The four GitHub Actions workflows in
+The five GitHub Actions workflows in
 [`.github/workflows/`](https://github.com/PHES-ODM/PHES-ODM-LinkMLGenerator/tree/main/.github/workflows).
-Three of them check the repository; the fourth generates the ODM v3 schema and
-commits it.
+Three of them check the repository; the other two generate the ODM v3 schema —
+one committing it here, one rolling it out to the repositories that consume it.
 
 | Workflow | File | Runs on | Does |
 | --- | --- | --- | --- |
@@ -11,6 +11,7 @@ commits it.
 | Tests | `pytest.yaml` | Push to `main`, pull request | `pytest tests/` |
 | Documentation | `docs.yaml` | Push to `main`, pull request, manual | `mkdocs build --strict`, then deploys to GitHub Pages from `main` |
 | Generate ODM Schema | `generate-odm-schema.yaml` | Weekly, manual, repository dispatch, push or pull request touching the generator | Regenerates and commits `schemas/odm_v3.yaml` |
+| Roll Out Dictionary Update | `rollout-dictionary-update.yaml` | Manual, repository dispatch | Regenerates the schema, the LinkML-Map schemas and the validation assets, and publishes them — currently to a staging repository |
 
 ## Generate ODM Schema
 
@@ -21,6 +22,11 @@ which is the copy other repositories should read. It is the automated form of
 [step 1 of Roll out a dictionary update](../how-to/dictionary-workflow.md#1-generate-the-linkml-schema).
 
 ### What it does
+
+Steps 1 to 3 are the
+`.github/actions/generate-odm-schema` action rather than steps of the workflow,
+because [Roll Out Dictionary Update](#roll-out-dictionary-update) needs exactly
+the same three things.
 
 1. Resolves the requested ref of
    [PHES-ODM/PHES-ODM](https://github.com/PHES-ODM/PHES-ODM) to a commit SHA,
@@ -52,9 +58,10 @@ which is the copy other repositories should read. It is the automated form of
 ### Inputs
 
 A caller can make two choices. They reach the run either as
-`workflow_dispatch` inputs or as `repository_dispatch` `client_payload` fields,
-and the **Resolve the dictionary ref and whether to commit** step settles both
-into a single answer the later steps read.
+`workflow_dispatch` inputs or as `repository_dispatch` `client_payload` fields.
+The ref is settled by the shared generate action, and whether to commit by the
+**Decide whether to commit** step, so that every later step has a single answer
+to read.
 
 | Input | Default | What it does |
 | --- | --- | --- |
@@ -118,9 +125,11 @@ identical file, and the weekly run is a no-op most weeks.
 Only ODM v3 is generated and committed. ODM v1, ODM v2, and the NWSS schemas
 are still local runs — v2 is superseded, and the NWSS dictionaries are Excel
 workbooks, two of them not public. Steps 2 to 5 of
-[Roll out a dictionary update](../how-to/dictionary-workflow.md) — copying the
-schema to the consuming repositories, and regenerating the LinkML-Map schemas
-and the validation assets — are also still manual.
+[Roll out a dictionary update](../how-to/dictionary-workflow.md) are not this
+workflow's job either; they belong to
+[Roll Out Dictionary Update](#roll-out-dictionary-update), which currently
+publishes them to a staging repository rather than to the repositories that
+consume them.
 
 ### Configuring it
 
@@ -161,6 +170,16 @@ rejects the push unless `github-actions[bot]` is allowed to bypass it.
 
 ### Sharing the configuration with another workflow
 
+Two workflows now read these, and there are two shared pieces they read them
+through:
+
+| Path | What it is |
+| --- | --- |
+| `.github/odm-config.env` | The settings themselves |
+| `.github/actions/odm-config` | Loads them into the environment of a job |
+| `.github/actions/generate-odm-schema` | Downloads the tables and runs the generator, using them |
+| `.github/odm-rollout.yaml` | The rollout workflow's own configuration — where it publishes to |
+
 `.github/odm-config.env` is a dotenv file — one `NAME=VALUE` per line, no
 quoting, `#` for a comment. A workflow reads it by checking the repository out
 and then using the local composite action, which loads every setting into the
@@ -187,10 +206,65 @@ cannot come from the file — those are read before any step runs. That is why t
 `dictionary_ref` input repeats `label` as its default literally rather than
 reading `DICTIONARY_REF_DEFAULT`; the two have to be changed together.
 
+## Roll Out Dictionary Update
+
+Does every generation step of
+[Roll out a dictionary update](../how-to/dictionary-workflow.md) in one run —
+the schema, the LinkML-Map schemas, and the PHES-ODM-Validation assets — and
+publishes the result. Setting it up, running it, and adding a destination are in
+[Automate a dictionary rollout](../how-to/automate-dictionary-rollout.md); what
+follows is what it is made of.
+
+### Its four jobs
+
+| Job | Manual step | Needs | Does |
+| --- | --- | --- | --- |
+| `schema` | 1 | — | The shared generate action, then collects the schema and the normalised `parts.csv` and `sets.csv` as the `rollout-schema` artifact |
+| `mappers` | 3 | `schema` | Checks PHES-ODM-MapGenerator out, replaces its copy of the ODM schema, generates the three mappings |
+| `validation` | 5, first half | `schema` | Checks PHES-ODM-Validation out, writes the tables to `assets/dictionary/v3.0.1/`, runs `generate_assets.py` |
+| `publish` | 2, 4, 5 | all three | Merges the artifacts and writes each product where the configuration says |
+
+Three jobs rather than three steps because each tool needs a different Python
+environment: this repository's, the map generator's, and the validation
+library's. Each generation job uploads only what it built, and `publish`
+downloads the `rollout-*` artifacts merged into one tree.
+
+### Where it publishes
+
+[`.github/odm-rollout.yaml`](https://github.com/PHES-ODM/PHES-ODM-LinkMLGenerator/blob/main/.github/odm-rollout.yaml)
+holds one entry per destination, and `staging.repo` decides whether they are
+written to for real:
+
+- **While `staging.repo` is set** — as it is now — no target repository is
+  contacted at all. Everything is written into that one repository at
+  `<staging.dir>/<owner>/<repo>/<the path it was meant for>`, so a run is a
+  reviewable preview rather than a publication. This is not scaffolding: the
+  published dictionary tables are behind the current dictionary, so a live run
+  today would replace newer files with older ones.
+- **When it is cleared** — each target repository is cloned and committed to,
+  and only if the run also passes `allow_live`.
+
+Publishing is
+[`.github/scripts/publish_rollout.py`](https://github.com/PHES-ODM/PHES-ODM-LinkMLGenerator/blob/main/.github/scripts/publish_rollout.py)
+rather than shell, because it has to copy files or whole directories, empty a
+destination first where the configuration asks, group destinations by
+repository, and skip a repository whose content is already identical. It writes
+nothing anywhere until it has checked that every configured product exists.
+
+### Why it needs a token
+
+`ROLLOUT_TOKEN`, a fine-grained personal access token with Contents write on the
+destination. A workflow's own `GITHUB_TOKEN` is scoped to the repository it runs
+in, so it cannot write to another repository at all — and this workflow asks for
+`contents: read` on this one, since it writes nothing here. A run without the
+secret fails in the publish step with an explanation.
+
 ## Related
 
 - [Roll out a dictionary update](../how-to/dictionary-workflow.md) — the whole
-  dictionary-change process, of which this workflow is the first step
+  dictionary-change process, of which the schema workflow is the first step
+- [Automate a dictionary rollout](../how-to/automate-dictionary-rollout.md) —
+  setting the rollout workflow up, and adding a repository for it to publish to
 - [Generate the ODM schemas](../how-to/generate-odm-schemas.md) — the same
   generation run, done locally
 - [Output layout](output-layout.md) — what the run writes to `--output-dir`
