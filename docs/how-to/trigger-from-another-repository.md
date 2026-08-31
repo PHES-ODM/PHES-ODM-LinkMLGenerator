@@ -295,6 +295,8 @@ The same rule applies — that run will not commit, because the ref is not
   Generate ODM Schema workflow does, its inputs, and its other triggers
 - [Roll out a dictionary update](dictionary-workflow.md) — the whole
   dictionary-change process; this page automates the front of step 1
+- [Trigger a dictionary rollout from another repository](trigger-rollout-from-another-repository.md)
+  — the same arrangement for the whole rollout, not just the schema
 - [Generate the ODM schemas](generate-odm-schemas.md) — the same generation run,
   done locally
 - [Troubleshooting](troubleshooting.md) — when the regenerated schema is not

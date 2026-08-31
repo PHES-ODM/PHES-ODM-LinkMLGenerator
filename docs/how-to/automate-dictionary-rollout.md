@@ -223,7 +223,9 @@ commit at all where nothing changed.
   this workflow automates, and the only description of what each step is for
 - [Continuous integration](../reference/continuous-integration.md) — this
   workflow and the four others, and the shared configuration they read
+- [Trigger a dictionary rollout from another repository](trigger-rollout-from-another-repository.md)
+  — dispatching this workflow from the PHES-ODM repository
 - [Trigger generation from another repository](trigger-from-another-repository.md)
-  — dispatching a run from the PHES-ODM repository
+  — the same, for the schema workflow alone
 - [Troubleshooting](troubleshooting.md) — when the regenerated schema is not
   what you expected

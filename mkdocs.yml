@@ -102,6 +102,7 @@ nav:
       - Roll out a dictionary update: how-to/dictionary-workflow.md
       - Automate a dictionary rollout: how-to/automate-dictionary-rollout.md
       - Trigger generation from another repository: how-to/trigger-from-another-repository.md
+      - Trigger a dictionary rollout from another repository: how-to/trigger-rollout-from-another-repository.md
       - Use it from Python: how-to/python-api.md
       - Troubleshooting: how-to/troubleshooting.md
       - Extending the generator: how-to/extending.md
