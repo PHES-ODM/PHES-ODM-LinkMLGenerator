@@ -100,6 +100,7 @@ nav:
       - Generate the ODM schemas: how-to/generate-odm-schemas.md
       - Generate the NWSS schemas: how-to/generate-nwss-schemas.md
       - Roll out a dictionary update: how-to/dictionary-workflow.md
+      - Trigger generation from another repository: how-to/trigger-from-another-repository.md
       - Use it from Python: how-to/python-api.md
       - Troubleshooting: how-to/troubleshooting.md
       - Extending the generator: how-to/extending.md

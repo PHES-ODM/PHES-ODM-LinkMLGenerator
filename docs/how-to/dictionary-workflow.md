@@ -20,6 +20,10 @@ validation repository, which does not use the LinkML schema but does use the
     [Let the GitHub Action generate it](#let-the-github-action-generate-it)
     below. Steps 2 to 5 are still manual.
 
+    The action can also be fired by the PHES-ODM repository itself, so that a
+    dictionary change regenerates the schema without anyone asking — see
+    [Trigger generation from another repository](trigger-from-another-repository.md).
+
 ## 1. Generate the LinkML schema
 
 ### Let the GitHub Action generate it
@@ -44,7 +48,7 @@ Two optional inputs are available:
 
 | Input | Default | What it does |
 | --- | --- | --- |
-| `dictionary_ref` | `label` | The branch, tag, or commit of PHES-ODM/PHES-ODM to read the tables from. Point it at a branch to see what a proposed dictionary change would do to the schema. |
+| `dictionary_ref` | `label` | The branch, tag, or commit of PHES-ODM/PHES-ODM to read the tables from. Point it at a branch to see what a proposed dictionary change would do to the schema — a run that read anything but `label` uploads the schema but does not commit it. |
 | `commit` | checked | Uncheck to generate the schema and upload it as a run artifact without committing it. |
 
 The run fails, and commits nothing, if the generator logged an `ERROR` — the
@@ -134,6 +138,8 @@ new `parts.csv` and `sets.csv` files.
   full, including where the published dictionary tables live
 - [Continuous integration](../reference/continuous-integration.md) — the
   **Generate ODM Schema** workflow, and the other three workflows
+- [Trigger generation from another repository](trigger-from-another-repository.md)
+  — have the PHES-ODM repository fire step 1 itself when the tables change
 - [The source data dictionaries](../reference/data-dictionaries.md) — which
   tables and columns a dictionary change can affect
 - [Troubleshooting](troubleshooting.md) — when the regenerated schema is not

@@ -45,18 +45,21 @@ which is the copy other repositories should read. It is the automated form of
 | --- | --- |
 | `schedule`, Mondays 07:00 UTC | The dictionary is in another repository, which cannot notify this one. The schedule bounds how stale the committed schema can get at a week. |
 | `workflow_dispatch` | To pick a dictionary change up immediately, or to generate from another branch of the dictionary repository. |
-| `repository_dispatch`, type `dictionary-updated` | So the PHES-ODM repository — or anything else holding a token for this one — can request a regeneration the moment the tables change. |
+| `repository_dispatch`, type `dictionary-updated` | So the PHES-ODM repository — or anything else holding a token for this one — can request a regeneration the moment the tables change. It may carry `dictionary_ref` and `commit` in its `client_payload`. See [Trigger generation from another repository](../how-to/trigger-from-another-repository.md). |
 | `push` to `main` touching `odm_linkmlgen/**` or `requirements.txt` | The other half of the problem: the same dictionary produces a different schema once the generator changes. |
 | `pull_request` touching the same paths | Proves a generator change still produces a clean schema before it reaches `main`. Commits nothing; the artifact is there to diff. |
 
 ### Inputs
 
-Only `workflow_dispatch` takes inputs.
+A caller can make two choices. They reach the run either as
+`workflow_dispatch` inputs or as `repository_dispatch` `client_payload` fields,
+and the **Resolve the dictionary ref and whether to commit** step settles both
+into a single answer the later steps read.
 
 | Input | Default | What it does |
 | --- | --- | --- |
-| `dictionary_ref` | `label` | The branch, tag, or commit of PHES-ODM/PHES-ODM to read the tables from. |
-| `commit` | checked | Uncheck to generate and upload the artifact without committing. |
+| `dictionary_ref` | `label` | The branch, tag, or commit of PHES-ODM/PHES-ODM to read the tables from. Held to the shape of a plain branch, tag, or SHA — the run fails rather than passing anything else on to the API, because on a dispatch this comes from outside the repository. |
+| `commit` | `true` | Set false to generate and upload the artifact without committing. |
 
 ```console
 gh workflow run generate-odm-schema.yaml \
@@ -65,12 +68,41 @@ gh workflow run generate-odm-schema.yaml \
     -f commit=false
 ```
 
+An input wins over the same field in a payload, and both fall back to the
+defaults above.
+
+#### Only the published dictionary is ever committed
+
+A run that read any ref other than `DICTIONARY_REF_DEFAULT` (`label`) generates
+the schema and uploads it, but **never commits it** — even when `commit` is
+explicitly true. So `dictionary_ref` is for inspecting what a proposed
+dictionary change would do, and the committed schema always came from the
+published tables.
+
+That is also what makes it safe for another repository to choose the ref: a
+token holder cannot make a schema built from an unmerged branch become the
+canonical one. Pull requests never commit either, for the same reason.
+
+Whether to commit is therefore decided in one place and exposed as the resolve
+step's `commit` output, which the commit step's `if` reads. Resolving it in
+shell rather than in a GitHub expression is deliberate: an absent value arrives
+as the empty string, and a GitHub expression compares the empty string equal to
+`false`, so `inputs.commit != false` is false on a schedule and
+`inputs.commit || payload.commit` silently discards an explicit `false`.
+
 To fire the repository dispatch from another repository or a script:
 
 ```console
 gh api repos/PHES-ODM/PHES-ODM-LinkMLGenerator/dispatches \
     -f event_type=dictionary-updated
 ```
+
+This needs a token with Contents write on this repository — a `GITHUB_TOKEN`
+will not do, both because it is scoped to its own repository and because events
+it sends deliberately do not start workflow runs.
+[Trigger generation from another repository](../how-to/trigger-from-another-repository.md)
+sets that up end to end, including sending a `dictionary_ref` in the
+`client_payload`.
 
 ### Why it commits rather than opening a pull request
 
@@ -100,6 +132,7 @@ retargeting it does not mean rewriting the steps:
 | `ODM_VERSION` | `3` |
 | `DICTIONARY_REPO` | `PHES-ODM/PHES-ODM` |
 | `DICTIONARY_DIR` | `dictionary-tables` |
+| `DICTIONARY_REF_DEFAULT` | `label` |
 | `PARTS_CSV` | `ODM_parts_v3.0.0.csv` |
 | `SETS_CSV` | `ODM_sets_v3.0.0.csv` |
 | `DOWNLOAD_DIR` | `gen/dictionary-download` |
