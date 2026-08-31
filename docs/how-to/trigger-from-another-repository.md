@@ -21,13 +21,16 @@ that event. This page sets that up.
 
 ## Which trigger to use
 
-Two API endpoints will start the workflow from outside this repository. They
-differ in whether you can choose the dictionary ref.
+Two API endpoints will start the workflow from outside this repository. Both
+read the two tables from `label` — the branch of PHES-ODM/PHES-ODM the
+dictionary is published on — unless the caller names a different branch (or tag,
+or SHA) in `dictionary_ref`. They differ in how that ref is passed, and in what
+the call means.
 
 | | `repository_dispatch` | `workflow_dispatch` |
 | --- | --- | --- |
 | Endpoint | `POST /repos/{owner}/{repo}/dispatches` | `POST /repos/{owner}/{repo}/actions/workflows/{file}/dispatches` |
-| Dictionary read from | `label`, or a `dictionary_ref` in the payload | `label`, or a `dictionary_ref` input |
+| Dictionary branch | `label`, or a `dictionary_ref` in the payload | `label`, or a `dictionary_ref` input |
 | Token permission | Contents: write | Actions: write |
 | Meaning | "The dictionary changed" — this repository decides what to do about it | "Run this specific workflow with these arguments" |
 
