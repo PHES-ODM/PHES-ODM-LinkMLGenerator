@@ -21,6 +21,9 @@ on:
       dictionary_ref:
         description: 'Branch, tag, or SHA of PHES-ODM/PHES-ODM to read the dictionary tables from. Anything but the default generates without committing.'
         required: false
+        # Kept in step with DICTIONARY_REF_DEFAULT in .github/odm-config.env by
+        # hand: an input default is read before any step runs, so it cannot be
+        # loaded from that file the way the rest of the settings are.
         default: 'label'
       commit:
         description: 'Commit the regenerated schema. Uncheck to generate and inspect the artifact only.'
@@ -38,12 +41,16 @@ on:
       - 'odm_linkmlgen/**'
       - 'requirements.txt'
       - '.github/workflows/generate-odm-schema.yaml'
+      - '.github/odm-config.env'
+      - '.github/actions/odm-config/action.yaml'
   pull_request:
     branches: [ main ]
     paths:
       - 'odm_linkmlgen/**'
       - 'requirements.txt'
       - '.github/workflows/generate-odm-schema.yaml'
+      - '.github/odm-config.env'
+      - '.github/actions/odm-config/action.yaml'
 
 # Two runs committing to main at once would collide on the push. Queue them
 # instead of cancelling, so a run that has already regenerated the schema is
@@ -52,23 +59,15 @@ concurrency:
   group: generate-odm-schema-${{ github.ref }}
   cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
+# Which dictionary is read, which ODM version is generated, and where the schema
+# is committed are not decided here: every workflow that touches the dictionary
+# needs the same answers, so they live in .github/odm-config.env and are loaded
+# into the environment by the first step of the job. What is left below is this
+# workflow's own scratch space.
 env:
-  ODM_VERSION: '3'
-  # Where the dictionary tables are published. The v3 tables are on the `label`
-  # branch of the PHES-ODM repository.
-  DICTIONARY_REPO: PHES-ODM/PHES-ODM
-  DICTIONARY_DIR: dictionary-tables
-  # The dictionary branch the committed schema tracks. A run that was pointed at
-  # any other ref generates the schema but does not commit it.
-  DICTIONARY_REF_DEFAULT: label
-  PARTS_CSV: ODM_parts_v3.0.0.csv
-  SETS_CSV: ODM_sets_v3.0.0.csv
   # Where the downloaded tables are staged. Under gen/, which is git-ignored,
   # and not the --output-dir, which the generator clears before reading them.
   DOWNLOAD_DIR: gen/dictionary-download
-  # The committed location of the generated schema. This is the path other
-  # repositories should read the ODM v3 schema from.
-  SCHEMA_PATH: schemas/odm_v3.yaml
 
 jobs:
   generate:
@@ -79,6 +78,13 @@ jobs:
       contents: write
     steps:
       - uses: actions/checkout@v4
+
+      - name: Load the shared ODM configuration
+        # Puts everything in .github/odm-config.env into the environment of
+        # every step below, so this has to run before the first step that reads
+        # any of it. It needs the checkout above, which is why it is not the
+        # first step in the job.
+        uses: ./.github/actions/odm-config
 
       - name: Set up Python
         uses: actions/setup-python@v5

@@ -124,19 +124,29 @@ and the validation assets — are also still manual.
 
 ### Configuring it
 
-The paths and versions are `env` values at the top of the workflow, so
-retargeting it does not mean rewriting the steps:
+The paths and versions are environment variables rather than literals in the
+steps, so retargeting the workflow does not mean rewriting it.
+
+Most of them are shared, because any other workflow driving part of the
+dictionary rollout needs the same answers — which dictionary is read, which ODM
+version is generated, and where the schema is committed. Those live in
+[`.github/odm-config.env`](https://github.com/PHES-ODM/PHES-ODM-LinkMLGenerator/blob/main/.github/odm-config.env):
 
 | Variable | Default |
 | --- | --- |
 | `ODM_VERSION` | `3` |
 | `DICTIONARY_REPO` | `PHES-ODM/PHES-ODM` |
 | `DICTIONARY_DIR` | `dictionary-tables` |
-| `DICTIONARY_REF_DEFAULT` | `label` |
 | `PARTS_CSV` | `ODM_parts_v3.0.0.csv` |
 | `SETS_CSV` | `ODM_sets_v3.0.0.csv` |
-| `DOWNLOAD_DIR` | `gen/dictionary-download` |
+| `DICTIONARY_REF_DEFAULT` | `label` |
 | `SCHEMA_PATH` | `schemas/odm_v3.yaml` |
+
+One is this workflow's own scratch space, and stays in its `env` block:
+
+| Variable | Default |
+| --- | --- |
+| `DOWNLOAD_DIR` | `gen/dictionary-download` |
 
 The dictionary tables are downloaded under `gen/`, which is git-ignored, so the
 only thing a run adds to the working tree is the schema itself. `DOWNLOAD_DIR`
@@ -148,6 +158,34 @@ If **Settings > Actions > General > Workflow permissions** is set to
 "Read repository contents and packages permissions", that job-level grant is
 still honoured, but branch protection on `main` is not: a protected `main`
 rejects the push unless `github-actions[bot]` is allowed to bypass it.
+
+### Sharing the configuration with another workflow
+
+`.github/odm-config.env` is a dotenv file — one `NAME=VALUE` per line, no
+quoting, `#` for a comment. A workflow reads it by checking the repository out
+and then using the local composite action, which loads every setting into the
+environment of the steps after it and fails the job if a line is neither a
+setting nor a comment:
+
+```yaml
+steps:
+  - uses: actions/checkout@v4
+
+  - name: Load the shared ODM configuration
+    uses: ./.github/actions/odm-config
+
+  - run: echo "Reading ${DICTIONARY_REPO}/${DICTIONARY_DIR}/${PARTS_CSV}"
+```
+
+The step has to come before the first step that reads a setting, and after the
+checkout that puts the file on disk. A setting is then available both as a shell
+variable, as above, and as `${{ env.PARTS_CSV }}` in a later step's `with:`.
+
+GitHub offers no way to share these at the point where a workflow is parsed, so
+a value needed in `on:`, `concurrency:`, or a `workflow_dispatch` input default
+cannot come from the file — those are read before any step runs. That is why the
+`dictionary_ref` input repeats `label` as its default literally rather than
+reading `DICTIONARY_REF_DEFAULT`; the two have to be changed together.
 
 ## Related
 

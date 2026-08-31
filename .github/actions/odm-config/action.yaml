@@ -1,0 +1,50 @@
+name: Load the ODM configuration
+description: >-
+  Reads the shared dictionary and version settings from a dotenv file into the
+  environment, so that every workflow needing them reads them from one place.
+
+inputs:
+  config-file:
+    description: 'The dotenv file to read. Override it only to try out a different configuration in a single run.'
+    required: false
+    default: .github/odm-config.env
+
+runs:
+  using: composite
+  steps:
+    - name: Load the configuration into the environment
+      # $GITHUB_ENV takes NAME=VALUE lines and nothing else, so the comments
+      # and blank lines that make the configuration file readable have to be
+      # dropped here rather than written into it. Anything else that is not a
+      # setting fails the step: a typo that silently left a variable unset
+      # would otherwise surface much later as an empty path or URL.
+      #
+      # The values are echoed so that a run log always records the
+      # configuration it ran with, without having to look up the file at that
+      # commit.
+      shell: bash
+      env:
+        CONFIG_FILE: ${{ inputs.config-file }}
+      run: |
+        set -euo pipefail
+
+        if [ ! -f "${CONFIG_FILE}" ]; then
+          echo "::error::No ODM configuration file at ${CONFIG_FILE}. Has the repository been checked out?"
+          exit 1
+        fi
+
+        echo "Loading ${CONFIG_FILE}:"
+        # `|| [ -n "${line}" ]` so that a last line without a trailing newline
+        # is still read.
+        while IFS= read -r line || [ -n "${line}" ]; do
+          case "${line}" in
+            '' | '#'*) continue ;;
+            [A-Za-z_]*=*) ;;
+            *)
+              echo "::error file=${CONFIG_FILE}::Expected a NAME=VALUE setting, a comment, or a blank line, got: ${line}"
+              exit 1
+              ;;
+          esac
+          echo "${line}" >> "$GITHUB_ENV"
+          echo "  ${line}"
+        done < "${CONFIG_FILE}"
