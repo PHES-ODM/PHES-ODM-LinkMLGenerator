@@ -31,19 +31,25 @@ the call means.
 | --- | --- | --- |
 | Endpoint | `POST /repos/{owner}/{repo}/dispatches` | `POST /repos/{owner}/{repo}/actions/workflows/{file}/dispatches` |
 | Dictionary branch | `label`, or a `dictionary_ref` in the payload | `label`, or a `dictionary_ref` input |
+| Caller has to know | the event type, `dictionary-updated` | the workflow's file name and its input names |
 | Token permission | Contents: write | Actions: write |
 | Meaning | "The dictionary changed" — this repository decides what to do about it | "Run this specific workflow with these arguments" |
 
 **Use `repository_dispatch`** for the job this page is about. The dictionary
 repository should not have to know the name of a workflow file here, or which
-branch the tables are published on — it only announces that something changed.
-That is what the rest of this page uses.
+branch the tables are published on — it only announces that something changed,
+and a bare dispatch with no payload regenerates from `label`. That is what the
+rest of this page uses.
 
-Reach for `workflow_dispatch` instead when the caller genuinely needs to pick
-the ref — for instance a script that generates the schema from a proposed
-dictionary branch to see what the change would do. See
+Choosing the ref is *not* what separates the two: a `repository_dispatch`
+payload can carry `dictionary_ref` just as well, and
 [Generate from another dictionary branch](#generate-from-another-dictionary-branch)
-at the end.
+does exactly that. What `workflow_dispatch` adds is that the two arguments are
+declared as workflow inputs, so GitHub renders them as a form on the Actions
+page and `gh workflow run` takes them as `-f` flags, rather than as free-form
+JSON in a `client_payload`. Reach for it when a *person* is driving the run —
+generating the schema from a proposed dictionary branch to see what the change
+would do, say — rather than a workflow firing it unattended.
 
 ## 1. Create a token
 
