@@ -4,6 +4,7 @@
 [![lint.yaml](https://github.com/PHES-ODM/PHES-ODM-LinkMLGenerator/actions/workflows/lint.yaml/badge.svg)](https://github.com/PHES-ODM/PHES-ODM-LinkMLGenerator/actions/workflows/lint.yaml)
 [![pytest.yaml](https://github.com/PHES-ODM/PHES-ODM-LinkMLGenerator/actions/workflows/pytest.yaml/badge.svg)](https://github.com/PHES-ODM/PHES-ODM-LinkMLGenerator/actions/workflows/pytest.yaml)
 [![docs.yaml](https://github.com/PHES-ODM/PHES-ODM-LinkMLGenerator/actions/workflows/docs.yaml/badge.svg)](https://github.com/PHES-ODM/PHES-ODM-LinkMLGenerator/actions/workflows/docs.yaml)
+[![generate-odm-schema.yaml](https://github.com/PHES-ODM/PHES-ODM-LinkMLGenerator/actions/workflows/generate-odm-schema.yaml/badge.svg)](https://github.com/PHES-ODM/PHES-ODM-LinkMLGenerator/actions/workflows/generate-odm-schema.yaml)
 <!-- badges: end -->
 
 This repository turns data dictionaries into [LinkML](https://linkml.io/)
@@ -63,6 +64,26 @@ pip install -e .
 This registers three CLI commands: `odm-linkmlgen-odm`, `odm-linkmlgen-odmv1`,
 and `odm-linkmlgen-nwss`. Pass `--help` to any of them, or see the
 [CLI reference](https://phes-odm.github.io/PHES-ODM-LinkMLGenerator/reference/cli/).
+
+## The current ODM v3 schema is already here
+
+If all you want is the ODM v3 LinkML schema, you do not need to install
+anything. It is committed at [schemas/odm_v3.yaml](schemas/odm_v3.yaml), kept up
+to date by the
+[Generate ODM Schema](https://github.com/PHES-ODM/PHES-ODM-LinkMLGenerator/actions/workflows/generate-odm-schema.yaml)
+GitHub Action, which regenerates it from the published dictionary tables weekly,
+whenever the generator changes, and on demand:
+
+```console
+curl -L -O \
+    "https://raw.githubusercontent.com/PHES-ODM/PHES-ODM-LinkMLGenerator/main/schemas/odm_v3.yaml"
+```
+
+Read on to generate it yourself — which you need to do for ODM v1, ODM v2, and
+NWSS, none of which are committed, and for a dictionary change that is not
+published yet. See
+[Continuous integration](https://phes-odm.github.io/PHES-ODM-LinkMLGenerator/reference/continuous-integration/)
+for what the action does and how to trigger it.
 
 ## Generate the ODM schemas
 

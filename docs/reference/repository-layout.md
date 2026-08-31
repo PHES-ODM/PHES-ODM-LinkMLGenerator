@@ -38,11 +38,21 @@ odm_linkmlgen/          # The Python package
     │                           # parts/sets CSV tables, or the Excel workbook
     └── nwss/                   # Where to put the NWSS Excel dictionaries
 
+schemas/                # The one generated schema that IS committed:
+│                       # odm_v3.yaml, written by the Generate ODM Schema
+│                       # workflow. Everything else the generator produces
+│                       # goes to the git-ignored gen/.
+│
 docs/                   # This documentation
 tests/                  # pytest unit tests
-.github/workflows/      # CI: lint.yaml, pytest.yaml, docs.yaml
+.github/workflows/      # CI: lint.yaml, pytest.yaml, docs.yaml, and
+│                       # generate-odm-schema.yaml
 mkdocs.yml              # Documentation site configuration
 ```
+
+See [Continuous integration](continuous-integration.md) for what each workflow
+does, and why `schemas/odm_v3.yaml` is the exception to "no generated output is
+committed".
 
 !!! note "No data dictionaries are committed"
 

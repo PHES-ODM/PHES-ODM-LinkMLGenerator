@@ -1,0 +1,127 @@
+# Continuous integration
+
+The four GitHub Actions workflows in
+[`.github/workflows/`](https://github.com/PHES-ODM/PHES-ODM-LinkMLGenerator/tree/main/.github/workflows).
+Three of them check the repository; the fourth generates the ODM v3 schema and
+commits it.
+
+| Workflow | File | Runs on | Does |
+| --- | --- | --- | --- |
+| Lint and Format | `lint.yaml` | Push to `main`, pull request | `ruff check` and `ruff format --diff` |
+| Tests | `pytest.yaml` | Push to `main`, pull request | `pytest tests/` |
+| Documentation | `docs.yaml` | Push to `main`, pull request, manual | `mkdocs build --strict`, then deploys to GitHub Pages from `main` |
+| Generate ODM Schema | `generate-odm-schema.yaml` | Weekly, manual, repository dispatch, push or pull request touching the generator | Regenerates and commits `schemas/odm_v3.yaml` |
+
+## Generate ODM Schema
+
+Regenerates the ODM v3 LinkML schema from the published dictionary tables and
+commits it to
+[`schemas/odm_v3.yaml`](https://github.com/PHES-ODM/PHES-ODM-LinkMLGenerator/blob/main/schemas/odm_v3.yaml),
+which is the copy other repositories should read. It is the automated form of
+[step 1 of Roll out a dictionary update](../how-to/dictionary-workflow.md#1-generate-the-linkml-schema).
+
+### What it does
+
+1. Resolves the requested ref of
+   [PHES-ODM/PHES-ODM](https://github.com/PHES-ODM/PHES-ODM) to a commit SHA,
+   and downloads `ODM_parts_v3.0.0.csv` and `ODM_sets_v3.0.0.csv` from
+   `dictionary-tables/` **at that SHA** — so the two tables cannot come from
+   different commits if the branch moves mid-run.
+2. Runs `odm-linkmlgen-odm --version 3`, teeing the log to `gen/generate.log`.
+3. Fails the run if the log holds an `ERROR`. This is the check
+   [step 3 of Generate the ODM schemas](../how-to/generate-odm-schemas.md) asks
+   you to do by hand, and it matters here for the same reason: a defect in the
+   source dictionary is logged and skipped rather than raised, so a run can exit
+   0 having produced a degraded schema. A `WARNING` is surfaced as an annotation
+   but is not fatal.
+4. Uploads the schema, both intermediate stages, and the log as the
+   `odm-v3-schema` artifact — on every run, including failed ones and pull
+   requests.
+5. Copies the schema to `schemas/odm_v3.yaml` and commits it, if it changed.
+
+### When it runs
+
+| Trigger | Why |
+| --- | --- |
+| `schedule`, Mondays 07:00 UTC | The dictionary is in another repository, which cannot notify this one. The schedule bounds how stale the committed schema can get at a week. |
+| `workflow_dispatch` | To pick a dictionary change up immediately, or to generate from another branch of the dictionary repository. |
+| `repository_dispatch`, type `dictionary-updated` | So the PHES-ODM repository — or anything else holding a token for this one — can request a regeneration the moment the tables change. |
+| `push` to `main` touching `odm_linkmlgen/**` or `requirements.txt` | The other half of the problem: the same dictionary produces a different schema once the generator changes. |
+| `pull_request` touching the same paths | Proves a generator change still produces a clean schema before it reaches `main`. Commits nothing; the artifact is there to diff. |
+
+### Inputs
+
+Only `workflow_dispatch` takes inputs.
+
+| Input | Default | What it does |
+| --- | --- | --- |
+| `dictionary_ref` | `label` | The branch, tag, or commit of PHES-ODM/PHES-ODM to read the tables from. |
+| `commit` | checked | Uncheck to generate and upload the artifact without committing. |
+
+```console
+gh workflow run generate-odm-schema.yaml \
+    --repo PHES-ODM/PHES-ODM-LinkMLGenerator \
+    -f dictionary_ref=some-dictionary-branch \
+    -f commit=false
+```
+
+To fire the repository dispatch from another repository or a script:
+
+```console
+gh api repos/PHES-ODM/PHES-ODM-LinkMLGenerator/dispatches \
+    -f event_type=dictionary-updated
+```
+
+### Why it commits rather than opening a pull request
+
+The schema is a build artefact, not authored content: reviewing it line by line
+is not useful, and a pull request nobody merges leaves the committed copy stale,
+which is the problem this workflow exists to solve. The `ERROR` check is what
+stands in for review. A run that regenerates an unchanged schema commits
+nothing — the generator writes no timestamps, so identical inputs produce an
+identical file, and the weekly run is a no-op most weeks.
+
+### What it does not do
+
+Only ODM v3 is generated and committed. ODM v1, ODM v2, and the NWSS schemas
+are still local runs — v2 is superseded, and the NWSS dictionaries are Excel
+workbooks, two of them not public. Steps 2 to 5 of
+[Roll out a dictionary update](../how-to/dictionary-workflow.md) — copying the
+schema to the consuming repositories, and regenerating the LinkML-Map schemas
+and the validation assets — are also still manual.
+
+### Configuring it
+
+The paths and versions are `env` values at the top of the workflow, so
+retargeting it does not mean rewriting the steps:
+
+| Variable | Default |
+| --- | --- |
+| `ODM_VERSION` | `3` |
+| `DICTIONARY_REPO` | `PHES-ODM/PHES-ODM` |
+| `DICTIONARY_DIR` | `dictionary-tables` |
+| `PARTS_CSV` | `ODM_parts_v3.0.0.csv` |
+| `SETS_CSV` | `ODM_sets_v3.0.0.csv` |
+| `DOWNLOAD_DIR` | `gen/dictionary-download` |
+| `SCHEMA_PATH` | `schemas/odm_v3.yaml` |
+
+The dictionary tables are downloaded under `gen/`, which is git-ignored, so the
+only thing a run adds to the working tree is the schema itself. `DOWNLOAD_DIR`
+must not be the `--output-dir`, which the generator clears before reading from
+it.
+
+The commit needs `contents: write`, which the workflow grants to its own job.
+If **Settings > Actions > General > Workflow permissions** is set to
+"Read repository contents and packages permissions", that job-level grant is
+still honoured, but branch protection on `main` is not: a protected `main`
+rejects the push unless `github-actions[bot]` is allowed to bypass it.
+
+## Related
+
+- [Roll out a dictionary update](../how-to/dictionary-workflow.md) — the whole
+  dictionary-change process, of which this workflow is the first step
+- [Generate the ODM schemas](../how-to/generate-odm-schemas.md) — the same
+  generation run, done locally
+- [Output layout](output-layout.md) — what the run writes to `--output-dir`
+- [Contributing](../how-to/contributing.md) — running the lint and the tests
+  locally before they run in CI

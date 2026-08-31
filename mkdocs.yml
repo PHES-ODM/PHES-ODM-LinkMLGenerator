@@ -110,6 +110,7 @@ nav:
       - Output layout: reference/output-layout.md
       - Repository layout: reference/repository-layout.md
       - The source data dictionaries: reference/data-dictionaries.md
+      - Continuous integration: reference/continuous-integration.md
       - Python API: reference/api.md
   - Explanation:
       - How it works: explanation/how-it-works.md

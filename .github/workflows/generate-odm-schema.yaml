@@ -1,0 +1,207 @@
+name: Generate ODM Schema
+
+# Regenerates the ODM v3 LinkML schema from the published parts and sets CSV
+# dictionary tables, and commits the result to schemas/odm_v3.yaml so that the
+# current schema is always available from this repository — see
+# docs/how-to/dictionary-workflow.md, which is the manual version of this job.
+#
+# The dictionary lives in a different repository, so nothing here can be
+# triggered by a dictionary change directly. The schedule catches an updated
+# dictionary within a week; repository_dispatch lets the PHES-ODM repository
+# (or anyone with a token) request a regeneration the moment the tables change;
+# and the push filter catches the other half of the problem — a change to the
+# generator itself producing a different schema from the same dictionary.
+on:
+  workflow_dispatch:
+    inputs:
+      dictionary_ref:
+        description: 'Branch, tag, or SHA of PHES-ODM/PHES-ODM to read the dictionary tables from'
+        required: false
+        default: 'label'
+      commit:
+        description: 'Commit the regenerated schema. Uncheck to generate and inspect the artifact only.'
+        type: boolean
+        required: false
+        default: true
+  schedule:
+    # Mondays at 07:00 UTC.
+    - cron: '0 7 * * 1'
+  repository_dispatch:
+    types: [ dictionary-updated ]
+  push:
+    branches: [ main ]
+    paths:
+      - 'odm_linkmlgen/**'
+      - 'requirements.txt'
+      - '.github/workflows/generate-odm-schema.yaml'
+  pull_request:
+    branches: [ main ]
+    paths:
+      - 'odm_linkmlgen/**'
+      - 'requirements.txt'
+      - '.github/workflows/generate-odm-schema.yaml'
+
+# Two runs committing to main at once would collide on the push. Queue them
+# instead of cancelling, so a run that has already regenerated the schema is
+# not thrown away; pull request runs commit nothing, so those can be cancelled.
+concurrency:
+  group: generate-odm-schema-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+env:
+  ODM_VERSION: '3'
+  # Where the dictionary tables are published. The v3 tables are on the `label`
+  # branch of the PHES-ODM repository.
+  DICTIONARY_REPO: PHES-ODM/PHES-ODM
+  DICTIONARY_DIR: dictionary-tables
+  PARTS_CSV: ODM_parts_v3.0.0.csv
+  SETS_CSV: ODM_sets_v3.0.0.csv
+  # Where the downloaded tables are staged. Under gen/, which is git-ignored,
+  # and not the --output-dir, which the generator clears before reading them.
+  DOWNLOAD_DIR: gen/dictionary-download
+  # The committed location of the generated schema. This is the path other
+  # repositories should read the ODM v3 schema from.
+  SCHEMA_PATH: schemas/odm_v3.yaml
+
+jobs:
+  generate:
+    name: Generate and commit
+    runs-on: ubuntu-latest
+    permissions:
+      # To push the regenerated schema back to main.
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+          cache: pip
+          cache-dependency-path: requirements.txt
+
+      - name: Install the generator
+        run: pip install -r requirements.txt && pip install -e . --no-deps
+
+      - name: Resolve the dictionary ref
+        id: dictionary
+        # workflow_dispatch can point the run at another branch or tag of the
+        # dictionary repository; every other trigger uses the default. The
+        # resolved SHA goes into the commit message, so a committed schema can
+        # always be traced back to the exact tables it came from.
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REQUESTED_REF: ${{ inputs.dictionary_ref || 'label' }}
+        run: |
+          set -euo pipefail
+          sha=$(gh api "repos/${DICTIONARY_REPO}/commits/${REQUESTED_REF}" --jq '.sha')
+          echo "ref=${REQUESTED_REF}" >> "$GITHUB_OUTPUT"
+          echo "sha=${sha}" >> "$GITHUB_OUTPUT"
+          echo "Using ${DICTIONARY_REPO}@${REQUESTED_REF} (${sha})"
+
+      - name: Download the dictionary tables
+        # Pinned to the resolved SHA rather than the branch, so the two tables
+        # cannot come from different commits if the branch moves mid-run. They
+        # go under gen/, which is git-ignored, so the only thing this run adds
+        # to the working tree is the schema itself.
+        env:
+          DICTIONARY_SHA: ${{ steps.dictionary.outputs.sha }}
+        run: |
+          set -euo pipefail
+          base="https://raw.githubusercontent.com/${DICTIONARY_REPO}/${DICTIONARY_SHA}/${DICTIONARY_DIR}"
+          mkdir -p "${DOWNLOAD_DIR}"
+          curl -sSfL -o "${DOWNLOAD_DIR}/${PARTS_CSV}" "${base}/${PARTS_CSV}"
+          curl -sSfL -o "${DOWNLOAD_DIR}/${SETS_CSV}" "${base}/${SETS_CSV}"
+          wc -l "${DOWNLOAD_DIR}"/*.csv
+
+      - name: Generate the schema
+        # --output-dir must not be the directory the CSVs were downloaded to:
+        # the generator clears it before reading them. Errors in the source
+        # dictionary are logged and skipped rather than raised, so the exit
+        # status alone does not tell us whether the run produced a usable
+        # schema — hence the log, which the next step checks. The generator
+        # logs to stdout, so the redirect is only for anything underneath it
+        # that writes to stderr.
+        run: |
+          set -euo pipefail
+          odm-linkmlgen-odm \
+            --version "${ODM_VERSION}" \
+            --parts-file "${DOWNLOAD_DIR}/${PARTS_CSV}" \
+            --sets-file "${DOWNLOAD_DIR}/${SETS_CSV}" \
+            --output-dir "gen/odm_v${ODM_VERSION}" \
+            2>&1 | tee gen/generate.log
+
+      - name: Check the log for errors
+        # A run that exits 0 can still have produced a degraded schema: the
+        # generator logs a defect in the source dictionary and carries on
+        # rather than raising, so one bad part does not cost the whole run.
+        # An ERROR therefore fails the job and stops the commit. A WARNING is
+        # surfaced as an annotation but is not fatal — warnings are expected in
+        # a normal run of a dictionary this size.
+        run: |
+          set -uo pipefail
+          # The log format puts the level first on the line, so anchoring the
+          # pattern avoids matching the word inside a message body.
+          if grep -n '^WARNING' gen/generate.log; then
+            echo "::warning::The generator logged warnings; see the run log and the uploaded artifact."
+          fi
+          if grep -n '^ERROR' gen/generate.log; then
+            echo "::error::The generator logged errors, so the schema is not trustworthy and was not committed."
+            exit 1
+          fi
+          echo "No errors logged."
+
+      - name: Upload the schema and the intermediate stages
+        # Kept for every run, including pull requests and failed runs, so a bad
+        # schema can be diffed against the committed one without a local run.
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: odm-v${{ env.ODM_VERSION }}-schema
+          path: |
+            gen/odm_v${{ env.ODM_VERSION }}/
+            gen/generate.log
+          if-no-files-found: warn
+
+      - name: Copy the schema to its committed location
+        run: |
+          set -euo pipefail
+          mkdir -p "$(dirname "${SCHEMA_PATH}")"
+          cp "gen/odm_v${ODM_VERSION}/linkml/odm_v${ODM_VERSION}.yaml" "${SCHEMA_PATH}"
+
+      - name: Commit the schema
+        # Skipped on pull requests, and on a dispatch that asked not to commit.
+        # The generator's output is deterministic — no timestamps — so an
+        # unchanged dictionary and an unchanged generator produce no diff, and
+        # the scheduled run is a no-op.
+        # `inputs.commit` is an empty string on every trigger other than
+        # workflow_dispatch, and GitHub compares that equal to false, so the
+        # event has to be checked before the input is consulted.
+        if: >-
+          github.event_name != 'pull_request' &&
+          (github.event_name != 'workflow_dispatch' || inputs.commit)
+        env:
+          DICTIONARY_REF: ${{ steps.dictionary.outputs.ref }}
+          DICTIONARY_SHA: ${{ steps.dictionary.outputs.sha }}
+        run: |
+          set -euo pipefail
+          # --porcelain covers both a modified schema and a brand new one,
+          # which `git diff` on its own would not see.
+          if [ -z "$(git status --porcelain -- "${SCHEMA_PATH}")" ]; then
+            echo "The schema is unchanged; nothing to commit."
+            echo "The regenerated schema is identical to the committed one." >> "$GITHUB_STEP_SUMMARY"
+            exit 0
+          fi
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add "${SCHEMA_PATH}"
+          git commit -m "Regenerate the ODM v${ODM_VERSION} LinkML schema" \
+            -m "Generated from ${DICTIONARY_REPO}@${DICTIONARY_REF} (${DICTIONARY_SHA}), tables ${PARTS_CSV} and ${SETS_CSV}." \
+            -m "Generated by the ${GITHUB_WORKFLOW} workflow, run ${GITHUB_RUN_ID}."
+          # The branch may have moved while the schema was being generated.
+          # checkout leaves HEAD detached, so this rebases the new commit onto
+          # whatever the branch is now and pushes it there by name.
+          git fetch origin "${GITHUB_REF_NAME}"
+          git rebase "origin/${GITHUB_REF_NAME}"
+          git push origin "HEAD:${GITHUB_REF_NAME}"
+          echo "### Committed an updated \`${SCHEMA_PATH}\`" >> "$GITHUB_STEP_SUMMARY"

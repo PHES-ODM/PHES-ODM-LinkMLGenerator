@@ -9,19 +9,66 @@ The [final section](#5-update-phes-odm-validation) covers updating the
 validation repository, which does not use the LinkML schema but does use the
 `parts` and `sets` tables.
 
-!!! note "This should eventually be automated"
+!!! tip "Step 1 is automated"
 
-    These steps should eventually be run by a GitHub Action. We may also want
-    to store a single copy of the ODM v3 LinkML schema at a publicly accessible
-    location, rather than a copy per repository.
+    The
+    [Generate ODM Schema](https://github.com/PHES-ODM/PHES-ODM-LinkMLGenerator/actions/workflows/generate-odm-schema.yaml)
+    GitHub Action already does step 1 for ODM v3, and commits the result to
+    [`schemas/odm_v3.yaml`](https://github.com/PHES-ODM/PHES-ODM-LinkMLGenerator/blob/main/schemas/odm_v3.yaml).
+    Once the dictionary change has been merged into the PHES-ODM repository,
+    take the schema from there rather than generating it yourself — see
+    [Let the GitHub Action generate it](#let-the-github-action-generate-it)
+    below. Steps 2 to 5 are still manual.
 
 ## 1. Generate the LinkML schema
 
-Follow [Generate the ODM schemas](generate-odm-schemas.md), using the updated
-`ODM_parts_v3.0.0.csv` and `ODM_sets_v3.0.0.csv` dictionary tables — the same
-files the change was made to. (The `v3 ODM dictionary.xlsx` workbook can be used
-instead, via `--dictionary-file`, if that is the form the update reached you
-in.) The output schema is written to `gen/odm_v3/linkml/odm_v3.yaml`.
+### Let the GitHub Action generate it
+
+The **Generate ODM Schema** workflow regenerates the ODM v3 schema from the
+published `ODM_parts_v3.0.0.csv` and `ODM_sets_v3.0.0.csv` tables and commits it
+to `schemas/odm_v3.yaml`. It runs weekly, on any change to the generator itself,
+and on demand — so as soon as the dictionary change is on the `label` branch of
+[PHES-ODM/PHES-ODM](https://github.com/PHES-ODM/PHES-ODM/tree/label/dictionary-tables),
+you can pick the schema up instead of generating it.
+
+Trigger it from the
+[Actions tab](https://github.com/PHES-ODM/PHES-ODM-LinkMLGenerator/actions/workflows/generate-odm-schema.yaml)
+with **Run workflow**, or from the command line:
+
+```console
+gh workflow run generate-odm-schema.yaml \
+    --repo PHES-ODM/PHES-ODM-LinkMLGenerator
+```
+
+Two optional inputs are available:
+
+| Input | Default | What it does |
+| --- | --- | --- |
+| `dictionary_ref` | `label` | The branch, tag, or commit of PHES-ODM/PHES-ODM to read the tables from. Point it at a branch to see what a proposed dictionary change would do to the schema. |
+| `commit` | checked | Uncheck to generate the schema and upload it as a run artifact without committing it. |
+
+The run fails, and commits nothing, if the generator logged an `ERROR` — the
+same check [step 3 of Generate the ODM schemas](generate-odm-schemas.md) asks
+you to do by hand. Either way the schema and both intermediate stages are
+uploaded as the run's `odm-v3-schema` artifact, so a schema you did not expect
+can be inspected without a local run.
+
+Once it has run, `schemas/odm_v3.yaml` on `main` is the schema to copy in step
+2:
+
+```console
+curl -L -O \
+    "https://raw.githubusercontent.com/PHES-ODM/PHES-ODM-LinkMLGenerator/main/schemas/odm_v3.yaml"
+```
+
+### Or generate it locally
+
+Needed for ODM v2, and for a dictionary change that is not on the `label`
+branch yet. Follow [Generate the ODM schemas](generate-odm-schemas.md), using
+the updated `ODM_parts_v3.0.0.csv` and `ODM_sets_v3.0.0.csv` dictionary tables —
+the same files the change was made to. (The `v3 ODM dictionary.xlsx` workbook can
+be used instead, via `--dictionary-file`, if that is the form the update reached
+you in.) The output schema is written to `gen/odm_v3/linkml/odm_v3.yaml`.
 
 ## 2. Upload the schema to the repositories
 
@@ -85,6 +132,8 @@ new `parts.csv` and `sets.csv` files.
 
 - [Generate the ODM schemas](generate-odm-schemas.md) — the generation step in
   full, including where the published dictionary tables live
+- [Continuous integration](../reference/continuous-integration.md) — the
+  **Generate ODM Schema** workflow, and the other three workflows
 - [The source data dictionaries](../reference/data-dictionaries.md) — which
   tables and columns a dictionary change can affect
 - [Troubleshooting](troubleshooting.md) — when the regenerated schema is not
