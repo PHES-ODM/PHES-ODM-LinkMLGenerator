@@ -1,13 +1,13 @@
 # Roll out a dictionary update
 
 What to do whenever the ODM data dictionary changes — that is, whenever the
-`parts` or `sets` sheets change. It covers regenerating the ODM LinkML schema,
+`parts` or `sets` tables change. It covers regenerating the ODM LinkML schema,
 copying that schema to the repositories that need it, and regenerating the
 LinkML-Map schemas that the PHES-ODM-Mapper uses.
 
 The [final section](#5-update-phes-odm-validation) covers updating the
 validation repository, which does not use the LinkML schema but does use the
-`parts` and `sets` sheets.
+`parts` and `sets` tables.
 
 !!! note "This should eventually be automated"
 
@@ -17,10 +17,11 @@ validation repository, which does not use the LinkML schema but does use the
 
 ## 1. Generate the LinkML schema
 
-Follow [Generate the ODM schemas](generate-odm-schemas.md). Generating the
-schema requires either the `v3 ODM dictionary.xlsx` file, or the `parts.csv`
-and `sets.csv` files. The output schema is written to
-`gen/odm_v3/linkml/odm_v3.yaml`.
+Follow [Generate the ODM schemas](generate-odm-schemas.md), using the updated
+`ODM_parts_v3.0.0.csv` and `ODM_sets_v3.0.0.csv` dictionary tables — the same
+files the change was made to. (The `v3 ODM dictionary.xlsx` workbook can be used
+instead, via `--dictionary-file`, if that is the form the update reached you
+in.) The output schema is written to `gen/odm_v3/linkml/odm_v3.yaml`.
 
 ## 2. Upload the schema to the repositories
 
@@ -61,8 +62,9 @@ the following locations (be sure to delete the previous mappers):
 
 ## 5. Update PHES-ODM-Validation
 
-Copy `parts.csv` and `sets.csv` to the appropriate directory on
-PHES-ODM-Validation. For version 3.0.1, copy them to
+Copy the parts and sets tables — as `parts.csv` and `sets.csv`, which is what
+the run's own `gen/odm_v3/dictionary/` directory already holds them as — to the
+appropriate directory on PHES-ODM-Validation. For version 3.0.1, copy them to
 [**PHES-ODM-Validation**/assets/dictionary/v3.0.1/](https://github.com/PHES-ODM/PHES-ODM-Validation/tree/main/assets/dictionary/v3.0.1).
 
 Install the PHES-ODM-Validation library by following its
@@ -82,8 +84,8 @@ new `parts.csv` and `sets.csv` files.
 ## Related
 
 - [Generate the ODM schemas](generate-odm-schemas.md) — the generation step in
-  full, including generating from CSV instead of the workbook
+  full, including where the published dictionary tables live
 - [The source data dictionaries](../reference/data-dictionaries.md) — which
-  sheets and columns a dictionary change can affect
+  tables and columns a dictionary change can affect
 - [Troubleshooting](troubleshooting.md) — when the regenerated schema is not
   what you expected

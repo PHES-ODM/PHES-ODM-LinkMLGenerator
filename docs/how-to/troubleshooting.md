@@ -17,13 +17,13 @@ Work through them in order.
 
 ### 1. Check `dictionary/*.csv`
 
-Did the sheet extract as expected?
+Did the parts and sets tables land there as expected?
 
 The usual problem here is **NA handling**: a value such as `NA`, `None`, or
 `null` was read as an empty cell. These are real permissible values in the ODM,
 not missing data. `extract_sheets` takes per-column `na_values` for exactly this
 reason — see
-[step 2 of the ODM pipeline](../reference/pipeline-steps.md#odm-2-extract-or-copy-the-dictionary-sheets-to-csv).
+[step 2 of the ODM pipeline](../reference/pipeline-steps.md#odm-2-copy-or-extract-the-dictionary-to-csv).
 
 ### 2. Check `schemasheets/*.tsv`
 
@@ -35,7 +35,7 @@ enumeration in question and look at the row:
   to `string`?
 
 A range that fell back to `string` means the range could not be resolved. For
-ODM that is usually a part marked `categorical` in the parts sheet whose
+ODM that is usually a part marked `categorical` in the parts file whose
 `mmaSet` cell — the only place the enumeration name comes from — is empty. Check
 the part's row in `dictionary/parts.csv`; the `mmaSet` column is carried through
 to the class TSV as well, so you can confirm it there.
@@ -51,7 +51,7 @@ enumeration is missing from the `Value Sets` sheet — check the
 
 ### 3. Re-run only the step you are working on
 
-Against the CSVs already in `dictionary/`, rather than rebuilding from Excel:
+Against the CSVs already in `dictionary/`, rather than doing a full run:
 
 ```console
 python -m odm_linkmlgen.odm.make_odm_ss_classes \
@@ -91,7 +91,8 @@ by automated tests:
 ```console
 cp gen/odm_v3/linkml/odm_v3.yaml /tmp/odm_v3.before.yaml
 # ... make your change ...
-odm-linkmlgen-odm --version 3 --dictionary-file ... --output-dir "gen/odm_v3"
+odm-linkmlgen-odm --version 3 --parts-file ... --sets-file ... \
+    --output-dir "gen/odm_v3"
 diff /tmp/odm_v3.before.yaml gen/odm_v3/linkml/odm_v3.yaml
 ```
 

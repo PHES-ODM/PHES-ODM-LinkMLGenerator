@@ -44,8 +44,9 @@ The tests cover the **pure helper functions** — `general_utils`, `schema_utils
 `odm_utils`, and `nwss_utils` — by constructing small DataFrames inline.
 
 The extraction modules and the two end-to-end pipelines are **not** covered,
-because both depend on Excel dictionaries that cannot be committed (NWSS) or are
-large and awkward to fixture (ODM). If you change an extraction module, verify
+because both depend on data dictionaries that are not in the repository — the
+NWSS workbooks cannot be committed, and the ODM dictionary tables are large and
+awkward to fixture. If you change an extraction module, verify
 it by regenerating the schema and diffing the output — see
 [Troubleshooting](troubleshooting.md#diffing-against-a-known-good-schema).
 

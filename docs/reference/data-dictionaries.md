@@ -1,7 +1,7 @@
 # The source data dictionaries
 
-What the generator reads out of the two source Excel workbooks: which sheets,
-which columns, and how each encodes its data model.
+What the generator reads out of the two source dictionaries: which files, which
+columns, and how each encodes its data model.
 
 Why they are shaped this way, and what that shape costs, is in
 [Why the dictionaries are hard to read](../explanation/data-dictionaries.md).
@@ -10,14 +10,22 @@ with what it reads.
 
 ## The ODM data dictionary
 
-The PHES-ODM data dictionary is an Excel workbook that authoritatively defines
-every table, field, and permissible value in the ODM. The generator reads two of
-its sheets:
+The PHES-ODM data dictionary authoritatively defines every table, field, and
+permissible value in the ODM. It is
+[published as a set of CSV tables](../how-to/generate-odm-schemas.md#get-the-dictionary-tables),
+of which the generator reads two:
 
-- **parts** — one row per "part". A part can be a table, a column, an
-  enumeration, or a permissible value of an enumeration. This sheet defines all
-  classes and slots, along with their data types and constraints.
-- **sets** — the permissible values for many (not all) of the enumerations.
+- **parts** (`ODM_parts_v3.0.0.csv`) — one row per "part". A part can be a
+  table, a column, an enumeration, or a permissible value of an enumeration.
+  This file defines all classes and slots, along with their data types and
+  constraints.
+- **sets** (`ODM_sets_v3.0.0.csv`) — the permissible values for many (not all)
+  of the enumerations.
+
+The same two tables are also distributed as the **parts** and **sets** sheets of
+the ODM Excel data dictionary, and the generator
+[accepts that workbook too](../how-to/generate-odm-schemas.md#generate-from-the-excel-dictionary-instead).
+Everything below describes the data, and holds for either form.
 
 ### The columns that carry meaning
 
@@ -35,7 +43,7 @@ its sheets:
 
 ### Table membership
 
-Each ODM table has a column in the parts sheet **named after the table**, plus
+Each ODM table has a column in the parts file **named after the table**, plus
 companion `{table}Required` and `{table}Order` columns. A row belongs to a table
 when the table's column contains one of three tags:
 
@@ -44,7 +52,7 @@ when the table's column contains one of three tags:
 - `header` — the row is an ordinary column of the table
 
 So every column of the `measures` table has `pK`, `fK`, or `header` in the parts
-sheet column named `measures`, and its position in the table comes from
+file column named `measures`, and its position in the table comes from
 `measuresOrder`.
 
 The same part can belong to several tables with different constraints in each —
@@ -54,7 +62,7 @@ see
 #### Discovering the tables
 
 The generator **does not hardcode the list of ODM tables.**
-`odm_utils.odm_get_available_class_names` finds them by scanning the parts sheet
+`odm_utils.odm_get_available_class_names` finds them by scanning the parts file
 column headers for any name ending in `Order` — the value of
 `odm_utils.ODM_PARTS_COLUMN_CLASS_TAG` — and stripping that suffix. So
 `measuresOrder` implies a table named `measures`.
@@ -75,18 +83,18 @@ from the dictionary*, never derived from the part ID.
 #### Where the permissible values live
 
 Naming the enumeration and defining its values are two different jobs, done by
-two different sheets.
+two different files.
 
 If the enumeration is defined in the **sets** sheet, `setID` is the enumeration
 name and `partID` is a permissible value. This is the common case, and the one
-[step 3](pipeline-steps.md#odm-3-extract-the-enumerations-defined-in-the-sets-sheet)
+[step 3](pipeline-steps.md#odm-3-extract-the-enumerations-defined-in-the-sets-file)
 reads.
 
-Some enumerations are instead defined in the parts sheet itself: their
+Some enumerations are instead defined in the parts file itself: their
 permissible values are the rows whose `partType` equals the enumeration's name.
 This is `partType`'s only job — it is how a permissible-value row says which
 enumeration it belongs to — and it is what
-[step 4](pipeline-steps.md#odm-4-extract-the-enumerations-defined-in-the-parts-sheet)
+[step 4](pipeline-steps.md#odm-4-extract-the-enumerations-defined-in-the-parts-file)
 reads.
 
 #### When no enumeration is named
@@ -103,15 +111,16 @@ Some ODM slots must accept a missingness enumeration — `genMissingnessSet`,
 value can be reported as missing for a documented reason rather than just being
 absent.
 
-The parts sheet records this in the `missingnessSet` column. No Schemasheets
+The parts file records this in the `missingnessSet` column. No Schemasheets
 column expresses "add this range as well", so it is applied afterwards, directly
 on the `SchemaDefinition`, by `odm_utils.add_missingness_set` — see
 [post-processing workarounds](../explanation/how-it-works.md#missingness-sets-odm-only).
 
 ## The NWSS data dictionaries
 
-NWSS is published as **five separate dictionaries**, each an Excel workbook, each
-producing its own independent LinkML schema. `make_nwss` runs the whole pipeline
+Unlike the ODM dictionary, NWSS is published only as Excel. It comes as **five
+separate dictionaries**, each an Excel workbook, each producing its own
+independent LinkML schema. `make_nwss` runs the whole pipeline
 once per dictionary you supply.
 
 | Dictionary type | Metadata sheet name | Publicly available |

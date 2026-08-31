@@ -1,7 +1,7 @@
 # Inside an ODM run
 
-The instructions for actually producing the schemas — obtaining the dictionary,
-where to put it, and the commands for v1, v2, and v3 — are in
+The instructions for actually producing the schemas — obtaining the dictionary
+tables, where to put them, and the commands for v3, v2, and v1 — are in
 [Generate the ODM schemas](../how-to/generate-odm-schemas.md). This page covers
 how an ODM run differs by version, and the one ODM-specific failure mode worth
 knowing about in advance.
@@ -13,7 +13,7 @@ They share a name and nothing else:
 | | ODM v1 | ODM v2+ |
 | --- | --- | --- |
 | Command | `odm-linkmlgen-odmv1` | `odm-linkmlgen-odm` |
-| Source | Schemasheets TSVs bundled in the package | An Excel data dictionary you supply |
+| Source | Schemasheets TSVs bundled in the package | A data dictionary you supply — the published CSV tables, or the Excel workbook |
 | Stages run | Stage 3 only | All three |
 | Output | `linkml/odm_v1.yaml` and nothing else | `dictionary/`, `schemasheets/`, and `linkml/` |
 
@@ -23,8 +23,8 @@ copied into `--output-dir`. So a change to the v1 schema is an edit to those
 TSVs, not to any extraction code — nothing in `odm_linkmlgen/odm/` runs for v1
 at all.
 
-For v2 and above, the parts sheet of the Excel dictionary drives everything; how
-it encodes the data model is described in
+For v2 and above, the dictionary's parts file drives everything; how it encodes
+the data model is described in
 [The source data dictionaries](../reference/data-dictionaries.md#the-odm-data-dictionary).
 The full v2+ output layout, including the asymmetry in how enumeration TSVs are
 grouped, is in the
@@ -48,7 +48,7 @@ gen/odm_v3/linkml/         # Stage 3 output
 
 Those three directories *are* the pipeline. Take them in order.
 
-### Stage 1 — Excel becomes CSV
+### Stage 1 — the dictionary becomes the run's own CSVs
 
 ```console
 ls gen/odm_v3/dictionary/
@@ -58,10 +58,12 @@ ls gen/odm_v3/dictionary/
 parts.csv    sets.csv
 ```
 
-Two sheets, saved verbatim as CSV. Nothing has been interpreted yet; this stage
-exists so that no later step ever has to open an Excel file, and so that you can
+The two dictionary tables under fixed names — copied verbatim from the CSVs you
+passed, or saved verbatim from the workbook's two sheets. Nothing has been
+interpreted yet; this stage exists so that no later step has to care which form
+the dictionary arrived in, and so that you can
 [re-run a later step](../how-to/python-api.md#re-run-a-single-step) in a second
-instead of re-parsing the workbook each time.
+against one fixed input.
 
 `parts.csv` is the data model. One row per part, and — after the descriptive
 columns — a group of three columns per ODM table: `samples`, `samplesRequired`,
@@ -75,7 +77,7 @@ enumeration and `partID` the permissible value in it.
 
 Search `parts.csv` for a `partID` of `NA` or `null`. Both are there, as literal
 text — they are real ODM parts, and reading them as missing values is exactly
-what [step 2's `na_values`](../reference/pipeline-steps.md#odm-2-extract-or-copy-the-dictionary-sheets-to-csv)
+what [step 2's `na_values`](../reference/pipeline-steps.md#odm-2-copy-or-extract-the-dictionary-to-csv)
 prevents.
 
 ### Stage 2 — CSV becomes Schemasheets TSV
@@ -133,13 +135,13 @@ A slot written as `any_of: [string, genMissingnessSet]` had a plain `string`
 range in stage 2 (just `string`). The second range (`genMissingnessSet`) was
 added afterwards, straight onto the `SchemaDefinition`, by [step
 10](../reference/pipeline-steps.md#odm-10-add-the-missingness-sets) — the parts
-sheet records it in a `missingnessSet` column that no Schemasheets column can
+file records it in a `missingnessSet` column that no Schemasheets column can
 express.
 
 ## Enumeration names come from the dictionary
 
 The ODM-specific thing to know before your first v2+ run: a categorical slot's
-enumeration name is read from the part's `mmaSet` column in the parts sheet, and
+enumeration name is read from the part's `mmaSet` column in the parts file, and
 the dictionary is the only authority on it. The generator does not derive, guess,
 or patch names.
 
@@ -159,4 +161,4 @@ why an unexpected `string` range is worth chasing back to the dictionary.
 - [ODM pipeline steps](../reference/pipeline-steps.md#odm-pipeline-steps) — what
   each of the eleven steps does
 - [The ODM data dictionary](../reference/data-dictionaries.md#the-odm-data-dictionary)
-  — how the parts sheet encodes the data model
+  — how the parts file encodes the data model

@@ -45,9 +45,9 @@ standard-library features newer than that.
 ## A note on testing
 
 The tests cover the pure helper functions only. The extraction modules and the
-two end-to-end pipelines are **not** covered, because both depend on Excel
-dictionaries that cannot be committed (NWSS) or are large and awkward to fixture
-(ODM).
+two end-to-end pipelines are **not** covered, because both depend on data
+dictionaries that are not in the repository — the NWSS workbooks cannot be
+committed, and the ODM dictionary tables are large and awkward to fixture.
 
 So if you change an extraction module, verify it by regenerating the schema and
 diffing the output against the previous version, and account for every line of

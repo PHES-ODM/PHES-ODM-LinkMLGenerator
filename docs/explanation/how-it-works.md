@@ -65,9 +65,9 @@ This project **never writes those TSVs by hand**.
 
 Well — with one exception. ODM v1's Schemasheets are hand-written and bundled at
 `odm_linkmlgen/data/odm_v1/schemasheets/`, which is why generating the v1 schema
-needs no Excel file and runs only the final stage.
+needs no dictionary at all and runs only the final stage.
 
-For everything else, the generator converts the source Excel dictionaries into
+For everything else, the generator converts the source dictionaries into
 Schemasheets TSVs, which is what nearly all the code in `odm_linkmlgen/` does.
 The `>` header row is added by
 `odm_linkmlgen.utils.schemasheets_utils.add_schemasheets_header`, and each
@@ -76,8 +76,8 @@ extraction module declares its own column-to-LinkML mapping in a module-level
 
 So the project's actual job is narrower than "generate a LinkML schema". It is:
 
-> Read an irregular Excel data dictionary, and write out a set of regular TSV
-> files that Schemasheets can understand.
+> Read an irregular data dictionary, and write out a set of regular TSV files
+> that Schemasheets can understand.
 
 ### Why not generate the YAML directly?
 
@@ -101,11 +101,11 @@ which is what [post-processing](#post-processing-workarounds) is for.
 Both the ODM and NWSS generators have the same three stages:
 
 ```text
-   Excel data dictionary
+   The data dictionary
             │
-            │  1. extract_sheets
+            │  1. copy the CSV tables, or extract_sheets
             ▼
-   dictionary/*.csv          One CSV per source sheet
+   dictionary/*.csv          One CSV per source table
             │
             │  2. the extraction modules (make_*_ss_*.py)
             ▼
@@ -121,10 +121,18 @@ For what each individual step does, see the
 
 ### Stage 1 — extract
 
-`general_utils.extract_sheets` saves the required Excel sheets as CSV files, and
-does nothing else. No interpretation happens here.
+Stage 1 puts each source table in `dictionary/`, as one CSV under a fixed name,
+and does nothing else. No interpretation happens here.
 
-Two reasons for a stage that appears to do nothing:
+The ODM dictionary is published as CSV already (`--parts-file` and
+`--sets-file`), so on that path the stage is a file copy: nothing needs
+re-parsing, since each later step reads with `get_dictionary_read_kwargs`
+itself. It is still a stage rather than nothing, because its point is to give
+every later step **one fixed input at one fixed path** — not merely to open a
+workbook. Given a workbook instead (`--dictionary-file`, and always for NWSS),
+`general_utils.extract_sheets` saves the required sheets as those same CSVs.
+
+Two reasons for a stage that appears to do so little:
 
 - **It keeps the rest of the pipeline free of Excel-specific concerns.** Only
   `extract_sheets` and the `get_na_values` helper it reads headers with know that
@@ -142,15 +150,8 @@ a file's header row, covering every column so that the file can be read with
 pandas' blanket defaults switched off. For the ODM dictionary, the read arguments
 that use it — the NA values, plus the converters that keep a `partID` or `label` a
 string — are built in one place, `odm_utils.get_dictionary_read_kwargs`, and
-applied again at every later read of the extracted CSVs.
-
-The ODM generator can also be given the parts and sets sheets as CSV files
-instead of a workbook (`--parts-file` and `--sets-file`). That skips the Excel
-extraction, but not the stage: the files are still written to `dictionary/`,
-because the point of stage 1 is to give every later step one fixed input at one
-fixed path — not merely to open a workbook. Nothing needs re-parsing on that
-path, since each later step reads with `get_dictionary_read_kwargs` itself, so
-the files are copied across unchanged.
+applied at every read of a dictionary file, the CSVs under `dictionary/`
+included.
 
 ### Stage 2 — transform
 
@@ -203,8 +204,8 @@ The `dictionary/` and `schemasheets/` files are build artefacts and could be
 written to a temporary directory. They are kept on disk because they are the most
 useful thing to look at when a generated schema is not what you expected:
 
-- If `dictionary/*.csv` is wrong, the problem is Excel parsing — almost always NA
-  handling.
+- If `dictionary/*.csv` is wrong, the problem is in reading the source file —
+  almost always NA handling, and on the Excel path the extraction itself.
 - If `schemasheets/*.tsv` is wrong, the problem is in the extraction modules,
   which is where it usually is.
 - If both are right and the YAML is wrong, the problem is Schemasheets or
@@ -236,8 +237,9 @@ Errors and warnings worth looking for:
   generated enumerations entirely.
 - A categorical slot assigned two conflicting enumerations by the dictionary; the
   log says which one was used.
-- A missing sheet or column in the source workbook, which usually means the
-  dictionary layout has changed since the generator last saw it.
+- A missing column — or, for a workbook, a missing sheet — in the source
+  dictionary, which usually means its layout has changed since the generator
+  last saw it.
 
 Anything reported at `ERROR` level is a defect in the source dictionary or a gap
 in the generator's handling of it, not a cosmetic complaint — check the generated
@@ -250,14 +252,14 @@ dataset-specific code. This is not duplication that ought to be factored out; th
 source dictionaries genuinely have little in common:
 
 - **ODM** packs table membership, keys, and enumeration membership into
-  relationships between the columns of a single parts sheet. Deciding what a row
+  relationships between the columns of a single parts file. Deciding what a row
   *is* requires looking at several other columns.
 - **NWSS** lists fields per table in a flat sheet with implicit boundaries, and
   keeps enumerations in a side-by-side column layout.
 
 An abstraction covering both would have to be general enough to express both
 encodings, which in practice means it expresses neither clearly. What the two
-pipelines *do* share lives in `odm_linkmlgen/utils/`: Excel and CSV I/O,
+pipelines *do* share lives in `odm_linkmlgen/utils/`: CSV and Excel I/O,
 DataFrame manipulation, Schemasheets file writing, and the schema generation and
 post-processing step. That is the part where the two datasets really are doing
 the same thing.
@@ -337,7 +339,7 @@ Schemasheets construct for it.
 
 Some ODM slots must accept a missingness enumeration — `genMissingnessSet`,
 `nrNAMissingnessSet` — **in addition to** their normal range, so a value can be
-reported as missing for a documented reason. The parts sheet records this in its
+reported as missing for a documented reason. The parts file records this in its
 `missingnessSet` column.
 
 No Schemasheets column expresses "add this range as well", so it cannot be done

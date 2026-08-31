@@ -6,7 +6,7 @@
 [![docs.yaml](https://github.com/PHES-ODM/PHES-ODM-LinkMLGenerator/actions/workflows/docs.yaml/badge.svg)](https://github.com/PHES-ODM/PHES-ODM-LinkMLGenerator/actions/workflows/docs.yaml)
 <!-- badges: end -->
 
-This repository turns Excel data dictionaries into [LinkML](https://linkml.io/)
+This repository turns data dictionaries into [LinkML](https://linkml.io/)
 schemas for two wastewater surveillance datasets:
 
 - **[PHES-ODM](https://phes-odm.org)** — the Public Health Environmental
@@ -66,9 +66,80 @@ and `odm-linkmlgen-nwss`. Pass `--help` to any of them, or see the
 
 ## Generate the ODM schemas
 
+**ODM v3 is the current version of the model**, and the dictionary it is
+generated from is the pair of CSV dictionary tables the PHES-ODM project
+publishes — a parts file and a sets file. They are public, and they are the
+recommended input. The Excel data dictionary is still accepted; see
+[Generate from the Excel dictionary](#generate-from-the-excel-dictionary-instead)
+at the end of this section.
+
+**1. Get the dictionary tables.** The v3 tables are in the
+[`dictionary-tables/` directory](https://github.com/PHES-ODM/PHES-ODM/tree/label/dictionary-tables)
+of the PHES-ODM repository, on the `label` branch. Two of the files there are
+the ones the generator reads: `ODM_parts_v3.0.0.csv` (the parts table) and
+`ODM_sets_v3.0.0.csv` (the sets table).
+
+```console
+mkdir -p odm_linkmlgen/data/odm_v3
+curl -L -o odm_linkmlgen/data/odm_v3/ODM_parts_v3.0.0.csv \
+    "https://raw.githubusercontent.com/PHES-ODM/PHES-ODM/label/dictionary-tables/ODM_parts_v3.0.0.csv"
+curl -L -o odm_linkmlgen/data/odm_v3/ODM_sets_v3.0.0.csv \
+    "https://raw.githubusercontent.com/PHES-ODM/PHES-ODM/label/dictionary-tables/ODM_sets_v3.0.0.csv"
+```
+
+By convention the tables go in `odm_linkmlgen/data/odm_v{n}/`, where every
+`.csv` and `.xlsx` is git-ignored, so the downloads cannot be committed by
+accident. The location is only a convention — any path can be passed to
+`--parts-file` and `--sets-file`.
+
+**2. Generate.**
+
+```console
+odm-linkmlgen-odm \
+    --version 3 \
+    --parts-file "odm_linkmlgen/data/odm_v3/ODM_parts_v3.0.0.csv" \
+    --sets-file "odm_linkmlgen/data/odm_v3/ODM_sets_v3.0.0.csv" \
+    --output-dir "gen/odm_v3"
+```
+
+The schema is written to `gen/odm_v3/linkml/odm_v3.yaml`, alongside the
+intermediate `dictionary/` and `schemasheets/` directories. The two CSVs are
+copied into `{output-dir}/dictionary/`, and that directory is cleared before
+they are read — so `--output-dir` must not be the directory the CSVs are read
+from, or they are deleted before the run can use them.
+
+`--version` is a bare version number, and is not just a label: it determines the
+generated schema's name (`ODMv3`), id (`https://onto.phes-odm.org/odm/v3`), and
+CURIE prefix (`odmv3`), so it must match the dictionary you passed.
+
+**3. Check the result.** Errors in the source dictionary are logged and skipped
+rather than raised, so a run that "succeeded" can still have produced a degraded
+schema. Scan the log:
+
+```console
+odm-linkmlgen-odm --version 3 --parts-file ... --sets-file ... \
+    --output-dir "gen/odm_v3" 2>&1 | tee gen/odm_v3/generate.log
+grep -E "ERROR|WARNING" gen/odm_v3/generate.log
+```
+
+### ODM v2
+
+Same command with `--version 2` and the v2 tables, which are in the
+[`archived V2.3 (PATCH)/` directory](https://github.com/PHES-ODM/PHES-ODM/tree/v2.3.0/archived%20V2.3%20%28PATCH%29)
+of the PHES-ODM repository, on the `v2.3.0` branch. ODM v2 is superseded by v3 —
+generate it only if something you maintain still needs it.
+
+```console
+odm-linkmlgen-odm \
+    --version 2 \
+    --parts-file "odm_linkmlgen/data/odm_v2/ODM_parts_v2.3.0.csv" \
+    --sets-file "odm_linkmlgen/data/odm_v2/ODM_sets_v2.3.0.csv" \
+    --output-dir "gen/odm_v2"
+```
+
 ### ODM v1
 
-ODM v1 needs no source Excel file — its Schemasheets are bundled with the
+ODM v1 needs no dictionary at all — its Schemasheets are bundled with the
 package, so this runs offline in a couple of seconds:
 
 ```console
@@ -78,82 +149,34 @@ odm-linkmlgen-odmv1 --output-dir "gen/odm_v1"
 The schema is written to `gen/odm_v1/linkml/odm_v1.yaml`. That is the only file
 produced — ODM v1 skips the extract and transform stages entirely.
 
-### ODM v2 and v3
+### Generate from the Excel dictionary instead
 
-Both versions use the same command; only `--version` and the dictionary change.
-
-**1. Obtain the dictionary.** The official PHES-ODM Excel data dictionary is
-**not publicly available** and is not committed to this repository. Contact
-[Mathew Thomson](mailto:matthomson@ohri.ca) to obtain a copy.
-
-> [!CAUTION]
-> Opening and resaving the dictionary with an older Excel will corrupt it. The
-> file relies on the `FILTER` and `XLOOKUP` functions; a version of Excel that
-> does not support them will silently destroy those formulas on save, and the
-> damage is not recoverable. Use a recent Excel, or a read-only viewer.
-
-**2. Put it where the generator expects it.** Name it `v# ODM dictionary.xlsx`,
-where `#` is the version number, and by convention place it in
-`odm_linkmlgen/data/odm_v{n}/`:
+The same schemas can be generated from the official PHES-ODM Excel data
+dictionary, by passing `--dictionary-file` in place of the `--parts-file` /
+`--sets-file` pair — one form or the other, never both:
 
 ```console
-mkdir -p odm_linkmlgen/data/odm_v2 odm_linkmlgen/data/odm_v3
-cp "~/v2 ODM dictionary.xlsx" odm_linkmlgen/data/odm_v2/
-cp "~/v3 ODM dictionary.xlsx" odm_linkmlgen/data/odm_v3/
-```
-
-Those directories are git-ignored (`/odm_linkmlgen/data/odm_v*/*.xlsx`), so your
-copy stays local to your checkout. The location is only a convention — any path
-can be passed to `--dictionary-file`.
-
-**3. Generate.**
-
-```console
-odm-linkmlgen-odm \
-    --version 2 \
-    --dictionary-file "odm_linkmlgen/data/odm_v2/v2 ODM dictionary.xlsx" \
-    --output-dir "gen/odm_v2"
-
 odm-linkmlgen-odm \
     --version 3 \
     --dictionary-file "odm_linkmlgen/data/odm_v3/v3 ODM dictionary.xlsx" \
     --output-dir "gen/odm_v3"
 ```
 
-The schemas are written to `gen/odm_v2/linkml/odm_v2.yaml` and
-`gen/odm_v3/linkml/odm_v3.yaml`, alongside the intermediate `dictionary/` and
-`schemasheets/` directories.
+The workbook is **not publicly available** and is not committed to this
+repository. Contact [Mathew Thomson](mailto:matthomson@ohri.ca) to obtain a
+copy, and by convention put it in `odm_linkmlgen/data/odm_v{n}/`, the same
+directory as the CSV tables and git-ignored the same way, so your copy stays
+local to your checkout.
 
-`--version` is a bare version number, and is not just a label: it determines the
-generated schema's name (`ODMv3`), id (`https://onto.phes-odm.org/odm/v3`), and
-CURIE prefix (`odmv3`), so it must match the dictionary you passed.
+> [!CAUTION]
+> Opening and resaving the dictionary with an older Excel will corrupt it. The
+> file relies on the `FILTER` and `XLOOKUP` functions; a version of Excel that
+> does not support them will silently destroy those formulas on save, and the
+> damage is not recoverable. Use a recent Excel, or a read-only viewer. The
+> published CSV tables avoid this hazard entirely.
 
-If you have the parts and sets sheets as CSV files rather than the workbook, pass
-`--parts-file` and `--sets-file` in place of `--dictionary-file` — one form or the
-other, never both:
-
-```console
-odm-linkmlgen-odm \
-    --version 3 \
-    --parts-file "gen/odm_v3/dictionary/parts.csv" \
-    --sets-file "gen/odm_v3/dictionary/sets.csv" \
-    --output-dir "gen/odm_v3_from_csv"
-```
-
-The CSVs are copied into `{output-dir}/dictionary/`, and that directory is
-cleared before they are read — so `--output-dir` must not be the directory the
-CSVs are read from, or they are deleted before the run can use them. See
-[Generate the ODM schemas](https://phes-odm.github.io/PHES-ODM-LinkMLGenerator/how-to/generate-odm-schemas/).
-
-**4. Check the result.** Errors in the source dictionary are logged and skipped
-rather than raised, so a run that "succeeded" can still have produced a degraded
-schema. Scan the log:
-
-```console
-odm-linkmlgen-odm --version 3 --dictionary-file ... --output-dir ... 2>&1 \
-    | tee gen/odm_v3/generate.log
-grep -E "ERROR|WARNING" gen/odm_v3/generate.log
-```
+See [Generate the ODM schemas](https://phes-odm.github.io/PHES-ODM-LinkMLGenerator/how-to/generate-odm-schemas/)
+for all of the above in full.
 
 ## Generate the NWSS schemas
 

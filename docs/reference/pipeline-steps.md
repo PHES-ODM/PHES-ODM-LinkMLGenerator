@@ -14,8 +14,8 @@ step.
 
 The eleven steps `odm-linkmlgen-odm` (`odm_linkmlgen.make_odm.make_odm`) runs, in
 order, to turn an ODM v2+ data dictionary into a LinkML schema. The dictionary is
-either an Excel workbook or its parts and sets sheets already saved as CSV, which
-changes step 2 only.
+either the pair of published CSV tables — the parts file and the sets file — or
+the Excel workbook holding both as sheets, which changes step 2 only.
 
 !!! note "ODM v1 does not use this pipeline"
 
@@ -29,7 +29,7 @@ changes step 2 only.
 | # | Module / function | Output |
 | --- | --- | --- |
 | 1 | `utils.general_utils.clear_dirs` | — |
-| 2 | `utils.general_utils.extract_sheets`, or a straight file copy | `dictionary/parts.csv`, `dictionary/sets.csv` |
+| 2 | A straight file copy, or `utils.general_utils.extract_sheets` | `dictionary/parts.csv`, `dictionary/sets.csv` |
 | 3 | `odm.make_odm_ss_enums_from_sets.extract_sets_enums` | `schemasheets/enums_sets.tsv` |
 | 4 | `odm.make_odm_ss_enums_from_parts.extract_parts_enums` | `schemasheets/enums_parts.tsv` |
 | 5 | `odm.make_odm_ss_classes.extract_all_classes` | `schemasheets/class_{class_name}.tsv` |
@@ -51,18 +51,18 @@ leak into the new schema.
 This matters because step 9 consumes **every** `.tsv` in `schemasheets/` rather
 than a known list of files.
 
-### ODM 2. Extract or copy the dictionary sheets to CSV
+### ODM 2. Copy or extract the dictionary to CSV
 
-`utils.general_utils.extract_sheets`, or `shutil.copyfile`
+`shutil.copyfile`, or `utils.general_utils.extract_sheets`
 
-Saves the **parts** and **sets** sheets as `dictionary/parts.csv` and
+Puts the **parts** and **sets** tables at `dictionary/parts.csv` and
 `dictionary/sets.csv`. Which of the two paths runs depends on how the dictionary
 was given:
 
 | Given | What runs |
 | --- | --- |
-| `--dictionary-file` (Excel) | `extract_sheets` extracts the two sheets |
 | `--parts-file` and `--sets-file` (CSV) | The two files are copied as-is under `dictionary/` |
+| `--dictionary-file` (Excel) | `extract_sheets` extracts the two sheets |
 
 Either way the rest of the pipeline reads the same two paths, so the input form
 is invisible from step 3 onwards. See the
@@ -75,30 +75,30 @@ strings. Without that, pandas would read part IDs such as `NA`, `None`, and
 would type a column of `TRUE`/`FALSE` part IDs as booleans.
 
 `odm_utils.get_dictionary_read_kwargs` builds those read arguments, and is used
-at **every** read of a dictionary file, not only this step — the Excel extraction
-here, and each of steps 3 to 5 and 10 reading the extracted CSVs. It gets the NA
-values from `general_utils.get_na_values`, which reads only the header row of the
-file and returns the NA values for **every** column: the override for `partID`
-and `label`, and pandas' own defaults for the rest. That completeness is what
-lets the file be read with `keep_default_na=False` — which switches pandas'
-defaults off wholesale — without losing NA parsing everywhere else.
+at **every** read of a dictionary file, not only this step — each of steps 3 to 5
+and 10 reading the CSVs under `dictionary/`, and the Excel extraction here. It
+gets the NA values from `general_utils.get_na_values`, which reads only the
+header row of the file and returns the NA values for **every** column: the
+override for `partID` and `label`, and pandas' own defaults for the rest. That
+completeness is what lets the file be read with `keep_default_na=False` — which
+switches pandas' defaults off wholesale — without losing NA parsing everywhere
+else.
 
-For a workbook those NA values come back keyed by **sheet name**, which is a
-shape pandas itself does not take. That is why `make_odm` passes them to
+The CSV path needs no re-parse at all: because every later step applies the same
+read arguments itself, the two files are copied to `dictionary/` byte for byte.
+
+For a workbook the NA values come back keyed by **sheet name**, which is a shape
+pandas itself does not take. That is why `make_odm` passes them to
 `extract_sheets`' own `na_values` argument — `extract_sheets` reads one sheet at
 a time and applies that sheet's NA values — and passes only the remaining read
 arguments through as its `read_excel_kwargs`.
 
-The CSV path needs no re-parse at all: because every later step applies the same
-read arguments itself, the two files can be copied to `dictionary/` byte for
-byte.
-
-### ODM 3. Extract the enumerations defined in the sets sheet
+### ODM 3. Extract the enumerations defined in the sets file
 
 `odm.make_odm_ss_enums_from_sets.extract_sets_enums` → `schemasheets/enums_sets.tsv`
 
-Takes the active rows of the sets sheet, where `setID` is the enumeration name and
-`partID` is a permissible value, and joins the parts sheet on `partID` to pick up
+Takes the active rows of the sets file, where `setID` is the enumeration name and
+`partID` is a permissible value, and joins the parts file on `partID` to pick up
 each value's `label` (title) and `partDesc` (description).
 
 Two details:
@@ -117,14 +117,14 @@ Two details:
 
 Returns the list of enumeration names it extracted.
 `make_odm_ss_enums_from_sets.get_enum_names_from_sets` retrieves the same names
-from a sets sheet DataFrame without extracting anything.
+from a sets file DataFrame without extracting anything.
 
-### ODM 4. Extract the enumerations defined in the parts sheet
+### ODM 4. Extract the enumerations defined in the parts file
 
 `odm.make_odm_ss_enums_from_parts.extract_parts_enums` → `schemasheets/enums_parts.tsv`
 
 Handles the enumerations step 3 does not: those with an empty `mmaSet`. Their
-names are the distinct values of the parts sheet's `partType` column, retrieved by
+names are the distinct values of the parts file's `partType` column, retrieved by
 `get_enum_names_from_parts`. For each name it collects:
 
 - the top-level row, where `partID` equals the enumeration name, and
@@ -135,14 +135,14 @@ Also returns the list of enumeration names it extracted.
 
 Steps 3 and 4 both return their names for the caller's convenience, but `make_odm`
 does not need them: step 5 resolves a slot's enumeration from the part's own row
-in the parts sheet, so the two enumeration steps and the class step are
+in the parts file, so the two enumeration steps and the class step are
 independent.
 
 ### ODM 5. Extract one Schemasheet per class
 
 `odm.make_odm_ss_classes.extract_all_classes` → `schemasheets/class_{class_name}.tsv`
 
-For every table discovered in the parts sheet, `extract_class` builds one
+For every table discovered in the parts file, `extract_class` builds one
 Schemasheet. **This is the largest step.** Per table it:
 
 1. Keeps the rows that are a `pK`, `fK`, or `header` for that table, and of those
@@ -209,7 +209,7 @@ the known Schemasheets shortcomings described in
 
 Some ODM slots must accept a missingness enumeration — `genMissingnessSet`,
 `nrNAMissingnessSet` — in addition to their normal range, so a value can be
-reported as missing for a documented reason. The parts sheet records this in the
+reported as missing for a documented reason. The parts file records this in the
 `missingnessSet` column, but no Schemasheets column expresses it, so it is applied
 afterwards directly on the `SchemaDefinition`.
 
@@ -227,7 +227,7 @@ Serialises the `SchemaDefinition` to YAML. `make_odm` also returns the
 `make_odm` then checks the finished schema with
 `schema_utils.find_undefined_ranges` and logs an error for every slot whose range
 names something the schema does not define — usually an enumeration named by the
-parts or sets sheet that was never generated. This is a check rather than a step:
+parts or sets file that was never generated. This is a check rather than a step:
 the schema is written either way. It runs after step 10 so that the ranges it
 sees are the final ones, including the `any_of` pairings that step introduces.
 The NWSS pipeline runs the same check, for the same reason — LinkML does not

@@ -12,7 +12,7 @@ the generator is reading, sheet by sheet and column by column;
 
 ### A row's meaning comes from its neighbours
 
-Almost everything the generator needs is in the parts sheet, and it is the harder
+Almost everything the generator needs is in the parts file, and it is the harder
 of the two to read. **A row's meaning is determined by its relationships to other
 columns rather than by a single "kind" column.** That one fact accounts for most
 of the ODM pipeline's complexity.
@@ -40,7 +40,7 @@ change.
 A categorical part's enumeration is
 [named by its `mmaSet`](../reference/data-dictionaries.md#enumerations), and
 `odm_get_data_type_of_row` reads that column straight off the part's own row in
-the parts sheet. The dictionary is the authority on the name, so there is no way
+the parts file. The dictionary is the authority on the name, so there is no way
 for the generator to invent one that nothing defines.
 
 What it cannot do is supply a name the dictionary omits. When a part is marked
@@ -63,8 +63,9 @@ in the code — see
 
 ## The NWSS dictionaries
 
-NWSS dictionaries are **less regular than the ODM one**, and some require manual
-repair before they can be processed at all — see
+NWSS dictionaries are **less regular than the ODM one**, are published only as
+Excel workbooks, and some require manual repair before they can be processed at
+all — see
 [the manual fixes](../how-to/generate-nwss-schemas.md#apply-the-manual-fixes).
 
 ### Table boundaries are formatting, not data

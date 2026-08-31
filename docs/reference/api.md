@@ -45,7 +45,7 @@ Generates the ODM v2+ LinkML schema.
 ### `odm_linkmlgen.make_odm_v1`
 
 Generates the ODM v1 schema from the Schemasheets bundled at
-`odm_linkmlgen/data/odm_v1/schemasheets/`. No source Excel file is involved, so
+`odm_linkmlgen/data/odm_v1/schemasheets/`. No data dictionary is involved, so
 this is only the final Schemasheets step.
 
 ::: odm_linkmlgen.make_odm_v1
@@ -76,7 +76,7 @@ for the source conventions they decode.
 
 ### `odm_linkmlgen.odm.make_odm_ss_classes`
 
-Creates one Schemasheet per ODM class (table) from the parts sheet, named
+Creates one Schemasheet per ODM class (table) from the parts file, named
 `class_{table_name}.tsv`.
 
 One module-level table is worth knowing about: `headers`, the column-to-LinkML
@@ -143,7 +143,7 @@ not handled by `extract_sets_enums`.
 
 ### `odm_linkmlgen.odm.odm_utils`
 
-Helpers for working with the ODM parts sheet, plus the missingness post-processing
+Helpers for working with the ODM parts file, plus the missingness post-processing
 step.
 
 `odm_get_data_type_of_row` resolves a parts row's LinkML range. The part's
@@ -155,7 +155,7 @@ an unrecognized `dataType` and a `categorical` part with an empty `mmaSet` alike
 the symptom of one of those two.
 
 `get_dictionary_read_kwargs` builds the Pandas kwargs that every read of an ODM
-dictionary file uses — the Excel workbook and the parts/sets CSVs alike. It is
+dictionary file uses — the parts/sets CSVs and the Excel workbook alike. It is
 what keeps part IDs such as `NA` and `None` from being read as missing data, and
 what keeps a `partID` or `label` a string rather than a boolean or a number. Use
 it instead of hand-written `na_values` whenever you read one of these files
@@ -278,7 +278,7 @@ to reach for when a literal value such as `NA` or `None` is being read as missin
 data — a real problem for ODM part IDs.
 
 `get_na_values` is what builds those per-column NA values, from the header row of
-an Excel or CSV file. `extract_sheets` uses it internally, and the ODM pipeline
+a CSV or Excel file. `extract_sheets` uses it internally, and the ODM pipeline
 reaches it through `odm_utils.get_dictionary_read_kwargs`, which is the helper to
 use when you read a dictionary file yourself and want the same NA handling the
 pipeline gets.

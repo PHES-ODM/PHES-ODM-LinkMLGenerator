@@ -13,8 +13,8 @@ odm_linkmlgen/          # The Python package
 │   ├── odm_utils.py                    # Shared ODM parts-sheet helpers
 │   ├── make_odm_ss_classes.py          # One Schemasheet per ODM table
 │   ├── make_odm_ss_container.py        # The tree_root Container class
-│   ├── make_odm_ss_enums_from_sets.py  # Enums defined in the sets sheet
-│   ├── make_odm_ss_enums_from_parts.py # Enums defined in the parts sheet
+│   ├── make_odm_ss_enums_from_sets.py  # Enums defined in the sets file
+│   ├── make_odm_ss_enums_from_parts.py # Enums defined in the parts file
 │   ├── make_odm_ss_prefixes.py         # CURIE prefixes
 │   └── make_odm_ss_schema.py           # Schema-level metadata
 │
@@ -27,14 +27,15 @@ odm_linkmlgen/          # The Python package
 │   └── make_nwss_ss_schema.py          # Schema-level metadata
 │
 ├── utils/              # Dataset-agnostic utilities
-│   ├── general_utils.py        # DataFrame helpers, Excel/CSV I/O, logging
+│   ├── general_utils.py        # DataFrame helpers, CSV/Excel I/O, logging
 │   ├── schemasheets_utils.py   # Schemasheets file creation and generation
 │   └── schema_utils.py         # SchemaDefinition inspection helpers
 │
 └── data/               # Bundled source data
     ├── odm_v1/schemasheets/    # Hand-written ODM v1 Schemasheets (stage 2
     │                           # output, so ODM v1 skips stages 1 and 2)
-    ├── odm_v2/, odm_v3/        # Where to put the ODM Excel dictionaries
+    ├── odm_v2/, odm_v3/        # Where to put the ODM dictionary: the published
+    │                           # parts/sets CSV tables, or the Excel workbook
     └── nwss/                   # Where to put the NWSS Excel dictionaries
 
 docs/                   # This documentation
@@ -43,12 +44,13 @@ tests/                  # pytest unit tests
 mkdocs.yml              # Documentation site configuration
 ```
 
-!!! note "No Excel dictionaries are committed"
+!!! note "No data dictionaries are committed"
 
-    Every `.xlsx` under `data/` is git-ignored — the ODM dictionary is not
-    publicly available, and the NWSS ones are downloaded from cdc.gov. You must
-    obtain them yourself; see
-    [Prepare the ODM dictionary](../how-to/generate-odm-schemas.md#prepare-the-dictionary-for-v2-and-above)
+    Every `.xlsx` under `data/` is git-ignored, and so is every `.csv` under
+    `data/odm_v*/` — the ODM dictionary tables are downloaded from the PHES-ODM
+    repository, the ODM workbook is not publicly available, and the NWSS ones
+    are downloaded from cdc.gov. See
+    [Get the dictionary tables](../how-to/generate-odm-schemas.md#get-the-dictionary-tables)
     and [Get the NWSS dictionaries](../how-to/generate-nwss-schemas.md#get-the-dictionaries).
 
 ## The naming convention
@@ -72,7 +74,7 @@ dataset-specific code — see
 | How an ODM slot's range is resolved | `odm_get_data_type_of_row` in `odm_utils` (the part's `mmaSet`, else its mapped `dataType`) |
 | A NWSS source column name | `DictionaryColumns` in `nwss_utils` |
 | Schema name / id / prefix templates | `_data` in `make_odm_ss_schema` and `make_odm_ss_prefixes`; `SCHEMA_VALUES_TEMPLATE` in `make_nwss` |
-| Excel or CSV reading | `general_utils` |
+| CSV or Excel reading | `general_utils` |
 | How an ODM dictionary file is read (NA values, `partID`/`label` as strings) | `get_dictionary_read_kwargs` in `odm_utils` |
 | Post-generation schema fixes | `schemasheets_utils.fix_schemasheets_generated_schema`, `odm_utils.add_missingness_set` |
 

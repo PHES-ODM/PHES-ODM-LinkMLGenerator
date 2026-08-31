@@ -5,7 +5,7 @@ give it, one per pipeline stage:
 
 ```text
 <output_dir>/
-├── dictionary/     # Stage 1: intermediate CSVs, one per source sheet
+├── dictionary/     # Stage 1: intermediate CSVs, one per source table
 ├── schemasheets/   # Stage 2: intermediate TSVs (the input to Schemasheets)
 └── linkml/         # Stage 3: the final LinkML YAML schema
 ```
@@ -31,8 +31,8 @@ gen/odm_v3/
 │   └── sets.csv
 ├── schemasheets/
 │   ├── class_{class_name}.tsv    # One per ODM table
-│   ├── enums_sets.tsv            # All enums defined in the sets sheet
-│   ├── enums_parts.tsv           # All enums defined in the parts sheet
+│   ├── enums_sets.tsv            # All enums defined in the sets file
+│   ├── enums_parts.tsv           # All enums defined in the parts file
 │   ├── container.tsv
 │   ├── prefixes.tsv
 │   └── schema.tsv

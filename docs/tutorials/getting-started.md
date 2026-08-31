@@ -10,8 +10,9 @@ stage's output on disk, so one run shows you the entire machine.
 You will need:
 
 - **Python 3.10 or newer.** Check with `python3 --version`.
-- **The ODM v3 Excel data dictionary.** It is not public and is not in this
-  repository; step 2 explains how to get it.
+- **The two ODM v3 dictionary tables**, `ODM_parts_v3.0.0.csv` and
+  `ODM_sets_v3.0.0.csv`. They are published by the PHES-ODM project and are
+  public; step 2 downloads them.
 
 ## 1. Install the package
 
@@ -41,40 +42,44 @@ Confirm the first one is on your path:
 odm-linkmlgen-odm --help
 ```
 
-You should see a usage message listing `--version`, `--output-dir`,
-`--dictionary-file`, and the `--parts-file` / `--sets-file` pair that replaces
-it when the dictionary is CSV rather than Excel. If instead you get `command not found`, the virtual environment
-is probably not active — re-run `source .env/bin/activate`. For other
-installation problems, see
+You should see a usage message listing `--version`, `--output-dir`, the
+`--parts-file` / `--sets-file` pair this tutorial uses, and the
+`--dictionary-file` that replaces them when you are working from the Excel
+workbook instead. If instead you get `command not found`, the virtual
+environment is probably not active — re-run `source .env/bin/activate`. For
+other installation problems, see
 [Troubleshooting](../how-to/troubleshooting.md#installation-problems).
 
 To also get `pytest`, `pytest-cov`, and `ruff`, install `requirements-dev.txt`
 instead — see [Contributing](../how-to/contributing.md).
 
-## 2. Get the data dictionary
+## 2. Get the dictionary tables
 
-Everything from ODM v2 onwards is generated from the official PHES-ODM Excel
-data dictionary. It is **not publicly available** — contact
-[Mathew Thomson](mailto:matthomson@ohri.ca) for a copy.
+Everything from ODM v2 onwards is generated from the ODM data dictionary, which
+the PHES-ODM project publishes as a set of CSV tables in the
+[`dictionary-tables/` directory](https://github.com/PHES-ODM/PHES-ODM/tree/label/dictionary-tables)
+of its repository, on the `label` branch. Two of those files are the dictionary
+as far as this generator is concerned:
 
-!!! danger "Opening and resaving with an older Excel will corrupt the workbook"
+| File | Holds |
+| --- | --- |
+| `ODM_parts_v3.0.0.csv` | The **parts** table — every table, column, enumeration, and permissible value in the model |
+| `ODM_sets_v3.0.0.csv` | The **sets** table — the permissible values of most of the enumerations |
 
-    The dictionary relies on the `FILTER` and `XLOOKUP` functions, which older
-    versions of Excel do not support. Opening the file in such a version and
-    saving it silently destroys those formulas, and the damage is not
-    recoverable from the saved file. Use a recent version of Excel, or a viewer
-    that will not write to the file.
-
-By convention the file goes in `odm_linkmlgen/data/odm_v3/`, named
-`v3 ODM dictionary.xlsx`:
+By convention they go in `odm_linkmlgen/data/odm_v3/`. Every `.csv` and `.xlsx`
+under `odm_linkmlgen/data/odm_v*/` is git-ignored, so your copies cannot be
+committed by accident:
 
 ```console
 mkdir -p odm_linkmlgen/data/odm_v3
-cp "~/v3 ODM dictionary.xlsx" odm_linkmlgen/data/odm_v3/
+curl -L -o odm_linkmlgen/data/odm_v3/ODM_parts_v3.0.0.csv \
+    "https://raw.githubusercontent.com/PHES-ODM/PHES-ODM/label/dictionary-tables/ODM_parts_v3.0.0.csv"
+curl -L -o odm_linkmlgen/data/odm_v3/ODM_sets_v3.0.0.csv \
+    "https://raw.githubusercontent.com/PHES-ODM/PHES-ODM/label/dictionary-tables/ODM_sets_v3.0.0.csv"
 ```
 
-That directory is git-ignored, so your copy cannot be committed by accident. The
-convention is only a convention — you can pass any path to `--dictionary-file`.
+The location is only a convention — you can pass any path to `--parts-file` and
+`--sets-file`.
 
 ## 3. Generate the schema
 
@@ -84,15 +89,15 @@ output:
 ```console
 odm-linkmlgen-odm \
     --version 3 \
-    --dictionary-file "odm_linkmlgen/data/odm_v3/v3 ODM dictionary.xlsx" \
+    --parts-file "odm_linkmlgen/data/odm_v3/ODM_parts_v3.0.0.csv" \
+    --sets-file "odm_linkmlgen/data/odm_v3/ODM_sets_v3.0.0.csv" \
     --output-dir "gen/odm_v3"
 ```
 
-It takes on the order of fifteen seconds and produces several thousand `INFO`
-lines. Almost all of them come from Schemasheets and LinkML themselves and are
-noise — the thousands of `Mismatch between slot_name_mapping key ...` lines and
-the pandas `DtypeWarning` about mixed types are both normal. The line that
-matters is near the end:
+It takes a few seconds and produces close to four thousand `INFO` lines. Almost
+all of them come from Schemasheets and LinkML themselves and are noise — the
+thousands of `Mismatch between slot_name_mapping ...` lines are normal. The line
+that matters is near the end:
 
 ```text
 INFO ... schemasheets_utils.py:84: LinkML schema saved to 'gen/odm_v3/linkml/odm_v3.yaml'
@@ -105,31 +110,31 @@ is what makes a failed run diagnosable.
 its id (`https://onto.phes-odm.org/odm/v3`), its CURIE prefix (`odmv3`), and the
 output file name, so it has to match the dictionary you passed.
 
-### If your dictionary is CSV rather than Excel
+Give the parts and sets files as a pair — never only one half, and never
+alongside `--dictionary-file`. And keep them out of `--output-dir`: the first
+step clears `dictionary/`, so pointing `--parts-file` at
+`gen/odm_v3/dictionary/parts.csv` while writing to `gen/odm_v3` would delete the
+input before it could be read.
 
-The workbook is only the usual way in. If you have its parts and sets sheets as
-CSV files instead — including the `parts.csv` and `sets.csv` a previous run
-wrote, which [step 4](#stage-1-the-dictionary-as-csv) describes — pass them as
-the pair `--parts-file` and `--sets-file` in place of `--dictionary-file`:
+### If you have the Excel dictionary instead
+
+The CSV tables are the usual way in, but the official PHES-ODM Excel data
+dictionary works too: pass `--dictionary-file` in place of the two CSV options
+and the run is identical from stage 1 onwards, since the workbook's parts and
+sets files are extracted to the same two paths.
 
 ```console
 odm-linkmlgen-odm \
     --version 3 \
-    --parts-file "gen/odm_v3/dictionary/parts.csv" \
-    --sets-file "gen/odm_v3/dictionary/sets.csv" \
-    --output-dir "gen/odm_v3_from_csv"
+    --dictionary-file "odm_linkmlgen/data/odm_v3/v3 ODM dictionary.xlsx" \
+    --output-dir "gen/odm_v3"
 ```
 
-Give one form or the other, never both and never half the pair. The two files
-are copied into `{output-dir}/dictionary/`, so the run is identical from there
-on — but that directory is cleared first, which is why the `--output-dir` above
-is *not* the `gen/odm_v3` the CSVs came from. Point it at the run's own output
-directory and the inputs are deleted before they can be read.
-
-The rest of this tutorial assumes the Excel run above; everything it says about
-the output holds for either form. See
-[Generate the ODM schemas](../how-to/generate-odm-schemas.md#generate-from-csv-instead-of-the-workbook)
-for this on its own.
+The workbook is not public — see
+[Generate from the Excel dictionary instead](../how-to/generate-odm-schemas.md#generate-from-the-excel-dictionary-instead)
+for how to obtain one and the hazard in opening it. The rest of this tutorial
+assumes the CSV run above; everything it says about the output holds for either
+form.
 
 ### Check the run before trusting the result
 
@@ -139,7 +144,8 @@ scan it:
 
 ```console
 odm-linkmlgen-odm --version 3 \
-    --dictionary-file "odm_linkmlgen/data/odm_v3/v3 ODM dictionary.xlsx" \
+    --parts-file "odm_linkmlgen/data/odm_v3/ODM_parts_v3.0.0.csv" \
+    --sets-file "odm_linkmlgen/data/odm_v3/ODM_sets_v3.0.0.csv" \
     --output-dir "gen/odm_v3" 2>&1 | tee gen/odm_v3/generate.log
 grep -E "ERROR|WARNING" gen/odm_v3/generate.log
 ```
@@ -161,9 +167,9 @@ gen/odm_v3/schemasheets/   # Stage 2 output
 gen/odm_v3/linkml/         # Stage 3 output
 ```
 
-Those three directories *are* the pipeline: Excel becomes CSV, CSV becomes
-Schemasheets TSV, and Schemasheets TSV becomes LinkML. Take them in order. The
-full inventory is in the
+Those three directories *are* the pipeline: the dictionary tables become the
+run's own CSVs, CSV becomes Schemasheets TSV, and Schemasheets TSV becomes
+LinkML. Take them in order. The full inventory is in the
 [output layout reference](../reference/output-layout.md#odm-v2).
 
 ### Stage 1 — the dictionary, as CSV
@@ -176,16 +182,18 @@ ls gen/odm_v3/dictionary/
 parts.csv    sets.csv
 ```
 
-Two sheets of the workbook, saved verbatim. Nothing has been interpreted yet.
-This stage exists so that no later step ever has to open an Excel file, and so
-that you can [re-run a later step](../how-to/python-api.md#re-run-a-single-step)
-in a second instead of re-parsing the workbook each time.
+The two dictionary tables, under fixed names. Nothing has been interpreted yet.
+On this path they are the files you downloaded, copied verbatim; on the Excel
+path they are the workbook's two sheets, saved verbatim. Either way the stage
+exists so that no later step has to care which — and so that you can
+[re-run a later step](../how-to/python-api.md#re-run-a-single-step) against one
+fixed input at one fixed path.
 
 `parts.csv` is the data model: one row per part, and — after the descriptive
 columns — a group of three columns per ODM table (`samples`, `samplesRequired`,
 `samplesOrder`, then the same triple for every other table). A part belongs to a
 table when its cell in that table's first column is filled in, and the value
-there (`pK`, `fK`, `header`) says what role it plays. That is how one flat sheet
+there (`pK`, `fK`, `header`) says what role it plays. That is how one flat table
 encodes twenty-six tables. `sets.csv` is the enumerations: one row per
 membership, `setID` naming the enumeration and `partID` the permissible value.
 
@@ -198,7 +206,7 @@ ls gen/odm_v3/schemasheets/
 Thirty-one files: one `class_*.tsv` per ODM table — `class_samples.tsv`,
 `class_sites.tsv`, and so on — plus `enums_sets.tsv`, `enums_parts.tsv`,
 `container.tsv`, `prefixes.tsv`, and `schema.tsv`. Note the asymmetry: one file
-per class, but only one file per enumeration *source sheet*, each holding every
+per class, but only one file per enumeration *source table*, each holding every
 enumeration from it.
 
 This is where all the ODM-specific knowledge lives. Look at one:
@@ -219,7 +227,7 @@ for readability, having already done their work upstream. See
 The third row is the first real slot, `sampleID`, and it shows two of the
 translations the generator does: its `pattern` of `^.{0,30}$` was built from the
 part's `minLength` and `maxLength`, because LinkML has no string-length
-constraint, and its `identifier` cell is `True` because the parts sheet marked
+constraint, and its `identifier` cell is `True` because the parts table marked
 it `pK`. Further down the file, `protocolID` has a `range` of `protocols` — a
 foreign key resolved to the class it points at — and `purpose` has a `range` of
 `purposeSet`, a categorical resolved to an enumeration name.
@@ -232,7 +240,7 @@ less gen/odm_v3/linkml/odm_v3.yaml
 ```
 
 Schemasheets read *every* `.tsv` in that directory and merged them into this one
-file — around 19,700 lines for v3. It opens with schema-level metadata —
+file — around 19,500 lines for v3. It opens with schema-level metadata —
 `name: ODMv3`, an `id`, `prefixes`, and a `default_range` — and then three
 sections worth finding:
 
@@ -257,7 +265,7 @@ grep -A3 "any_of" gen/odm_v3/linkml/odm_v3.yaml | head -8
 
 A slot written as `any_of: [string, genMissingnessSet]` had a plain `string`
 range in stage 2. The second range was added afterwards, straight onto the
-schema object, because the parts sheet records it in a `missingnessSet` column
+schema object, because the parts table records it in a `missingnessSet` column
 that no Schemasheets column can express.
 
 ## 5. Do something with the schema
@@ -284,8 +292,11 @@ itself. It produces one schema, and the LinkML ecosystem does the rest.
 - The generator's job is to turn a data dictionary into **one LinkML YAML file**,
   and then get out of the way — validation, conversion, and documentation are
   all done by other LinkML tools.
+- The dictionary it reads is the pair of **published CSV tables**, parts and
+  sets. The Excel workbook is an alternative input to the same pipeline, not a
+  different one.
 - It gets there in **three stages**, each leaving its output in `--output-dir`:
-  the Excel sheets as CSV, then Schemasheets TSVs, then the schema.
+  the dictionary tables as CSV, then Schemasheets TSVs, then the schema.
 - The middle stage is where the work happens. **Schemasheets TSVs**, whose `>`
   header rows map spreadsheet columns onto the LinkML metamodel, are what turns
   a dictionary's own vocabulary into LinkML's.
@@ -297,7 +308,7 @@ itself. It produces one schema, and the LinkML ecosystem does the rest.
 - [Inside an ODM run](../explanation/odm-runs.md) — the same run, in more
   detail, and how the legacy v1 pipeline differs
 - [Generate the ODM schemas](../how-to/generate-odm-schemas.md) — the commands
-  on their own, for v1, v2, and v3
+  on their own, for v3, v2, and v1
 - [Generate the NWSS schemas](../how-to/generate-nwss-schemas.md) — from a CDC
   dictionary you can download right now, walked through in
   [Inside an NWSS run](../explanation/nwss-runs.md)

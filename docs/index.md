@@ -1,6 +1,6 @@
 # PHES-ODM LinkML Schema Generator
 
-This project turns Excel data dictionaries into [LinkML](https://linkml.io/)
+This project turns data dictionaries into [LinkML](https://linkml.io/)
 schemas for two wastewater surveillance datasets:
 
 - **[PHES-ODM](https://phes-odm.org)** — the Public Health Environmental
@@ -28,7 +28,8 @@ start with the one that matches what you need.
 A guided first run, start to finish. Read it once, in order.
 
 - [Getting started](tutorials/getting-started.md) — install the generator,
-  produce the ODM v3 schema, and look at what it contains
+  produce the ODM v3 schema from the published CSV dictionary tables, and look
+  at what it contains
 
 ### [How-to guides](how-to/install.md) — *doing*
 
@@ -37,7 +38,7 @@ Steps for one task, assuming you already know roughly what you are doing.
 | Guide | For |
 | --- | --- |
 | [Install the generator](how-to/install.md) | Getting the commands onto your path |
-| [Generate the ODM schemas](how-to/generate-odm-schemas.md) | v1, v2, and v3, and the dictionary they need |
+| [Generate the ODM schemas](how-to/generate-odm-schemas.md) | v3 first, then v2 and v1, and the dictionary tables they need |
 | [Generate the NWSS schemas](how-to/generate-nwss-schemas.md) | The five CDC dictionaries, and the manual fixes they need |
 | [Roll out a dictionary update](how-to/dictionary-workflow.md) | Regenerating and redistributing the schemas after the ODM dictionary changes |
 | [Use it from Python](how-to/python-api.md) | Calling the generators, and re-running a single step |
@@ -55,7 +56,7 @@ Dry, complete descriptions of what is there.
 | [Pipeline steps](reference/pipeline-steps.md) | What each step of both pipelines reads and writes |
 | [Output layout](reference/output-layout.md) | Where a generation run writes every file |
 | [Repository layout](reference/repository-layout.md) | Where the source files live, and which one to change |
-| [The source data dictionaries](reference/data-dictionaries.md) | Which sheets and columns the generator reads |
+| [The source data dictionaries](reference/data-dictionaries.md) | Which tables and columns the generator reads |
 | [Python API](reference/api.md) | Signatures and docstrings, generated from the source |
 
 ### [Explanation](explanation/how-it-works.md) — *understanding*
@@ -68,4 +69,4 @@ makes the rest of the project make sense.
 | [How it works](explanation/how-it-works.md) | LinkML, Schemasheets, the three-stage pipeline, and the post-processing workarounds |
 | [Inside an ODM run](explanation/odm-runs.md) | What an ODM run leaves on disk, and how v1 and v2+ differ |
 | [Inside an NWSS run](explanation/nwss-runs.md) | What an NWSS run leaves on disk, and why the output looks the way it does |
-| [Why the dictionaries are hard to read](explanation/data-dictionaries.md) | What the two Excel files' irregularities cost, and what they silently break |
+| [Why the dictionaries are hard to read](explanation/data-dictionaries.md) | What the two dictionaries' irregularities cost, and what they silently break |

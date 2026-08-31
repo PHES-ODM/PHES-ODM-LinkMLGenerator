@@ -1,7 +1,7 @@
 site_name: PHES-ODM LinkML Schema Generator
 site_description: >-
   Generate LinkML schemas for the PHES-ODM and CDC NWSS wastewater surveillance
-  data models from their Excel data dictionaries.
+  data models from their published data dictionaries.
 site_url: https://phes-odm.github.io/PHES-ODM-LinkMLGenerator/
 repo_url: https://github.com/PHES-ODM/PHES-ODM-LinkMLGenerator
 repo_name: PHES-ODM/PHES-ODM-LinkMLGenerator

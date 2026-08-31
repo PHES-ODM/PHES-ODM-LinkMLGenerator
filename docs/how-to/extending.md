@@ -15,19 +15,25 @@ usually needs **no code changes at all**:
 
 ### The procedure
 
-1. **Obtain the dictionary** and save it as `v{n} ODM dictionary.xlsx` under
-   `odm_linkmlgen/data/odm_v{n}/`. Excel dictionaries are git-ignored, so it
-   stays local to your checkout. Read
-   [Prepare the dictionary](generate-odm-schemas.md#prepare-the-dictionary-for-v2-and-above)
-   first — the file must only ever be opened with a recent version of Excel.
+1. **Obtain the new version's dictionary tables** — the parts and sets CSVs, as
+   described in
+   [Get the dictionary tables](generate-odm-schemas.md#get-the-dictionary-tables).
+   By convention they go in `odm_linkmlgen/data/odm_v{n}/`, which is
+   git-ignored, so they stay local to your checkout.
 
 2. **Generate:**
 
     ```console
     odm-linkmlgen-odm --version {n} \
-        --dictionary-file "odm_linkmlgen/data/odm_v{n}/v{n} ODM dictionary.xlsx" \
+        --parts-file "odm_linkmlgen/data/odm_v{n}/ODM_parts_v{n}.0.0.csv" \
+        --sets-file "odm_linkmlgen/data/odm_v{n}/ODM_sets_v{n}.0.0.csv" \
         --output-dir "gen/odm_v{n}"
     ```
+
+    If the new version reaches you as the Excel workbook instead, pass
+    `--dictionary-file` in its place — see
+    [Generate from the Excel dictionary](generate-odm-schemas.md#generate-from-the-excel-dictionary-instead),
+    which is also where the hazard in opening that file is described.
 
 3. **Diff the new schema against the previous version's, and account for every
    change.** This is the actual work. An unexplained difference is a bug, not a
@@ -37,7 +43,7 @@ usually needs **no code changes at all**:
 
 Four things go wrong, in rough order of likelihood.
 
-**New or renamed parts sheet columns.** `extract_class` raises a `RuntimeError`
+**New or renamed parts file columns.** `extract_class` raises a `RuntimeError`
 naming any column it requires but cannot find, so this one announces itself.
 A column that became *optional* needs adding to `optional_keep_cols`, as
 `fKAliasID` was — v2 dictionaries have no `fKAliasID` column, v3 does.

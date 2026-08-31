@@ -1,11 +1,13 @@
 .DS_Store
 .vscode
 
-# Source data dictionaries (Excel). Not committed: the ODM dictionary is not
+# Source data dictionaries. Not committed: the ODM dictionary tables are
+# downloaded from the PHES-ODM repository, the ODM Excel dictionary is not
 # publicly available, and the NWSS dictionaries are downloaded from cdc.gov.
 # See the README for how to obtain them.
 /odm_linkmlgen/data/nwss/*.xlsx
 /odm_linkmlgen/data/odm_v*/*.xlsx
+/odm_linkmlgen/data/odm_v*/*.csv
 
 # Generator output. "gen" is the output directory used throughout the
 # documentation, and holds the generated schemas along with the intermediate

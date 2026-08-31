@@ -35,13 +35,13 @@ app = typer.Typer(
 )
 
 MAIN_HELP = """Make ODM v2 and above LinkML schema, using an ODM data dictionary. The dictionary
-is either a single Excel file (--dictionary-file), or its parts and sets sheets already saved
-as CSV files (--parts-file and --sets-file)."""
+is either the published parts and sets CSV tables (--parts-file and --sets-file), which is the
+usual form, or the Excel workbook holding both as sheets (--dictionary-file)."""
 
-VERSION_HELP = """Version string of ODM to generate the schema for. eg. '2', '3'."""
+VERSION_HELP = """Version string of ODM to generate the schema for. eg. '3', '2'."""
 
-DICTIONARY_FILE_HELP = """Location of the Excel data dictionary (parts/sets file) for ODM. If
-set then the parts file and sets file must NOT be specified."""
+DICTIONARY_FILE_HELP = """Location of the Excel data dictionary (parts/sets workbook) for ODM.
+An alternative to the CSV parts and sets files: if set then those must NOT be specified."""
 
 OUTPUT_DIR_HELP = """Directory to save the LinkML schema to."""
 
@@ -70,19 +70,20 @@ def make_odm(
 ) -> SchemaDefinition | None:
     """Generate the LinkML schema for ODM.
 
-    The data dictionary is supplied either as a single Excel file (dictionary_file), or as its
-    parts and sets sheets already saved as CSV files (parts_file and sets_file). Exactly one of
-    those two forms must be given: the CSV form is for regenerating a schema from the
-    "{output_dir}/dictionary" files of a previous run, or from a dictionary that is maintained
-    as CSV rather than as a workbook. Either way, the parts and sets are (re)written to
+    The data dictionary is supplied either as the parts and sets CSV tables (parts_file and
+    sets_file), or as the Excel workbook holding both as sheets (dictionary_file). Exactly one
+    of those two forms must be given. The CSV form is the usual one, since the ODM dictionary is
+    published as CSV; it also covers regenerating a schema from the "{output_dir}/dictionary"
+    files of a previous run. Either way, the parts and sets are (re)written to
     "{output_dir}/dictionary" and every later step reads them from there.
 
     Args:
         version (str): The ODM version number we are making (eg. "2", "3")
         output_dir (Path): Location to save all output. The LinkML schema output is
             saved to "{output_dir}/linkml/odm_v{version}.yaml"
-        dictionary_file (Path, optional): Location of the Excel data dictionary (parts/sets file)
-            for ODM. If set then parts_file and sets_file must not be. Defaults to None.
+        dictionary_file (Path, optional): Location of the Excel data dictionary (parts/sets
+            workbook) for ODM. If set then parts_file and sets_file must not be. Defaults to
+            None.
         parts_file (Path, optional): Location of the dictionary parts file in CSV format. If set
             then sets_file must be set too, and dictionary_file must not be. Defaults to None.
         sets_file (Path, optional): Location of the dictionary sets file in CSV format. If set

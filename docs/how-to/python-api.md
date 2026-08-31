@@ -14,7 +14,8 @@ from odm_linkmlgen.make_odm import make_odm
 
 schema = make_odm(
     version="3",
-    dictionary_file="path/to/v3 ODM dictionary.xlsx",
+    parts_file="odm_linkmlgen/data/odm_v3/ODM_parts_v3.0.0.csv",
+    sets_file="odm_linkmlgen/data/odm_v3/ODM_sets_v3.0.0.csv",
     output_dir="gen/odm_v3",
 )
 ```
@@ -24,23 +25,26 @@ writing `gen/odm_v3/linkml/odm_v3.yaml`. The intermediate `dictionary/` and
 `schemasheets/` files are written too — the function is not a pure in-memory
 path.
 
-If the dictionary is kept as CSV rather than as a workbook, pass its two sheets
-instead of `dictionary_file`:
+`parts_file` and `sets_file` are the two published CSV dictionary tables; see
+[Get the dictionary tables](generate-odm-schemas.md#get-the-dictionary-tables)
+for where to obtain them. Note that `output_dir` must not be the directory those
+CSVs live in — the first step clears `dictionary/`, which would delete the files
+before they are read.
+
+If you have the Excel workbook instead, pass it as `dictionary_file` in their
+place:
 
 ```python
 schema = make_odm(
     version="3",
-    parts_file="path/to/parts.csv",
-    sets_file="path/to/sets.csv",
-    output_dir="gen/odm_v3_from_csv",
+    dictionary_file="odm_linkmlgen/data/odm_v3/v3 ODM dictionary.xlsx",
+    output_dir="gen/odm_v3_from_excel",
 )
 ```
 
-Give one form or the other, never both: `dictionary_file`, or `parts_file` *and*
-`sets_file` together. Anything else logs an error and returns `None` rather than
-raising, so check the result before using it. Note that `output_dir` must not be
-the directory those CSVs live in — the first step clears `dictionary/`, which
-would delete the files before they are read.
+Give one form or the other, never both: `parts_file` *and* `sets_file` together,
+or `dictionary_file`. Anything else logs an error and returns `None` rather than
+raising, so check the result before using it.
 
 ## ODM v1
 
@@ -51,7 +55,7 @@ schema = make_odm_v1(output_dir="gen/odm_v1")
 ```
 
 Returns a `SchemaDefinition`, *in addition to* writing
-`gen/odm_v1/linkml/odm_v1.yaml`. There is no source Excel file — the
+`gen/odm_v1/linkml/odm_v1.yaml`. There is no source dictionary — the
 Schemasheets TSVs are bundled at
 `odm_linkmlgen/data/odm_v1/schemasheets/` and are read in place, so no
 `dictionary/` or `schemasheets/` files are written to `output_dir`.
@@ -122,8 +126,9 @@ an unknown class or slot unless you pass `exception_on_error=False`.
 
 Every step of both pipelines is both an importable function and a standalone
 CLI. Re-running one step against the CSVs already in `dictionary/` takes a
-moment, where rebuilding from Excel takes far longer — this is the loop to work
-in when adapting the generator to a new dictionary.
+moment, where a full run — and, on the Excel path, re-parsing the workbook —
+takes far longer. This is the loop to work in when adapting the generator to a
+new dictionary.
 
 ### From the command line
 
@@ -154,7 +159,7 @@ its inputs, and its outputs.
         enumerations are used instead of the per-field (detailed) copies.
 
     The ODM class step needs no such care: `extract_all_classes` resolves
-    enumeration names from the parts sheet, so re-running it by hand against
+    enumeration names from the parts file, so re-running it by hand against
     `dictionary/parts.csv` reproduces exactly what `make_odm` produced.
 
 !!! warning "`clear_dirs` only runs at the start of a full pipeline"
