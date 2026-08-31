@@ -154,13 +154,17 @@ def manifest(config, args, rows):
     lines = [
         f"# Staged ODM v{args.odm_version} dictionary rollout",
         "",
-        "Built by the Roll Out Dictionary Update workflow of "
-        "PHES-ODM/PHES-ODM-LinkMLGenerator. Nothing here has been published: "
-        "every file below is a preview of what the run would have written to "
-        "the repository and path it is filed under.",
+        (
+            "Built by the Roll Out Dictionary Update workflow of "
+            "PHES-ODM/PHES-ODM-LinkMLGenerator. Nothing here has been published: "
+            "every file below is a preview of what the run would have written to "
+            "the repository and path it is filed under."
+        ),
         "",
-        f"- Dictionary: `{args.dictionary_repo}@{args.dictionary_ref}` "
-        f"(`{args.dictionary_sha}`)",
+        (
+            f"- Dictionary: `{args.dictionary_repo}@{args.dictionary_ref}` "
+            f"(`{args.dictionary_sha}`)"
+        ),
         f"- Run: {args.run_url}",
         "",
         "| Product | Would have been written to | Files |",
