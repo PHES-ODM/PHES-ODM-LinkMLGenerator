@@ -6,12 +6,20 @@ description: >-
   the same way.
 
 # .github/actions/odm-config has to have run first: ODM_VERSION,
-# DICTIONARY_REPO, DICTIONARY_DIR, PARTS_CSV, SETS_CSV and
-# DICTIONARY_REF_DEFAULT all come from the environment it sets up.
+# DICTIONARY_REPO, DICTIONARY_DIR and DICTIONARY_REF_DEFAULT all come from the
+# environment it sets up.
 
 inputs:
   dictionary-ref:
     description: 'Branch, tag, or SHA of DICTIONARY_REPO to read the tables from. Defaults to DICTIONARY_REF_DEFAULT.'
+    required: false
+    default: ''
+  dictionary-dir:
+    description: 'Directory of DICTIONARY_REPO to read the tables from. Defaults to DICTIONARY_DIR. Override to generate an archival version whose tables have been moved to their own folder (e.g. "archived V2.3 (PATCH)").'
+    required: false
+    default: ''
+  odm-version:
+    description: 'Major ODM version to generate (passed to the generator as --version, and used to name the committed schema schemas/odm_v<version>.yaml). Defaults to ODM_VERSION. Override when dictionary-dir points at a different major version than the default (e.g. 2 for a v2.x archival release, since ODM_VERSION defaults to 3).'
     required: false
     default: ''
   output-dir:
@@ -42,6 +50,18 @@ outputs:
   sha:
     description: 'The commit of DICTIONARY_REPO the tables were read from.'
     value: ${{ steps.resolve.outputs.sha }}
+  odm-version:
+    description: 'The major ODM version that was generated.'
+    value: ${{ steps.resolve.outputs.odm-version }}
+  dictionary-dir-used:
+    description: 'The directory of DICTIONARY_REPO the tables were read from.'
+    value: ${{ steps.resolve.outputs.dictionary-dir-used }}
+  parts-file:
+    description: 'The versioned parts CSV filename found in dictionary-dir-used.'
+    value: ${{ steps.files.outputs.parts-file }}
+  sets-file:
+    description: 'The versioned sets CSV filename found in dictionary-dir-used.'
+    value: ${{ steps.files.outputs.sets-file }}
   output-dir:
     description: 'The directory the three stages were written to.'
     value: ${{ steps.resolve.outputs.output-dir }}
@@ -83,6 +103,8 @@ runs:
       env:
         GH_TOKEN: ${{ inputs.github-token }}
         INPUT_REF: ${{ inputs.dictionary-ref }}
+        INPUT_DIR: ${{ inputs.dictionary-dir }}
+        INPUT_VERSION: ${{ inputs.odm-version }}
         INPUT_OUTPUT_DIR: ${{ inputs.output-dir }}
         INPUT_LOG_FILE: ${{ inputs.log-file }}
       run: |
@@ -91,8 +113,8 @@ runs:
         # A missing setting means .github/actions/odm-config has not run, which
         # is worth saying plainly: the alternative is a download from an
         # unhelpful URL made of empty strings.
-        for name in ODM_VERSION DICTIONARY_REPO DICTIONARY_DIR PARTS_CSV \
-                    SETS_CSV DICTIONARY_REF_DEFAULT; do
+        for name in ODM_VERSION DICTIONARY_REPO DICTIONARY_DIR \
+                    DICTIONARY_REF_DEFAULT; do
           if [ -z "${!name:-}" ]; then
             echo "::error::${name} is not set. Run .github/actions/odm-config before this action."
             exit 1
@@ -112,20 +134,74 @@ runs:
             ;;
         esac
 
+        dictionary_dir="${INPUT_DIR:-}"
+        [ -n "${dictionary_dir}" ] || dictionary_dir="${DICTIONARY_DIR}"
+
+        odm_version="${INPUT_VERSION:-}"
+        [ -n "${odm_version}" ] || odm_version="${ODM_VERSION}"
+
         output_dir="${INPUT_OUTPUT_DIR:-}"
-        [ -n "${output_dir}" ] || output_dir="gen/odm_v${ODM_VERSION}"
+        [ -n "${output_dir}" ] || output_dir="gen/odm_v${odm_version}"
 
         sha=$(gh api "repos/${DICTIONARY_REPO}/commits/${ref}" --jq '.sha')
 
         {
           echo "ref=${ref}"
           echo "sha=${sha}"
+          echo "odm-version=${odm_version}"
+          echo "dictionary-dir-used=${dictionary_dir}"
           echo "output-dir=${output_dir}"
-          echo "schema-file=${output_dir}/linkml/odm_v${ODM_VERSION}.yaml"
+          echo "schema-file=${output_dir}/linkml/odm_v${odm_version}.yaml"
           echo "dictionary-dir=${output_dir}/dictionary"
           echo "log-file=${INPUT_LOG_FILE}"
         } >> "$GITHUB_OUTPUT"
-        echo "Reading ${DICTIONARY_REPO}@${ref} (${sha}) into ${output_dir}"
+        echo "Reading ${DICTIONARY_REPO}@${ref} (${sha}), ${dictionary_dir}/, ODM v${odm_version} into ${output_dir}"
+
+    - name: Find the versioned dictionary table filenames
+      # PHES-ODM renames these files on every release
+      # (ODM_parts_v3.0.0.csv -> _v3.0.1.csv, etc.) and moves a superseded
+      # version's tables out of dictionary-dir entirely once retired, so
+      # exactly one ODM_parts_v*.csv/ODM_sets_v*.csv is expected here at any
+      # commit. Resolving them at generation time, rather than reading a
+      # filename fixed in .github/odm-config.env, is what keeps this working
+      # without a manual update every release -- a fixed filename is exactly
+      # how this action's config went stale before (see that file's history).
+      #
+      # This deliberately does not fall back to the unversioned
+      # ODM_parts.csv/ODM_sets.csv PHES-ODM also publishes: those carry a
+      # leading `Version,X.Y.Z,...` metadata row the generator's plain CSV
+      # read can't handle, and have been found out of sync with the versioned
+      # file's actual columns for at least one archival release -- the
+      # versioned file is the one PHES-ODM treats as the frozen source of
+      # truth.
+      id: files
+      shell: bash
+      env:
+        GH_TOKEN: ${{ inputs.github-token }}
+        DICTIONARY_SHA: ${{ steps.resolve.outputs.sha }}
+        DICTIONARY_DIR_USED: ${{ steps.resolve.outputs.dictionary-dir-used }}
+      run: |
+        set -euo pipefail
+        listing=$(gh api "repos/${DICTIONARY_REPO}/contents/${DICTIONARY_DIR_USED}" -f ref="${DICTIONARY_SHA}" --jq '.[].name')
+
+        find_one() {
+          local pattern="$1" label="$2" matches
+          matches=$(grep -E "${pattern}" <<< "${listing}" || true)
+          if [ "$(grep -c . <<< "${matches}")" -ne 1 ]; then
+            echo "::error::Expected exactly one ${label} file in '${DICTIONARY_DIR_USED}' at ${DICTIONARY_SHA}, found: $(echo "${matches}" | tr '\n' ' ')"
+            exit 1
+          fi
+          echo "${matches}"
+        }
+
+        parts_file=$(find_one '^ODM_parts_v[0-9.]+\.csv$' 'ODM_parts_v*.csv')
+        sets_file=$(find_one '^ODM_sets_v[0-9.]+\.csv$' 'ODM_sets_v*.csv')
+
+        {
+          echo "parts-file=${parts_file}"
+          echo "sets-file=${sets_file}"
+        } >> "$GITHUB_OUTPUT"
+        echo "Found ${parts_file} and ${sets_file}"
 
     - name: Download the dictionary tables
       # Pinned to the resolved SHA rather than the branch. The tables go under
@@ -134,13 +210,16 @@ runs:
       shell: bash
       env:
         DICTIONARY_SHA: ${{ steps.resolve.outputs.sha }}
+        DICTIONARY_DIR_USED: ${{ steps.resolve.outputs.dictionary-dir-used }}
+        PARTS_FILE: ${{ steps.files.outputs.parts-file }}
+        SETS_FILE: ${{ steps.files.outputs.sets-file }}
         DOWNLOAD_DIR: ${{ inputs.download-dir }}
       run: |
         set -euo pipefail
-        base="https://raw.githubusercontent.com/${DICTIONARY_REPO}/${DICTIONARY_SHA}/${DICTIONARY_DIR}"
+        base="https://raw.githubusercontent.com/${DICTIONARY_REPO}/${DICTIONARY_SHA}/${DICTIONARY_DIR_USED}"
         mkdir -p "${DOWNLOAD_DIR}"
-        curl -sSfL -o "${DOWNLOAD_DIR}/${PARTS_CSV}" "${base}/${PARTS_CSV}"
-        curl -sSfL -o "${DOWNLOAD_DIR}/${SETS_CSV}" "${base}/${SETS_CSV}"
+        curl -sSfL -o "${DOWNLOAD_DIR}/${PARTS_FILE}" "${base}/${PARTS_FILE}"
+        curl -sSfL -o "${DOWNLOAD_DIR}/${SETS_FILE}" "${base}/${SETS_FILE}"
         wc -l "${DOWNLOAD_DIR}"/*.csv
 
     - name: Generate the schema
@@ -153,15 +232,18 @@ runs:
       shell: bash
       env:
         DOWNLOAD_DIR: ${{ inputs.download-dir }}
+        PARTS_FILE: ${{ steps.files.outputs.parts-file }}
+        SETS_FILE: ${{ steps.files.outputs.sets-file }}
+        ODM_VERSION_RESOLVED: ${{ steps.resolve.outputs.odm-version }}
         OUTPUT_DIR: ${{ steps.resolve.outputs.output-dir }}
         LOG_FILE: ${{ steps.resolve.outputs.log-file }}
       run: |
         set -euo pipefail
         mkdir -p "$(dirname "${LOG_FILE}")"
         odm-linkmlgen-odm \
-          --version "${ODM_VERSION}" \
-          --parts-file "${DOWNLOAD_DIR}/${PARTS_CSV}" \
-          --sets-file "${DOWNLOAD_DIR}/${SETS_CSV}" \
+          --version "${ODM_VERSION_RESOLVED}" \
+          --parts-file "${DOWNLOAD_DIR}/${PARTS_FILE}" \
+          --sets-file "${DOWNLOAD_DIR}/${SETS_FILE}" \
           --output-dir "${OUTPUT_DIR}" \
           2>&1 | tee "${LOG_FILE}"
 

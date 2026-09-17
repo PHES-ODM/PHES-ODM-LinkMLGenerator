@@ -30,10 +30,14 @@ the same three things.
 
 1. Resolves the requested ref of
    [PHES-ODM/PHES-ODM](https://github.com/PHES-ODM/PHES-ODM) to a commit SHA,
-   and downloads `ODM_parts_v3.0.0.csv` and `ODM_sets_v3.0.0.csv` from
-   `dictionary-tables/` **at that SHA** — so the two tables cannot come from
-   different commits if the branch moves mid-run.
-2. Runs `odm-linkmlgen-odm --version 3`, teeing the log to `gen/generate.log`.
+   lists the requested directory (`dictionary-tables/` by default) **at that
+   SHA** to find the one `ODM_parts_v*.csv`/`ODM_sets_v*.csv` file pair there
+   (PHES-ODM renames these on every release, so the filename is resolved at
+   generation time rather than fixed in configuration), and downloads them —
+   so the two tables cannot come from different commits if the branch moves
+   mid-run, or come from a filename that went stale.
+2. Runs `odm-linkmlgen-odm --version <odm_version>` (`3` by default), teeing
+   the log to `gen/generate.log`.
 3. Fails the run if the log holds an `ERROR`. This is the check
    [step 3 of Generate the ODM schemas](../how-to/generate-odm-schemas.md) asks
    you to do by hand, and it matters here for the same reason: a defect in the
@@ -41,9 +45,10 @@ the same three things.
    0 having produced a degraded schema. A `WARNING` is surfaced as an annotation
    but is not fatal.
 4. Uploads the schema, both intermediate stages, and the log as the
-   `odm-v3-schema` artifact — on every run, including failed ones and pull
-   requests.
-5. Copies the schema to `schemas/odm_v3.yaml` and commits it, if it changed.
+   `odm-v<odm_version>-schema` artifact (`odm-v3-schema` by default) — on
+   every run, including failed ones and pull requests.
+5. Copies the schema to `schemas/odm_v<odm_version>.yaml` and commits it, if
+   it changed.
 
 ### When it runs
 
@@ -57,15 +62,17 @@ the same three things.
 
 ### Inputs
 
-A caller can make two choices. They reach the run either as
+A caller can make four choices. They reach the run either as
 `workflow_dispatch` inputs or as `repository_dispatch` `client_payload` fields.
-The ref is settled by the shared generate action, and whether to commit by the
-**Decide whether to commit** step, so that every later step has a single answer
-to read.
+The ref/directory/version are settled by the shared generate action, and
+whether to commit by the **Decide whether to commit** step, so that every
+later step has a single answer to read.
 
 | Input | Default | What it does |
 | --- | --- | --- |
-| `dictionary_ref` | `label` | The branch, tag, or commit of PHES-ODM/PHES-ODM to read the tables from. Held to the shape of a plain branch, tag, or SHA — the run fails rather than passing anything else on to the API, because on a dispatch this comes from outside the repository. |
+| `dictionary_ref` | `main` | The branch, tag, or commit of PHES-ODM/PHES-ODM to read the tables from. Held to the shape of a plain branch, tag, or SHA — the run fails rather than passing anything else on to the API, because on a dispatch this comes from outside the repository. |
+| `dictionary_dir` | `dictionary-tables` | The directory to read the tables from. Override to generate an archival major version whose tables PHES-ODM has moved to their own folder once retired, e.g. `archived V2.3 (PATCH)` for v2.3.0. |
+| `odm_version` | `3` | The major ODM version to generate (`--version`), and which `schemas/odm_v<version>.yaml` the run commits to. An archival `dictionary_dir` is rarely the same major version as the default — v2.3.0 needs this set to `2`. |
 | `commit` | `true` | Set false to generate and upload the artifact without committing. |
 
 ```console
@@ -78,17 +85,23 @@ gh workflow run generate-odm-schema.yaml \
 An input wins over the same field in a payload, and both fall back to the
 defaults above.
 
-#### Only the published dictionary is ever committed
+#### Only a human-triggered run can commit a non-default combination
 
-A run that read any ref other than `DICTIONARY_REF_DEFAULT` (`label`) generates
-the schema and uploads it, but **never commits it** — even when `commit` is
-explicitly true. So `dictionary_ref` is for inspecting what a proposed
-dictionary change would do, and the committed schema always came from the
-published tables.
+A run whose `(dictionary_ref, dictionary_dir, odm_version)` all match the
+defaults in `.github/odm-config.env` always commits to that version's tracked
+`schemas/odm_v<version>.yaml` when it changed. Any other combination —
+inspecting a proposed dictionary change, or generating an archival major
+version — generates the schema and uploads it, but **commits it only when the
+run is a `workflow_dispatch`** triggered directly by a person (with `commit`
+left at its default `true`); from a `schedule` or an external
+`repository_dispatch`, it is never committed, even when `commit` is explicitly
+true.
 
 That is also what makes it safe for another repository to choose the ref: a
 token holder cannot make a schema built from an unmerged branch become the
-canonical one. Pull requests never commit either, for the same reason.
+canonical one, since `repository_dispatch` can never commit a non-default
+combination regardless of intent — only a human acting through the GitHub UI
+or CLI can. Pull requests never commit either, for the same reason.
 
 Whether to commit is therefore decided in one place and exposed as the resolve
 step's `commit` output, which the commit step's `if` reads. Resolving it in
@@ -122,9 +135,15 @@ identical file, and the weekly run is a no-op most weeks.
 
 ### What it does not do
 
-Only ODM v3 is generated and committed. ODM v1, ODM v2, and the NWSS schemas
-are still local runs — v2 is superseded, and the NWSS dictionaries are Excel
-workbooks, two of them not public. Steps 2 to 5 of
+ODM v3 is generated and committed automatically, on a schedule and on every
+dictionary release. An archival major version — v2.3.0, say — can be generated
+and committed the same way, but only on demand via `dictionary_dir` and
+`odm_version` (see [Only a human-triggered run can commit a non-default
+combination](#only-a-human-triggered-run-can-commit-a-non-default-combination)
+above): there is no live branch for a retired version to schedule a run
+against. ODM v1 and the NWSS schemas are still local-only runs — the NWSS
+dictionaries are Excel workbooks, two of them not public, so there is nothing
+in a public repository this workflow could read them from. Steps 2 to 5 of
 [Roll out a dictionary update](../how-to/dictionary-workflow.md) are not this
 workflow's job either; they belong to
 [Roll Out Dictionary Update](#roll-out-dictionary-update), which currently
@@ -146,10 +165,14 @@ version is generated, and where the schema is committed. Those live in
 | `ODM_VERSION` | `3` |
 | `DICTIONARY_REPO` | `PHES-ODM/PHES-ODM` |
 | `DICTIONARY_DIR` | `dictionary-tables` |
-| `PARTS_CSV` | `ODM_parts_v3.0.0.csv` |
-| `SETS_CSV` | `ODM_sets_v3.0.0.csv` |
-| `DICTIONARY_REF_DEFAULT` | `label` |
-| `SCHEMA_PATH` | `schemas/odm_v3.yaml` |
+| `DICTIONARY_REF_DEFAULT` | `main` |
+
+There is deliberately no `PARTS_CSV`/`SETS_CSV`/`SCHEMA_PATH` setting: the
+versioned table filenames are resolved at generation time (see [What it
+does](#what-it-does), step 1) rather than fixed here, since PHES-ODM renames
+them on every release, and the committed schema path is derived as
+`schemas/odm_v<odm_version>.yaml` from the resolved version rather than a
+single fixed path.
 
 One is this workflow's own scratch space, and stays in its `env` block:
 
@@ -193,17 +216,17 @@ steps:
   - name: Load the shared ODM configuration
     uses: ./.github/actions/odm-config
 
-  - run: echo "Reading ${DICTIONARY_REPO}/${DICTIONARY_DIR}/${PARTS_CSV}"
+  - run: echo "Reading ${DICTIONARY_REPO}/${DICTIONARY_DIR}"
 ```
 
 The step has to come before the first step that reads a setting, and after the
 checkout that puts the file on disk. A setting is then available both as a shell
-variable, as above, and as `${{ env.PARTS_CSV }}` in a later step's `with:`.
+variable, as above, and as `${{ env.DICTIONARY_DIR }}` in a later step's `with:`.
 
 GitHub offers no way to share these at the point where a workflow is parsed, so
 a value needed in `on:`, `concurrency:`, or a `workflow_dispatch` input default
 cannot come from the file — those are read before any step runs. That is why the
-`dictionary_ref` input repeats `label` as its default literally rather than
+`dictionary_ref` input repeats `main` as its default literally rather than
 reading `DICTIONARY_REF_DEFAULT`; the two have to be changed together.
 
 ## Roll Out Dictionary Update
