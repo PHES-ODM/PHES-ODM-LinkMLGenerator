@@ -25,8 +25,13 @@ on:
         required: false
         # Kept in step with DICTIONARY_REF_DEFAULT in .github/odm-config.env by
         # hand: an input default is read before any step runs, so it cannot be
-        # loaded from that file the way the rest of the settings are.
-        default: 'label'
+        # loaded from that file the way the rest of the settings are. (This one
+        # had drifted from that file's own default before this comment was
+        # last touched -- both said `label` when DICTIONARY_REF_DEFAULT should
+        # already have moved to `main`, which is exactly the failure mode of
+        # keeping two copies "by hand": see the Generate ODM Schema workflow's
+        # own history.)
+        default: 'main'
       publish:
         description: 'Publish the result. Uncheck to build everything and inspect the artifacts without writing to any repository.'
         type: boolean

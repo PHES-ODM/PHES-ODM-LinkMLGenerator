@@ -22,7 +22,7 @@ that event. This page sets that up.
 ## Which trigger to use
 
 Two API endpoints will start the workflow from outside this repository. Both
-read the two tables from `label` — the branch of PHES-ODM/PHES-ODM the
+read the two tables from `main` — the branch of PHES-ODM/PHES-ODM the
 dictionary is published on — unless the caller names a different branch (or tag,
 or SHA) in `dictionary_ref`. They differ in how that ref is passed, and in what
 the call means.
@@ -30,7 +30,7 @@ the call means.
 | | `repository_dispatch` | `workflow_dispatch` |
 | --- | --- | --- |
 | Endpoint | `POST /repos/{owner}/{repo}/dispatches` | `POST /repos/{owner}/{repo}/actions/workflows/{file}/dispatches` |
-| Dictionary branch | `label`, or a `dictionary_ref` in the payload | `label`, or a `dictionary_ref` input |
+| Dictionary branch | `main`, or a `dictionary_ref` in the payload | `main`, or a `dictionary_ref` input |
 | Caller has to know | the event type, `dictionary-updated` | the workflow's file name and its input names |
 | Token permission | Contents: write | Actions: write |
 | Meaning | "The dictionary changed" — this repository decides what to do about it | "Run this specific workflow with these arguments" |
@@ -38,7 +38,7 @@ the call means.
 **Use `repository_dispatch`** for the job this page is about. The dictionary
 repository should not have to know the name of a workflow file here, or which
 branch the tables are published on — it only announces that something changed,
-and a bare dispatch with no payload regenerates from `label`. That is what the
+and a bare dispatch with no payload regenerates from `main`. That is what the
 rest of this page uses.
 
 Choosing the ref is *not* what separates the two: a `repository_dispatch`
@@ -112,18 +112,23 @@ repositories come to need the same thing.
 
 Commit this to the dictionary repository as
 `.github/workflows/notify-linkmlgenerator.yaml`. It fires only when one of the
-two tables the generator actually reads changes on the `label` branch, so
+two tables the generator actually reads changes on the `main` branch, so
 editing `ODM_translations.csv` or a README does not spend a workflow run here.
+The `paths` filter below uses a glob rather than a filename fixed to the
+current version, since PHES-ODM renames these files on every release
+(`ODM_parts_v3.0.0.csv` → `_v3.0.1.csv`, etc.) — a fixed filename here would
+silently stop firing the moment that happens, the same failure mode this whole
+change is fixing on the generator's side.
 
 ```yaml
 name: Notify LinkML Generator
 
 on:
   push:
-    branches: [ label ]
+    branches: [ main ]
     paths:
-      - 'dictionary-tables/ODM_parts_v3.0.0.csv'
-      - 'dictionary-tables/ODM_sets_v3.0.0.csv'
+      - 'dictionary-tables/ODM_parts_v*.csv'
+      - 'dictionary-tables/ODM_sets_v*.csv'
   # So the dispatch can also be sent by hand, without touching the tables.
   workflow_dispatch:
 
@@ -145,7 +150,7 @@ jobs:
 once a field is passed.
 
 That bare dispatch is all the common case needs: it means "the published
-dictionary changed", and the workflow reads the `label` branch. To generate from
+dictionary changed", and the workflow reads the `main` branch. To generate from
 a different ref, put it in the payload — see
 [Generate from another dictionary branch](#generate-from-another-dictionary-branch).
 
@@ -170,7 +175,7 @@ success looks like, not a sign that nothing happened.
 
 ## 4. Check that it worked
 
-Push a change to one of the two tables on `label`, or run **Notify LinkML
+Push a change to one of the two tables on `main`, or run **Notify LinkML
 Generator** by hand, and then look at the
 [Generate ODM Schema runs](https://github.com/PHES-ODM/PHES-ODM-LinkMLGenerator/actions/workflows/generate-odm-schema.yaml).
 A run should appear within a few seconds, labelled `repository_dispatch`.
@@ -185,7 +190,7 @@ gh run list \
 ```
 
 What that run then does is unchanged from any other trigger — it downloads the
-two tables from `label`, generates, and commits
+two tables from `main`, generates, and commits
 [`schemas/odm_v3.yaml`](https://github.com/PHES-ODM/PHES-ODM-LinkMLGenerator/blob/main/schemas/odm_v3.yaml)
 if the schema changed. Two outcomes are worth knowing about:
 
@@ -213,8 +218,8 @@ commits to `schemas/`, rather than the dispatch response.
 | `422 Unprocessable Entity` | The request body is malformed, or `event_type` is longer than 100 characters. |
 | `204`, but no run appears | Three usual causes. **The event type does not match**: the workflow listens for `dictionary-updated` exactly, and an unmatched type is accepted and silently dropped. **The dispatch used a `GITHUB_TOKEN`**: events sent with the built-in token deliberately do not start new workflow runs, to stop workflows triggering themselves — this is the main reason the setup needs a PAT or an App. **This repository's Actions are disabled**, or scheduled and dispatched runs have been disabled after 60 days of repository inactivity. |
 | The run starts but the push fails | Branch protection on `main` rejecting `github-actions[bot]`. This is unrelated to the dispatch — see [Continuous integration](../reference/continuous-integration.md#configuring-it). |
-| The dictionary change is not in the generated schema | A dispatch with no `dictionary_ref` reads the `label` branch. If the change is on another branch, the run genuinely regenerated from tables that do not contain it — pass the ref in the payload, as [below](#generate-from-another-dictionary-branch). |
-| The run generated a schema but committed nothing | Either the schema was unchanged, or the run read a ref other than `label`, which never commits. The run's log says which. |
+| The dictionary change is not in the generated schema | A dispatch with no `dictionary_ref` reads the `main` branch. If the change is on another branch, the run genuinely regenerated from tables that do not contain it — pass the ref in the payload, as [below](#generate-from-another-dictionary-branch). |
+| The run generated a schema but committed nothing | Either the schema was unchanged, or the run read a ref/dir/version other than the default, which a `repository_dispatch` (unlike a human-triggered `workflow_dispatch`) never commits. The run's log says which. |
 | `Refusing the dictionary ref` and a failed run | The `dictionary_ref` in the payload is not the shape of a branch, tag, or SHA. It is checked rather than trusted, because on a dispatch it comes from outside this repository. |
 
 ## Generate from another dictionary branch
@@ -248,34 +253,40 @@ workflow, the ref is usually the branch that was pushed:
             | gh api repos/PHES-ODM/PHES-ODM-LinkMLGenerator/dispatches --input -
 ```
 
-!!! important "A non-default ref never commits"
+!!! important "A repository_dispatch with a non-default ref never commits"
 
-    A run that read anything other than the `label` branch generates the schema
-    and uploads it as the `odm-v3-schema` artifact, but does **not** commit it —
-    even if the payload asks it to with `"commit": true`. The run logs a notice
-    saying so.
+    A `repository_dispatch` that reads anything other than the default
+    `(dictionary_ref, dictionary_dir, odm_version)` generates the schema and
+    uploads it as the `odm-v<odm_version>-schema` artifact, but does **not**
+    commit it — even if the payload asks it to with `"commit": true`. The run
+    logs a notice saying so. Only a *human*, driving a `workflow_dispatch` run
+    directly, can commit a non-default combination — see [Only a
+    human-triggered run can commit a non-default combination](../reference/continuous-integration.md#only-a-human-triggered-run-can-commit-a-non-default-combination).
 
     This is what makes it safe to let another repository choose the ref. The
     committed [`schemas/odm_v3.yaml`](https://github.com/PHES-ODM/PHES-ODM-LinkMLGenerator/blob/main/schemas/odm_v3.yaml)
     tracks the *published* dictionary, and a token holder cannot make a schema
-    from an unmerged branch become the canonical one. The worst a dispatch can
-    do is spend a workflow run.
+    from an unmerged branch — or an archival major version — become the
+    canonical one via `repository_dispatch`. The worst such a dispatch can do
+    is spend a workflow run.
 
-    To publish a schema from a dictionary change, merge the change to `label`
+    To publish a schema from a dictionary change, merge the change to `main`
     and let a bare dispatch regenerate from it.
 
-Two other payload fields are read:
+Other payload fields are read:
 
 | Field | Default | What it does |
 | --- | --- | --- |
-| `dictionary_ref` | `label` | The branch, tag, or SHA of PHES-ODM/PHES-ODM to read the tables from. Rejected, and the run fails, if it is not the shape of a plain branch, tag, or SHA. |
-| `commit` | `true` | Set to `false` to generate from `label` without committing — a dry run of the real thing. |
+| `dictionary_ref` | `main` | The branch, tag, or SHA of PHES-ODM/PHES-ODM to read the tables from. Rejected, and the run fails, if it is not the shape of a plain branch, tag, or SHA. |
+| `dictionary_dir` | `dictionary-tables` | The directory to read the tables from. Point at an archival version's own folder (e.g. `archived V2.3 (PATCH)`) together with `odm_version`. |
+| `odm_version` | `3` | The major ODM version to generate, and which `schemas/odm_v<version>.yaml` a commit would go to. |
+| `commit` | `true` | Set to `false` to generate without committing — a dry run of the real thing. |
 
 Anything else in the payload is ignored.
 
 ### Or use the workflow_dispatch endpoint
 
-The same two choices are available as `workflow_dispatch`
+The same choices are available as `workflow_dispatch`
 [inputs](../reference/continuous-integration.md#inputs), which is the better fit
 when a person is driving it rather than a workflow. It needs a token with
 **Actions: Read and write** instead of Contents write:
@@ -286,8 +297,24 @@ gh workflow run generate-odm-schema.yaml \
     -f dictionary_ref=my-dictionary-branch
 ```
 
-The same rule applies — that run will not commit, because the ref is not
-`label`.
+Unlike the `repository_dispatch` form, this **will commit** the result — to
+`schemas/odm_v3.yaml` if `my-dictionary-branch` and its tables genuinely
+differ from `main`'s. `workflow_dispatch` is run by a person through the
+GitHub UI or `gh`, so a non-default combination here is by definition someone
+directly asking for it, not an unattended trigger — pass `-f commit=false` if
+you only meant to inspect the branch rather than commit from it.
+
+This is also how to generate and commit an archival major version, by adding
+`dictionary_dir`/`odm_version`:
+
+```console
+gh workflow run generate-odm-schema.yaml \
+    --repo PHES-ODM/PHES-ODM-LinkMLGenerator \
+    -f 'dictionary_dir=archived V2.3 (PATCH)' \
+    -f odm_version=2
+```
+
+That commits to its own `schemas/odm_v2.yaml`, never touching `odm_v3.yaml`.
 
 ## Related
 

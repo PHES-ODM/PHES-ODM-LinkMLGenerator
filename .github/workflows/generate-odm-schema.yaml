@@ -12,21 +12,36 @@ name: Generate ODM Schema
 # and the push filter catches the other half of the problem — a change to the
 # generator itself producing a different schema from the same dictionary.
 #
-# A dispatch may carry a `dictionary_ref` in its client_payload to generate from
-# a ref other than the published branch; such a run never commits. See
+# A dispatch may carry a `dictionary_ref`/`dictionary_dir`/`odm_version` in its
+# client_payload (or a manual run its matching inputs) to generate a different
+# major version than the live one — e.g. an archival release like v2.3.0,
+# whose tables live in their own folder once retired rather than alongside the
+# live dictionary. Such a run commits to its own schemas/odm_v<version>.yaml
+# (never colliding with the live schema this default tracks) only when a human
+# triggered it directly via workflow_dispatch; from a schedule or an external
+# repository_dispatch, any non-default combination generates and uploads an
+# artifact only, exactly as a non-default dictionary_ref alone always has. See
 # docs/how-to/trigger-from-another-repository.md.
 on:
   workflow_dispatch:
     inputs:
       dictionary_ref:
-        description: 'Branch, tag, or SHA of PHES-ODM/PHES-ODM to read the dictionary tables from. Anything but the default generates without committing.'
+        description: 'Branch, tag, or SHA of PHES-ODM/PHES-ODM to read the dictionary tables from. Defaults to the live dictionary.'
         required: false
         # Kept in step with DICTIONARY_REF_DEFAULT in .github/odm-config.env by
         # hand: an input default is read before any step runs, so it cannot be
         # loaded from that file the way the rest of the settings are.
-        default: 'label'
+        default: 'main'
+      dictionary_dir:
+        description: 'Directory to read the tables from. Defaults to the live dictionary-tables/. Set to generate an archival major version, e.g. "archived V2.3 (PATCH)" for v2.3.0 -- pair with odm_version, since an archival folder is rarely the same major version as the default.'
+        required: false
+        default: ''
+      odm_version:
+        description: 'Major ODM version to generate (--version passed to the generator, and the schemas/odm_v<version>.yaml this run commits to). Defaults to the live major version. v2.3.0 is ODM v2, for example, so generating it needs this set to 2.'
+        required: false
+        default: ''
       commit:
-        description: 'Commit the regenerated schema. Uncheck to generate and inspect the artifact only.'
+        description: 'Commit the regenerated schema. Unchecked, or a non-default dictionary_ref/dictionary_dir/odm_version on a schedule or repository_dispatch run, generates and uploads the artifact for inspection only.'
         type: boolean
         required: false
         default: true
@@ -97,6 +112,8 @@ jobs:
         uses: ./.github/actions/generate-odm-schema
         with:
           dictionary-ref: ${{ inputs.dictionary_ref || github.event.client_payload.dictionary_ref }}
+          dictionary-dir: ${{ inputs.dictionary_dir || github.event.client_payload.dictionary_dir }}
+          odm-version: ${{ inputs.odm_version || github.event.client_payload.odm_version }}
 
       - name: Decide whether to commit
         id: decide
@@ -113,6 +130,8 @@ jobs:
           INPUT_COMMIT: ${{ inputs.commit }}
           PAYLOAD_COMMIT: ${{ github.event.client_payload.commit }}
           DICTIONARY_REF: ${{ steps.schema.outputs.ref }}
+          DICTIONARY_DIR_USED: ${{ steps.schema.outputs.dictionary-dir-used }}
+          ODM_VERSION_RESOLVED: ${{ steps.schema.outputs.odm-version }}
         run: |
           set -euo pipefail
 
@@ -121,13 +140,26 @@ jobs:
           [ -n "${commit}" ] || commit="${PAYLOAD_COMMIT:-}"
           [ -n "${commit}" ] || commit=true
 
-          # The committed schema tracks the published dictionary, so a run
-          # against any other ref is for inspection only and never commits. This
-          # is what makes it safe for another repository to dispatch a ref: the
-          # worst it can do is spend a run and upload an artifact.
-          if [ "${DICTIONARY_REF}" != "${DICTIONARY_REF_DEFAULT}" ] && [ "${commit}" = true ]; then
-            commit=false
-            echo "::notice::${DICTIONARY_REF} is not the default ${DICTIONARY_REF_DEFAULT} branch, so the schema will be generated but not committed."
+          is_default=true
+          [ "${DICTIONARY_REF}" = "${DICTIONARY_REF_DEFAULT}" ] || is_default=false
+          [ "${DICTIONARY_DIR_USED}" = "${DICTIONARY_DIR}" ] || is_default=false
+          [ "${ODM_VERSION_RESOLVED}" = "${ODM_VERSION}" ] || is_default=false
+
+          # The default (ref, dir, version) triple tracks the live dictionary,
+          # and always commits to its one tracked schemas/odm_v<ODM_VERSION>.yaml.
+          # Any other triple is for an archival major version (or a one-off
+          # inspection) and commits to its own schemas/odm_v<version>.yaml only
+          # when a human explicitly asked for it via workflow_dispatch --
+          # never from a schedule or an external repository_dispatch, so that
+          # the worst a dispatch from PHES-ODM (or anyone with a token) can do
+          # is spend a run and upload an artifact, exactly as before.
+          if [ "${is_default}" != true ] && [ "${commit}" = true ]; then
+            if [ "${GITHUB_EVENT_NAME}" = workflow_dispatch ]; then
+              echo "::notice::Generating ODM v${ODM_VERSION_RESOLVED} from '${DICTIONARY_DIR_USED}'@${DICTIONARY_REF} (not the default ODM v${ODM_VERSION} from '${DICTIONARY_DIR}'@${DICTIONARY_REF_DEFAULT}). Committing to schemas/odm_v${ODM_VERSION_RESOLVED}.yaml because this is an explicit, human-triggered run."
+            else
+              commit=false
+              echo "::notice::Generating ODM v${ODM_VERSION_RESOLVED} from '${DICTIONARY_DIR_USED}'@${DICTIONARY_REF} (not the default), so the schema will be generated but not committed. Only an explicit workflow_dispatch run may commit a non-default dictionary_ref/dictionary_dir/odm_version."
+            fi
           fi
 
           # A pull request only ever proves the generator still works.
@@ -141,25 +173,30 @@ jobs:
       - name: Upload the schema and the intermediate stages
         # Kept for every run, including pull requests and failed runs, so a bad
         # schema can be diffed against the committed one without a local run.
-        # The paths are the generate action's defaults spelled out rather than
-        # read from its outputs, so that a run that failed before setting them
-        # still uploads whatever it did produce.
+        # The paths use the resolved ODM version (falling back to the
+        # configured default when the schema step failed before setting its
+        # output), so a run that failed before setting outputs still uploads
+        # whatever it did produce.
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: odm-v${{ env.ODM_VERSION }}-schema
+          name: odm-v${{ steps.schema.outputs.odm-version || env.ODM_VERSION }}-schema
           path: |
-            gen/odm_v${{ env.ODM_VERSION }}/
+            gen/odm_v${{ steps.schema.outputs.odm-version || env.ODM_VERSION }}/
             gen/generate.log
           if-no-files-found: warn
 
       - name: Copy the schema to its committed location
+        id: destination
         env:
           SCHEMA_FILE: ${{ steps.schema.outputs.schema-file }}
+          ODM_VERSION_RESOLVED: ${{ steps.schema.outputs.odm-version }}
         run: |
           set -euo pipefail
-          mkdir -p "$(dirname "${SCHEMA_PATH}")"
-          cp "${SCHEMA_FILE}" "${SCHEMA_PATH}"
+          schema_path="schemas/odm_v${ODM_VERSION_RESOLVED}.yaml"
+          mkdir -p "$(dirname "${schema_path}")"
+          cp "${SCHEMA_FILE}" "${schema_path}"
+          echo "schema-path=${schema_path}" >> "$GITHUB_OUTPUT"
 
       - name: Commit the schema
         # Whether to commit was settled by the step above, which is why this is
@@ -171,6 +208,11 @@ jobs:
         env:
           DICTIONARY_REF: ${{ steps.schema.outputs.ref }}
           DICTIONARY_SHA: ${{ steps.schema.outputs.sha }}
+          DICTIONARY_DIR_USED: ${{ steps.schema.outputs.dictionary-dir-used }}
+          ODM_VERSION_RESOLVED: ${{ steps.schema.outputs.odm-version }}
+          PARTS_FILE: ${{ steps.schema.outputs.parts-file }}
+          SETS_FILE: ${{ steps.schema.outputs.sets-file }}
+          SCHEMA_PATH: ${{ steps.destination.outputs.schema-path }}
         run: |
           set -euo pipefail
           # --porcelain covers both a modified schema and a brand new one,
@@ -183,8 +225,8 @@ jobs:
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git add "${SCHEMA_PATH}"
-          git commit -m "Regenerate the ODM v${ODM_VERSION} LinkML schema" \
-            -m "Generated from ${DICTIONARY_REPO}@${DICTIONARY_REF} (${DICTIONARY_SHA}), tables ${PARTS_CSV} and ${SETS_CSV}." \
+          git commit -m "Regenerate the ODM v${ODM_VERSION_RESOLVED} LinkML schema" \
+            -m "Generated from ${DICTIONARY_REPO}@${DICTIONARY_REF} (${DICTIONARY_SHA}), '${DICTIONARY_DIR_USED}/${PARTS_FILE}' and '${DICTIONARY_DIR_USED}/${SETS_FILE}'." \
             -m "Generated by the ${GITHUB_WORKFLOW} workflow, run ${GITHUB_RUN_ID}."
           # The branch may have moved while the schema was being generated.
           # checkout leaves HEAD detached, so this rebases the new commit onto
