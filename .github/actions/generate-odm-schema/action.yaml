@@ -182,7 +182,15 @@ runs:
         DICTIONARY_DIR_USED: ${{ steps.resolve.outputs.dictionary-dir-used }}
       run: |
         set -euo pipefail
-        listing=$(gh api "repos/${DICTIONARY_REPO}/contents/${DICTIONARY_DIR_USED}" -f ref="${DICTIONARY_SHA}" --jq '.[].name')
+        # --method GET is required, not optional: gh api silently switches
+        # to POST whenever any -f/-F field is given unless told otherwise,
+        # and a POST to a read-only contents listing reports as a plain 404
+        # -- indistinguishable from "repository not found" or "ref not
+        # found" in the run log, which is what actually happened here
+        # before this fix (confirmed empirically: the identical request,
+        # unauthenticated, succeeds over plain REST -- this was never a
+        # permissions or missing-commit problem).
+        listing=$(gh api --method GET "repos/${DICTIONARY_REPO}/contents/${DICTIONARY_DIR_USED}" -f ref="${DICTIONARY_SHA}" --jq '.[].name')
 
         find_one() {
           local pattern="$1" label="$2" matches
