@@ -224,10 +224,22 @@ runs:
         DOWNLOAD_DIR: ${{ inputs.download-dir }}
       run: |
         set -euo pipefail
-        base="https://raw.githubusercontent.com/${DICTIONARY_REPO}/${DICTIONARY_SHA}/${DICTIONARY_DIR_USED}"
+        # Percent-encode each path segment separately (never the assembled
+        # path -- that would also escape the "/" separators between
+        # segments). Plain concatenation works for dictionary-tables, the
+        # live default, but an archival dictionary-dir can be a real,
+        # human-titled folder name like "archived V2.3 (PATCH)" -- its
+        # spaces and parentheses make an invalid URL curl refuses outright
+        # ("URL rejected: Malformed input to a URL function"), confirmed
+        # reproducing this exact error locally against that exact path.
+        urlencode() { jq -rn --arg v "$1" '$v|@uri'; }
+        dir_enc=$(urlencode "${DICTIONARY_DIR_USED}")
+        parts_enc=$(urlencode "${PARTS_FILE}")
+        sets_enc=$(urlencode "${SETS_FILE}")
+        base="https://raw.githubusercontent.com/${DICTIONARY_REPO}/${DICTIONARY_SHA}/${dir_enc}"
         mkdir -p "${DOWNLOAD_DIR}"
-        curl -sSfL -o "${DOWNLOAD_DIR}/${PARTS_FILE}" "${base}/${PARTS_FILE}"
-        curl -sSfL -o "${DOWNLOAD_DIR}/${SETS_FILE}" "${base}/${SETS_FILE}"
+        curl -sSfL -o "${DOWNLOAD_DIR}/${PARTS_FILE}" "${base}/${parts_enc}"
+        curl -sSfL -o "${DOWNLOAD_DIR}/${SETS_FILE}" "${base}/${sets_enc}"
         wc -l "${DOWNLOAD_DIR}"/*.csv
 
     - name: Generate the schema
